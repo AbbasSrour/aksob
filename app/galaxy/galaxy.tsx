@@ -187,24 +187,42 @@ export default function Galaxy() {
       const gridPositions = new Float32Array(particleCount * 3);
       const rowSize = Math.ceil(Math.pow(particleCount, 1/3)); 
       
-      // Let's use a Fibonacci Sphere distribution for nice evenly spaced "scatter"
-      const phi = Math.PI * (3 - Math.sqrt(5)); // golden angle
-      
-      for (let i=0; i < particleCount; i++) {
-          const y = 1 - (i / (particleCount - 1)) * 2; // y goes from 1 to -1
-          const radius = Math.sqrt(1 - y * y); // radius at y
-          
-          const theta = phi * i; // golden angle increment
-          
-          const rx = Math.cos(theta) * radius;
-          const rz = Math.sin(theta) * radius;
-          
-          // Radius of the "Scattered" sphere. Make it large enough to fill screen comfortably.
-          const spreadRadius = 100; 
+      // Randomized Star Field Layout (2D with overlap avoidance)
+      // We want them scattered randomly but not on top of each other.
+      const fieldWidth = 300; 
+      const fieldHeight = 180;
+      const minDistance = 8; // Minimum distance between stars
+      const placedPoints: {x: number, y: number}[] = [];
 
-          gridPositions[i*3] = center.x + rx * spreadRadius;
-          gridPositions[i*3+1] = center.y + y * spreadRadius; 
-          gridPositions[i*3+2] = center.z + rz * spreadRadius;
+      for (let i=0; i < particleCount; i++) {
+          let x = 0, y = 0, found = false;
+          
+          // Try to find a non-overlapping spot
+          for(let attempt=0; attempt<30; attempt++) {
+              x = (Math.random() - 0.5) * fieldWidth;
+              y = (Math.random() - 0.5) * fieldHeight;
+              
+              let overlap = false;
+              for (const p of placedPoints) {
+                  const dx = p.x - x;
+                  const dy = p.y - y;
+                  if (dx*dx + dy*dy < minDistance*minDistance) {
+                      overlap = true;
+                      break;
+                  }
+              }
+              if (!overlap) {
+                  found = true;
+                  break;
+              }
+          }
+          
+          // If clear spot not found after retries, just place it (rare)
+          placedPoints.push({x, y});
+
+          gridPositions[i*3] = center.x + x;
+          gridPositions[i*3+1] = center.y + y;
+          gridPositions[i*3+2] = center.z; // Flat 2D plane
       }
 
       geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
