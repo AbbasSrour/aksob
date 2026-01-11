@@ -1,0 +1,21 @@
+{
+	"name": "@aksob/shared",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"main": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"lint": "biome check --write .",
+		"format": "biome format --write ."
+	},
+	"dependencies": {
+		"zod": "^3.24.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.11",
+		"typescript": "^5.9.2"
+	}
+}

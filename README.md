@@ -1,87 +1,99 @@
-# AKSOB Alumni Galaxy
+# AKSOB - Turborepo with Bun, Elysia, Drizzle ORM & Better Auth
 
-A modern, production-ready template for building full-stack React applications using React Router.
+A modern monorepo setup with React Router frontend and Elysia backend.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Structure
 
-## Features
-
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+```
+aksob/
+├── apps/
+│   ├── api/           # Elysia backend
+│   │   ├── src/
+│   │   │   ├── db/        # Drizzle schema & migrations
+│   │   │   ├── auth/      # Better Auth configuration
+│   │   │   ├── plugins/   # Elysia plugins (db, auth)
+│   │   │   ├── routes/    # API routes
+│   │   │   └── auth.ts   # Entry point
+│   │   ├── drizzle.config.ts
+│   │   └── package.json
+│   │
+│   └── web/           # React Router frontend
+│       ├── src/
+│       ├── package.json
+│       └── vite.config.ts
+│
+├── packages/
+│   └── shared/        # Shared utilities
+│       ├── src/
+│       └── package.json
+│
+├── package.json       # Root workspace
+├── turbo.json         # Turborepo config
+└── tsconfig.json      # Base TypeScript config
+```
 
 ## Getting Started
 
-### Installation
-
-Install the dependencies:
+### 1. Install Dependencies
 
 ```bash
-npm install
+bun install
 ```
 
-### Development
+### 2. Set Up Database
 
-Start the development server with HMR:
+Copy the example env file and update the DATABASE_URL:
 
 ```bash
-npm run dev
+cp apps/api/.env.example apps/api/.env
 ```
 
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
+Then generate the Better Auth schema and run migrations:
 
 ```bash
-npm run build
+# Generate Better Auth schema (adds tables to schema.ts)
+cd apps/api && bunx @better-auth/cli generate
+
+# Generate Drizzle migrations
+bun run db:generate
+
+# Apply migrations
+bun run db:migrate
+
+# Optional: Open Drizzle Studio
+bun run db:studio
 ```
 
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
+### 3. Run Development Servers
 
 ```bash
-docker build -t my-app .
+# Run both API and Web in parallel
+bun run dev
 
-# Run the container
-docker run -p 3000:3000 my-app
+# Or run individually:
+cd apps/api && bun run dev    # API on http://localhost:3000
+cd apps/web && bun run dev    # Web on http://localhost:5173
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
+## Available Commands
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+| Command | Description |
+|---------|-------------|
+| `bun run dev` | Run all dev servers in parallel |
+| `bun run build` | Build all apps |
+| `bun run db:generate` | Generate Drizzle migrations |
+| `bun run db:migrate` | Apply database migrations |
+| `bun run db:studio` | Open Drizzle Studio |
 
-### DIY Deployment
+## Tech Stack
 
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
+- **Runtime**: Bun
+- **Backend**: Elysia + Drizzle ORM + Better Auth
+- **Frontend**: React Router + Vite + TailwindCSS
+- **Monorepo**: Turborepo
 
-Make sure to deploy the output of `npm run build`
+## Database Schema
 
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+- Your app tables go in `apps/api/src/db/schema.ts`
+- Better Auth tables are **auto-generated** by running `bunx @better-auth/cli generate`
+- Run `bun run db:generate` after modifying the schema to create migrations

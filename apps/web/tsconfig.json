@@ -1,9 +1,10 @@
 {
 	"compilerOptions": {
-		"lib": ["ES2022"],
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
 		"target": "ES2022",
 		"module": "ESNext",
 		"moduleResolution": "bundler",
+		"jsx": "react-jsx",
 		"strict": true,
 		"skipLibCheck": true,
 		"esModuleInterop": true,
@@ -14,8 +15,10 @@
 		"forceConsistentCasingInFileNames": true,
 		"baseUrl": ".",
 		"paths": {
-			"@aksob/shared/*": ["./packages/shared/src/*"]
-		}
+			"@aksob/shared/*": ["../../packages/shared/src/*"]
+		},
+		"types": ["react/canary", "react-dom/canary", "@react-router/node"]
 	},
-	"exclude": ["node_modules", "apps/*/node_modules", "packages/*/node_modules"]
+	"include": ["src/**/*", "react-router.config.ts", "vite.config.ts"],
+	"exclude": ["node_modules", "build", ".react-router"]
 }

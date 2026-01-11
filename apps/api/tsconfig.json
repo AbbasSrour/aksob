@@ -1,4 +1,5 @@
 {
+	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"lib": ["ES2022"],
 		"target": "ES2022",
@@ -14,8 +15,10 @@
 		"forceConsistentCasingInFileNames": true,
 		"baseUrl": ".",
 		"paths": {
-			"@aksob/shared/*": ["./packages/shared/src/*"]
+			"@/*": ["./src/*"],
+			"@aksob/shared/*": ["../../packages/shared/src/*"]
 		}
 	},
-	"exclude": ["node_modules", "apps/*/node_modules", "packages/*/node_modules"]
+	"include": ["src/**/*", "drizzle.config.ts"],
+	"exclude": ["node_modules", "dist"]
 }
