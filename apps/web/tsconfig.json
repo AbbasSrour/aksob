@@ -15,10 +15,11 @@
 		"forceConsistentCasingInFileNames": true,
 		"baseUrl": ".",
 		"paths": {
+			"~/*": ["app/*"],
 			"@aksob/shared/*": ["../../packages/shared/src/*"]
 		},
 		"types": ["react/canary", "react-dom/canary", "@react-router/node"]
 	},
-	"include": ["src/**/*", "react-router.config.ts", "vite.config.ts"],
+	"include": ["app/**/*", "src/**/*", "react-router.config.ts", "vite.config.ts"],
 	"exclude": ["node_modules", "build", ".react-router"]
 }

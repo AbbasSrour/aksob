@@ -1,138 +1,149 @@
-:root {
-	/* Theme Colors */
-	--theme-palette-color-1: #076951;
-	--theme-palette-color-2: #16876b;
-	--theme-palette-color-3: #365951;
-	--theme-palette-color-4: #192c27;
-	--theme-palette-color-5: #e7f4f1;
-	--theme-palette-color-6: #f2f7f6;
-	--theme-palette-color-7: #f8fafa;
-	--theme-palette-color-8: #ffffff;
-
-	/* Component Tokens */
-	--theme-button-bg: var(--theme-palette-color-1);
-	--theme-button-bg-hover: var(--theme-palette-color-2);
-	--theme-text-main: var(--theme-palette-color-3);
-	--theme-heading-color: var(--theme-palette-color-4);
-
-	/* Fonts */
-	--theme-font-family:
-		-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
+/* Galaxy Container */
 .galaxy-container {
-	width: 100vw;
-	height: 100vh;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	background: radial-gradient(circle at center, #192c27 0%, #000000 100%); /* Deep Green to Black */
-	position: relative;
-	font-family: var(--theme-font-family);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    background: radial-gradient(circle at center, #0f1c19 0%, #000000 100%);
 }
 
-#galaxy-canvas {
-	width: 100%;
-	height: 100%;
-	display: block;
-}
-
-/* Cluster Labels */
+/* Cluster Labels - Glassmorphism Premium */
 .cluster-label {
-	position: absolute;
-	color: #ffffff; /* Explicit white for max contrast */
-	font-size: 16px; /* Larger */
-	font-weight: 700; /* Bolder */
-	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
-	pointer-events: none;
-	transform: translate(-50%, -50%); /* Centered on the point */
-	background: rgba(7, 105, 81, 0.85); /* distinct green background matching brand but semi-opaque */
-	padding: 6px 12px;
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	border-radius: 12px;
-	backdrop-filter: blur(4px);
-	z-index: 5; /* Ensure above stars? No, HTML is always on top of canvas. */
-	transition: opacity 0.3s;
+    position: absolute;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    pointer-events: none; /* Let clicks pass through to 3D scene usually, but we want them clickable? The code handles clicks via raycaster, so labels are just visual indicators */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    border-radius: 99px;
+    transition: all 0.3s ease-out;
+    transform-origin: center center;
+    white-space: nowrap;
+    z-index: 10;
 }
 
-/* UI Overlay / Popup */
+.cluster-label::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -4px;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--aksob-primary);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--aksob-primary);
+}
+
+/* Hover effect on label (if we made them interactive, currently they are just visual relative to 3D center) */
+
+/* Star Popup - Sleek Glass Card */
 .star-popup {
-	position: absolute;
-	top: 0;
-	left: 0;
-	background-color: var(--theme-palette-color-8);
-	border-radius: 10px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-	padding: 16px;
-	width: 280px;
-	pointer-events: none; /* Initially none, but we might need interaction */
-	opacity: 0;
-	transition:
-		opacity 0.2s ease,
-		transform 0.2s ease;
-	transform: translate(-50%, -100%) translateY(-10px);
-	z-index: 10;
-	border: 1px solid var(--theme-palette-color-5);
-	color: var(--theme-text-main);
-	pointer-events: auto; /* Re-enable for buttons */
+    position: absolute;
+    width: 280px;
+    background: rgba(15, 28, 25, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 20px;
+    color: white;
+    transform: translate(-50%, -100%) translateY(-20px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    z-index: 100;
+    opacity: 0;
+    animation: popupFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    pointer-events: auto;
 }
 
-.star-popup.visible {
-	opacity: 1;
-	transform: translate(-50%, -100%) translateY(-20px);
+.star-popup::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 12px;
+    height: 12px;
+    background: rgba(15, 28, 25, 0.85);
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+@keyframes popupFadeIn {
+    from { opacity: 0; transform: translate(-50%, -100%) translateY(-10px) scale(0.95); }
+    to { opacity: 1; transform: translate(-50%, -100%) translateY(-24px) scale(1); }
 }
 
 .popup-header {
-	display: flex;
-	align-items: center;
-	margin-bottom: 12px;
-	border-bottom: 1px solid var(--theme-palette-color-6);
-	padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .popup-avatar {
-	width: 48px;
-	height: 48px;
-	border-radius: 50%;
-	background-color: var(--theme-palette-color-2);
-	margin-right: 12px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: white;
-	font-weight: bold;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--aksob-primary), var(--aksob-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
+    box-shadow: 0 4px 12px rgba(7, 105, 81, 0.3);
+    border: 2px solid rgba(255,255,255,0.1);
 }
 
 .popup-info h3 {
-	margin: 0;
-	font-size: 1.1rem;
-	color: var(--theme-heading-color);
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
 }
 
 .popup-info p {
-	margin: 4px 0 0;
-	font-size: 0.85rem;
-	color: var(--theme-text-main);
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .popup-details {
-	font-size: 0.9rem;
-	margin-bottom: 16px;
-	line-height: 1.4;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .popup-action {
-	width: 100%;
-	padding: 8px 16px;
-	background-color: var(--theme-button-bg);
-	color: white;
-	border: none;
-	border-radius: 8px;
-	font-weight: 500;
-	cursor: pointer;
-	transition: background-color 0.2s;
+    width: 100%;
+    padding: 10px;
+    background: white;
+    color: var(--aksob-darkest);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .popup-action:hover {
-	background-color: var(--theme-button-bg-hover);
+    background: var(--pale-mint);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
+

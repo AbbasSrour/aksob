@@ -1,16 +1,159 @@
 @import "tailwindcss";
 
-@theme {
-	--font-sans:
-		"Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-		"Segoe UI Symbol", "Noto Color Emoji";
+:root {
+	/* 1.1 Color Palette */
+	/* Primary Colors */
+	--aksob-primary: #076951;
+	--aksob-secondary: #16876b;
+	--aksob-muted: #365951;
+	--aksob-darkest: #192c27;
+
+	/* Neutral Colors */
+	--white: #ffffff;
+	--off-white: #f8fafa;
+	--pale-mint: #e7f4f1;
+	--footer-grey: #f2f7f6;
+	--gray-200: #e5e7eb;
+	--gray-300: #d1d5db;
+	--gray-400: #9ca3af;
+	--gray-500: #6b7280;
+	--gray-600: #4b5563;
+	--gray-700: #374151;
+
+	/* Semantic Colors */
+	--success: #10b981;
+	--error: #ef4444;
+	--warning: #f59e0b;
+	--info: #3b82f6;
+
+	/* Galaxy-Specific */
+	--galaxy-bg: radial-gradient(circle at center, #192c27 0%, #000000 100%);
+	--glass-white: rgba(255, 255, 255, 0.8);
+	--glass-dark: rgba(25, 44, 39, 0.8);
+	--star-glow: rgba(7, 105, 81, 0.85);
+
+	/* 1.2 Typography */
+	--font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	--font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+	/* 1.3 Spacing System */
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-3: 12px;
+	--space-4: 16px;
+	--space-5: 20px;
+	--space-6: 24px;
+	--space-8: 32px;
+	--space-10: 40px;
+	--space-12: 48px;
+	--space-16: 64px;
+
+	/* 1.4 Border & Shadows */
+	/* Border Radius */
+	--radius-sm: 4px;
+	--radius-md: 8px;
+	--radius-lg: 12px;
+	--radius-xl: 16px;
+	--radius-2xl: 24px;
+	--radius-full: 9999px;
+
+	/* Shadows */
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+	--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+	--shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.2);
+	--shadow-glow: 0 0 20px rgba(7, 105, 81, 0.3);
+
+	/* Z-Index Scale */
+	--z-base: 0;
+	--z-dropdown: 10;
+	--z-sticky: 20;
+	--z-overlay: 30;
+	--z-modal: 40;
+	--z-popover: 50;
+	--z-toast: 60;
+	--z-fixed: 100;
 }
 
-html,
-body {
-	@apply bg-white dark:bg-gray-950;
+@theme {
+	--color-aksob-primary: var(--aksob-primary);
+	--color-aksob-secondary: var(--aksob-secondary);
+	--color-aksob-muted: var(--aksob-muted);
+	--color-aksob-darkest: var(--aksob-darkest);
 
-	@media (prefers-color-scheme: dark) {
-		color-scheme: dark;
+	--font-sans: var(--font-primary);
+	--font-mono: var(--font-mono);
+}
+
+body {
+	font-family: var(--font-primary);
+	color: var(--aksob-muted);
+	-webkit-font-smoothing: antialiased;
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+	background: var(--glass-white);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-panel-dark {
+	background: var(--glass-dark);
+	backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 1.5 Transitions & Animation */
+/* Fade In */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
 	}
+	to {
+		opacity: 1;
+	}
+}
+
+/* Slide Up */
+@keyframes slideUp {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Pulse (loading) */
+@keyframes pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+}
+
+/* Typing Dots */
+@keyframes typingBounce {
+	0%,
+	60%,
+	100% {
+		transform: translateY(0);
+	}
+	30% {
+		transform: translateY(-4px);
+	}
+}
+
+.animate-fade-in {
+	animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+	animation: slideUp 0.5s ease-out forwards;
 }

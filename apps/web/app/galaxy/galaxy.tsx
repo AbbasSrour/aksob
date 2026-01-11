@@ -1,7 +1,8 @@
+// import { useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import type { Route } from "./+types/galaxy";
+// import type { Route } from "./+types/galaxy";
 import "./galaxy.css";
 import { type Alumnus, galaxyData } from "./galaxy-data";
 
@@ -15,7 +16,7 @@ interface ClusterUserData {
 	morphFactor?: number;
 }
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
 	return [
 		{ title: "Galaxy of Stars - AKSOB Alumni" },
 		{ name: "description", content: "Explore the AKSOB Alumni network galaxy." },
@@ -23,6 +24,8 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Galaxy() {
+	// const navigate = useNavigate();
+	const navigate = (path: string) => (window.location.href = path); // Fallback
 	const mountRef = useRef<HTMLDivElement>(null);
 	const [viewMode, setViewMode] = useState<"overview" | "cluster">("overview");
 	const [hoveredStar, setHoveredStar] = useState<{ x: number; y: number; data: Alumnus } | null>(
@@ -75,57 +78,105 @@ export default function Galaxy() {
 		// Switch active cluster back to cloud state
 		clusterMeshesRef.current.forEach((mesh) => {
 			mesh.visible = true;
+			if (mesh.userData.linesMesh) mesh.userData.linesMesh.visible = true;
 			(mesh.userData as ClusterUserData).targetState = "cloud";
 			(mesh.userData as ClusterUserData).transitionTime = 0;
 			(mesh.material as THREE.PointsMaterial).opacity = 1;
 		});
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: This effect should only run once on mount to setup Three.js scene
 	useEffect(() => {
 		if (!mountRef.current) return;
 
 		// --- Scene Setup ---
 		const scene = new THREE.Scene();
-		scene.fog = new THREE.FogExp2(0x192c27, 0.0005);
+		// Deeper fog for more contrast
+		scene.fog = new THREE.FogExp2(0x050a09, 0.0008); 
 
 		const camera = new THREE.PerspectiveCamera(
 			75,
 			window.innerWidth / window.innerHeight,
 			0.1,
-			2000,
+			3000, // Increased far plane for background stars
 		);
 		camera.position.set(0, 100, 400);
 		cameraRef.current = camera;
 
 		const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		renderer.setPixelRatio(window.devicePixelRatio);
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Cap pixel ratio for performance
+		// Enable tone mapping for "glow" feel
+		renderer.toneMapping = THREE.ACESFilmicToneMapping;
+		renderer.toneMappingExposure = 1.2;
 		mountRef.current.appendChild(renderer.domElement);
 
 		const controls = new OrbitControls(camera, renderer.domElement);
 		controls.enableDamping = true;
 		controls.dampingFactor = 0.05;
 		controls.autoRotate = true;
-		controls.autoRotateSpeed = 0.5;
+		controls.autoRotateSpeed = 0.3; // Slower, majestic rotation
+		controls.maxDistance = 1200;
+		controls.minDistance = 20;
 		controlsRef.current = controls;
 
+		// --- Background Stars (Deep Field) ---
+		// Thousands of tiny static stars to create depth
+		const bgGeometry = new THREE.BufferGeometry();
+		const bgCount = 4000;
+		const bgPositions = new Float32Array(bgCount * 3);
+		const bgSizes = new Float32Array(bgCount);
+		const bgColors = new Float32Array(bgCount * 3);
+
+		for(let i=0; i<bgCount; i++) {
+			const r = 1000 + Math.random() * 1000; // Far away
+			const theta = Math.random() * Math.PI * 2;
+			const phi = Math.acos((Math.random() * 2) - 1);
+			bgPositions[i*3] = r * Math.sin(phi) * Math.cos(theta);
+			bgPositions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+			bgPositions[i*3+2] = r * Math.cos(phi);
+			
+			bgSizes[i] = Math.random() * 2;
+			
+			// Subtle blue-ish white
+			const shade = 0.5 + Math.random() * 0.5;
+			bgColors[i*3] = shade * 0.8;
+			bgColors[i*3+1] = shade * 0.9;
+			bgColors[i*3+2] = shade;
+		}
+		bgGeometry.setAttribute('position', new THREE.BufferAttribute(bgPositions, 3));
+		bgGeometry.setAttribute('color', new THREE.BufferAttribute(bgColors, 3));
+		bgGeometry.setAttribute('size', new THREE.BufferAttribute(bgSizes, 1));
+		
+		const bgMaterial = new THREE.PointsMaterial({
+			size: 2,
+			vertexColors: true,
+			transparent: true,
+			opacity: 0.6,
+			sizeAttenuation: true,
+			blending: THREE.AdditiveBlending,
+		});
+		const bgStars = new THREE.Points(bgGeometry, bgMaterial);
+		scene.add(bgStars);
+
+
 		// --- Galaxy Generation (Per Cluster) ---
-		// Helper to generate a soft glowing star texture
 		const createStarTexture = () => {
 			const canvas = document.createElement("canvas");
-			canvas.width = 32;
-			canvas.height = 32;
+			canvas.width = 64; // Higher res
+			canvas.height = 64;
 			const context = canvas.getContext("2d");
 			if (!context) return new THREE.Texture();
 
-			const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
+			// Soft glow gradient
+			const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
 			gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-			gradient.addColorStop(0.2, "rgba(255, 255, 255, 0.8)");
-			gradient.addColorStop(0.5, "rgba(255, 255, 255, 0.2)");
+			gradient.addColorStop(0.15, "rgba(255, 255, 255, 0.9)");
+			gradient.addColorStop(0.4, "rgba(255, 255, 255, 0.2)");
 			gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
 
 			context.fillStyle = gradient;
-			context.fillRect(0, 0, 32, 32);
+			context.fillRect(0, 0, 64, 64);
 
 			const texture = new THREE.CanvasTexture(canvas);
 			return texture;
@@ -142,7 +193,7 @@ export default function Galaxy() {
 			const particleCount = cluster.alumni.length;
 			const geometry = new THREE.BufferGeometry();
 			const positions = new Float32Array(particleCount * 3);
-			const colors = new Float32Array(particleCount * 3); // Keep colors if we want internal variation, otherwise material color is enough? Let's keep variance.
+			const colors = new Float32Array(particleCount * 3);
 			const sizes = new Float32Array(particleCount);
 
 			const clusterAlumni: Alumnus[] = [];
@@ -150,76 +201,101 @@ export default function Galaxy() {
 
 			// Calculate Center
 			const clusterAngle = (clusterIndex / galaxyData.length) * Math.PI * 2;
-			const clusterRadius = 150 + Math.random() * 50;
+			const clusterRadius = 200 + Math.random() * 80; // Spread them out more
 			const clusterX = Math.cos(clusterAngle) * clusterRadius;
 			const clusterZ = Math.sin(clusterAngle) * clusterRadius;
-			const center = new THREE.Vector3(clusterX, 0, clusterZ);
+			// Clusters at slightly different heights for 3D feel
+			const clusterY = (Math.random() - 0.5) * 60; 
+			const center = new THREE.Vector3(clusterX, clusterY, clusterZ);
 			clusterCentersRef.current.push(center);
 
 			const blinkOffsets = new Float32Array(particleCount);
 			const blinkSpeeds = new Float32Array(particleCount);
 			const baseColors = new Float32Array(particleCount * 3);
+			
+			// Store positions for lines
+			const particlePositionsVec3: THREE.Vector3[] = [];
 
 			cluster.alumni.forEach((alumnus, i) => {
-				// Position relative to 0,0,0 (Cluster local space) could be useful, but keeping World Space is easier for the "One Galaxy" feel initially.
-				// ACTUALLY: If we want to isolate them easily, World Space is fine as long as we move the camera.
-
-				const r = Math.random() * 50;
+				const r = Math.random() * 60; // Tighter clusters
 				const theta = Math.random() * Math.PI * 2;
 				const phi = Math.random() * Math.PI;
 
-				const x = clusterX + r * Math.sin(phi) * Math.cos(theta); // World Space Placement
-				const y = (Math.random() - 0.5) * 40;
+				const x = clusterX + r * Math.sin(phi) * Math.cos(theta);
+				const y = clusterY + (Math.random() - 0.5) * 40; // Flattened slightly
 				const z = clusterZ + r * Math.sin(phi) * Math.sin(theta);
 
 				positions[i * 3] = x;
 				positions[i * 3 + 1] = y;
 				positions[i * 3 + 2] = z;
+				
+				particlePositionsVec3.push(new THREE.Vector3(x, y, z));
 
 				colorHelper.set(cluster.color);
-				// Add slight variation
-				// colorHelper.offsetHSL(0, 0, (Math.random() - 0.5) * 0.1);
+				// Random variation brightness
+				colorHelper.offsetHSL(0, 0, (Math.random() - 0.5) * 0.2); 
+				
 				colors[i * 3] = colorHelper.r;
 				colors[i * 3 + 1] = colorHelper.g;
 				colors[i * 3 + 2] = colorHelper.b;
 
-				// Store base color for animation
 				baseColors[i * 3] = colorHelper.r;
 				baseColors[i * 3 + 1] = colorHelper.g;
 				baseColors[i * 3 + 2] = colorHelper.b;
 
-				// Blink params
 				blinkOffsets[i] = Math.random() * Math.PI * 2;
-				blinkSpeeds[i] = 0.5 + Math.random() * 1.5;
+				blinkSpeeds[i] = 1.0 + Math.random() * 2.0; // Faster blink
 
-				sizes[i] = 1.5 + Math.random() * 1.5;
+				sizes[i] = 2.0 + Math.random() * 3.0; // Varied sizes
 
 				clusterAlumni.push(alumnus);
 			});
-
-			// Pre-calculate Grid Positions for "Scattered" view
-			// We want a nice distribution (e.g., Sphere or Grid) centered at 0,0,0 (local space of cluster)
-			// Since particles are world space, we need to add the cluster center offset.
+			
+			// --- Constellation Lines ---
+			// Connect nearby stars with faint lines
+			const linePoints: THREE.Vector3[] = [];
+			const maxConnections = 2; // Keep it clean
+			const connectionDistance = 25;
+			
+			for(let i=0; i<particleCount; i++) {
+				const p1 = particlePositionsVec3[i];
+				let connections = 0;
+				for(let j=i+1; j<particleCount; j++) {
+					const p2 = particlePositionsVec3[j];
+					if(p1.distanceToSquared(p2) < connectionDistance * connectionDistance) {
+						linePoints.push(p1);
+						linePoints.push(p2);
+						connections++;
+						if(connections >= maxConnections) break;
+					}
+				}
+			}
+			
+			const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePoints);
+			const lineMaterial = new THREE.LineBasicMaterial({
+				color: cluster.color,
+				transparent: true,
+				opacity: 0.15, // Very faint
+				blending: THREE.AdditiveBlending,
+				depthWrite: false
+			});
+			const linesMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
+			scene.add(linesMesh);
+			// Bind lines visibility to points
+			// We can attach it to the points object in userData or manage parallel array
+			
+			// Pre-calculate Grid Positions
 			const gridPositions = new Float32Array(particleCount * 3);
-			const _rowSize = Math.ceil(particleCount ** (1 / 3));
-
-			// Randomized Star Field Layout (2D with overlap avoidance)
-			// We want them scattered randomly but not on top of each other.
-			const fieldWidth = 300;
-			const fieldHeight = 180;
-			const minDistance = 8; // Minimum distance between stars
+			const fieldWidth = 350;
+			const fieldHeight = 220;
+			const minDistance = 12; // More spacing
 			const placedPoints: { x: number; y: number }[] = [];
 
 			for (let i = 0; i < particleCount; i++) {
-				let x = 0,
-					y = 0,
-					_found = false;
-
-				// Try to find a non-overlapping spot
-				for (let attempt = 0; attempt < 30; attempt++) {
+				let x = 0, y = 0, _found = false;
+				for (let attempt = 0; attempt < 50; attempt++) {
 					x = (Math.random() - 0.5) * fieldWidth;
 					y = (Math.random() - 0.5) * fieldHeight;
-
 					let overlap = false;
 					for (const p of placedPoints) {
 						const dx = p.x - x;
@@ -234,32 +310,28 @@ export default function Galaxy() {
 						break;
 					}
 				}
-
-				// If clear spot not found after retries, just place it (rare)
 				placedPoints.push({ x, y });
-
 				gridPositions[i * 3] = center.x + x;
 				gridPositions[i * 3 + 1] = center.y + y;
-				gridPositions[i * 3 + 2] = center.z; // Flat 2D plane
+				gridPositions[i * 3 + 2] = center.z;
 			}
 
 			geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-			// Store original cloud positions to return to
 			geometry.setAttribute("initialPosition", new THREE.BufferAttribute(positions.slice(), 3));
 			geometry.setAttribute("gridPosition", new THREE.BufferAttribute(gridPositions, 3));
 			geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 			geometry.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
 
 			const material = new THREE.PointsMaterial({
-				size: 6, // Increased size for visibility
+				size: 8, // Bigger base size, attenuated
 				sizeAttenuation: true,
 				map: texture,
-				alphaTest: 0.1, // Lower threshold for soft edges
+				alphaTest: 0.01,
 				transparent: true,
 				vertexColors: true,
-				blending: THREE.AdditiveBlending, // Additive blending for "glow"
-				depthWrite: false, // Prevent z-fighting with transparency
-				opacity: 0.9,
+				blending: THREE.AdditiveBlending,
+				depthWrite: false,
+				opacity: 1.0,
 			});
 
 			const points = new THREE.Points(geometry, material);
@@ -268,14 +340,15 @@ export default function Galaxy() {
 				blinkOffsets: blinkOffsets,
 				blinkSpeeds: blinkSpeeds,
 				baseColors: baseColors,
-			}; // Tag it
+				linesMesh: linesMesh // Store ref to lines
+			}; 
 			scene.add(points);
 			clusterMeshesRef.current.push(points);
 			alumniDataGrid.push(clusterAlumni);
 
-			// Hit Mesh for Cluster Selection
+			// Hit Mesh
 			const hitMesh = new THREE.Mesh(
-				new THREE.SphereGeometry(50, 16, 16),
+				new THREE.SphereGeometry(70, 16, 16), // Larger hit area
 				new THREE.MeshBasicMaterial({ visible: false }),
 			);
 			hitMesh.position.copy(center);
@@ -319,10 +392,15 @@ export default function Galaxy() {
 			clusterMeshesRef.current.forEach((mesh, i) => {
 				if (i !== index) {
 					mesh.visible = false;
+					if (mesh.userData.linesMesh) mesh.userData.linesMesh.visible = false;
 				} else {
 					// Trigger Scatter Animation for the entered cluster
 					(mesh.userData as ClusterUserData).targetState = "grid";
 					(mesh.userData as ClusterUserData).transitionTime = 0;
+					// Hide lines for specific cluster in grid view? Or keep them?
+					// In grid view, positions change, so lines would be incorrect unless we animate them too (hard).
+					// So hide lines when in grid mode.
+					if (mesh.userData.linesMesh) mesh.userData.linesMesh.visible = false;
 				}
 			});
 
@@ -508,7 +586,7 @@ export default function Galaxy() {
 					}
 				} else {
 					document.body.style.cursor = "default";
-					if (hoveredStar) setHoveredStar(null);
+					setHoveredStar(null);
 					hoveredIndex = -1;
 					hoveredClusterIndex = -1;
 				}
@@ -540,7 +618,7 @@ export default function Galaxy() {
 			});
 			renderer.dispose();
 		};
-	}, [hoveredStar]);
+	}, []);
 
 	return (
 		<div className="galaxy-container" ref={mountRef}>
@@ -609,7 +687,7 @@ export default function Galaxy() {
 					<button
 						type="button"
 						className="popup-action"
-						onClick={() => alert(`Start chat with ${hoveredStar.data.name}`)}
+						onClick={() => navigate(`/chat/${hoveredStar.data.id}`)}
 					>
 						Chat Now
 					</button>
