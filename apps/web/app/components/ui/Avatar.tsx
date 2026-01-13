@@ -48,7 +48,7 @@ export const Avatar: React.FC<AvatarProps> = ({ src, name, size = "md", status, 
 				className={`
           ${sizeClasses[size]}
           rounded-full flex items-center justify-center
-          overflow-hidden border-2 border-white bg-[var(--aksob-muted)]
+          overflow-hidden bg-[var(--aksob-muted)]
           text-white font-semibold select-none
         `}
 			>
@@ -62,7 +62,7 @@ export const Avatar: React.FC<AvatarProps> = ({ src, name, size = "md", status, 
 			{status && (
 				<span
 					className={`
-            absolute bottom-0 right-0 block rounded-full ring-2 ring-white
+            absolute bottom-0 right-0 block rounded-full border-2 border-white
             ${statusColors[status]}
             ${statusSizes[size]}
           `}

@@ -43,26 +43,20 @@ export default function ChatLayout() {
 	const navigate = useNavigate();
 	const [conversations] = useState(MOCK_CONVERSATIONS);
 
-	// Check if we are viewing a specific conversation
 	const isConversationActive =
 		location.pathname.startsWith("/chat/") && location.pathname !== "/chat";
 
-	// Mobile Logic:
-	// If active conversation: Hide List, Show Outlet
-	// If no active conversation: Show List, Hide Outlet (unless desktop)
-
 	return (
-		<div className="flex h-full w-full bg-[var(--off-white)] overflow-hidden">
+		<div className="flex h-full w-full bg-white overflow-hidden">
 			{/* Sidebar */}
 			<div
 				className={`
-                w-full lg:w-80 h-full flex-shrink-0 z-20 
-                ${isConversationActive ? "hidden lg:flex" : "flex"}
-            `}
+					w-full lg:w-[340px] h-full flex-shrink-0 z-20 
+					${isConversationActive ? "hidden lg:block" : "block"}
+				`}
 			>
 				<ConversationList
 					onSearch={(q) => console.log("Search", q)}
-					onNewChat={() => console.log("New Chat")}
 				>
 					{conversations.map((conv) => (
 						<ConversationItem
@@ -78,9 +72,9 @@ export default function ChatLayout() {
 			{/* Main Content Area */}
 			<div
 				className={`
-                flex-1 h-full relative flex flex-col min-w-0
-                ${isConversationActive ? "flex" : "hidden lg:flex"}
-            `}
+					flex-1 h-full relative flex flex-col min-w-0 bg-white
+					${isConversationActive ? "flex" : "hidden lg:flex"}
+				`}
 			>
 				<Outlet />
 			</div>

@@ -1,4 +1,5 @@
 // import { useNavigate } from "react-router";
+import { ArrowLeft, Move, MousePointerClick } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
@@ -28,10 +29,12 @@ export default function Galaxy() {
 	const navigate = (path: string) => (window.location.href = path); // Fallback
 	const mountRef = useRef<HTMLDivElement>(null);
 	const [viewMode, setViewMode] = useState<"overview" | "cluster">("overview");
-	const [hoveredStar, setHoveredStar] = useState<{ x: number; y: number; data: Alumnus } | null>(
-		null,
-	);
-
+	const [selectedStar, setSelectedStar] = useState<{ x: number; y: number; data: Alumnus } | null>(null);
+    const [hoveredStar, setHoveredStar] = useState<{ x: number; y: number; data: Alumnus } | null>(null); // Re-added for tooltip
+    const [clusterBgColor, setClusterBgColor] = useState<string | null>(null); // Track active cluster color for background
+    // Track sidebar visibility for animation in loop
+    const sidebarOpenRef = useRef(false);
+	
 	// Refs for animation state to avoid re-renders
 	const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
 	const controlsRef = useRef<OrbitControls | null>(null);
@@ -39,6 +42,8 @@ export default function Galaxy() {
 	const targetControlsTarget = useRef(new THREE.Vector3(0, 0, 0));
 	const isTransitioning = useRef(false);
 	const viewModeRef = useRef<"overview" | "cluster">("overview");
+    const currentViewOffset = useRef(0); // For smooth sidebar camera shift
+
 
 	// Store cluster meshes to toggle visibility
 	const clusterMeshesRef = useRef<THREE.Points[]>([]);
@@ -64,6 +69,7 @@ export default function Galaxy() {
 	const handleBackClick = () => {
 		setViewMode("overview"); // Update UI
 		viewModeRef.current = "overview"; // Update Logic
+		setClusterBgColor(null); // Reset background to black
 
 		// Reset Camera Target
 		targetCameraPos.current.set(0, 100, 400);
@@ -123,36 +129,37 @@ export default function Galaxy() {
 		// --- Background Stars (Deep Field) ---
 		// Thousands of tiny static stars to create depth
 		const bgGeometry = new THREE.BufferGeometry();
-		const bgCount = 4000;
+		const bgCount = 10000;
 		const bgPositions = new Float32Array(bgCount * 3);
 		const bgSizes = new Float32Array(bgCount);
 		const bgColors = new Float32Array(bgCount * 3);
 
 		for(let i=0; i<bgCount; i++) {
-			const r = 1000 + Math.random() * 1000; // Far away
+			const r = 800 + Math.random() * 1200; // Slightly closer for visibility
 			const theta = Math.random() * Math.PI * 2;
 			const phi = Math.acos((Math.random() * 2) - 1);
 			bgPositions[i*3] = r * Math.sin(phi) * Math.cos(theta);
 			bgPositions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
 			bgPositions[i*3+2] = r * Math.cos(phi);
 			
-			bgSizes[i] = Math.random() * 2;
+			// Varied sizes - some larger "bright" stars
+			bgSizes[i] = 0.5 + Math.random() * 3;
 			
-			// Subtle blue-ish white
-			const shade = 0.5 + Math.random() * 0.5;
-			bgColors[i*3] = shade * 0.8;
-			bgColors[i*3+1] = shade * 0.9;
-			bgColors[i*3+2] = shade;
+			// Brighter white with slight color variation
+			const shade = 0.7 + Math.random() * 0.3;
+			bgColors[i*3] = shade;
+			bgColors[i*3+1] = shade;
+			bgColors[i*3+2] = shade * (0.95 + Math.random() * 0.05); // Slight blue tint
 		}
 		bgGeometry.setAttribute('position', new THREE.BufferAttribute(bgPositions, 3));
 		bgGeometry.setAttribute('color', new THREE.BufferAttribute(bgColors, 3));
 		bgGeometry.setAttribute('size', new THREE.BufferAttribute(bgSizes, 1));
 		
 		const bgMaterial = new THREE.PointsMaterial({
-			size: 2,
+			size: 2.5,
 			vertexColors: true,
 			transparent: true,
-			opacity: 0.6,
+			opacity: 1.0,
 			sizeAttenuation: true,
 			blending: THREE.AdditiveBlending,
 		});
@@ -231,17 +238,20 @@ export default function Galaxy() {
 				
 				particlePositionsVec3.push(new THREE.Vector3(x, y, z));
 
+				// Store original cluster color
 				colorHelper.set(cluster.color);
-				// Random variation brightness
 				colorHelper.offsetHSL(0, 0, (Math.random() - 0.5) * 0.2); 
 				
+				// Use cluster colors directly
 				colors[i * 3] = colorHelper.r;
 				colors[i * 3 + 1] = colorHelper.g;
 				colors[i * 3 + 2] = colorHelper.b;
-
+				
+				// Store base colors for blinking effect
 				baseColors[i * 3] = colorHelper.r;
 				baseColors[i * 3 + 1] = colorHelper.g;
 				baseColors[i * 3 + 2] = colorHelper.b;
+
 
 				blinkOffsets[i] = Math.random() * Math.PI * 2;
 				blinkSpeeds[i] = 1.0 + Math.random() * 2.0; // Faster blink
@@ -275,7 +285,7 @@ export default function Galaxy() {
 			const lineMaterial = new THREE.LineBasicMaterial({
 				color: cluster.color,
 				transparent: true,
-				opacity: 0.15, // Very faint
+				opacity: 0.12, // Subtle lines
 				blending: THREE.AdditiveBlending,
 				depthWrite: false
 			});
@@ -367,28 +377,13 @@ export default function Galaxy() {
 			mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 		};
 
-		const onClick = (_event: MouseEvent) => {
-			if (isTransitioning.current) return;
-			raycaster.setFromCamera(mouse, camera);
-
-			if (viewModeRef.current === "overview") {
-				// Use ref for reliable state in event handler
-				const intersects = raycaster.intersectObjects(clusterHitMeshes);
-				if (intersects.length > 0) {
-					enterCluster(intersects[0].object.userData.clusterIndex);
-				}
-			} else {
-				// Cluster Mode
-				// Check for Star Clicks (Chat) - Optional handled by popup button
-			}
-		};
 
 		const enterCluster = (index: number) => {
 			setViewMode("cluster");
 			viewModeRef.current = "cluster";
 			const center = clusterCentersRef.current[index];
 
-			// Hide other clusters
+			// Hide other clusters, transition colors for the active one
 			clusterMeshesRef.current.forEach((mesh, i) => {
 				if (i !== index) {
 					mesh.visible = false;
@@ -397,12 +392,13 @@ export default function Galaxy() {
 					// Trigger Scatter Animation for the entered cluster
 					(mesh.userData as ClusterUserData).targetState = "grid";
 					(mesh.userData as ClusterUserData).transitionTime = 0;
-					// Hide lines for specific cluster in grid view? Or keep them?
-					// In grid view, positions change, so lines would be incorrect unless we animate them too (hard).
-					// So hide lines when in grid mode.
+					// Hide lines when in grid mode
 					if (mesh.userData.linesMesh) mesh.userData.linesMesh.visible = false;
 				}
 			});
+			
+			// Set background color to cluster color
+			setClusterBgColor(galaxyData[index].color);
 
 			// Camera Logic
 			targetControlsTarget.current.copy(center);
@@ -413,9 +409,6 @@ export default function Galaxy() {
 			isTransitioning.current = true;
 			controls.autoRotate = false;
 		};
-
-		window.addEventListener("mousemove", onMouseMove);
-		window.addEventListener("click", onClick);
 
 		// --- Animation Loop ---
 		let hoveredIndex = -1;
@@ -454,14 +447,16 @@ export default function Galaxy() {
 				const { blinkOffsets, blinkSpeeds, baseColors } = points.userData;
 
 				for (let i = 0; i < blinkOffsets.length; i++) {
-					// Sine wave between 0.4 and 1.0 intensity
+					// Sine wave between 0.5 and 1.0 intensity for subtle blinking
 					const brightness = 0.6 + 0.4 * Math.sin(time * blinkSpeeds[i] + blinkOffsets[i]);
-
+					
 					colors[i * 3] = baseColors[i * 3] * brightness;
 					colors[i * 3 + 1] = baseColors[i * 3 + 1] * brightness;
 					colors[i * 3 + 2] = baseColors[i * 3 + 2] * brightness;
 				}
+				
 				points.geometry.attributes.color.needsUpdate = true;
+
 
 				// --- Position Morphing (Cloud <-> Grid) ---
 				if (points.userData.targetState) {
@@ -544,29 +539,20 @@ export default function Galaxy() {
 			// Mouse Interaction
 			raycaster.setFromCamera(mouse, camera);
 
-			// Different interactions based on state
-			// We can infer state from controls.autoRotate (True = Overview, False = Cluster)
-			// const isOverview = controls.autoRotate; // Replaced by viewModeRef.current
-
 			if (viewModeRef.current === "overview") {
-				// Use ref for reliable state
-				// Highlight Clusters logic (Optional visual scale up)
-				// For now, cursor change on hover over cluster mesh
 				const hits = raycaster.intersectObjects(clusterHitMeshes);
 				document.body.style.cursor = hits.length > 0 ? "pointer" : "default";
-				setHoveredStar(null); // No star popups in overview
+                setHoveredStar(null);
 			} else if (viewModeRef.current === "cluster") {
-				// Cluster Mode: Use ref for reliable state
-				// Cluster Mode: Raycast only against the VISIBLE cluster mesh
 				const visibleClusters = clusterMeshesRef.current.filter((m) => m.visible);
 				const intersects = raycaster.intersectObjects(visibleClusters);
+				
+				document.body.style.cursor = intersects.length > 0 ? "pointer" : "default";
 
-				if (intersects.length > 0) {
-					document.body.style.cursor = "pointer";
+                if (intersects.length > 0) {
 					const instanceId = intersects[0].index;
-					const clusterIdx = intersects[0].object.userData.clusterIndex; // Get which cluster
+					const clusterIdx = intersects[0].object.userData.clusterIndex;
 
-					// Check if valid
 					if (
 						instanceId !== undefined &&
 						clusterIdx !== undefined &&
@@ -575,8 +561,9 @@ export default function Galaxy() {
 						hoveredIndex = instanceId;
 						hoveredClusterIndex = clusterIdx;
 
-						const starData = alumniDataGrid[clusterIdx][instanceId]; // Access correct data
-
+						const starData = alumniDataGrid[clusterIdx][instanceId]; // Access data
+                        
+                        // Calculate screen pos for tooltip
 						const p = intersects[0].point.clone();
 						p.project(camera);
 						const startX = (p.x * 0.5 + 0.5) * window.innerWidth;
@@ -585,17 +572,73 @@ export default function Galaxy() {
 						setHoveredStar({ x: startX, y: startY, data: starData });
 					}
 				} else {
-					document.body.style.cursor = "default";
 					setHoveredStar(null);
 					hoveredIndex = -1;
 					hoveredClusterIndex = -1;
 				}
 			}
+			
+			// Handle Camera Offset for Sidebar
+			// We want to shift the view so the center of the 3D scene appears to the LEFT 
+            // to make room for the sidebar on the RIGHT.
+            // setViewOffset(fullW, fullH, x, y, w, h)
+            // Positive x shifts the finding window to the right, which makes the image shift LEFT.
+            const targetOffset = sidebarOpenRef.current ? window.innerWidth * 0.15 : 0; 
+            
+            // Smoothly interpolate offset
+            if (Math.abs(currentViewOffset.current - targetOffset) > 0.5) {
+                currentViewOffset.current += (targetOffset - currentViewOffset.current) * 0.1;
+                
+                camera.setViewOffset(
+                    window.innerWidth, 
+                    window.innerHeight, 
+                    currentViewOffset.current, 
+                    0, 
+                    window.innerWidth, 
+                    window.innerHeight
+                );
+            }
 
 			renderer.render(scene, camera);
 		};
 
 		animate();
+        
+        // Click Handler (Interaction)
+		const onClick = (_event: MouseEvent) => {
+			if (isTransitioning.current) return;
+			raycaster.setFromCamera(mouse, camera);
+
+			if (viewModeRef.current === "overview") {
+				const intersects = raycaster.intersectObjects(clusterHitMeshes);
+				if (intersects.length > 0) {
+					enterCluster(intersects[0].object.userData.clusterIndex);
+				}
+			} else {
+				// Cluster Mode: Select Star
+				const visibleClusters = clusterMeshesRef.current.filter((m) => m.visible);
+				const intersects = raycaster.intersectObjects(visibleClusters);
+
+				if (intersects.length > 0) {
+					const instanceId = intersects[0].index;
+					const clusterIdx = intersects[0].object.userData.clusterIndex;
+                    
+                    if (instanceId !== undefined && clusterIdx !== undefined) {
+                        const starData = alumniDataGrid[clusterIdx][instanceId]; // Access data
+                        setSelectedStar({ x: 0, y: 0, data: starData }); // Coords not needed for sidebar
+                        sidebarOpenRef.current = true;
+                    }
+				} else {
+                    // Clicking empty space deselects
+                    setSelectedStar(null);
+                    sidebarOpenRef.current = false;
+                }
+			}
+		};
+
+
+		window.addEventListener("mousemove", onMouseMove);
+		window.addEventListener("click", onClick);
 
 		const handleResize = () => {
 			camera.aspect = window.innerWidth / window.innerHeight;
@@ -638,34 +681,25 @@ export default function Galaxy() {
 			{viewMode === "cluster" && (
 				<button
 					type="button"
-					className="back-button"
+					className="glass-back-button"
 					onClick={handleBackClick}
-					style={{
-						position: "absolute",
-						top: "20px",
-						left: "20px",
-						zIndex: 100,
-						padding: "10px 20px",
-						background: "rgba(7, 105, 81, 0.9)",
-						color: "white",
-						border: "none",
-						borderRadius: "8px",
-						cursor: "pointer",
-						fontWeight: "bold",
-						backdropFilter: "blur(4px)",
-					}}
 				>
-					← Back to Galaxy
+					← Back to Overview
 				</button>
 			)}
 
-			{/* Interaction UI Layer */}
-			{hoveredStar && viewMode === "cluster" && (
+			{/* Hover Tooltip (Detailed) */}
+			{!selectedStar && hoveredStar && viewMode === "cluster" && (
 				<div
-					className={`star-popup visible`}
+					className="star-popup visible"
 					style={{
 						top: hoveredStar.y,
 						left: hoveredStar.x,
+                        pointerEvents: "none", // Ensure clicks pass through to 3D scene (unless buttons are inside?)
+                        // If we want hover to be interactive (e.g. click button), pointerEvents must be auto.
+                        // But raycaster runs on mousemove. If tooltip covers the star, mousemove might lose the star?
+                        // Usually simpler if tooltip is offset or non-interactive for selection.
+                        // Since Click on Star opens Sidebar, this tooltip is just preview.
 					}}
 				>
 					<div className="popup-header">
@@ -684,15 +718,59 @@ export default function Galaxy() {
 						<br />
 						{hoveredStar.data.company}
 					</div>
-					<button
-						type="button"
-						className="popup-action"
-						onClick={() => navigate(`/chat/${hoveredStar.data.id}`)}
-					>
-						Chat Now
-					</button>
+                    {/* Trace/Hint */}
+                    <div className="text-[10px] text-white/50 mt-2 uppercase tracking-wide">
+                        Click to view profile & chat
+                    </div>
 				</div>
 			)}
+
+			{/* Side Panel (Desktop) */}
+			<div className={`galaxy-sidebar ${selectedStar ? "open" : ""}`}>
+				{selectedStar && (
+					<>
+                        <button type="button" className="sidebar-close" onClick={() => {
+                            setSelectedStar(null);
+                            sidebarOpenRef.current = false;
+                        }}>×</button>
+                        
+						<div className="sidebar-header">
+							<div className="sidebar-avatar">
+								{selectedStar.data.name.substring(0, 2).toUpperCase()}
+							</div>
+							<div>
+								<h2>{selectedStar.data.name}</h2>
+								<p className="sidebar-subtitle">
+									{selectedStar.data.major} '{selectedStar.data.year.toString().slice(-2)}
+								</p>
+							</div>
+						</div>
+
+						<div className="sidebar-content">
+                            <div className="sidebar-section">
+                                <h3>Current Position</h3>
+                                <p>{selectedStar.data.position}</p>
+                                <p className="text-sm opacity-70">{selectedStar.data.company}</p>
+                            </div>
+                            
+                            <hr className="sidebar-divider" />
+                            
+                             <div className="sidebar-section">
+                                <h3>Location</h3>
+                                <p>Beirut, Lebanon</p>
+                            </div>
+
+							<button
+								type="button"
+								className="sidebar-action-btn"
+								onClick={() => navigate(`/chat/${selectedStar.data.id}`)}
+							>
+								Start Conversation
+							</button>
+						</div>
+					</>
+				)}
+			</div>
 		</div>
 	);
 }

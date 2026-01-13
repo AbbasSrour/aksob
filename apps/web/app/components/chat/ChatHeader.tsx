@@ -1,13 +1,12 @@
-import { ArrowLeft, MoreVertical } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import type React from "react";
-import { Link } from "react-router";
 import { Avatar } from "~/components/ui";
 
 interface ChatHeaderProps {
 	name: string;
 	avatarSrc?: string;
 	isOnline?: boolean;
-	statusText?: string; // "Online", "Last seen...", "Typing..."
+	statusText?: string;
 	onBack?: () => void;
 	showBack?: boolean;
 }
@@ -21,28 +20,42 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 	showBack,
 }) => {
 	return (
-		<div className="flex items-center justify-between h-16 px-4 bg-white/80 backdrop-blur-md border-b border-[var(--gray-200)] shadow-sm flex-shrink-0 z-[var(--z-sticky)]">
+		<div className="flex items-center justify-between h-[72px] px-4 pt-2 bg-white border-b border-gray-100 flex-shrink-0">
 			<div className="flex items-center gap-3">
 				{showBack && (
 					<button
+						type="button"
 						onClick={onBack}
-						className="md:hidden p-2 -ml-2 text-[var(--gray-600)] hover:text-[var(--aksob-primary)] rounded-full hover:bg-[var(--gray-50)]"
+						className="lg:hidden p-2 -ml-2 text-gray-500 hover:text-[var(--aksob-primary)] rounded-xl hover:bg-gray-50 transition-colors"
 					>
-						<ArrowLeft size={20} />
+						<ArrowLeft size={22} />
 					</button>
 				)}
 
 				<div className="flex items-center gap-3">
-					<Avatar name={name} src={avatarSrc} status={isOnline ? "online" : undefined} size="md" />
+					<Avatar 
+						name={name} 
+						src={avatarSrc} 
+						status={isOnline ? "online" : undefined} 
+						size="md"
+					/>
 					<div>
-						<h3 className="text-base font-semibold text-[var(--aksob-darkest)] leading-tight">
+						<h3 className="text-base font-semibold text-gray-900 leading-tight">
 							{name}
 						</h3>
 						{statusText && (
-							<div className="flex items-center gap-1.5">
-								{isOnline && <span className="w-1.5 h-1.5 rounded-full bg-[var(--success)]"></span>}
+							<div className="flex items-center gap-1.5 mt-0.5">
+								{isOnline && statusText !== "Typing..." && (
+									<span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+								)}
 								<span
-									className={`text-xs ${statusText === "Typing..." ? "text-[var(--aksob-primary)] font-medium" : "text-[var(--gray-500)]"}`}
+									className={`text-xs ${
+										statusText === "Typing..." 
+											? "text-[var(--aksob-primary)] font-medium" 
+											: isOnline 
+												? "text-emerald-600" 
+												: "text-gray-400"
+									}`}
 								>
 									{statusText}
 								</span>
@@ -51,10 +64,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 					</div>
 				</div>
 			</div>
-
-			<button className="p-2 text-[var(--gray-500)] hover:text-[var(--aksob-primary)] rounded-full hover:bg-[var(--gray-50)] transition-colors">
-				<MoreVertical size={20} />
-			</button>
 		</div>
 	);
 };
