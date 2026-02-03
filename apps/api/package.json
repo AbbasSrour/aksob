@@ -32,6 +32,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.11",
 		"@types/bun": "^1.2.0",
+		"@typescript/native-preview": "latest",
 		"drizzle-kit": "^0.31.0"
 	}
 }

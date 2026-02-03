@@ -194,7 +194,7 @@ export const healthModule = new Elysia({ prefix: "/health" })
 - Custom theme in `app.css` using `@theme` directive
 
 ### Three.js (Galaxy)
-- Main component: `apps/web/src/galaxy/galaxy.tsx`
+- Main component: `apps/web/src/galaxy/galaxy.layout.tsx`
 - Data: `apps/web/src/galaxy/galaxy-data.ts`
 - Use refs for animation state to avoid re-renders
 - Clean up resources in useEffect return

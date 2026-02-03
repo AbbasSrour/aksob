@@ -16,6 +16,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.11",
-		"typescript": "^5.9.2"
+		"@typescript/native-preview": "latest"
 	}
 }

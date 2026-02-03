@@ -11,11 +11,6 @@
 		"isolatedModules": true,
 		"noEmit": true,
 		"verbatimModuleSyntax": true,
-		"forceConsistentCasingInFileNames": true,
-		"baseUrl": ".",
-		"paths": {
-			"@aksob/shared/*": ["./packages/shared/src/*"]
-		}
-	},
-	"exclude": ["node_modules", "apps/*/node_modules", "packages/*/node_modules"]
+		"forceConsistentCasingInFileNames": true
+	}
 }

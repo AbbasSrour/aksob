@@ -310,10 +310,10 @@ export const conversationParticipantsRelations = relations(
 
 ## 8.1 Galaxy Integration (Click Star → Chat)
 
-### File: `apps/web/app/galaxy/galaxy.tsx` (additions)
+### File: `apps/web/app/galaxy/galaxy.layout.tsx` (additions)
 
 ```tsx
-// Add to existing galaxy.tsx
+// Add to existing galaxy.layout.tsx
 
 import { useNavigate } from "react-router";
 import { useSession } from "@/lib/auth-client";
@@ -3023,7 +3023,7 @@ import { type RouteConfig, index, route, layout } from "@react-router/dev/routes
 
 export default [
   // Galaxy (home)
-  index("galaxy/galaxy.tsx"),
+  index("galaxy/galaxy.layout.tsx"),
   
   // Auth routes
   route("auth/login", "auth/login.tsx"),
