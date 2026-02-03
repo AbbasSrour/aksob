@@ -1,4 +1,4 @@
-import { ArrowLeft, LogOut, MessageSquare } from "lucide-react";
+import { ArrowLeft, LogIn, LogOut, MessageSquare, UserPlus } from "lucide-react";
 import type React from "react";
 import { Link, useLocation } from "react-router";
 import { Avatar } from "~/components/ui/avatar";
@@ -11,11 +11,11 @@ interface NavbarProps {
 	onLogout?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({
-	user = { name: "User", avatar: undefined },
-	onLogout,
-}) => {
+export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 	const location = useLocation();
+	const isAuthenticated = Boolean(user);
+	const userName = user?.name?.trim() ? user.name : "User";
+	const userAvatar = user?.avatar;
 
 	// Determine if we need a transparent background (overlay) for Galaxy view
 	const isGalaxy = location.pathname === "/";
@@ -67,45 +67,73 @@ export const Navbar: React.FC<NavbarProps> = ({
 								: "flex items-center gap-3"
 						}
 					>
-						{/* Chat Icon */}
-						<Link
-							to="/chat"
-							className={isGalaxy ? "hud-btn has-dot" : normalBtnClass}
-							title="Chat"
-							data-label="Network"
-						>
-							<MessageSquare size={20} />
-						</Link>
+						{isAuthenticated ? (
+							<>
+								{/* Chat Icon */}
+								<Link
+									to="/chat"
+									className={isGalaxy ? "hud-btn has-dot" : normalBtnClass}
+									title="Chat"
+									data-label="Network"
+								>
+									<MessageSquare size={20} />
+								</Link>
 
-						{isGalaxy && <div className="hud-separator" />}
+								{isGalaxy && <div className="hud-separator" />}
 
-						{/* Profile (Avatar) */}
-						<Link
-							to="/profile"
-							className={isGalaxy ? "hud-btn" : "block pointer-events-auto"}
-							title="Profile"
-							data-label="Profile"
-						>
-							<Avatar
-								name={user.name}
-								src={user.avatar}
-								size="sm"
-								className={isGalaxy ? "" : "transition-all cursor-pointer"}
-							/>
-						</Link>
+								{/* Profile (Avatar) */}
+								<Link
+									to="/profile"
+									className={isGalaxy ? "hud-btn" : "block pointer-events-auto"}
+									title="Profile"
+									data-label="Profile"
+								>
+									<Avatar
+										name={userName}
+										src={userAvatar}
+										size="sm"
+										className={isGalaxy ? "" : "transition-all cursor-pointer"}
+									/>
+								</Link>
 
-						{isGalaxy && <div className="hud-separator" />}
+								{isGalaxy && <div className="hud-separator" />}
 
-						{/* Logout */}
-						<button
-							type="button"
-							onClick={onLogout}
-							className={`${isGalaxy ? "hud-btn" : normalBtnClass} cursor-pointer`}
-							title="Logout"
-							data-label="Logout"
-						>
-							<LogOut size={18} />
-						</button>
+								{/* Logout */}
+								<button
+									type="button"
+									onClick={onLogout}
+									className={`${isGalaxy ? "hud-btn" : normalBtnClass} cursor-pointer`}
+									title="Logout"
+									data-label="Logout"
+								>
+									<LogOut size={18} />
+								</button>
+							</>
+						) : (
+							<>
+								{/* Sign In */}
+								<Link
+									to="/auth/login"
+									className={isGalaxy ? "hud-btn" : normalBtnClass}
+									title="Sign In"
+									data-label="Sign In"
+								>
+									<LogIn size={18} />
+								</Link>
+
+								{isGalaxy && <div className="hud-separator" />}
+
+								{/* Join */}
+								<Link
+									to="/auth/register"
+									className={isGalaxy ? "hud-btn" : normalBtnClass}
+									title="Join"
+									data-label="Join"
+								>
+									<UserPlus size={18} />
+								</Link>
+							</>
+						)}
 					</div>
 				</div>
 			</div>
