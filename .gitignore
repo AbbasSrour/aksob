@@ -7,6 +7,9 @@ node_modules/
 build/
 dist/
 
+# Vercel
+.vercel/
+
 # Logs
 logs/
 *.log
