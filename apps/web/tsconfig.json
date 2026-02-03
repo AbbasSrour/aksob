@@ -14,12 +14,28 @@
 		"verbatimModuleSyntax": true,
 		"forceConsistentCasingInFileNames": true,
 		"baseUrl": ".",
+		"rootDirs": [".", ".react-router/types"],
 		"paths": {
-			"~/*": ["app/*"],
+			"~/app/*": ["app/*"],
+			"~/components/*": ["components/*"],
+			"~/hooks/*": ["hooks/*"],
+			"~/utils/*": ["utils/*"],
 			"@aksob/shared/*": ["../../packages/shared/src/*"]
 		},
-		"types": ["react/canary", "react-dom/canary", "@react-router/node"]
+		"types": [
+			"react/canary",
+			"react-dom/canary",
+			"@react-router/node",
+			"vite/client"
+		]
 	},
-	"include": ["app/**/*", "src/**/*", "react-router.config.ts", "vite.config.ts"],
+	"include": [
+		"app/**/*",
+		"components/**/*",
+		"hooks/**/*",
+		"utils/**/*",
+		"react-router.config.ts",
+		"vite.config.ts"
+	],
 	"exclude": ["node_modules", "build", ".react-router"]
 }
