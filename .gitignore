@@ -13,3 +13,4 @@ dist/
 # Logs
 logs/
 *.log
+/**/*/local.db
