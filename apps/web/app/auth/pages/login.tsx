@@ -1,103 +1,134 @@
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Form, Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
-import { Divider } from "~/components/ui/divider";
 import { Input } from "~/components/ui/input";
 
 export default function Login() {
 	return (
-		<div className="w-full">
-			<div className="mb-6 text-center">
-				<h2 className="text-2xl font-bold text-(--aksob-darkest)">
-					Welcome Back
-				</h2>
-				<p className="text-(--gray-600) mt-2">
-					Sign in to your account to continue
-				</p>
-			</div>
-
-			<div className="space-y-4">
-				<Button
-					variant="secondary"
-					fullWidth
-					className="relative flex items-center justify-center gap-2"
-				>
-					{/* Simple G icon for Google */}
-					<svg
-						className="w-5 h-5"
-						viewBox="0 0 24 24"
-						fill="currentColor"
-						role="img"
-						aria-label="Google Logo"
-					>
-						<title>Google Logo</title>
-						<path
-							d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-							fill="#4285F4"
-						/>
-						<path
-							d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-							fill="#34A853"
-						/>
-						<path
-							d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-							fill="#FBBC05"
-						/>
-						<path
-							d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-							fill="#EA4335"
-						/>
-					</svg>
-					Continue with Google
-				</Button>
-			</div>
-
-			<Divider text="OR" />
-
-			<Form method="post" className="space-y-5">
-				<Input
-					type="email"
-					name="email"
-					label="Email Address"
-					placeholder="name@lau.edu"
-					required
-					fullWidth
-				/>
-
-				<div className="space-y-1">
-					<Input
-						type="password"
-						name="password"
-						label="Password"
-						placeholder="Enter your password"
-						required
-						fullWidth
+		<div className="relative w-full animate-fade-in">
+			<div className="pointer-events-none absolute -right-40 top-0 h-52 w-52 rounded-full bg-(--aksob-primary)/12 blur-3xl" />
+			<div className="pointer-events-none absolute -right-32 top-56 h-28 w-28 rounded-full border border-(--aksob-primary)/25 bg-white/30" />
+			<div className="pointer-events-none absolute -right-[26rem] -top-8 hidden h-[38rem] w-[38rem] opacity-50 md:block">
+				<svg viewBox="0 0 480 480" className="h-full w-full" aria-hidden="true">
+					<path
+						d="M92 42 C148 72, 196 102, 244 148 C292 194, 332 236, 372 282 C404 318, 428 344, 456 372"
+						fill="none"
+						stroke="rgba(7,105,81,0.38)"
+						strokeWidth="1.6"
+						strokeDasharray="3 9"
 					/>
+					<circle cx="82" cy="36" r="5" fill="rgba(7,105,81,0.12)" />
+					<circle cx="82" cy="36" r="8" fill="rgba(7,105,81,0.06)" className="blur-[2px]" />
+					<circle cx="308" cy="228" r="6" fill="rgba(7,105,81,0.10)" />
+					<circle cx="308" cy="228" r="10" fill="rgba(7,105,81,0.05)" className="blur-[3px]" />
+					<circle cx="462" cy="378" r="5" fill="rgba(7,105,81,0.12)" />
+					<circle cx="462" cy="378" r="8" fill="rgba(7,105,81,0.06)" className="blur-[2px]" />
+					<text x="94" y="26" fill="rgba(54,89,81,0.48)" fontSize="11" letterSpacing="1.1">
+						FACULTY
+					</text>
+					<text x="320" y="218" fill="rgba(54,89,81,0.48)" fontSize="11" letterSpacing="1.1">
+						ALUMNI
+					</text>
+					<text x="380" y="400" fill="rgba(54,89,81,0.48)" fontSize="11" letterSpacing="1.1">
+						STUDENTS
+					</text>
+				</svg>
+			</div>
+
+			<div className="relative z-10 space-y-6">
+				<div>
+					<Link to="/" className="mb-5 inline-block w-full max-w-[24rem]">
+						<img
+							src="/logo.png"
+							alt="Lebanese American University - Adnan Kassar School of Business"
+							className="h-auto w-full"
+						/>
+					</Link>
+
+					<div className="flex items-center gap-3">
+						<span className="h-px w-10 bg-(--aksob-primary)/45" />
+						<p className="text-[11px] font-semibold tracking-[0.16em] text-(--aksob-primary) uppercase">
+							Secure access
+						</p>
+					</div>
+					<h2 className="mt-4 text-3xl font-bold tracking-tight text-(--aksob-darkest)">
+						Sign in to your AKSOB account
+					</h2>
+					<p className="mt-2 max-w-md text-sm leading-relaxed text-(--gray-600)">
+						Faculty, alumni, and students can access their network space from here.
+					</p>
 				</div>
 
-				<div className="flex items-center justify-between">
-					<Checkbox id="remember" name="remember" label="Remember me" />
-					<Link
-						to="/auth/forgot-password"
-						className="text-sm font-medium text-(--aksob-primary) hover:text-(--aksob-secondary) hover:underline"
+				<Form method="post" className="space-y-5">
+					<div className="relative pl-4 sm:pl-5">
+						<div className="pointer-events-none absolute inset-y-1 left-0 w-px bg-linear-to-b from-(--aksob-primary)/20 via-(--aksob-primary)/70 to-(--aksob-primary)/20" />
+						<div className="space-y-4">
+							<Input
+								id="email"
+								type="email"
+								name="email"
+								label="Email Address"
+								placeholder="name@lau.edu.lb"
+								helperText="Use your institutional or registered alumni email"
+								required
+								fullWidth
+							/>
+
+							<Input
+								id="password"
+								type="password"
+								name="password"
+								label="Password"
+								placeholder="Enter your password"
+								required
+								fullWidth
+							/>
+						</div>
+					</div>
+
+					<div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+						<Checkbox id="remember" name="remember" label="Keep me signed in" />
+						<Link
+							to="/auth/forgot-password"
+							className="text-sm font-medium text-(--aksob-primary) transition-colors hover:text-(--aksob-secondary) hover:underline"
+						>
+							Forgot password?
+						</Link>
+					</div>
+
+					<Button
+						type="submit"
+						variant="primary"
+						fullWidth
+						size="lg"
+						className="h-12 rounded-full text-base font-semibold shadow-none ring-1 ring-(--aksob-primary)/15 transition-all hover:ring-(--aksob-primary)/40"
 					>
-						Forgot password?
+						Sign In
+						<ArrowRight size={18} className="ml-2" />
+					</Button>
+				</Form>
+
+				<div className="flex items-start gap-2 border-t border-(--gray-200) pt-4 text-xs text-(--gray-600)">
+					<ShieldCheck
+						size={16}
+						className="mt-0.5 shrink-0 text-(--aksob-primary)"
+					/>
+					<p>
+						For students and alumni, use your registered academic email. Faculty can sign
+						in with their LAU credentials.
+					</p>
+				</div>
+
+				<div className="text-center text-sm">
+					<span className="text-(--gray-600)">Need an account? </span>
+					<Link
+						to="/auth/register"
+						className="font-medium text-(--aksob-primary) transition-colors hover:text-(--aksob-secondary) hover:underline"
+					>
+						Create one here
 					</Link>
 				</div>
-
-				<Button type="submit" variant="primary" fullWidth size="lg">
-					Sign In
-				</Button>
-			</Form>
-
-			<div className="mt-6 text-center text-sm">
-				<span className="text-(--gray-600)">Don't have an account? </span>
-				<Link
-					to="/auth/signup"
-					className="font-medium text-(--aksob-primary) hover:text-(--aksob-secondary) hover:underline"
-				>
-					Sign up
-				</Link>
 			</div>
 		</div>
 	);

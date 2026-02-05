@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import "./galaxy.css";
-import { type Alumnus, type MajorCluster, galaxyData } from "../utils/galaxy-data";
+import {
+	type Alumnus,
+	galaxyData,
+	type MajorCluster,
+} from "../utils/galaxy-data";
 
 interface ClusterUserData {
 	clusterIndex: number;
@@ -574,9 +578,9 @@ export default function Galaxy() {
 				document.body.style.cursor = hits.length > 0 ? "pointer" : "default";
 				setHoveredStar(null);
 			} else if (viewModeRef.current === "cluster") {
-					const visibleClusters = clusterMeshesRef.current.filter(
-						(m) => m.visible,
-					);
+				const visibleClusters = clusterMeshesRef.current.filter(
+					(m) => m.visible,
+				);
 				const intersects = raycaster.intersectObjects(visibleClusters);
 
 				document.body.style.cursor =
@@ -652,9 +656,9 @@ export default function Galaxy() {
 				}
 			} else {
 				// Cluster Mode: Select Star
-			const visibleClusters = clusterMeshesRef.current.filter(
-				(m) => m.visible,
-			);
+				const visibleClusters = clusterMeshesRef.current.filter(
+					(m) => m.visible,
+				);
 				const intersects = raycaster.intersectObjects(visibleClusters);
 
 				if (intersects.length > 0) {

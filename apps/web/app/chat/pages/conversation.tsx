@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { ChatHeader } from "~/app/chat/components/chat-header";
-import { MessageBubble, type MessageProps } from "~/app/chat/components/message-bubble";
+import {
+	MessageBubble,
+	type MessageProps,
+} from "~/app/chat/components/message-bubble";
 import { MessageInput } from "~/app/chat/components/message-input";
 
 // Mock Messages Data

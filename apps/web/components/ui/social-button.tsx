@@ -56,9 +56,9 @@ export const SocialButton: React.FC<SocialButtonProps> = ({
 
 	return (
 		<Button
-			variant="secondary"
+			variant="outline"
 			fullWidth
-			className={`relative flex items-center justify-center gap-3 bg-white hover:bg-[var(--gray-50)] border-[var(--gray-200)] text-[var(--gray-700)] ${className || ""}`}
+			className={`relative flex items-center justify-center gap-3 ${className || ""}`}
 			leftIcon={content.icon}
 			{...props}
 		>

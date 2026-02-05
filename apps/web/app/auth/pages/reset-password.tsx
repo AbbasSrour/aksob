@@ -1,5 +1,5 @@
-import { useState } from "react";
 import type { ChangeEvent } from "react";
+import { useState } from "react";
 import { Form } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -21,17 +21,17 @@ export default function ResetPassword() {
 
 			<Form method="post" className="space-y-5">
 				<div className="space-y-1">
-				<Input
-					type="password"
-					name="password"
-					label="New Password"
-					placeholder="••••••••••••"
-					required
-					fullWidth
-					onChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setPassword(e.target.value)
-					}
-				/>
+					<Input
+						type="password"
+						name="password"
+						label="New Password"
+						placeholder="••••••••••••"
+						required
+						fullWidth
+						onChange={(e: ChangeEvent<HTMLInputElement>) =>
+							setPassword(e.target.value)
+						}
+					/>
 					<PasswordStrengthIndicator password={password} />
 				</div>
 

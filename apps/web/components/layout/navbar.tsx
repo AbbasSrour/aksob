@@ -1,4 +1,10 @@
-import { ArrowLeft, LogIn, LogOut, MessageSquare, UserPlus } from "lucide-react";
+import {
+	ArrowLeft,
+	LogIn,
+	LogOut,
+	MessageSquare,
+	UserPlus,
+} from "lucide-react";
 import type React from "react";
 import { Link, useLocation } from "react-router";
 import { Avatar } from "~/components/ui/avatar";

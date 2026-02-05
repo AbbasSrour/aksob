@@ -7,6 +7,7 @@ import { Elysia } from "elysia";
 import { env } from "./config/env";
 import { requestLogger } from "./middleware/http-logger";
 import { healthModule } from "./modules/health/health.routes";
+import { usersModule } from "./modules/users/users.routes";
 import { authPlugin } from "./plugins/auth";
 import { dbPlugin } from "./plugins/db";
 import { logger } from "./utils/logger";
@@ -46,6 +47,7 @@ const app = new Elysia()
 	.use(dbPlugin)
 	.use(authPlugin)
 	.use(healthModule)
+	.use(usersModule)
 	.onError(({ code, error, set }) => {
 		if (code === "NOT_FOUND") {
 			set.status = 404;
