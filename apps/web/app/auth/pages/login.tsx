@@ -3,38 +3,12 @@ import { Form, Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
+import { LoginGalaxyBackground } from "../components/login-galaxy-background";
 
 export default function Login() {
 	return (
 		<div className="relative w-full animate-fade-in">
-			<div className="pointer-events-none absolute -right-40 top-0 h-52 w-52 rounded-full bg-(--aksob-primary)/12 blur-3xl" />
-			<div className="pointer-events-none absolute -right-32 top-56 h-28 w-28 rounded-full border border-(--aksob-primary)/25 bg-white/30" />
-			<div className="pointer-events-none absolute -right-[26rem] -top-8 hidden h-[38rem] w-[38rem] opacity-50 md:block">
-				<svg viewBox="0 0 480 480" className="h-full w-full" aria-hidden="true">
-					<path
-						d="M92 42 C148 72, 196 102, 244 148 C292 194, 332 236, 372 282 C404 318, 428 344, 456 372"
-						fill="none"
-						stroke="rgba(7,105,81,0.38)"
-						strokeWidth="1.6"
-						strokeDasharray="3 9"
-					/>
-					<circle cx="82" cy="36" r="5" fill="rgba(7,105,81,0.12)" />
-					<circle cx="82" cy="36" r="8" fill="rgba(7,105,81,0.06)" className="blur-[2px]" />
-					<circle cx="308" cy="228" r="6" fill="rgba(7,105,81,0.10)" />
-					<circle cx="308" cy="228" r="10" fill="rgba(7,105,81,0.05)" className="blur-[3px]" />
-					<circle cx="462" cy="378" r="5" fill="rgba(7,105,81,0.12)" />
-					<circle cx="462" cy="378" r="8" fill="rgba(7,105,81,0.06)" className="blur-[2px]" />
-					<text x="94" y="26" fill="rgba(54,89,81,0.48)" fontSize="11" letterSpacing="1.1">
-						FACULTY
-					</text>
-					<text x="320" y="218" fill="rgba(54,89,81,0.48)" fontSize="11" letterSpacing="1.1">
-						ALUMNI
-					</text>
-					<text x="380" y="400" fill="rgba(54,89,81,0.48)" fontSize="11" letterSpacing="1.1">
-						STUDENTS
-					</text>
-				</svg>
-			</div>
+			<LoginGalaxyBackground />
 
 			<div className="relative z-10 space-y-6">
 				<div>
