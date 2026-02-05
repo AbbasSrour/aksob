@@ -7,8 +7,8 @@ export default function AuthLayout() {
 			<div className="pointer-events-none absolute right-8 top-8 h-56 w-56 rounded-full border border-(--aksob-primary)/15" />
 			<div className="pointer-events-none absolute right-14 top-14 h-44 w-44 rounded-full border border-(--aksob-primary)/10" />
 			<div className="pointer-events-none absolute right-24 top-24 h-2 w-2 rounded-full bg-(--aksob-primary)/60" />
-			<div className="pointer-events-none absolute left-[-8rem] top-56 h-72 w-72 rounded-full border border-(--aksob-primary)/20" />
-			<div className="pointer-events-none absolute bottom-[-7rem] right-[18%] h-72 w-72 rounded-full bg-(--aksob-muted)/12 blur-3xl" />
+			<div className="pointer-events-none absolute -left-32 top-56 h-72 w-72 rounded-full border border-(--aksob-primary)/20" />
+			<div className="pointer-events-none absolute -bottom-28 right-[18%] h-72 w-72 rounded-full bg-(--aksob-muted)/12 blur-3xl" />
 			<div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-linear-to-b from-white/45 to-transparent" />
 
 			<div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-6 sm:px-8 sm:py-8">

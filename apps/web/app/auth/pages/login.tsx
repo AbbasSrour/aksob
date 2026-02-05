@@ -1,14 +1,16 @@
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Form, Link } from "react-router";
+import { LoginPathElement } from "~/app/auth/components/login-path-element";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
-import { LoginGalaxyBackground } from "../components/login-galaxy-background";
+import { LoginGlobElement } from "../components/login-glob-element";
 
 export default function Login() {
 	return (
 		<div className="relative w-full animate-fade-in">
-			<LoginGalaxyBackground />
+			<LoginGlobElement />
+			<LoginPathElement />
 
 			<div className="relative z-10 space-y-6">
 				<div>
@@ -30,7 +32,8 @@ export default function Login() {
 						Sign in to your AKSOB account
 					</h2>
 					<p className="mt-2 max-w-md text-sm leading-relaxed text-(--gray-600)">
-						Faculty, alumni, and students can access their network space from here.
+						Faculty, alumni, and students can access their network space from
+						here.
 					</p>
 				</div>
 
@@ -89,8 +92,8 @@ export default function Login() {
 						className="mt-0.5 shrink-0 text-(--aksob-primary)"
 					/>
 					<p>
-						For students and alumni, use your registered academic email. Faculty can sign
-						in with their LAU credentials.
+						For students and alumni, use your registered academic email. Faculty
+						can sign in with their LAU credentials.
 					</p>
 				</div>
 
