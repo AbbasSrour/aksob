@@ -1,12 +1,48 @@
 import { ArrowRight, ShieldCheck } from "lucide-react";
-import { Form, Link } from "react-router";
+import type { FormEvent } from "react";
+import { useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { LoginPathElement } from "~/app/auth/components/login-path-element";
+import { authClient } from "~/app/lib/auth";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { LoginGlobElement } from "../components/login-glob-element";
 
 export default function Login() {
+	const navigate = useNavigate();
+	const [searchParams] = useSearchParams();
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
+
+	const callbackURL = searchParams.get("redirectTo") ?? "/galaxy";
+
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		setErrorMessage(null);
+		setIsLoading(true);
+
+		const formData = new FormData(event.currentTarget);
+		const email = String(formData.get("email") ?? "");
+		const password = String(formData.get("password") ?? "");
+		const rememberMe = formData.get("remember") === "on";
+
+		const { error } = await authClient.signIn.email({
+			email,
+			password,
+			rememberMe,
+			callbackURL,
+		});
+
+		if (error) {
+			setErrorMessage(error.message || "Unable to sign in. Please try again.");
+			setIsLoading(false);
+			return;
+		}
+
+		navigate(callbackURL);
+	};
+
 	return (
 		<div className="relative w-full animate-fade-in">
 			<LoginGlobElement />
@@ -37,7 +73,7 @@ export default function Login() {
 					</p>
 				</div>
 
-				<Form method="post" className="space-y-5">
+				<form onSubmit={handleSubmit} className="space-y-5">
 					<div className="relative pl-4 sm:pl-5">
 						<div className="pointer-events-none absolute inset-y-1 left-0 w-px bg-linear-to-b from-(--aksob-primary)/20 via-(--aksob-primary)/70 to-(--aksob-primary)/20" />
 						<div className="space-y-4">
@@ -74,8 +110,13 @@ export default function Login() {
 						</Link>
 					</div>
 
+					{errorMessage && (
+						<p className="text-sm text-[var(--error)]">{errorMessage}</p>
+					)}
+
 					<Button
 						type="submit"
+						isLoading={isLoading}
 						variant="primary"
 						fullWidth
 						size="lg"
@@ -84,7 +125,7 @@ export default function Login() {
 						Sign In
 						<ArrowRight size={18} className="ml-2" />
 					</Button>
-				</Form>
+				</form>
 
 				<div className="flex items-start gap-2 border-t border-(--gray-200) pt-4 text-xs text-(--gray-600)">
 					<ShieldCheck

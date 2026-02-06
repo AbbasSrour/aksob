@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { ChatHeader } from "~/app/chat/components/chat-header";
 import {
@@ -6,151 +6,179 @@ import {
 	type MessageProps,
 } from "~/app/chat/components/message-bubble";
 import { MessageInput } from "~/app/chat/components/message-input";
+import {
+	type ChatConversation,
+	listConversations,
+	listMessages,
+	sendMessage,
+} from "~/app/chat/lib/chat";
+import { getCurrentUser } from "~/app/lib/users";
 
-// Mock Messages Data
-const MOCK_MESSAGES: Record<string, MessageProps[]> = {
-	"1": [
-		{
-			id: "m1",
-			senderId: "other",
-			senderName: "John Doe",
-			content: "Hey, how are you doing today?",
-			timestamp: "2:32 PM",
-			isOwn: false,
-			status: "read",
-		},
-		{
-			id: "m2",
-			senderId: "me",
-			senderName: "Me",
-			content: "I'm doing great! Just finished my project.",
-			timestamp: "2:34 PM",
-			isOwn: true,
-			status: "read",
-		},
-		{
-			id: "m3",
-			senderId: "other",
-			senderName: "John Doe",
-			content: "That's awesome to hear! Would love to see it sometime.",
-			timestamp: "2:35 PM",
-			isOwn: false,
-			status: "read",
-		},
-	],
-	"2": [
-		{
-			id: "m1",
-			senderId: "other",
-			senderName: "Jane Smith",
-			content: "See you tomorrow at the event!",
-			timestamp: "1:00 PM",
-			isOwn: false,
-			status: "read",
-		},
-	],
-	"3": [],
-	"4": [],
+const formatMessageTime = (timestamp: string) => {
+	return new Date(timestamp).toLocaleTimeString([], {
+		hour: "2-digit",
+		minute: "2-digit",
+	});
 };
 
-const MOCK_USERS: Record<
-	string,
-	{ name: string; isOnline: boolean; status: string }
-> = {
-	"1": { name: "John Doe", isOnline: true, status: "Online" },
-	"2": { name: "Jane Smith", isOnline: false, status: "Last seen 1h ago" },
-	"3": { name: "Study Group", isOnline: false, status: "" },
-	"4": { name: "Alumni Association", isOnline: true, status: "Online" },
-};
-
-export default function ChatConversation() {
+export default function ChatConversationPage() {
 	const { conversationId } = useParams();
 	const navigate = useNavigate();
-	const [messages, setMessages] = useState<MessageProps[]>([]);
 	const scrollRef = useRef<HTMLDivElement>(null);
+	const [messages, setMessages] = useState<MessageProps[]>([]);
+	const [activeConversation, setActiveConversation] =
+		useState<ChatConversation | null>(null);
+	const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+	const [isSending, setIsSending] = useState(false);
 
 	useEffect(() => {
-		if (conversationId && MOCK_MESSAGES[conversationId]) {
-			setMessages(MOCK_MESSAGES[conversationId]);
-		} else {
-			setMessages([]);
+		if (!conversationId) {
+			return;
 		}
-	}, [conversationId]);
 
-	// Auto scroll logic
+		let isMounted = true;
+
+		const loadConversationMeta = async () => {
+			try {
+				const [meResponse, conversationsResponse] = await Promise.all([
+					getCurrentUser(),
+					listConversations(),
+				]);
+
+				if (!isMounted) {
+					return;
+				}
+
+				setCurrentUserId(meResponse.data.id);
+				setActiveConversation(
+					conversationsResponse.data.find(
+						(conversation) => conversation.id === conversationId,
+					) ?? null,
+				);
+			} catch {
+				if (!isMounted) {
+					return;
+				}
+				navigate("/chat");
+			}
+		};
+
+		void loadConversationMeta();
+
+		return () => {
+			isMounted = false;
+		};
+	}, [conversationId, navigate]);
+
 	useEffect(() => {
-		if (scrollRef.current) {
-			scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+		if (!conversationId || !currentUserId) {
+			return;
 		}
+
+		let isMounted = true;
+
+		const loadMessages = async () => {
+			try {
+				const response = await listMessages(conversationId);
+				if (!isMounted) {
+					return;
+				}
+
+				setMessages(
+					response.data.map((message) => ({
+						id: message.id,
+						senderId: message.senderId,
+						senderName: message.senderName,
+						content: message.content,
+						timestamp: formatMessageTime(message.createdAt),
+						isOwn: message.senderId === currentUserId,
+						status: message.senderId === currentUserId ? "sent" : "read",
+					})),
+				);
+			} catch {
+				if (!isMounted) {
+					return;
+				}
+				navigate("/chat");
+			}
+		};
+
+		void loadMessages();
+		const interval = window.setInterval(loadMessages, 3000);
+
+		return () => {
+			isMounted = false;
+			window.clearInterval(interval);
+		};
+	}, [conversationId, currentUserId, navigate]);
+
+	useEffect(() => {
+		if (!scrollRef.current) {
+			return;
+		}
+		scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
 	}, [messages]);
 
-	const handleSendMessage = (text: string) => {
-		const newMessage: MessageProps = {
-			id: Date.now().toString(),
-			senderId: "me",
-			senderName: "Me",
-			content: text,
-			timestamp: new Date().toLocaleTimeString([], {
-				hour: "2-digit",
-				minute: "2-digit",
-			}),
-			isOwn: true,
-			status: "sending",
-		};
-		setMessages((prev) => [...prev, newMessage]);
+	const handleSendMessage = async (text: string) => {
+		if (!conversationId || isSending) {
+			return;
+		}
 
-		// Simulate sending success
-		setTimeout(() => {
-			setMessages((prev) =>
-				prev.map((m) =>
-					m.id === newMessage.id ? { ...m, status: "sent" } : m,
-				),
-			);
-		}, 1000);
+		setIsSending(true);
+		try {
+			const response = await sendMessage(conversationId, text);
+			setMessages((previousMessages) => [
+				...previousMessages,
+				{
+					id: response.data.id,
+					senderId: response.data.senderId,
+					senderName: response.data.senderName,
+					content: response.data.content,
+					timestamp: formatMessageTime(response.data.createdAt),
+					isOwn: true,
+					status: "sent",
+				},
+			]);
+		} finally {
+			setIsSending(false);
+		}
 	};
 
-	const user =
-		conversationId && MOCK_USERS[conversationId]
-			? MOCK_USERS[conversationId]
-			: { name: "Unknown", isOnline: false, status: "" };
+	const headerName = useMemo(() => {
+		if (!activeConversation) {
+			return "Conversation";
+		}
+		return activeConversation.otherUser.name;
+	}, [activeConversation]);
 
 	return (
-		<div className="flex flex-col h-full w-full bg-[#f8fafc] dark:bg-[#0a0a0a]">
+		<div className="flex h-full w-full flex-col bg-[#f8fafc] dark:bg-[#0a0a0a]">
 			<ChatHeader
-				name={user.name}
-				isOnline={user.isOnline}
-				statusText={user.status}
+				name={headerName}
+				avatarSrc={activeConversation?.otherUser.image ?? undefined}
+				email={activeConversation?.otherUser.email}
+				isOnline={false}
+				statusText={activeConversation?.otherUser.major ?? ""}
 				showBack={true}
 				onBack={() => navigate("/chat")}
 			/>
 
 			<div
-				className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar"
+				className="custom-scrollbar flex-1 space-y-2 overflow-y-auto p-4"
 				ref={scrollRef}
 			>
 				{messages.length === 0 ? (
-					<div className="flex h-full items-center justify-center text-gray-400 text-sm">
+					<div className="flex h-full items-center justify-center text-sm text-gray-400">
 						No messages yet. Say hello!
 					</div>
 				) : (
-					<>
-						<div className="flex items-center justify-center my-4">
-							<div className="bg-gray-200 h-[1px] flex-1 max-w-[100px]"></div>
-							<span className="mx-2 text-xs text-gray-500 font-medium">
-								Today
-							</span>
-							<div className="bg-gray-200 h-[1px] flex-1 max-w-[100px]"></div>
-						</div>
-						{messages.map((msg, i) => {
-							// Logic to show avatar only for last message in sequence from same sender?
-							// Simplified for now: always show avatar for incoming
-							return <MessageBubble key={msg.id} {...msg} />;
-						})}
-					</>
+					messages.map((message) => (
+						<MessageBubble key={message.id} {...message} />
+					))
 				)}
 			</div>
 
-			<MessageInput onSendMessage={handleSendMessage} />
+			<MessageInput onSendMessage={handleSendMessage} isSending={isSending} />
 		</div>
 	);
 }

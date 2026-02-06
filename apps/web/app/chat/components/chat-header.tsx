@@ -5,6 +5,7 @@ import { Avatar } from "~/components/ui/avatar";
 interface ChatHeaderProps {
 	name: string;
 	avatarSrc?: string;
+	email?: string;
 	isOnline?: boolean;
 	statusText?: string;
 	onBack?: () => void;
@@ -14,6 +15,7 @@ interface ChatHeaderProps {
 export const ChatHeader: React.FC<ChatHeaderProps> = ({
 	name,
 	avatarSrc,
+	email,
 	isOnline,
 	statusText,
 	onBack,
@@ -42,6 +44,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 					<div>
 						<h3 className="text-base font-semibold text-gray-900 leading-tight">
 							{name}
+							{email ? ` (${email})` : ""}
 						</h3>
 						{statusText && (
 							<div className="flex items-center gap-1.5 mt-0.5">

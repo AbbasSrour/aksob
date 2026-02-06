@@ -34,14 +34,24 @@ export function LoginGalaxyBackground({ className }: { className?: string }) {
 
 		// --- Constants ---
 		const BRAND_GREEN = new THREE.Color(0x076951);
-		
+
 		const elements: THREE.Mesh[] = [];
 
 		// --- Helper: Solid Circle (Flattened Cylinder/Disc) ---
 		// "Solid circles" implies filled shapes, effectively discs in 3D.
 		// giving them a tiny bit of thickness to feel "3D" but keeping the circle billboard look.
-		function createSolidCircle(radius: number, pos: THREE.Vector3, opacity: number, thickness = 0.5) {
-			const geometry = new THREE.CylinderGeometry(radius, radius, thickness, 64);
+		function createSolidCircle(
+			radius: number,
+			pos: THREE.Vector3,
+			opacity: number,
+			thickness = 0.5,
+		) {
+			const geometry = new THREE.CylinderGeometry(
+				radius,
+				radius,
+				thickness,
+				64,
+			);
 			const material = new THREE.MeshBasicMaterial({
 				color: BRAND_GREEN,
 				transparent: true,
@@ -49,13 +59,17 @@ export function LoginGalaxyBackground({ className }: { className?: string }) {
 			});
 			const mesh = new THREE.Mesh(geometry, material);
 			// Cylinder defaults to upright (standing on XZ plane), rotate to face camera-ish
-			mesh.rotation.x = Math.PI / 2; 
+			mesh.rotation.x = Math.PI / 2;
 			mesh.position.copy(pos);
 			return mesh;
 		}
 
 		// --- Helper: Soft Blob (Sphere) ---
-		function createSoftBlob(radius: number, pos: THREE.Vector3, opacity: number) {
+		function createSoftBlob(
+			radius: number,
+			pos: THREE.Vector3,
+			opacity: number,
+		) {
 			const geometry = new THREE.SphereGeometry(radius, 64, 64);
 			const material = new THREE.MeshBasicMaterial({
 				color: BRAND_GREEN,
@@ -68,51 +82,29 @@ export function LoginGalaxyBackground({ className }: { className?: string }) {
 			return mesh;
 		}
 
-
-		// --- 1. Top Right Cluster ---
-		// Replicating: Large blur, medium circle, small circle, dot.
-
-		// Large Background Blur (The "Glow")
-		const trBlur = createSoftBlob(14, new THREE.Vector3(25, 15, -10), 0.05);
+		// --- 1. Top Right ---
+		// Soft background blur pushed far to the corner
+		const trBlur = createSoftBlob(10, new THREE.Vector3(38, 25, -20), 0.04);
 		scene.add(trBlur);
 		elements.push(trBlur);
 
-		// Medium Solid Circle
-		// "Border" equivalent -> Low opacity solid
-		const trCircle1 = createSolidCircle(7, new THREE.Vector3(22, 12, 0), 0.1);
-		// Tilted slightly to show 3D nature
-		trCircle1.rotation.x = Math.PI / 2 - 0.2;
-		trCircle1.rotation.z = -0.1;
-		scene.add(trCircle1);
-		elements.push(trCircle1);
-
-		// Smaller Solid Circle (Inner)
-		const trCircle2 = createSolidCircle(5, new THREE.Vector3(19, 10, 5), 0.15);
-		trCircle2.rotation.x = Math.PI / 2 - 0.1;
-		scene.add(trCircle2);
-		elements.push(trCircle2);
-
-		// The "Dot" (Solid small sphere)
-		const trDot = createSoftBlob(0.6, new THREE.Vector3(16, 9, 8), 0.9);
-		scene.add(trDot);
-		elements.push(trDot);
-
-
 		// --- 2. Left Side ---
-		// Single large ring/circle
-		const leftCircle = createSolidCircle(9, new THREE.Vector3(-32, 2, -5), 0.08);
+		// Single large solid circle (far left edge)
+		const leftCircle = createSolidCircle(
+			8,
+			new THREE.Vector3(-38, 5, -8),
+			0.08,
+		);
 		leftCircle.rotation.x = Math.PI / 2 + 0.1;
 		leftCircle.rotation.y = 0.2;
 		scene.add(leftCircle);
 		elements.push(leftCircle);
 
-
 		// --- 3. Bottom Right ---
-		// Large soft blob
-		const brBlob = createSoftBlob(15, new THREE.Vector3(12, -20, -5), 0.06);
+		// Soft blob pushed further down and right
+		const brBlob = createSoftBlob(10, new THREE.Vector3(25, -28, -10), 0.05);
 		scene.add(brBlob);
 		elements.push(brBlob);
-
 
 		// --- Animation ---
 		const clock = new THREE.Clock();
@@ -122,16 +114,12 @@ export function LoginGalaxyBackground({ className }: { className?: string }) {
 			const delta = clock.getDelta();
 			time += delta;
 
-			// Very slow, heavy floating (Ambient)
+			// Very slow, gentle 2D floating (no rotation, no Z movement)
 			elements.forEach((el, i) => {
-				// Bobbing
-				el.position.y += Math.sin(time * 0.5 + i) * 0.005;
-				
-				// Gentle Rotation for the discs
-				if (el.geometry.type === 'CylinderGeometry') {
-					el.rotation.z += Math.cos(time * 0.3 + i) * 0.001;
-					el.rotation.x += Math.sin(time * 0.2 + i) * 0.001;
-				}
+				// Horizontal drift
+				el.position.x += Math.sin(time * 0.3 + i * 2) * 0.003;
+				// Vertical bobbing
+				el.position.y += Math.cos(time * 0.4 + i) * 0.003;
 			});
 
 			// No camera movement, keep it stable

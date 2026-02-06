@@ -10,6 +10,12 @@
 	},
 	"overrides": [
 		{
+			"includes": [".react-router/**/*.ts"],
+			"linter": {
+				"enabled": false
+			}
+		},
+		{
 			"includes": ["app/**/*.css"],
 			"css": {
 				"parser": {

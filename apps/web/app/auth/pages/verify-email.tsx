@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
+import { authClient } from "~/app/lib/auth";
 import { Button } from "~/components/ui/button";
 
 export default function VerifyEmail() {
@@ -7,19 +8,52 @@ export default function VerifyEmail() {
 	const [status, setStatus] = useState<"loading" | "success" | "error">(
 		"loading",
 	);
+	const [resendMessage, setResendMessage] = useState<string | null>(null);
 
-	// Mock verification process
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			// Simulate success if token is present, otherwise error
-			if (searchParams.get("token")) {
-				setStatus("success");
-			} else {
-				setStatus("error"); // In real app, this might default to error or stay loading until API responds
+		const verify = async () => {
+			const token = searchParams.get("token");
+			if (!token) {
+				setStatus("error");
+				return;
 			}
-		}, 2000);
-		return () => clearTimeout(timer);
+
+			const { error } = await authClient.verifyEmail({
+				query: {
+					token,
+				},
+			});
+
+			if (error) {
+				setStatus("error");
+				return;
+			}
+
+			setStatus("success");
+		};
+
+		void verify();
 	}, [searchParams]);
+
+	const handleResend = async () => {
+		const email = searchParams.get("email");
+		if (!email) {
+			setResendMessage("Unable to resend verification email.");
+			return;
+		}
+
+		const { error } = await authClient.sendVerificationEmail({
+			email,
+			callbackURL: `${window.location.origin}/auth/verify-email`,
+		});
+
+		if (error) {
+			setResendMessage(error.message || "Unable to resend verification email.");
+			return;
+		}
+
+		setResendMessage("A new verification email has been sent.");
+	};
 
 	if (status === "loading") {
 		return (
@@ -63,7 +97,7 @@ export default function VerifyEmail() {
 					Your email has been verified. You can now access all features.
 				</p>
 
-				<Link to="/dashboard" className="block w-full">
+				<Link to="/galaxy" className="block w-full">
 					<Button variant="primary" fullWidth size="lg">
 						Continue to App
 					</Button>
@@ -101,9 +135,12 @@ export default function VerifyEmail() {
 			</p>
 
 			<div className="space-y-4">
-				<Button variant="primary" fullWidth>
+				<Button variant="primary" fullWidth onClick={handleResend}>
 					Request New Link
 				</Button>
+				{resendMessage && (
+					<p className="text-xs text-[var(--gray-600)]">{resendMessage}</p>
+				)}
 
 				<Link
 					to="/auth/login"

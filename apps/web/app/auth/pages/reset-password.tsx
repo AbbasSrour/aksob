@@ -1,12 +1,47 @@
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import { useState } from "react";
-import { Form } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
+import { authClient } from "~/app/lib/auth";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { PasswordStrengthIndicator } from "~/components/ui/password-strength-indicator";
 
 export default function ResetPassword() {
+	const navigate = useNavigate();
+	const [searchParams] = useSearchParams();
 	const [password, setPassword] = useState("");
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
+
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		setErrorMessage(null);
+		setIsLoading(true);
+
+		const formData = new FormData(event.currentTarget);
+		const newPassword = String(formData.get("password") ?? "");
+		const confirmPassword = String(formData.get("confirmPassword") ?? "");
+		const token = searchParams.get("token") ?? undefined;
+
+		if (newPassword !== confirmPassword) {
+			setErrorMessage("Passwords do not match.");
+			setIsLoading(false);
+			return;
+		}
+
+		const { error } = await authClient.resetPassword({
+			newPassword,
+			token,
+		});
+
+		if (error) {
+			setErrorMessage(error.message || "Unable to reset password.");
+			setIsLoading(false);
+			return;
+		}
+
+		navigate("/auth/login");
+	};
 
 	return (
 		<div className="w-full animate-fade-in">
@@ -19,7 +54,7 @@ export default function ResetPassword() {
 				</p>
 			</div>
 
-			<Form method="post" className="space-y-5">
+			<form onSubmit={handleSubmit} className="space-y-5">
 				<div className="space-y-1">
 					<Input
 						type="password"
@@ -44,10 +79,20 @@ export default function ResetPassword() {
 					fullWidth
 				/>
 
-				<Button type="submit" variant="primary" fullWidth size="lg">
+				{errorMessage && (
+					<p className="text-sm text-[var(--error)]">{errorMessage}</p>
+				)}
+
+				<Button
+					type="submit"
+					variant="primary"
+					fullWidth
+					size="lg"
+					isLoading={isLoading}
+				>
 					Reset Password
 				</Button>
-			</Form>
+			</form>
 		</div>
 	);
 }

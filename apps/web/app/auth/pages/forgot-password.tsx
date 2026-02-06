@@ -1,9 +1,41 @@
 import { ArrowLeft } from "lucide-react";
-import { Form, Link } from "react-router";
+import type { FormEvent } from "react";
+import { useState } from "react";
+import { Link } from "react-router";
+import { authClient } from "~/app/lib/auth";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 
 export default function ForgotPassword() {
+	const [isLoading, setIsLoading] = useState(false);
+	const [message, setMessage] = useState<string | null>(null);
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		setIsLoading(true);
+		setMessage(null);
+		setErrorMessage(null);
+
+		const formData = new FormData(event.currentTarget);
+		const email = String(formData.get("email") ?? "");
+		const callbackURL = `${window.location.origin}/auth/reset-password`;
+
+		const { error } = await authClient.requestPasswordReset({
+			email,
+			redirectTo: callbackURL,
+		});
+
+		if (error) {
+			setErrorMessage(error.message || "Unable to request password reset.");
+			setIsLoading(false);
+			return;
+		}
+
+		setMessage("Reset link sent. Please check your email inbox.");
+		setIsLoading(false);
+	};
+
 	return (
 		<div className="w-full animate-fade-in">
 			<div className="mb-6 text-center">
@@ -15,7 +47,7 @@ export default function ForgotPassword() {
 				</p>
 			</div>
 
-			<Form method="post" className="space-y-6">
+			<form onSubmit={handleSubmit} className="space-y-6">
 				<Input
 					type="email"
 					name="email"
@@ -25,10 +57,23 @@ export default function ForgotPassword() {
 					fullWidth
 				/>
 
-				<Button type="submit" variant="primary" fullWidth size="lg">
+				{message && (
+					<p className="text-sm text-[var(--aksob-primary)]">{message}</p>
+				)}
+				{errorMessage && (
+					<p className="text-sm text-[var(--error)]">{errorMessage}</p>
+				)}
+
+				<Button
+					type="submit"
+					variant="primary"
+					fullWidth
+					size="lg"
+					isLoading={isLoading}
+				>
 					Send Reset Link
 				</Button>
-			</Form>
+			</form>
 
 			<div className="mt-8 text-center">
 				<Link

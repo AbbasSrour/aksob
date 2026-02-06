@@ -10,7 +10,9 @@ const { combine, timestamp, printf, colorize, json } = winston.format;
 const consoleFormat = printf(({ level, message, timestamp, ...meta }) => {
 	const metaStr = Object.keys(meta).length
 		? ` ${Object.entries(meta)
-				.map(([k, v]) => `${k}=${typeof v === "string" ? v : JSON.stringify(v)}`)
+				.map(
+					([k, v]) => `${k}=${typeof v === "string" ? v : JSON.stringify(v)}`,
+				)
 				.join(" ")}`
 		: "";
 
@@ -20,7 +22,10 @@ const consoleFormat = printf(({ level, message, timestamp, ...meta }) => {
 /**
  * File format: structured JSON for log aggregation
  */
-const fileFormat = combine(timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), json());
+const fileFormat = combine(
+	timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+	json(),
+);
 
 export const logger = winston.createLogger({
 	level: env.LOG_LEVEL,

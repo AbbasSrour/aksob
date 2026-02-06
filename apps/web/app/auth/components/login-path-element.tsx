@@ -1,6 +1,17 @@
 import { useEffect, useRef } from "react";
 import { cn } from "~/app/lib/utils";
 
+/**
+ * LoginPathElement
+ *
+ * This component renders a canvas background with:
+ * 1. A constellation network of particles (dots + connections).
+ * 2. A curved path connecting "FACULTY -> ALUMNI -> STUDENTS".
+ * 3. Flowing "packets" of energy along that path.
+ *
+ * Updated: Reduced particle count to be less busy.
+ */
+
 interface Point {
 	x: number;
 	y: number;
@@ -16,7 +27,6 @@ interface Node {
 	label: string;
 	x: number; // 0-1 relative
 	y: number; // 0-1 relative
-	color: string;
 }
 
 export function LoginPathElement({ className }: { className?: string }) {
@@ -28,22 +38,24 @@ export function LoginPathElement({ className }: { className?: string }) {
 		const ctx = canvas.getContext("2d", { alpha: true });
 		if (!ctx) return;
 
-		let width = (canvas.width = window.innerWidth);
-		let height = (canvas.height = window.innerHeight);
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+		let width = canvas.width;
+		let height = canvas.height;
 
 		// Configuration
 		// Using RGB values to easily compose rgba strings
 		const PRIMARY_RGB = "7, 105, 81"; // #076951 - Brand Green
 
-		const PARTICLE_COUNT = 80;
-		const CONNECTION_DIST = 170;
+		// REDUCED Particle Count for cleaner look
+		const PARTICLE_COUNT = 40;
 
 		// Nodes - "Faculty -> Alumni -> Students" path
 		// Positioned on the right side of the screen (mirrored to left at render)
 		const nodes: Node[] = [
-			{ label: "FACULTY", x: 0.65, y: 0.2, color: PRIMARY_RGB },
-			{ label: "ALUMNI", x: 0.78, y: 0.5, color: PRIMARY_RGB },
-			{ label: "STUDENTS", x: 0.65, y: 0.8, color: PRIMARY_RGB },
+			{ label: "FACULTY", x: 0.65, y: 0.2 },
+			{ label: "ALUMNI", x: 0.78, y: 0.5 },
+			{ label: "STUDENTS", x: 0.65, y: 0.8 },
 		];
 
 		// Particles
@@ -52,8 +64,8 @@ export function LoginPathElement({ className }: { className?: string }) {
 			particles.push({
 				x: Math.random() * width,
 				y: Math.random() * height,
-				vx: (Math.random() - 0.5) * 0.15,
-				vy: (Math.random() - 0.5) * 0.15,
+				vx: (Math.random() - 0.5) * 0.1, // Slower movement
+				vy: (Math.random() - 0.5) * 0.1,
 				size: Math.random() * 1.5 + 0.5,
 				alpha: Math.random() * 0.4 + 0.1,
 				baseAlpha: Math.random() * 0.4 + 0.1,
@@ -123,9 +135,14 @@ export function LoginPathElement({ className }: { className?: string }) {
 			ctx.fillStyle = wash;
 			ctx.fillRect(0, 0, width, height);
 
-			// 1. Draw Background Particles & Constellations
+			// 1. Draw Background Particles & Constellations (REMOVED MOLECULES if requested, but keeping constellations as "Network")
+			// User said "remove the molcule particles" from the OTHER file (login-galaxy-background).
+			// But user also said "we still have particle molcules flowing on the screen".
+			// If referencing this file, we should reduce/hide them.
+			// I will keep them VERY subtle here as "stars" but remove the "molecule" connections to create less clutter.
+
 			ctx.lineWidth = 0.5;
-			particles.forEach((p, i) => {
+			particles.forEach((p) => {
 				p.x += p.vx;
 				p.y += p.vy;
 
@@ -138,41 +155,13 @@ export function LoginPathElement({ className }: { className?: string }) {
 				// Twinkle
 				p.alpha = p.baseAlpha + Math.sin(time * 3 + p.phase) * 0.2;
 
-				// Draw Particle
+				// Draw Particle (Star)
 				ctx.beginPath();
 				ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-				ctx.fillStyle = `rgba(${PRIMARY_RGB}, ${p.alpha})`;
+				ctx.fillStyle = `rgba(${PRIMARY_RGB}, ${p.alpha * 0.5})`; // Reduced alpha
 				ctx.fill();
 
-				// Connect to nearby particles
-				for (let j = i + 1; j < particles.length; j++) {
-					const p2 = particles[j];
-					const dx = p.x - p2.x;
-					const dy = p.y - p2.y;
-					const dist = Math.sqrt(dx * dx + dy * dy);
-
-					if (dist < CONNECTION_DIST) {
-						ctx.beginPath();
-						ctx.moveTo(p.x, p.y);
-						ctx.lineTo(p2.x, p2.y);
-						ctx.strokeStyle = `rgba(${PRIMARY_RGB}, ${
-							0.1 * (1 - dist / CONNECTION_DIST)
-						})`;
-						ctx.stroke();
-					}
-				}
-
-				// Repel/Connect Mouse
-				const mDx = p.x - mouse.x;
-				const mDy = p.y - mouse.y;
-				const mDist = Math.sqrt(mDx * mDx + mDy * mDy);
-				if (mDist < 250) {
-					ctx.beginPath();
-					ctx.moveTo(p.x, p.y);
-					ctx.lineTo(mouse.x, mouse.y);
-					ctx.strokeStyle = `rgba(${PRIMARY_RGB}, ${0.12 * (1 - mDist / 250)})`;
-					ctx.stroke();
-				}
+				// REMOVED: Molecule connections between random particles to reduce clutter.
 			});
 
 			// 2. Main Path Logic

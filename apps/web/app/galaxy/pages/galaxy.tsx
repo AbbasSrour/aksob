@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { createOrGetDm } from "~/app/chat/lib/chat";
+import { listUsers } from "~/app/lib/users";
 import "./galaxy.css";
 import {
 	type Alumnus,
-	galaxyData,
+	buildGalaxyData,
 	type MajorCluster,
 } from "../utils/galaxy-data";
 
@@ -29,10 +32,11 @@ export function meta() {
 }
 
 export default function Galaxy() {
-	// const navigate = useNavigate();
-	// biome-ignore lint/suspicious/noAssignInExpressions: I don't care I love it
-	const navigate = (path: string) => (window.location.href = path); // Fallback
+	const navigate = useNavigate();
 	const mountRef = useRef<HTMLDivElement>(null);
+	const [galaxyData, setGalaxyData] = useState<MajorCluster[]>([]);
+	const [isLoadingUsers, setIsLoadingUsers] = useState(true);
+	const [isStartingConversation, setIsStartingConversation] = useState(false);
 	const [viewMode, setViewMode] = useState<"overview" | "cluster">("overview");
 	const [selectedStar, setSelectedStar] = useState<{
 		x: number;
@@ -103,9 +107,63 @@ export default function Galaxy() {
 		});
 	};
 
+	const handleStartConversation = async () => {
+		if (!selectedStar || isStartingConversation) {
+			return;
+		}
+
+		setIsStartingConversation(true);
+		try {
+			const response = await createOrGetDm(selectedStar.data.id);
+			navigate(`/chat/${response.data.conversationId}`);
+		} catch {
+			const redirectTo = encodeURIComponent(`/galaxy`);
+			navigate(`/auth/login?redirectTo=${redirectTo}`);
+		} finally {
+			setIsStartingConversation(false);
+		}
+	};
+
+	const getDisplayTitle = (star: Alumnus) => {
+		return star.position.trim() || "Not specified";
+	};
+
+	const getDisplayCompany = (star: Alumnus) => {
+		return star.company.trim() || "Not specified";
+	};
+
+	useEffect(() => {
+		let isMounted = true;
+
+		const loadUsers = async () => {
+			try {
+				const response = await listUsers();
+				if (!isMounted) {
+					return;
+				}
+				setGalaxyData(buildGalaxyData(response.data));
+			} catch {
+				if (!isMounted) {
+					return;
+				}
+				setGalaxyData(buildGalaxyData([]));
+			} finally {
+				if (isMounted) {
+					setIsLoadingUsers(false);
+				}
+			}
+		};
+
+		void loadUsers();
+
+		return () => {
+			isMounted = false;
+		};
+	}, []);
+
 	// biome-ignore lint/correctness/useExhaustiveDependencies: This effect should only run once on mount to setup Three.js scene
 	useEffect(() => {
-		if (!mountRef.current) return;
+		if (!mountRef.current || galaxyData.length === 0) return;
 
 		// --- Scene Setup ---
 		const scene = new THREE.Scene();
@@ -702,10 +760,19 @@ export default function Galaxy() {
 			});
 			renderer.dispose();
 		};
-	}, []);
+	}, [galaxyData]);
 
 	return (
-		<div className="galaxy-container" ref={mountRef}>
+		<div
+			className="galaxy-container"
+			ref={mountRef}
+			style={{ background: clusterBgColor ?? undefined }}
+		>
+			{isLoadingUsers && (
+				<div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 text-white">
+					Loading galaxy...
+				</div>
+			)}
 			{/* Labels */}
 			{galaxyData.map((cluster: MajorCluster, i: number) => (
 				<div
@@ -756,9 +823,9 @@ export default function Galaxy() {
 						</div>
 					</div>
 					<div className="popup-details">
-						{hoveredStar.data.position}
+						{getDisplayTitle(hoveredStar.data)}
 						<br />
-						{hoveredStar.data.company}
+						{getDisplayCompany(hoveredStar.data)}
 					</div>
 					{/* Trace/Hint */}
 					<div className="text-[10px] text-white/50 mt-2 uppercase tracking-wide">
@@ -798,9 +865,9 @@ export default function Galaxy() {
 						<div className="sidebar-content">
 							<div className="sidebar-section">
 								<h3>Current Position</h3>
-								<p>{selectedStar.data.position}</p>
+								<p>{getDisplayTitle(selectedStar.data)}</p>
 								<p className="text-sm opacity-70">
-									{selectedStar.data.company}
+									{getDisplayCompany(selectedStar.data)}
 								</p>
 							</div>
 
@@ -814,9 +881,10 @@ export default function Galaxy() {
 							<button
 								type="button"
 								className="sidebar-action-btn"
-								onClick={() => navigate(`/chat/${selectedStar.data.id}`)}
+								onClick={handleStartConversation}
+								disabled={isStartingConversation}
 							>
-								Start Conversation
+								{isStartingConversation ? "Starting..." : "Start Conversation"}
 							</button>
 						</div>
 					</>

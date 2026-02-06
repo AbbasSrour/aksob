@@ -27,6 +27,9 @@ const EnvSchema = TypeCompiler.Compile(
 		PORT: t.Numeric({
 			default: 3000,
 		}),
+		FRONTEND_URL: t.String({
+			default: "http://localhost:5173",
+		}),
 
 		// Database
 		DATABASE_URL: t.String({

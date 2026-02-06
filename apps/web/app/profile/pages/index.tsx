@@ -7,7 +7,8 @@ import {
 	Phone,
 	Save,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getCurrentUser } from "~/app/lib/users";
 import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
@@ -28,6 +29,43 @@ export default function Profile() {
 		company: "TechCorp",
 		position: "Senior Engineer",
 	});
+	const [loadError, setLoadError] = useState<string | null>(null);
+
+	useEffect(() => {
+		let isMounted = true;
+
+		const loadProfile = async () => {
+			try {
+				const response = await getCurrentUser();
+				if (!isMounted) {
+					return;
+				}
+
+				setUser((prev) => ({
+					...prev,
+					name: response.data.name,
+					email: response.data.email,
+					major: response.data.major,
+					department: response.data.major,
+					headline: response.data.title ?? prev.headline,
+					company: response.data.company ?? prev.company,
+					position: response.data.title ?? prev.position,
+					year: new Date(response.data.createdAt).getFullYear(),
+				}));
+			} catch {
+				if (!isMounted) {
+					return;
+				}
+				setLoadError("Could not refresh profile from server.");
+			}
+		};
+
+		void loadProfile();
+
+		return () => {
+			isMounted = false;
+		};
+	}, []);
 
 	const handleSave = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -37,6 +75,10 @@ export default function Profile() {
 	return (
 		<div className="w-full min-h-full bg-white">
 			<div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+				{loadError && (
+					<p className="mb-4 text-sm text-[var(--error)]">{loadError}</p>
+				)}
+
 				{/* Profile Header Card */}
 				<Card className="p-6 mb-6">
 					<div className="flex flex-col sm:flex-row gap-6">
