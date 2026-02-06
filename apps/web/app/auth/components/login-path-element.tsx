@@ -176,8 +176,8 @@ export function LoginPathElement({ className }: { className?: string }) {
 			});
 
 			// 2. Main Path Logic
-			const leftPadding = -100;
-			const verticalShift = height * 0.26;
+			const leftPadding = 75;
+			const verticalShift = height * 0;
 			let nodePoints = nodes.map((n) => ({
 				...n,
 				x: (1 - n.x) * width,
