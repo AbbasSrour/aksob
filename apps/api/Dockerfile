@@ -2,10 +2,9 @@ FROM oven/bun:1.3.5 AS base
 WORKDIR /app
 
 FROM base AS deps
-COPY bun.lock package.json turbo.json ./
-COPY apps/api/package.json apps/api/package.json
-COPY apps/web/package.json apps/web/package.json
-COPY packages/shared/package.json packages/shared/package.json
+
+COPY . .
+
 RUN bun install --frozen-lockfile
 
 FROM base AS builder
