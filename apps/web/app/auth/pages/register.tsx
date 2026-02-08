@@ -3,8 +3,6 @@ import { ArrowRight, ShieldCheck } from "lucide-react";
 import type { ChangeEvent, FormEvent } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { LoginGlobElement } from "~/app/auth/components/login-glob-element";
-import { LoginPathElement } from "~/app/auth/components/login-path-element";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { PasswordStrengthIndicator } from "~/components/ui/password-strength-indicator";
@@ -70,9 +68,6 @@ export default function Register() {
 
 	return (
 		<div className="relative w-full animate-fade-in">
-			<LoginGlobElement />
-			<LoginPathElement />
-
 			<div className="relative z-10 space-y-6">
 				<div>
 					<Link to="/" className="mb-5 inline-block w-full max-w-[24rem]">

@@ -48,7 +48,6 @@ export default function Galaxy() {
 		y: number;
 		data: Alumnus;
 	} | null>(null); // Re-added for tooltip
-	const [clusterBgColor, setClusterBgColor] = useState<string | null>(null); // Track active cluster color for background
 	// Track sidebar visibility for animation in loop
 	const sidebarOpenRef = useRef(false);
 
@@ -85,8 +84,6 @@ export default function Galaxy() {
 	const handleBackClick = () => {
 		setViewMode("overview"); // Update UI
 		viewModeRef.current = "overview"; // Update Logic
-		setClusterBgColor(null); // Reset background to black
-
 		// Reset Camera Target
 		targetCameraPos.current.set(0, 100, 400);
 		targetControlsTarget.current.set(0, 0, 0);
@@ -481,9 +478,6 @@ export default function Galaxy() {
 				}
 			});
 
-			// Set background color to cluster color
-			setClusterBgColor(galaxyData[index].color);
-
 			// Camera Logic
 			targetControlsTarget.current.copy(center);
 			// Zoom out slightly more than before to fit the scattered sphere
@@ -763,11 +757,7 @@ export default function Galaxy() {
 	}, [galaxyData]);
 
 	return (
-		<div
-			className="galaxy-container"
-			ref={mountRef}
-			style={{ background: clusterBgColor ?? undefined }}
-		>
+		<div className="galaxy-container" ref={mountRef}>
 			{isLoadingUsers && (
 				<div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 text-white">
 					Loading galaxy...

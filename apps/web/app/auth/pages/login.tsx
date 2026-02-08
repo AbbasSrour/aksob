@@ -2,12 +2,10 @@ import { ArrowRight, ShieldCheck } from "lucide-react";
 import type { FormEvent } from "react";
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
-import { LoginPathElement } from "~/app/auth/components/login-path-element";
 import { authClient } from "~/app/lib/auth";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
-import { LoginGlobElement } from "../components/login-glob-element";
 
 export default function Login() {
 	const navigate = useNavigate();
@@ -45,9 +43,6 @@ export default function Login() {
 
 	return (
 		<div className="relative w-full animate-fade-in">
-			<LoginGlobElement />
-			<LoginPathElement />
-
 			<div className="relative z-10 space-y-6">
 				<div>
 					<Link to="/" className="mb-5 inline-block w-full max-w-[24rem]">
