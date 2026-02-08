@@ -1,5 +1,13 @@
 {
 	"$schema": "https://turborepo.com/schema.json",
+	"globalEnv": [
+		"DATABASE_URL",
+		"TURSO_AUTH_TOKEN",
+		"BETTER_AUTH_SECRET",
+		"BETTER_AUTH_URL",
+		"PORT",
+		"LOG_LEVEL"
+	],
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
