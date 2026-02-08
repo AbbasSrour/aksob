@@ -1,7 +1,6 @@
 import { and, desc, eq, inArray, sql } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 import { db, schema } from "@/db";
-import { auth } from "@/lib/auth";
 
 const createDmSchema = t.Object({
 	userId: t.String(),
@@ -31,6 +30,7 @@ const withAuth = async (
 	headers: Headers,
 	set: { status?: number | string },
 ) => {
+	const { auth } = await import("@/lib/auth");
 	const session = await auth.api.getSession({ headers });
 	if (!session?.user) {
 		set.status = 401;
