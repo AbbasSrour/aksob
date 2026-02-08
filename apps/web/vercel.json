@@ -4,11 +4,6 @@
 	"installCommand": "bun install",
 	"framework": "react-router",
 	"regions": ["iad1"],
-	"functions": {
-		"build/server/index.js": {
-			"maxDuration": 30
-		}
-	},
 	"headers": [
 		{
 			"source": "/(.*)",

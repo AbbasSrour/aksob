@@ -1,0 +1,13 @@
+// OpenCode Configuration
+{
+  "mcp": {
+    "vercel": {
+      "command": [
+        "npx",
+        "mcp-remote",
+        "https://mcp.vercel.com"
+      ],
+      "type": "local"
+    }
+  }
+}
