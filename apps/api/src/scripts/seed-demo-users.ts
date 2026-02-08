@@ -80,7 +80,7 @@ const createDemoUsers = () => {
 	return users;
 };
 
-const seedDemoUsers = async () => {
+export const seedDemoUsers = async () => {
 	const users = createDemoUsers();
 	let created = 0;
 	let updated = 0;
@@ -134,9 +134,11 @@ const seedDemoUsers = async () => {
 	});
 };
 
-seedDemoUsers()
-	.then(() => process.exit(0))
-	.catch((error) => {
-		console.error("Failed to seed demo users", error);
-		process.exit(1);
-	});
+if (import.meta.main) {
+	seedDemoUsers()
+		.then(() => process.exit(0))
+		.catch((error) => {
+			console.error("Failed to seed demo users", error);
+			process.exit(1);
+		});
+}

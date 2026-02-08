@@ -12,6 +12,8 @@
 		"format": "biome format --write .",
 		"db:generate": "bunx drizzle-kit generate",
 		"db:migrate": "bunx drizzle-kit migrate",
+		"db:migrate:prod": "bun run src/scripts/migrate.ts",
+		"db:setup:prod": "bun run src/scripts/db-setup.ts",
 		"db:studio": "bunx drizzle-kit studio",
 		"db:push": "bunx drizzle-kit push",
 		"db:seed:demo": "bun run src/scripts/seed-demo-users.ts"
