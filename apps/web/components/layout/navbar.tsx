@@ -24,7 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 	const userAvatar = user?.avatar;
 
 	// Determine if we need a transparent background (overlay) for Galaxy view
-	const isGalaxy = location.pathname === "/";
+	const isGalaxy = location.pathname === "/" || location.pathname === "/galaxy";
 	// If Galaxy, remove bar background entirely (floating elements). Else, typical glass header.
 	const bgClass = isGalaxy
 		? "bg-transparent pointer-events-none"

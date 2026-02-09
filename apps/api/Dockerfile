@@ -26,6 +26,4 @@ COPY --from=builder /app/apps/api/src apps/api/src
 COPY --from=builder /app/apps/api/docker-entrypoint.sh apps/api/docker-entrypoint.sh
 COPY --from=builder /app/packages/shared packages/shared
 WORKDIR /app/apps/api
-RUN chmod +x docker-entrypoint.sh
-ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["bun", "run", "start"]

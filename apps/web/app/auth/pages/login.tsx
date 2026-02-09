@@ -1,14 +1,13 @@
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import type { FormEvent } from "react";
 import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { authClient } from "~/app/lib/auth";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 
 export default function Login() {
-	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +37,7 @@ export default function Login() {
 			return;
 		}
 
-		navigate(callbackURL);
+		window.location.assign(callbackURL);
 	};
 
 	return (
