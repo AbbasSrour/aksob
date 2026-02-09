@@ -32,9 +32,7 @@ const EnvSchema = TypeCompiler.Compile(
 		}),
 
 		// Database
-		DATABASE_URL: t.String({
-			default: "file:local.db",
-		}),
+		DATABASE_URL: t.String(),
 		TURSO_AUTH_TOKEN: t.Optional(t.String()),
 
 		// BetterAuth
