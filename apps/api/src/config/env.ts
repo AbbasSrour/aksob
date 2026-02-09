@@ -30,6 +30,7 @@ const EnvSchema = TypeCompiler.Compile(
 		FRONTEND_URL: t.String({
 			default: "http://localhost:5173",
 		}),
+		CORS_ORIGINS: t.Optional(t.String()),
 
 		// Database
 		DATABASE_URL: t.String(),

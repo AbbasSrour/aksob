@@ -13,11 +13,27 @@ import { authPlugin } from "./plugins/auth";
 import { dbPlugin } from "./plugins/db";
 import { logger } from "./utils/logger";
 
+const normalizeOrigin = (value: string): string | null => {
+	try {
+		return new URL(value).origin;
+	} catch {
+		return null;
+	}
+};
+
+const allowedOrigins = [
+	env.FRONTEND_URL,
+	env.BETTER_AUTH_URL,
+	...(env.CORS_ORIGINS?.split(",") ?? []),
+]
+	.map((origin) => normalizeOrigin(origin.trim()))
+	.filter((origin): origin is string => Boolean(origin));
+
 const app = new Elysia()
 	.use(requestLogger)
 	.use(
 		cors({
-			origin: [env.FRONTEND_URL, env.BETTER_AUTH_URL],
+			origin: allowedOrigins,
 			methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 			credentials: true,
 			allowedHeaders: ["Content-Type", "Authorization"],
