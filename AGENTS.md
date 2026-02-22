@@ -94,14 +94,14 @@ import { healthModule } from "./modules/health/health.routes";
 - **Shared**: `@aksob/shared/*` -> `../../packages/shared/src/*`
 
 ### Naming Conventions
-| Type | Convention | Example |
-|------|------------|---------|
-| Files (routes) | `kebab-case.routes.ts` | `health.routes.ts` |
-| Files (general) | `kebab-case.ts` | `http-logger.ts` |
-| Variables/Functions | `camelCase` | `formatDate`, `dbPlugin` |
-| Types/Interfaces | `PascalCase` | `Alumnus`, `MajorCluster` |
-| Constants | `SCREAMING_SNAKE_CASE` or `camelCase` | `env.PORT` |
-| React Components | `PascalCase` | `Galaxy`, `ErrorBoundary` |
+| Type                | Convention                            | Example                   |
+|---------------------|---------------------------------------|---------------------------|
+| Files (routes)      | `kebab-case.routes.ts`                | `health.routes.ts`        |
+| Files (general)     | `kebab-case.ts`                       | `http-logger.ts`          |
+| Variables/Functions | `camelCase`                           | `formatDate`, `dbPlugin`  |
+| Types/Interfaces    | `PascalCase`                          | `Alumnus`, `MajorCluster` |
+| Constants           | `SCREAMING_SNAKE_CASE` or `camelCase` | `env.PORT`                |
+| React Components    | `PascalCase`                          | `Galaxy`, `ErrorBoundary` |
 
 ### Formatting
 - **Indentation**: Tabs
@@ -202,12 +202,12 @@ export const healthModule = new Elysia({ prefix: "/health" })
 ## Design System (see DESIGN_GUIDELINES.md)
 
 ### Brand Colors
-| Token | Hex | Usage |
-|-------|-----|-------|
-| Primary Green | `#076951` | Main actions, buttons |
-| Secondary Green | `#16876b` | Hover states |
-| Muted Green | `#365951` | Secondary text |
-| Darkest Green | `#192c27` | Galaxy background |
+| Token           | Hex       | Usage                 |
+|-----------------|-----------|-----------------------|
+| Primary Green   | `#076951` | Main actions, buttons |
+| Secondary Green | `#16876b` | Hover states          |
+| Muted Green     | `#365951` | Secondary text        |
+| Darkest Green   | `#192c27` | Galaxy background     |
 
 ### UI Components
 - Border radius: 8-12px
