@@ -16,7 +16,7 @@ export default [
 	]),
 
 	layout("layout.tsx", [
-		index("galaxy/pages/galaxy.tsx", {
+		index("home/pages/home.tsx", {
 			id: "home",
 		}),
 

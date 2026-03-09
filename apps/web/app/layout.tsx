@@ -7,7 +7,8 @@ export default function AppLayout() {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { data: session, isPending } = useSession();
-	const isGalaxy = location.pathname === "/" || location.pathname === "/galaxy";
+	const isHome = location.pathname === "/";
+	const isGalaxy = location.pathname === "/galaxy";
 	const isChat = location.pathname.startsWith("/chat");
 	const isProtectedRoute =
 		location.pathname.startsWith("/chat") || location.pathname === "/profile";
@@ -46,7 +47,7 @@ export default function AppLayout() {
 			<Navbar user={user} onLogout={handleLogout} />
 			<div
 				className={`w-full ${
-					isGalaxy
+					isHome || isGalaxy
 						? ""
 						: isChat
 							? "pt-16 h-[calc(100vh-4rem)]"

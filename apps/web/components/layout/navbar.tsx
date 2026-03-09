@@ -23,14 +23,13 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 	const userName = user?.name?.trim() ? user.name : "User";
 	const userAvatar = user?.avatar;
 
-	// Determine if we need a transparent background (overlay) for Galaxy view
-	const isGalaxy = location.pathname === "/" || location.pathname === "/galaxy";
-	// If Galaxy, remove bar background entirely (floating elements). Else, typical glass header.
+	const isGalaxy = location.pathname === "/galaxy";
+	const isHome = location.pathname === "/";
+
 	const bgClass = isGalaxy
 		? "bg-transparent pointer-events-none"
 		: "bg-white/80 backdrop-blur-md text-[var(--aksob-darkest)] shadow-sm pointer-events-auto";
 
-	// Standard styling for non-galaxy mode
 	const normalBtnClass =
 		"p-2 rounded-full transition-colors border hover:bg-[var(--gray-100)] text-[var(--gray-500)] hover:text-[var(--aksob-primary)] border-[var(--gray-200)] pointer-events-auto";
 
@@ -39,29 +38,38 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 			className={`fixed top-0 left-0 right-0 z-(--z-fixed) h-20 transition-all duration-300 ${bgClass}`}
 		>
 			<div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
-				{/* Left Side - Brand or Back Button */}
+				{/* Left Side - Logo */}
 				<div className="flex items-center gap-4">
-					{!isGalaxy && (
+					{!isHome && !isGalaxy && (
 						<Link
 							to="/"
 							className="flex items-center gap-2 text-sm text-gray-500 hover:text-(--aksob-primary) transition-colors pointer-events-auto"
 						>
 							<ArrowLeft size={18} />
-							<span className="hidden sm:inline">Back to Galaxy</span>
+							<span className="hidden sm:inline">Back</span>
 						</Link>
 					)}
 
-					{isGalaxy && (
-						<Link
-							to="/"
-							id="navbar-logo"
-							className="flex items-center gap-2 pointer-events-auto transition-transform duration-500 hover:scale-105"
+					<Link
+						to="/"
+						className="flex items-center gap-3 pointer-events-auto transition-transform duration-500 hover:scale-[1.02]"
+					>
+						<img
+							src="/logo.png"
+							alt="LAU"
+							className={`h-10 w-auto ${isGalaxy ? "brightness-0 invert" : ""}`}
+						/>
+						<div
+							className={`hidden md:block leading-tight ${isGalaxy ? "text-white" : "text-[var(--aksob-darkest)]"}`}
 						>
-							<div className="font-bold text-xl tracking-tight text-white drop-shadow-md">
-								AKSOB<span className="font-light opacity-80">Alumni</span>
+							<div className="text-xs font-semibold tracking-wide">
+								Adnan Kassar
 							</div>
-						</Link>
-					)}
+							<div className="text-xs font-medium opacity-70">
+								School of Business
+							</div>
+						</div>
+					</Link>
 				</div>
 
 				<div className="flex items-center gap-4">
