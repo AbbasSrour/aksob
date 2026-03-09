@@ -1,0 +1,73 @@
+// noinspection HttpUrlsUsage
+
+import { cors } from "@elysiajs/cors";
+import { openapi } from "@elysiajs/openapi";
+import { swagger } from "@elysiajs/swagger";
+import { Elysia } from "elysia";
+import { logger } from "@/utils/logger";
+import { env } from "./config/env";
+import { requestLogger } from "./middleware/http-logger";
+import { chatModule } from "./modules/chat/chat.routes";
+import { healthModule } from "./modules/health/health.routes";
+import { usersModule } from "./modules/users/users.routes";
+import { authPlugin } from "./plugins/auth";
+import { dbPlugin } from "./plugins/db";
+
+export const app = new Elysia()
+	.use(requestLogger)
+	.use(
+		cors({
+			origin: [
+				env.FRONTEND_URL,
+				env.BETTER_AUTH_URL,
+				...(env.CORS_ORIGINS?.split(",") ?? []),
+			]
+				.map((origin) => new URL(origin.trim()).origin)
+				.filter((origin): origin is string => Boolean(origin)),
+			methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+			allowedHeaders: ["Content-Type", "Authorization"],
+			credentials: true,
+		}),
+	)
+	.use(
+		openapi({
+			path: "/openapi",
+			documentation: {
+				info: {
+					title: "AKSOB API",
+					version: "1.0.0",
+				},
+			},
+		}),
+	)
+	.use(
+		swagger({
+			path: "/docs",
+			documentation: {
+				info: {
+					title: "AKSOB API Documentation",
+					version: "1.0.0",
+				},
+			},
+		}),
+	)
+	.use(dbPlugin)
+	.use(authPlugin)
+	.use(healthModule)
+	.use(chatModule)
+	.use(usersModule)
+	.onError(({ code, error, set }) => {
+		if (code === "NOT_FOUND") {
+			set.status = 404;
+			return { error: "Route not found" };
+		}
+
+		logger.error("Server error", {
+			error: error instanceof Error ? error.message : error,
+		});
+		set.status = 500;
+
+		return { error: "Internal server error" };
+	});
+
+export type App = typeof app;
