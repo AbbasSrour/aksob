@@ -4,6 +4,8 @@ import { Elysia, t } from "elysia";
 import { db, schema } from "@/db";
 import { auth } from "@/lib/auth";
 
+type UserType = "alumni" | "faculty" | "student";
+
 const usersIdParamSchema = t.Object({
 	id: t.String(),
 });
@@ -12,7 +14,7 @@ const usersOpenApiDetail = {
 	tags: ["Users"],
 };
 
-const normalizeUserType = (userType: string) => {
+const normalizeUserType = (userType: string): UserType => {
 	if (
 		userType === "alumni" ||
 		userType === "faculty" ||
