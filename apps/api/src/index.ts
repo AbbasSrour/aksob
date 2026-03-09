@@ -13,59 +13,22 @@ import { authPlugin } from "./plugins/auth";
 import { dbPlugin } from "./plugins/db";
 import { logger } from "./utils/logger";
 
-const normalizeOrigin = (value: string): string | null => {
-	try {
-		return new URL(value).origin;
-	} catch {
-		return null;
-	}
-};
-
-const allowedOrigins = [
-	env.FRONTEND_URL,
-	env.BETTER_AUTH_URL,
-	...(env.CORS_ORIGINS?.split(",") ?? []),
-]
-	.map((origin) => normalizeOrigin(origin.trim()))
-	.filter((origin): origin is string => Boolean(origin));
-
 const app = new Elysia()
 	.use(requestLogger)
 	.use(
 		cors({
-			origin: allowedOrigins,
+			origin: [
+				env.FRONTEND_URL,
+				env.BETTER_AUTH_URL,
+				...(env.CORS_ORIGINS?.split(",") ?? []),
+			]
+				.map((origin) => new URL(origin.trim()).origin)
+				.filter((origin): origin is string => Boolean(origin)),
 			methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-			credentials: true,
 			allowedHeaders: ["Content-Type", "Authorization"],
+			credentials: true,
 		}),
 	)
-	.onBeforeHandle(async ({ request, set }) => {
-		if (request.method !== "POST") {
-			return;
-		}
-
-		const url = new URL(request.url);
-		if (url.pathname !== "/api/auth/sign-up/email") {
-			return;
-		}
-
-		try {
-			const body = (await request.clone().json()) as {
-				userType?: string;
-				company?: string;
-			};
-
-			if (body.userType === "alumni" && !body.company?.trim()) {
-				set.status = 400;
-				return {
-					error: "Company is required for alumni registrations",
-				};
-			}
-		} catch {
-			set.status = 400;
-			return { error: "Invalid signup payload" };
-		}
-	})
 	.use(
 		openapi({
 			path: "/openapi",
@@ -103,6 +66,7 @@ const app = new Elysia()
 			error: error instanceof Error ? error.message : error,
 		});
 		set.status = 500;
+
 		return { error: "Internal server error" };
 	})
 	.listen(env.PORT, (server) => {

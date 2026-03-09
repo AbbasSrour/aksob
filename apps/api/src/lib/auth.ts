@@ -1,6 +1,7 @@
 import { AKSOB_MAJORS } from "@aksob/shared";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { APIError, createAuthMiddleware } from "better-auth/api";
 import { admin, phoneNumber } from "better-auth/plugins";
 import { env } from "@/config/env";
 import { db } from "@/db";
@@ -71,6 +72,19 @@ export const auth = betterAuth({
 		},
 	},
 	plugins: [admin(), phoneNumber()],
+	hooks: {
+		before: createAuthMiddleware(async (ctx) => {
+			if (ctx.path !== "/sign-up/email") {
+				return;
+			}
+			const body = ctx.body as { userType?: string; company?: string };
+			if (body.userType === "alumni" && !body.company?.trim()) {
+				throw new APIError("BAD_REQUEST", {
+					message: "Company is required for alumni registrations",
+				});
+			}
+		}),
+	},
 });
 
 export type Auth = typeof auth;
