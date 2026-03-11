@@ -1,0 +1,15 @@
+import { Skeleton } from '@aksob/ui/core/skeleton';
+import { cn } from '@aksob/ui/lib/utils';
+import type { ComponentProps } from 'react';
+
+export function ComboboxSkeleton({
+  className,
+  ...props
+}: ComponentProps<'div'>) {
+  return (
+    <Skeleton
+      className={cn('h-9 w-full rounded-md border border-input/50', className)}
+      {...props}
+    />
+  );
+}

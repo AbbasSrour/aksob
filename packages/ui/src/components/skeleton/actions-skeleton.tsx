@@ -1,0 +1,14 @@
+import { cn } from "@aksob/ui/lib/utils";
+import type { PropsWithChildren } from "react";
+
+interface ActionsSkeletonProps extends PropsWithChildren {
+	className?: string;
+}
+
+export function ActionsSkeleton({ children, className }: ActionsSkeletonProps) {
+	return (
+		<div className={cn("flex flex-wrap items-center gap-2", className)}>
+			{children}
+		</div>
+	);
+}

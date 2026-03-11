@@ -1,0 +1,17 @@
+import { cn } from '@aksob/ui/lib/utils';
+import type { PropsWithChildren } from 'react';
+
+interface FormFooterSkeletonProps extends PropsWithChildren {
+  className?: string;
+}
+
+export function FormFooterSkeleton({
+  children,
+  className,
+}: FormFooterSkeletonProps) {
+  return (
+    <div className={cn('flex items-center justify-end gap-x-2', className)}>
+      {children}
+    </div>
+  );
+}

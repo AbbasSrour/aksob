@@ -1,0 +1,12 @@
+{
+  "extends": "@aksob/tsconfig/react-library.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@aksob/ui/*": ["./src/*"]
+    }
+  },
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "index.d.ts"],
+  "exclude": ["node_modules", "dist"]
+}
