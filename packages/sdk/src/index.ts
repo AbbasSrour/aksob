@@ -1,0 +1,40 @@
+import type { App } from "@aksob/api/app";
+import type { Treaty } from "@elysiajs/eden";
+import { treaty } from "@elysiajs/eden";
+
+export type { App } from "@aksob/api/app";
+
+export function createApiClient(
+	baseUrl: string,
+	options?: Treaty.Config,
+): Treaty.Create<App> {
+	return treaty<App>(baseUrl, {
+		...options,
+		fetch: {
+			credentials: "include",
+			...(options?.fetch ?? {}),
+		},
+	});
+}
+
+export function getApiErrorMessage(error: unknown) {
+	if (typeof error === "string") {
+		return error;
+	}
+
+	if (error && typeof error === "object") {
+		if ("error" in error && typeof error.error === "string") {
+			return error.error;
+		}
+
+		if ("message" in error && typeof error.message === "string") {
+			return error.message;
+		}
+
+		if ("summary" in error && typeof error.summary === "string") {
+			return error.summary;
+		}
+	}
+
+	return "Request failed";
+}

@@ -1,0 +1,20 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"lib": ["ES2022", "DOM"],
+		"types": [],
+		"composite": true,
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"declarationMap": true,
+		"outDir": "dist/types",
+		"noEmit": false,
+		"baseUrl": ".",
+		"paths": {
+			"@aksob/api": ["../../apps/api/src/index.ts"],
+			"@aksob/api/*": ["../../apps/api/src/*"]
+		}
+	},
+	"references": [{ "path": "../../apps/api" }],
+	"include": ["src/**/*"]
+}
