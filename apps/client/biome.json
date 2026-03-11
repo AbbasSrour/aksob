@@ -1,0 +1,36 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+	"extends": ["../../biome.json"],
+	"files": {
+		"includes": [
+			"app/**",
+			"components/**",
+			"hooks/**",
+			"lib/**",
+			"config/**",
+			"constants/**",
+			"middleware/**",
+			"styles/**",
+			".vscode/**",
+			"env.ts",
+			"index.d.ts",
+			"index.html",
+			"router.tsx",
+			"routes.ts",
+			"server.ts",
+			"vite.config.ts",
+			"!routeTree.gen.ts",
+			"!styles/app.css"
+		]
+	},
+	"linter": {
+		"rules": {
+			"style": {
+				"noNonNullAssertion": "off"
+			},
+			"correctness": {
+				"useUniqueElementIds": "off"
+			}
+		}
+	}
+}

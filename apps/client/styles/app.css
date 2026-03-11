@@ -1,0 +1,29 @@
+@import "@aksob/ui/globals.css";
+@import "@bprogress/core/css";
+
+:root {
+	--bprogress-color: var(--aksob-primary);
+	--bprogress-height: 3px;
+	--bprogress-spinner-size: 18px;
+	--bprogress-spinner-border-size: 2px;
+
+	--aksob-primary: oklch(0.45 0.13 165);
+	--aksob-secondary: oklch(0.52 0.13 165);
+	--aksob-muted: oklch(0.38 0.08 165);
+	--aksob-darkest: oklch(0.25 0.05 165);
+	--aksob-pale-mint: oklch(0.97 0.02 165);
+
+	--primary: var(--aksob-primary);
+	--primary-foreground: oklch(0.985 0 0);
+	--ring: var(--aksob-primary);
+}
+
+@theme {
+	--font-sans: system-ui, sans-serif;
+	--font-mono: ui-monospace, monospace;
+	--color-aksob-primary: var(--aksob-primary);
+	--color-aksob-secondary: var(--aksob-secondary);
+	--color-aksob-muted: var(--aksob-muted);
+	--color-aksob-darkest: var(--aksob-darkest);
+	--color-aksob-pale-mint: var(--aksob-pale-mint);
+}
