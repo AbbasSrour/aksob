@@ -12,6 +12,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/app-sidebar";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { navigationConfig } from "@/config/navigation";
+import { m } from "@/paraglide/messages";
 import { useSession } from "@/lib/auth.ts";
 
 export const Route = createFileRoute("/admin")({
@@ -24,9 +25,9 @@ function AdminRoute() {
 	const user = sessionData?.user;
 
 	return (
-		<PermissionProvider permissions={[]}>
+		<PermissionProvider permissions={[]} hasPermission={() => true}>
 			<NavigationProvider
-				projectName={"AKSOB Dashboard"}
+				projectName={m.app_project_name()}
 				main={navigationConfig.admin}
 				user={
 					user && {

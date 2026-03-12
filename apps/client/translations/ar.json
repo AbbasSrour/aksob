@@ -2,6 +2,75 @@
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"language_label": "اللغة",
 	"current_locale": "اللغة الحالية: {locale}",
+
+	"app_title": "LAU AKSOB",
+	"app_description": "شبكة خريجي LAU AKSOB - منصة مجتمع مجرة النجوم",
+	"app_project_name": "لوحة تحكم AKSOB",
+
+	"maintenance_title": "تحت الصيانة",
+	"maintenance_description": "نقوم حالياً بإجراء صيانة مجدولة. يرجى المحاولة مرة أخرى قريباً.",
+
+	"dashboard_title": "لوحة تحكم المشرف",
+	"dashboard_welcome": "مرحباً بك في لوحة تحكم المشرف",
+
+	"users_list_title": "قائمة المستخدمين",
+	"users_list_description": "إدارة مستخدمي النظام ومعلوماتهم هنا.",
+	"users_add_button": "إضافة مستخدم",
+	"users_page_title": "المستخدمون - AKSOB",
+	"users_page_description": "إدارة مستخدمي النظام ومعلوماتهم هنا.",
+
+	"users_create_title": "إنشاء مستخدم",
+	"users_create_description": "إنشاء حساب مستخدم جديد.",
+	"users_create_page_title": "إنشاء مستخدم - AKSOB",
+
+	"users_edit_title": "تعديل {name}",
+	"users_edit_description": "تحديث تفاصيل المستخدم.",
+	"users_edit_page_title": "تعديل مستخدم - AKSOB",
+	"users_edit_page_description": "تحديث حساب مستخدم.",
+	"users_edit_back_button": "العودة للمستخدمين",
+	"users_not_found": "المستخدم غير موجود",
+
+	"users_table_column_user": "المستخدم",
+	"users_table_column_phone": "رقم الهاتف",
+	"users_table_column_role": "الدور",
+	"users_table_column_status": "الحالة",
+	"users_table_action_edit": "تعديل المستخدم",
+	"users_table_action_send_verification": "إرسال بريد التحقق",
+	"users_table_action_delete": "حذف المستخدم",
+
+	"users_insights_total_title": "إجمالي المستخدمين",
+	"users_insights_total_active": "{rate}% نشط",
+	"users_insights_admins_title": "المشرفون والمديرون",
+	"users_insights_admins_subtext": "{admins} مشرف، {managers} مدير",
+	"users_insights_new_title": "المستخدمون الجدد (30 يوم)",
+	"users_insights_new_subtext": "النمو",
+
+	"users_role_admin": "مدير النظام",
+	"users_role_user": "مستخدم",
+	"users_role_select_placeholder": "اختر الدور",
+
+	"users_status_active": "نشط",
+	"users_status_invited": "مدعو",
+	"users_status_suspended": "معلق",
+
+	"users_form_section_personal_title": "المعلومات الشخصية",
+	"users_form_section_personal_description": "أدخل المعلومات الشخصية الأساسية للمستخدم بما في ذلك الاسم والبريد الإلكتروني وتفاصيل الاتصال.",
+	"users_form_section_account_title": "معلومات الحساب",
+	"users_form_section_account_description": "إعداد بيانات اعتماد الوصول والأذونات للمستخدم من خلال تحديد دور وإنشاء كلمة مرور آمنة.",
+	"users_form_first_name_label": "الاسم الأول",
+	"users_form_first_name_placeholder": "جون على سبيل المثال...",
+	"users_form_last_name_label": "اسم العائلة",
+	"users_form_last_name_placeholder": "يمكن أن يكون ويك...",
+	"users_form_email_label": "البريد الإلكتروني",
+	"users_form_email_placeholder": "john-wick@continental.com",
+	"users_form_phone_label": "الهاتف",
+	"users_form_phone_placeholder": "00 000 000",
+	"users_form_role_label": "الدور",
+	"users_form_password_label": "كلمة المرور",
+	"users_form_password_placeholder": "******",
+	"users_form_password_confirm_label": "تأكيد كلمة المرور",
+	"users_form_password_confirm_description": "يجب أن تتطابق مع حقل كلمة المرور",
+
 	"auth_login_title": "تسجيل الدخول إلى لوحة تحكم AKSOB",
 	"auth_login_description": "تواصل مع الخريجين، استكشف مجرة النجوم، وادخل إلى مجتمع AKSOB.",
 	"auth_login_button": "تسجيل الدخول",
@@ -22,5 +91,9 @@
 	"auth_login_create_account": "إنشاء حساب",
 	"auth_login_or": "أو",
 	"auth_login_google": "تسجيل الدخول بواسطة Google",
-	"auth_error_generic": "حدث خطأ غير متوقع!"
+	"auth_error_generic": "حدث خطأ غير متوقع!",
+
+	"nav_platform": "المنصة",
+	"nav_dashboard": "لوحة التحكم",
+	"nav_user_management": "إدارة المستخدمين"
 }

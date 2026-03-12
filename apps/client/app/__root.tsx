@@ -19,6 +19,7 @@ import { AppLoading } from "@/components/app-loading";
 import { AppTopLoader } from "@/components/app-top-loader";
 import { projectConfig } from "@/config/project";
 import { maintenanceMiddleware } from "@/middleware/maintenance.ts";
+import { m } from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 import appCss from "@/styles/app.css?url";
 
@@ -50,11 +51,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "LAU AKSOB",
+				title: m.app_title(),
 			},
 			{
 				name: "description",
-				content: "LAU AKSOB Alumni Network - Galaxy of Stars Community Platform",
+				content: m.app_description(),
 			},
 		],
 		links: [

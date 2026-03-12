@@ -11,10 +11,10 @@ import {
 import { Input } from "@aksob/ui/core/input";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useNavigate } from "@tanstack/react-router";
-import { useForm, useFormContext } from "react-hook-form";
+import { type SubmitHandler, useForm, useFormContext } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
-import { signIn } from "@/lib/auth.ts";
+import { authClient } from "@/lib/auth.ts";
 import { m } from "@/paraglide/messages";
 
 const loginSchema = z.object({
@@ -37,8 +37,13 @@ export const LoginForm = () => {
 		resolver: standardSchemaResolver(loginSchema),
 	});
 
-	const handleSubmit = async (values: LoginFormValues) => {
-		const result = await signIn.email({
+	const handleSubmit: SubmitHandler<LoginFormValues> = async (
+		values: LoginFormValues,
+		event,
+	) => {
+		event?.preventDefault();
+
+		const result = await authClient.signIn.email({
 			email: values.email,
 			password: values.password,
 			rememberMe: values.rememberMe,

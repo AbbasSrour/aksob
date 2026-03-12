@@ -2,6 +2,75 @@
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"language_label": "Language",
 	"current_locale": "Current locale: {locale}",
+
+	"app_title": "LAU AKSOB",
+	"app_description": "LAU AKSOB Alumni Network - Galaxy of Stars Community Platform",
+	"app_project_name": "AKSOB Dashboard",
+
+	"maintenance_title": "Under Maintenance",
+	"maintenance_description": "We are currently performing scheduled maintenance. Please check back soon.",
+
+	"dashboard_title": "Admin Dashboard",
+	"dashboard_welcome": "Welcome to the admin dashboard",
+
+	"users_list_title": "Users List",
+	"users_list_description": "Manage system users and their information here.",
+	"users_add_button": "Add User",
+	"users_page_title": "Users - AKSOB",
+	"users_page_description": "Manage system users and their information here.",
+
+	"users_create_title": "Create User",
+	"users_create_description": "Create a new user account.",
+	"users_create_page_title": "Create User - AKSOB",
+
+	"users_edit_title": "Edit {name}",
+	"users_edit_description": "Update the user details.",
+	"users_edit_page_title": "Edit User - AKSOB",
+	"users_edit_page_description": "Update a user account.",
+	"users_edit_back_button": "Back to Users",
+	"users_not_found": "User not found",
+
+	"users_table_column_user": "User",
+	"users_table_column_phone": "Phone Number",
+	"users_table_column_role": "Role",
+	"users_table_column_status": "Status",
+	"users_table_action_edit": "Edit User",
+	"users_table_action_send_verification": "Send Verification Email",
+	"users_table_action_delete": "Delete User",
+
+	"users_insights_total_title": "Total Users",
+	"users_insights_total_active": "{rate}% Active",
+	"users_insights_admins_title": "Admins & Managers",
+	"users_insights_admins_subtext": "{admins} Admins, {managers} Managers",
+	"users_insights_new_title": "New Users (30d)",
+	"users_insights_new_subtext": "Growth",
+
+	"users_role_admin": "Administrator",
+	"users_role_user": "User",
+	"users_role_select_placeholder": "Select role",
+
+	"users_status_active": "Active",
+	"users_status_invited": "Invited",
+	"users_status_suspended": "Suspended",
+
+	"users_form_section_personal_title": "Personal Information",
+	"users_form_section_personal_description": "Enter the user's basic personal information including their name, email address, and contact details.",
+	"users_form_section_account_title": "Account Information",
+	"users_form_section_account_description": "Set up user access credentials and permissions by selecting a role and creating a secure password.",
+	"users_form_first_name_label": "First Name",
+	"users_form_first_name_placeholder": "John for example...",
+	"users_form_last_name_label": "Last Name",
+	"users_form_last_name_placeholder": "Can be Wick...",
+	"users_form_email_label": "Email",
+	"users_form_email_placeholder": "john-wick@continental.com",
+	"users_form_phone_label": "Phone",
+	"users_form_phone_placeholder": "00 000 000",
+	"users_form_role_label": "Role",
+	"users_form_password_label": "Password",
+	"users_form_password_placeholder": "******",
+	"users_form_password_confirm_label": "Confirm Password",
+	"users_form_password_confirm_description": "Must match the password field",
+
 	"auth_login_title": "Sign in to AKSOB Dashboard",
 	"auth_login_description": "Connect with alumni, explore the Galaxy of Stars, and access the AKSOB community.",
 	"auth_login_button": "Sign in",
@@ -22,5 +91,9 @@
 	"auth_login_create_account": "Create an account",
 	"auth_login_or": "or",
 	"auth_login_google": "Sign in with Google",
-	"auth_error_generic": "Something went wrong!"
+	"auth_error_generic": "Something went wrong!",
+
+	"nav_platform": "Platform",
+	"nav_dashboard": "Dashboard",
+	"nav_user_management": "User Management"
 }
