@@ -1,4 +1,5 @@
 import { t } from "elysia";
+
 export const usersInputSchema = t.Object({
 	id: t.String(),
 	name: t.String(),

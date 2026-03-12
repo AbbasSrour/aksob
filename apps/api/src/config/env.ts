@@ -43,6 +43,9 @@ const EnvSchema = TypeCompiler.Compile(
 		BETTER_AUTH_URL: t.String({
 			default: "http://localhost:3000",
 		}),
+		DEFAULT_ADMIN_PASSWORD: t.String({
+			minLength: 8,
+		}),
 	}),
 );
 

@@ -6,22 +6,6 @@ import { admin, phoneNumber } from "better-auth/plugins";
 import { env } from "@/config/env";
 import { db } from "@/db";
 
-const normalizeOrigin = (value: string): string | null => {
-	try {
-		return new URL(value).origin;
-	} catch {
-		return null;
-	}
-};
-
-const trustedOrigins = [
-	env.FRONTEND_URL,
-	env.BETTER_AUTH_URL,
-	...(env.CORS_ORIGINS?.split(",") ?? []),
-]
-	.map((origin) => normalizeOrigin(origin.trim()))
-	.filter((origin): origin is string => Boolean(origin));
-
 const isSecureAuth = env.BETTER_AUTH_URL.startsWith("https://");
 
 export const auth = betterAuth({
@@ -64,7 +48,13 @@ export const auth = betterAuth({
 	},
 	secret: env.BETTER_AUTH_SECRET,
 	baseURL: env.BETTER_AUTH_URL,
-	trustedOrigins,
+	trustedOrigins: [
+		env.FRONTEND_URL,
+		env.BETTER_AUTH_URL,
+		...(env.CORS_ORIGINS?.split(",") ?? []),
+	]
+		.map((origin) => new URL(origin.trim()).origin)
+		.filter((origin): origin is string => Boolean(origin)),
 	advanced: {
 		defaultCookieAttributes: {
 			sameSite: isSecureAuth ? "none" : "lax",

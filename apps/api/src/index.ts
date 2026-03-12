@@ -1,6 +1,9 @@
 import { app } from "./app";
 import { env } from "./config/env";
+import { ensureDefaultAdmin } from "./lib/ensure-default-admin";
 import { logger } from "./utils/logger";
+
+await ensureDefaultAdmin();
 
 app.listen(env.PORT, (server) => {
 	logger.info(`🚀 AKSOB API is running at ${server?.hostname}:${server?.port}`);
