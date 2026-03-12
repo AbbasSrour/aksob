@@ -7,10 +7,19 @@ export const authClient = createAuthClient({
 	basePath: "/api/auth",
 	fetchOptions: {
 		credentials: "include",
+		onResponse: async (context) => {
+			try {
+				await authClient.signOut();
+			} catch {}
+
+			if (context.response.status === 401) {
+				window.location.href = "/auth/login";
+			}
+		},
 	},
 	plugins: [adminClient(), phoneNumberClient()],
 });
 
-export const { signIn, useSession, getSession, admin } = authClient;
+export const { useSession } = authClient;
 
 export type AuthClient = typeof authClient;
