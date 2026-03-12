@@ -21,19 +21,26 @@ export const usePermission = () => {
 
 interface PermissionProviderProps {
 	permissions: PermissionKeys[];
+	hasPermission?: (permission?: PermissionKeys) => boolean;
 }
 
 export const PermissionProvider = ({
 	children,
 	permissions,
+	hasPermission,
 }: PropsWithChildren<PermissionProviderProps>) => {
-	const hasPermission = (permission?: PermissionKeys) => {
+	const defaultHasPermission = (permission?: PermissionKeys) => {
 		if (!permission) return true;
 		return permissions.includes(permission);
 	};
 
 	return (
-		<PermissionContext.Provider value={{ permissions, hasPermission }}>
+		<PermissionContext.Provider
+			value={{
+				permissions,
+				hasPermission: hasPermission || defaultHasPermission,
+			}}
+		>
 			{children}
 		</PermissionContext.Provider>
 	);
