@@ -1,1 +1,5 @@
-export const formKeyFactory = {};
+export const formKeyFactory = {
+	users: {
+		form: "users-variation",
+	},
+};

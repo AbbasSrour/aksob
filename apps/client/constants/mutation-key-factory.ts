@@ -12,4 +12,25 @@ export const mutationKeyFactory = {
 		sendEmailVerification: () =>
 			[...mutationKeyFactory.auth.entity, "sendEmailVerification"] as const,
 	},
+
+	users: {
+		entity: ["users"] as const,
+		create: () =>
+			[
+				...mutationKeyFactory.users.entity,
+				...mutationKeyFactory.create(),
+			] as const,
+		update: () =>
+			[
+				...mutationKeyFactory.users.entity,
+				...mutationKeyFactory.update(),
+			] as const,
+		delete: () =>
+			[
+				...mutationKeyFactory.users.entity,
+				...mutationKeyFactory.delete(),
+			] as const,
+		sendVerification: () =>
+			[...mutationKeyFactory.users.entity, "sendVerification"] as const,
+	},
 } as const;

@@ -14,13 +14,13 @@ export const routes = rootRoute("__root.tsx", [
 
 	// Admin Routes
 	route("admin", "admin.route.tsx", [
-		// 	route("/dashboard", "dashboard/pages/admin-dashboard.tsx"),
-		//
-		// 	route("/users", "users/layout.tsx", [
-		// 		index("users/pages/list.tsx"),
-		// 		route("/create", "users/pages/create.tsx"),
-		// 		route("/$userId/edit", "users/pages/userId-edit.tsx"),
-		// 	]),
+		route("/dashboard", "dashboard/pages/admin-dashboard.tsx"),
+
+		route("/users", "users/layout.tsx", [
+			index("users/pages/list.tsx"),
+			route("/create", "users/pages/create.tsx"),
+			route("/$userId/edit", "users/pages/userId-edit.tsx"),
+		]),
 	]),
 
 	// API routes

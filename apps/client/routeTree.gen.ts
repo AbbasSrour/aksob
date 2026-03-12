@@ -14,8 +14,13 @@ import { Route as authLayoutRouteImport } from './app/auth/layout'
 import { Route as adminDotrouteRouteImport } from './app/admin.route'
 import { Route as indexRouteImport } from './app/index'
 import { Route as authPagesLoginRouteImport } from './app/auth/pages/login'
+import { Route as usersLayoutRouteImport } from './app/users/layout'
+import { Route as dashboardPagesAdminDashboardRouteImport } from './app/dashboard/pages/admin-dashboard'
 import { Route as ApiAuthSplatRouteImport } from './app/api/auth/$'
+import { Route as usersPagesCreateRouteImport } from './app/users/pages/create'
+import { Route as usersPagesListRouteImport } from './app/users/pages/list'
 import { Route as ApiAuthAdminSplatRouteImport } from './app/api/auth/admin/$'
+import { Route as usersPagesUserIdEditRouteImport } from './app/users/pages/userId-edit'
 
 const maintenanceRoute = maintenanceRouteImport.update({
   id: '/maintenance',
@@ -42,43 +47,83 @@ const authPagesLoginRoute = authPagesLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => authLayoutRoute,
 } as any)
+const usersLayoutRoute = usersLayoutRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => adminDotrouteRoute,
+} as any)
+const dashboardPagesAdminDashboardRoute =
+  dashboardPagesAdminDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => adminDotrouteRoute,
+  } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
+} as any)
+const usersPagesCreateRoute = usersPagesCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => usersLayoutRoute,
+} as any)
+const usersPagesListRoute = usersPagesListRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => usersLayoutRoute,
 } as any)
 const ApiAuthAdminSplatRoute = ApiAuthAdminSplatRouteImport.update({
   id: '/api/auth/admin/$',
   path: '/api/auth/admin/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const usersPagesUserIdEditRoute = usersPagesUserIdEditRouteImport.update({
+  id: '/$userId/edit',
+  path: '/$userId/edit',
+  getParentRoute: () => usersLayoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof indexRoute
-  '/admin': typeof adminDotrouteRoute
+  '/admin': typeof adminDotrouteRouteWithChildren
   '/auth': typeof authLayoutRouteWithChildren
   '/maintenance': typeof maintenanceRoute
+  '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
+  '/admin/users': typeof usersLayoutRouteWithChildren
   '/auth/login': typeof authPagesLoginRoute
+  '/admin/users/': typeof usersPagesListRoute
+  '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/users/$userId/edit': typeof usersPagesUserIdEditRoute
   '/api/auth/admin/$': typeof ApiAuthAdminSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof indexRoute
-  '/admin': typeof adminDotrouteRoute
+  '/admin': typeof adminDotrouteRouteWithChildren
   '/auth': typeof authLayoutRouteWithChildren
   '/maintenance': typeof maintenanceRoute
+  '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
   '/auth/login': typeof authPagesLoginRoute
+  '/admin/users': typeof usersPagesListRoute
+  '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/users/$userId/edit': typeof usersPagesUserIdEditRoute
   '/api/auth/admin/$': typeof ApiAuthAdminSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof indexRoute
-  '/admin': typeof adminDotrouteRoute
+  '/admin': typeof adminDotrouteRouteWithChildren
   '/auth': typeof authLayoutRouteWithChildren
   '/maintenance': typeof maintenanceRoute
+  '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
+  '/admin/users': typeof usersLayoutRouteWithChildren
   '/auth/login': typeof authPagesLoginRoute
+  '/admin/users/': typeof usersPagesListRoute
+  '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/users/$userId/edit': typeof usersPagesUserIdEditRoute
   '/api/auth/admin/$': typeof ApiAuthAdminSplatRoute
 }
 export interface FileRouteTypes {
@@ -88,8 +133,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/maintenance'
+    | '/admin/dashboard'
+    | '/admin/users'
     | '/auth/login'
+    | '/admin/users/'
+    | '/admin/users/create'
     | '/api/auth/$'
+    | '/admin/users/$userId/edit'
     | '/api/auth/admin/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -97,8 +147,12 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/maintenance'
+    | '/admin/dashboard'
     | '/auth/login'
+    | '/admin/users'
+    | '/admin/users/create'
     | '/api/auth/$'
+    | '/admin/users/$userId/edit'
     | '/api/auth/admin/$'
   id:
     | '__root__'
@@ -106,14 +160,19 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/maintenance'
+    | '/admin/dashboard'
+    | '/admin/users'
     | '/auth/login'
+    | '/admin/users/'
+    | '/admin/users/create'
     | '/api/auth/$'
+    | '/admin/users/$userId/edit'
     | '/api/auth/admin/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   indexRoute: typeof indexRoute
-  adminDotrouteRoute: typeof adminDotrouteRoute
+  adminDotrouteRoute: typeof adminDotrouteRouteWithChildren
   authLayoutRoute: typeof authLayoutRouteWithChildren
   maintenanceRoute: typeof maintenanceRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -157,12 +216,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authPagesLoginRouteImport
       parentRoute: typeof authLayoutRoute
     }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof usersLayoutRouteImport
+      parentRoute: typeof adminDotrouteRoute
+    }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof dashboardPagesAdminDashboardRouteImport
+      parentRoute: typeof adminDotrouteRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/users/create': {
+      id: '/admin/users/create'
+      path: '/create'
+      fullPath: '/admin/users/create'
+      preLoaderRoute: typeof usersPagesCreateRouteImport
+      parentRoute: typeof usersLayoutRoute
+    }
+    '/admin/users/': {
+      id: '/admin/users/'
+      path: '/'
+      fullPath: '/admin/users/'
+      preLoaderRoute: typeof usersPagesListRouteImport
+      parentRoute: typeof usersLayoutRoute
     }
     '/api/auth/admin/$': {
       id: '/api/auth/admin/$'
@@ -171,8 +258,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthAdminSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/users/$userId/edit': {
+      id: '/admin/users/$userId/edit'
+      path: '/$userId/edit'
+      fullPath: '/admin/users/$userId/edit'
+      preLoaderRoute: typeof usersPagesUserIdEditRouteImport
+      parentRoute: typeof usersLayoutRoute
+    }
   }
 }
+
+interface usersLayoutRouteChildren {
+  usersPagesListRoute: typeof usersPagesListRoute
+  usersPagesCreateRoute: typeof usersPagesCreateRoute
+  usersPagesUserIdEditRoute: typeof usersPagesUserIdEditRoute
+}
+
+const usersLayoutRouteChildren: usersLayoutRouteChildren = {
+  usersPagesListRoute: usersPagesListRoute,
+  usersPagesCreateRoute: usersPagesCreateRoute,
+  usersPagesUserIdEditRoute: usersPagesUserIdEditRoute,
+}
+
+const usersLayoutRouteWithChildren = usersLayoutRoute._addFileChildren(
+  usersLayoutRouteChildren,
+)
+
+interface adminDotrouteRouteChildren {
+  dashboardPagesAdminDashboardRoute: typeof dashboardPagesAdminDashboardRoute
+  usersLayoutRoute: typeof usersLayoutRouteWithChildren
+}
+
+const adminDotrouteRouteChildren: adminDotrouteRouteChildren = {
+  dashboardPagesAdminDashboardRoute: dashboardPagesAdminDashboardRoute,
+  usersLayoutRoute: usersLayoutRouteWithChildren,
+}
+
+const adminDotrouteRouteWithChildren = adminDotrouteRoute._addFileChildren(
+  adminDotrouteRouteChildren,
+)
 
 interface authLayoutRouteChildren {
   authPagesLoginRoute: typeof authPagesLoginRoute
@@ -188,7 +312,7 @@ const authLayoutRouteWithChildren = authLayoutRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   indexRoute: indexRoute,
-  adminDotrouteRoute: adminDotrouteRoute,
+  adminDotrouteRoute: adminDotrouteRouteWithChildren,
   authLayoutRoute: authLayoutRouteWithChildren,
   maintenanceRoute: maintenanceRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
