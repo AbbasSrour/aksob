@@ -12,10 +12,14 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/app-sidebar";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { navigationConfig } from "@/config/navigation";
-import { m } from "@/paraglide/messages";
 import { useSession } from "@/lib/auth.ts";
+import { authenticated } from "@/middleware/authenticated.ts";
+import { m } from "@/paraglide/messages";
 
 export const Route = createFileRoute("/admin")({
+	server: {
+		middleware: [authenticated],
+	},
 	component: AdminRoute,
 });
 

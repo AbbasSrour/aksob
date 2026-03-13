@@ -8,12 +8,16 @@ export const authClient = createAuthClient({
 	fetchOptions: {
 		credentials: "include",
 		onResponse: async (context) => {
-			try {
-				await authClient.signOut();
-			} catch {}
-
 			if (context.response.status === 401) {
-				window.location.href = "/auth/login";
+				if (typeof window === "undefined") {
+					return;
+				}
+
+				if (window.location.pathname.includes("/auth")) {
+					return;
+				}
+
+				window.location.replace("/auth/login");
 			}
 		},
 	},
