@@ -1,4 +1,5 @@
 import { AKSOB_MAJORS } from "@aksob/shared";
+import { generatePasswordResetEmail } from "@aksob/templates";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError, createAuthMiddleware } from "better-auth/api";
@@ -7,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { AUTH_ERRORS } from "@/modules/auth/auth.errors";
 import { env } from "@/config/env";
 import { db, schema } from "@/db";
+import { sendEmail } from "@/lib/email";
 
 const isSecureAuth = env.BETTER_AUTH_URL.startsWith("https://");
 
@@ -69,21 +71,30 @@ interface UpdateUserBody {
 }
 
 export const auth = betterAuth({
-	secret: env.BETTER_AUTH_SECRET,
 	baseURL: env.BETTER_AUTH_URL,
-	trustedOrigins: [
-		env.FRONTEND_URL,
-		env.BETTER_AUTH_URL,
-		...(env.CORS_ORIGINS?.split(",") ?? []),
-	]
-		.map((origin) => new URL(origin.trim()).origin)
-		.filter((origin): origin is string => Boolean(origin)),
+	secret: env.BETTER_AUTH_SECRET,
+	trustedOrigins: env.trustedOrigins,
 	database: drizzleAdapter(db, {
 		provider: "sqlite",
 	}),
 	emailAndPassword: {
 		enabled: true,
 		requireEmailVerification: false,
+		sendResetPassword: async ({ user, url }) => {
+			void (async () => {
+				const message = await generatePasswordResetEmail({
+					name: user.name,
+					resetUrl: url,
+				});
+
+				await sendEmail({
+					to: user.email,
+					...message,
+				});
+			})().catch((error) => {
+				console.error("Failed to send password reset email", error);
+			});
+		},
 	},
 	emailVerification: {
 		sendOnSignUp: false,

@@ -1,4 +1,3 @@
-import { Button } from "@aksob/ui/core/button";
 import {
 	Card,
 	CardContent,
@@ -6,7 +5,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@aksob/ui/core/card";
-import { Separator } from "@aksob/ui/core/separator";
 import { cn } from "@aksob/ui/lib/utils";
 import { createFileRoute } from "@tanstack/react-router";
 import { LoginForm } from "@/app/auth/components/form/login-form.tsx";

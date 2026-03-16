@@ -10,7 +10,11 @@ export const routes = rootRoute("__root.tsx", [
 	route("/maintenance", "maintenance.tsx"),
 
 	// Auth Routes
-	route("/auth", "auth/layout.tsx", [route("/login", "auth/pages/login.tsx")]),
+	route("/auth", "auth/layout.tsx", [
+		route("/login", "auth/pages/login.tsx"),
+		route("/forgot-password", "auth/pages/forgot-password.tsx"),
+		route("/reset-password", "auth/pages/reset-password.tsx"),
+	]),
 
 	// Admin Routes
 	route("admin", "admin.route.tsx", [

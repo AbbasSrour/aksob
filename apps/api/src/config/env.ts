@@ -27,10 +27,9 @@ const EnvSchema = TypeCompiler.Compile(
 		PORT: t.Numeric({
 			default: 3000,
 		}),
-		FRONTEND_URL: t.String({
+		TRUSTED_ORIGINS: t.String({
 			default: "http://localhost:5173",
 		}),
-		CORS_ORIGINS: t.Optional(t.String()),
 
 		// Database
 		DATABASE_URL: t.String(),
@@ -46,6 +45,12 @@ const EnvSchema = TypeCompiler.Compile(
 		DEFAULT_ADMIN_PASSWORD: t.String({
 			minLength: 8,
 		}),
+
+		// Email (Resend)
+		RESEND_API_KEY: t.Optional(t.String()),
+		EMAIL_FROM: t.String({
+			default: "noreply@aksob.lau.edu.lb",
+		}),
 	}),
 );
 
@@ -56,4 +61,12 @@ if (!EnvSchema.Check(Bun.env)) {
 	process.exit(1);
 }
 
-export const env = EnvSchema.Encode(Bun.env);
+const parsedEnv = EnvSchema.Encode(Bun.env);
+
+export const env = {
+	...parsedEnv,
+	trustedOrigins: [parsedEnv.BETTER_AUTH_URL, ...parsedEnv.TRUSTED_ORIGINS.split(",")]
+		.map((origin) => origin.trim())
+		.filter((origin): origin is string => Boolean(origin))
+		.map((origin) => new URL(origin).origin),
+};

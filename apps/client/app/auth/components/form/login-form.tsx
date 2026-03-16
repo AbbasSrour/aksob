@@ -10,7 +10,7 @@ import {
 } from "@aksob/ui/core/form";
 import { Input } from "@aksob/ui/core/input";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { type SubmitHandler, useForm, useFormContext } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
@@ -148,13 +148,12 @@ const RememberMeField = () => {
 							{m.auth_login_remember_me()}
 						</FormLabel>
 					</FormItem>
-					<Button
-						type={"button"}
-						className={"hover:underline hover:bg-transparent p-0"}
-						variant={"ghost"}
+					<Link
+						to="/auth/forgot-password"
+						className="text-sm text-primary hover:underline"
 					>
 						{m.auth_login_forgot_password()}
-					</Button>
+					</Link>
 				</div>
 			)}
 		/>
