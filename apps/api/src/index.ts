@@ -1,7 +1,7 @@
-import { app } from "./app";
-import { env } from "./config/env";
-import { ensureDefaultAdmin } from "./lib/ensure-default-admin";
-import { logger } from "./utils/logger";
+import { app } from "@/app";
+import { env } from "@/config/env";
+import { ensureDefaultAdmin } from "@/lib/ensure-default-admin";
+import { logger } from "@/utils/logger";
 
 await ensureDefaultAdmin();
 

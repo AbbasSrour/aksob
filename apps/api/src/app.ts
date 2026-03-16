@@ -4,26 +4,20 @@ import { cors } from "@elysiajs/cors";
 import { openapi } from "@elysiajs/openapi";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
+import { env } from "@/config/env";
+import { requestLogger } from "@/middleware/http-logger";
+import { chatModule } from "@/modules/chat/chat.routes";
+import { healthModule } from "@/modules/health/health.routes";
+import { usersModule } from "@/modules/users/users.routes";
+import { authPlugin } from "@/plugins/auth";
+import { dbPlugin } from "@/plugins/db";
 import { logger } from "@/utils/logger";
-import { env } from "./config/env";
-import { requestLogger } from "./middleware/http-logger";
-import { chatModule } from "./modules/chat/chat.routes";
-import { healthModule } from "./modules/health/health.routes";
-import { usersModule } from "./modules/users/users.routes";
-import { authPlugin } from "./plugins/auth";
-import { dbPlugin } from "./plugins/db";
 
 export const app = new Elysia()
 	.use(requestLogger)
 	.use(
 		cors({
-			origin: [
-				env.FRONTEND_URL,
-				env.BETTER_AUTH_URL,
-				...(env.CORS_ORIGINS?.split(",") ?? []),
-			]
-				.map((origin) => new URL(origin.trim()).origin)
-				.filter((origin): origin is string => Boolean(origin)),
+			origin: env.trustedOrigins,
 			methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 			allowedHeaders: ["Content-Type", "Authorization"],
 			credentials: true,
