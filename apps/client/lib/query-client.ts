@@ -1,6 +1,7 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { toast } from 'react-hot-toast';
+import { m } from '@/paraglide/messages';
 
 const errorHandlingCodeWhitelist = [400, 403, 404, 409, 500];
 
@@ -8,6 +9,20 @@ type ErrorObject = {
   message: string;
   error: string;
   code: string;
+};
+
+const translateErrorCode = (code?: string) => {
+  if (!code) {
+    return undefined;
+  }
+
+  const translation = m[code as keyof typeof m];
+
+  if (typeof translation !== 'function') {
+    return undefined;
+  }
+
+  return translation();
 };
 
 const resolveErrorMessage = (
@@ -45,6 +60,7 @@ const resolveErrorMessage = (
 
   return (
     (code && errorMessages?.[code]) ||
+    translateErrorCode(code) ||
     (message && errorMessages?.[message]) ||
     error ||
     message ||
@@ -129,7 +145,12 @@ const mutationCache = new MutationCache({
         const errors = err.response?.data;
         const errorCodes = errors.map((error: ErrorObject) => error.code);
         const customErrorMessages = errorCodes
-          .map((code) => mutation.meta?.errorMessages?.[code] || code)
+          .map(
+            (code) =>
+              mutation.meta?.errorMessages?.[code] ||
+              translateErrorCode(code) ||
+              code,
+          )
           .join('\n');
 
         toast.error(customErrorMessages, {

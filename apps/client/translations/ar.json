@@ -92,6 +92,9 @@
 	"auth_login_or": "أو",
 	"auth_login_google": "تسجيل الدخول بواسطة Google",
 	"auth_error_generic": "حدث خطأ غير متوقع!",
+	"ALUMNI_COMPANY_REQUIRED": "اسم الشركة مطلوب لتسجيل الخريجين.",
+	"USER_EMAIL_ALREADY_EXISTS": "يوجد مستخدم بهذا البريد الإلكتروني بالفعل.",
+	"USER_PHONE_NUMBER_ALREADY_EXISTS": "يوجد مستخدم بهذا رقم الهاتف بالفعل.",
 
 	"nav_platform": "المنصة",
 	"nav_dashboard": "لوحة التحكم",

@@ -92,6 +92,9 @@
 	"auth_login_or": "or",
 	"auth_login_google": "Sign in with Google",
 	"auth_error_generic": "Something went wrong!",
+	"ALUMNI_COMPANY_REQUIRED": "Company is required for alumni registrations.",
+	"USER_EMAIL_ALREADY_EXISTS": "A user with this email already exists.",
+	"USER_PHONE_NUMBER_ALREADY_EXISTS": "A user with this phone number already exists.",
 
 	"nav_platform": "Platform",
 	"nav_dashboard": "Dashboard",

@@ -5,6 +5,8 @@ export function formatDate(date: Date): string {
 	}).format(date);
 }
 
+export * from "./auth-errors";
+
 export function slugify(text: string): string {
 	return text
 		.toLowerCase()
