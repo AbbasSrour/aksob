@@ -11,6 +11,7 @@ import { healthModule } from "@/modules/health/health.routes";
 import { usersModule } from "@/modules/users/users.routes";
 import { authPlugin } from "@/plugins/auth";
 import { dbPlugin } from "@/plugins/db";
+import { uploadthingPlugin } from "@/plugins/uploadthing";
 import { logger } from "@/utils/logger";
 
 export const app = new Elysia()
@@ -47,6 +48,7 @@ export const app = new Elysia()
 	)
 	.use(dbPlugin)
 	.use(authPlugin)
+	.use(uploadthingPlugin)
 	.use(healthModule)
 	.use(chatModule)
 	.use(usersModule)

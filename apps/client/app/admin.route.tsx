@@ -8,7 +8,10 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 } from "@aksob/ui/core/sidebar";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
+import { LogOutIcon, UserRoundIcon } from "lucide-react";
+import { toast } from "react-hot-toast";
+import { useSignOut } from "@/app/auth/hooks/api/auth.queries";
 import { AppSidebar } from "@/components/app-sidebar";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { navigationConfig } from "@/config/navigation";
@@ -24,9 +27,29 @@ export const Route = createFileRoute("/admin")({
 });
 
 function AdminRoute() {
+	const navigate = useNavigate();
+	const signOutMutation = useSignOut();
 	const { data: sessionData } = useSession();
 
 	const user = sessionData?.user;
+
+	const handleSignOut = async () => {
+		try {
+			await signOutMutation.mutateAsync();
+			toast.success(m.profile_sign_out_success());
+
+			await navigate({
+				to: "/auth/login",
+				reloadDocument: true,
+			});
+		} catch (error) {
+			toast.error(
+				error instanceof Error && error.message
+					? error.message
+					: m.profile_sign_out_error(),
+			);
+		}
+	};
 
 	return (
 		<PermissionProvider permissions={[]} hasPermission={() => true}>
@@ -40,6 +63,32 @@ function AdminRoute() {
 						avatar: user.image,
 					}
 				}
+				userActions={[
+					{
+						key: "account",
+						actions: [
+							{
+								label: m.profile_title(),
+								icon: <UserRoundIcon className="size-4" />,
+								onClick: () => {
+									void navigate({ to: "/admin/profile" });
+								},
+							},
+						],
+					},
+					{
+						key: "session",
+						actions: [
+							{
+								label: m.profile_sign_out_button(),
+								icon: <LogOutIcon className="size-4" />,
+								onClick: () => {
+									void handleSignOut();
+								},
+							},
+						],
+					},
+				]}
 			>
 				<SidebarProvider>
 					<AppSidebar />

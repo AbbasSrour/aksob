@@ -13,9 +13,11 @@ import { Route as maintenanceRouteImport } from './app/maintenance'
 import { Route as authLayoutRouteImport } from './app/auth/layout'
 import { Route as adminDotrouteRouteImport } from './app/admin.route'
 import { Route as indexRouteImport } from './app/index'
+import { Route as profilePagesIndexRouteImport } from './app/profile/pages/index'
 import { Route as authPagesResetPasswordRouteImport } from './app/auth/pages/reset-password'
 import { Route as authPagesLoginRouteImport } from './app/auth/pages/login'
 import { Route as authPagesForgotPasswordRouteImport } from './app/auth/pages/forgot-password'
+import { Route as ApiMediaRouteImport } from './app/api/media'
 import { Route as usersLayoutRouteImport } from './app/users/layout'
 import { Route as dashboardPagesAdminDashboardRouteImport } from './app/dashboard/pages/admin-dashboard'
 import { Route as ApiAuthSplatRouteImport } from './app/api/auth/$'
@@ -44,6 +46,11 @@ const indexRoute = indexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const profilePagesIndexRoute = profilePagesIndexRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => adminDotrouteRoute,
+} as any)
 const authPagesResetPasswordRoute = authPagesResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -58,6 +65,11 @@ const authPagesForgotPasswordRoute = authPagesForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
   getParentRoute: () => authLayoutRoute,
+} as any)
+const ApiMediaRoute = ApiMediaRouteImport.update({
+  id: '/api/media',
+  path: '/api/media',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const usersLayoutRoute = usersLayoutRouteImport.update({
   id: '/users',
@@ -103,9 +115,11 @@ export interface FileRoutesByFullPath {
   '/maintenance': typeof maintenanceRoute
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
   '/admin/users': typeof usersLayoutRouteWithChildren
+  '/api/media': typeof ApiMediaRoute
   '/auth/forgot-password': typeof authPagesForgotPasswordRoute
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
+  '/admin/profile': typeof profilePagesIndexRoute
   '/admin/users/': typeof usersPagesListRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -118,9 +132,11 @@ export interface FileRoutesByTo {
   '/auth': typeof authLayoutRouteWithChildren
   '/maintenance': typeof maintenanceRoute
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
+  '/api/media': typeof ApiMediaRoute
   '/auth/forgot-password': typeof authPagesForgotPasswordRoute
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
+  '/admin/profile': typeof profilePagesIndexRoute
   '/admin/users': typeof usersPagesListRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -135,9 +151,11 @@ export interface FileRoutesById {
   '/maintenance': typeof maintenanceRoute
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
   '/admin/users': typeof usersLayoutRouteWithChildren
+  '/api/media': typeof ApiMediaRoute
   '/auth/forgot-password': typeof authPagesForgotPasswordRoute
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
+  '/admin/profile': typeof profilePagesIndexRoute
   '/admin/users/': typeof usersPagesListRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -153,9 +171,11 @@ export interface FileRouteTypes {
     | '/maintenance'
     | '/admin/dashboard'
     | '/admin/users'
+    | '/api/media'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
+    | '/admin/profile'
     | '/admin/users/'
     | '/admin/users/create'
     | '/api/auth/$'
@@ -168,9 +188,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/maintenance'
     | '/admin/dashboard'
+    | '/api/media'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
+    | '/admin/profile'
     | '/admin/users'
     | '/admin/users/create'
     | '/api/auth/$'
@@ -184,9 +206,11 @@ export interface FileRouteTypes {
     | '/maintenance'
     | '/admin/dashboard'
     | '/admin/users'
+    | '/api/media'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
+    | '/admin/profile'
     | '/admin/users/'
     | '/admin/users/create'
     | '/api/auth/$'
@@ -199,6 +223,7 @@ export interface RootRouteChildren {
   adminDotrouteRoute: typeof adminDotrouteRouteWithChildren
   authLayoutRoute: typeof authLayoutRouteWithChildren
   maintenanceRoute: typeof maintenanceRoute
+  ApiMediaRoute: typeof ApiMediaRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiAuthAdminSplatRoute: typeof ApiAuthAdminSplatRoute
 }
@@ -233,6 +258,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof indexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/profile': {
+      id: '/admin/profile'
+      path: '/profile'
+      fullPath: '/admin/profile'
+      preLoaderRoute: typeof profilePagesIndexRouteImport
+      parentRoute: typeof adminDotrouteRoute
+    }
     '/auth/reset-password': {
       id: '/auth/reset-password'
       path: '/reset-password'
@@ -253,6 +285,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/forgot-password'
       preLoaderRoute: typeof authPagesForgotPasswordRouteImport
       parentRoute: typeof authLayoutRoute
+    }
+    '/api/media': {
+      id: '/api/media'
+      path: '/api/media'
+      fullPath: '/api/media'
+      preLoaderRoute: typeof ApiMediaRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/users': {
       id: '/admin/users'
@@ -325,11 +364,13 @@ const usersLayoutRouteWithChildren = usersLayoutRoute._addFileChildren(
 interface adminDotrouteRouteChildren {
   dashboardPagesAdminDashboardRoute: typeof dashboardPagesAdminDashboardRoute
   usersLayoutRoute: typeof usersLayoutRouteWithChildren
+  profilePagesIndexRoute: typeof profilePagesIndexRoute
 }
 
 const adminDotrouteRouteChildren: adminDotrouteRouteChildren = {
   dashboardPagesAdminDashboardRoute: dashboardPagesAdminDashboardRoute,
   usersLayoutRoute: usersLayoutRouteWithChildren,
+  profilePagesIndexRoute: profilePagesIndexRoute,
 }
 
 const adminDotrouteRouteWithChildren = adminDotrouteRoute._addFileChildren(
@@ -357,6 +398,7 @@ const rootRouteChildren: RootRouteChildren = {
   adminDotrouteRoute: adminDotrouteRouteWithChildren,
   authLayoutRoute: authLayoutRouteWithChildren,
   maintenanceRoute: maintenanceRoute,
+  ApiMediaRoute: ApiMediaRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiAuthAdminSplatRoute: ApiAuthAdminSplatRoute,
 }

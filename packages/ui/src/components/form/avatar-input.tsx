@@ -44,7 +44,7 @@ export function AvatarInput({
 						<img
 							src={previewUrl}
 							alt={label}
-							className="size-full object-cover"
+							className="size-full object-cover object-center"
 						/>
 					) : (
 						preview

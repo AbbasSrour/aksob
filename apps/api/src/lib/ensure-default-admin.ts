@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 import { env } from "@/config/env";
 import { db, schema } from "@/db";
-import { logger } from "@/utils/logger";
 import { auth } from "@/lib/auth";
+import { logger } from "@/utils/logger";
 
 const DEFAULT_ADMIN_EMAIL = "admin@aksob.lau.edu.lb";
 const DEFAULT_ADMIN_NAME = "AKSOB Admin";

@@ -51,6 +51,9 @@ const EnvSchema = TypeCompiler.Compile(
 		EMAIL_FROM: t.String({
 			default: "noreply@aksob.lau.edu.lb",
 		}),
+
+		// Media uploads (UploadThing API token)
+		UPLOADTHING_TOKEN: t.Optional(t.String()),
 	}),
 );
 
@@ -65,7 +68,10 @@ const parsedEnv = EnvSchema.Encode(Bun.env);
 
 export const env = {
 	...parsedEnv,
-	trustedOrigins: [parsedEnv.BETTER_AUTH_URL, ...parsedEnv.TRUSTED_ORIGINS.split(",")]
+	trustedOrigins: [
+		parsedEnv.BETTER_AUTH_URL,
+		...parsedEnv.TRUSTED_ORIGINS.split(","),
+	]
 		.map((origin) => origin.trim())
 		.filter((origin): origin is string => Boolean(origin))
 		.map((origin) => new URL(origin).origin),

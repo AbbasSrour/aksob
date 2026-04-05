@@ -1,14 +1,18 @@
 import { AKSOB_MAJORS } from "@aksob/shared";
-import { generatePasswordResetEmail } from "@aksob/templates";
+import {
+	generateEmailVerificationEmail,
+	generatePasswordResetEmail,
+} from "@aksob/templates";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { admin, phoneNumber } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
-import { AUTH_ERRORS } from "@/modules/auth/auth.errors";
 import { env } from "@/config/env";
 import { db, schema } from "@/db";
 import { sendEmail } from "@/lib/email";
+import { AUTH_ERRORS } from "@/modules/auth/auth.errors";
+import { logger } from "@/utils/logger";
 
 const isSecureAuth = env.BETTER_AUTH_URL.startsWith("https://");
 
@@ -92,15 +96,33 @@ export const auth = betterAuth({
 					...message,
 				});
 			})().catch((error) => {
-				console.error("Failed to send password reset email", error);
+				logger.error("Failed to send password reset email", { error });
 			});
 		},
 	},
 	emailVerification: {
 		sendOnSignUp: false,
 		sendOnSignIn: false,
+		sendVerificationEmail: async ({ user, url }) => {
+			void (async () => {
+				const message = await generateEmailVerificationEmail({
+					name: user.name,
+					verificationUrl: url,
+				});
+
+				await sendEmail({
+					to: user.email,
+					...message,
+				});
+			})().catch((error) => {
+				logger.error("Failed to send verification email", { error });
+			});
+		},
 	},
 	user: {
+		changeEmail: {
+			enabled: true,
+		},
 		additionalFields: {
 			userType: {
 				type: "string",

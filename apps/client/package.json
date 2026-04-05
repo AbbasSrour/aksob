@@ -12,6 +12,7 @@
     "check": "biome check"
   },
   "dependencies": {
+    "@aksob/api": "workspace:*",
     "@aksob/sdk": "workspace:*",
     "@aksob/ui": "workspace:*",
     "@bprogress/core": "^1.0.2",
@@ -37,6 +38,7 @@
     "@tanstack/virtual-file-routes": "^1.145.4",
     "@tanstack/zod-adapter": "^1.157.16",
     "@uidotdev/usehooks": "^2.4.1",
+    "@uploadthing/react": "^7.3.3",
     "axios": "^1.8.4",
     "better-auth": "^1.4.12",
     "better-themes": "^1.1.0",
