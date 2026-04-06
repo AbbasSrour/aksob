@@ -4,7 +4,6 @@ import { EmailInput } from "@aksob/ui/components/form/email-input";
 import { PasswordInput } from "@aksob/ui/components/form/password-input";
 import { PhoneInput } from "@aksob/ui/components/form/phone-input";
 import { Main } from "@aksob/ui/components/layout/main";
-import { PageHeader } from "@aksob/ui/components/layout/page-header";
 import { Avatar, AvatarFallback, AvatarImage } from "@aksob/ui/core/avatar";
 import { Badge } from "@aksob/ui/core/badge";
 import { Button } from "@aksob/ui/core/button";
@@ -178,12 +177,6 @@ function ProfilePage() {
 
 	return (
 		<Main>
-			<PageHeader
-				title={m.profile_title()}
-				description={m.profile_description()}
-				withSeparator
-			/>
-
 			<div className="mx-auto w-full max-w-2xl space-y-14 pb-4">
 				<header>
 					<div className="flex min-w-0 gap-5">
