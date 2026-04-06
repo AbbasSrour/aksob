@@ -1,7 +1,7 @@
-import { AKSOB_MAJORS } from "@aksob/shared";
 import { eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { auth } from "@/lib/auth";
+import { AKSOB_MAJORS } from "@/modules/users/constant/aksob-majors";
 
 const DEMO_PASSWORD = "AksobDemo123!";
 const USERS_PER_MAJOR = 64;

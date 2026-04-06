@@ -1,10 +1,9 @@
-import { AKSOB_MAJORS } from "@aksob/shared";
 import { desc, eq } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 import { db, schema } from "@/db";
 import { auth } from "@/lib/auth";
-
-type UserType = "alumni" | "faculty" | "student";
+import { AKSOB_MAJORS } from "@/modules/users/constant/aksob-majors";
+import type { UserType } from "@/modules/users/constant/user-types";
 
 const usersIdParamSchema = t.Object({
 	id: t.String(),
