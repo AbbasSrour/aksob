@@ -1,4 +1,4 @@
-import type { AksobMajor } from "@aksob/shared";
+import type { AksobMajor } from "@aksob/sdk";
 import { apiFetch } from "~/app/lib/api";
 
 export type UserType = "student" | "alumni" | "faculty";

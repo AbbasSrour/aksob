@@ -1,4 +1,4 @@
-import { AKSOB_MAJORS, type AksobMajor } from "@aksob/shared";
+import { AKSOB_MAJORS, type AksobMajor } from "@aksob/sdk";
 import type { ApiUser } from "~/app/lib/users";
 
 export interface Alumnus {

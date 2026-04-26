@@ -1,4 +1,4 @@
-import { AKSOB_MAJORS } from "@aksob/shared";
+import { AKSOB_MAJORS } from "@aksob/sdk";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import type { ChangeEvent, FormEvent } from "react";
 import { useState } from "react";

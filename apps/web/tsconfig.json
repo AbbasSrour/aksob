@@ -20,7 +20,7 @@
 			"~/components/*": ["components/*"],
 			"~/hooks/*": ["hooks/*"],
 			"~/utils/*": ["utils/*"],
-			"@aksob/shared/*": ["../../packages/shared/src/*"]
+			"@aksob/sdk": ["../../packages/sdk/src/index.ts"]
 		},
 		"types": [
 			"react/canary",

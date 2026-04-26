@@ -13,7 +13,7 @@
 		"typecheck": "react-router typegen && tsc"
 	},
 	"dependencies": {
-		"@aksob/shared": "workspace:*",
+		"@aksob/sdk": "workspace:*",
 		"@react-router/node": "7.10.1",
 		"@react-router/serve": "7.10.1",
 		"@types/three": "^0.182.0",

@@ -14,7 +14,8 @@ aksob/
 │   ├── api/          # Elysia backend (Bun runtime)
 │   └── web/          # React Router v7 frontend (Vite + Three.js)
 ├── packages/
-│   └── shared/       # Shared TypeScript utilities
+│   ├── sdk/           # API client + shared constants/types
+│   └── templates/     # Email templates
 ├── turbo.json        # Turborepo pipeline config
 └── package.json      # Root workspace (Bun)
 ```
@@ -73,7 +74,7 @@ bun run typecheck        # Run TypeScript type checking
 
 ### Import Organization
 1. External packages first (alphabetical)
-2. Internal aliases second (`@/`, `@aksob/shared`)
+2. Internal aliases second (`@/`, `@aksob/sdk`)
 3. Relative imports last
 
 ```typescript
@@ -91,7 +92,7 @@ import { healthModule } from "./modules/health/health.routes";
 
 ### Path Aliases
 - **API**: `@/*` -> `./src/*`
-- **Shared**: `@aksob/shared/*` -> `../../packages/shared/src/*`
+- **SDK**: `@aksob/sdk` -> `../../packages/sdk/src/index.ts`
 
 ### Naming Conventions
 | Type                | Convention                            | Example                   |
@@ -228,7 +229,7 @@ export const healthModule = new Elysia({ prefix: "/health" })
 - **Packages**: Each package extends root config via `biome.json`:
   - `apps/api/biome.json` - Extends root
   - `apps/web/biome.json` - Extends root + TailwindCSS directives
-  - `packages/shared/biome.json` - Extends root
+  - `packages/sdk/biome.json` - Extends root
 
 ### Running Biome
 ```bash
@@ -245,5 +246,5 @@ cd apps/api && bun run lint
 2. **React Router v7**: Not Remix - use RR7 conventions
 3. **SSR enabled**: Frontend runs on server too (Vercel preset)
 4. **No tests yet**: Add Vitest when implementing tests
-5. **Workspace packages**: Import from `@aksob/shared` using workspace protocol
+5. **Workspace packages**: Import from `@aksob/sdk` using workspace protocol
 6. **Biome configs**: Each package has its own `biome.json` that extends the root

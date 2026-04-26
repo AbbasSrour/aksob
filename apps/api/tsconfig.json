@@ -22,8 +22,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"],
-			"@aksob/shared/*": ["../../packages/shared/src/*"]
+			"@/*": ["./src/*"]
 		}
 	},
 	"include": ["src/**/*", "drizzle.config.ts"],
