@@ -238,10 +238,7 @@ function ProfilePage() {
 									</span>
 								</Badge>
 							</div>
-							<p className="text-xs leading-relaxed text-muted-foreground">
-								{m.profile_photo_dropzone_hint()}
-							</p>
-						</div>
+					</div>
 					</div>
 				</header>
 
@@ -424,13 +421,15 @@ function ProfilePasswordForm({
 					)}
 				/>
 
-				<Button
-					type="submit"
-					className="w-full sm:w-auto"
-					loading={form.formState.isSubmitting}
-				>
-					{m.profile_password_submit()}
-				</Button>
+				<div className="flex justify-end">
+					<Button
+						type="submit"
+						className="w-full sm:w-auto"
+						loading={form.formState.isSubmitting}
+					>
+						{m.profile_password_submit()}
+					</Button>
+				</div>
 			</form>
 		</Form>
 	);
@@ -522,13 +521,15 @@ function ProfileEmailChangeForm({
 					)}
 				/>
 
-				<Button
-					type="submit"
-					className="w-full sm:w-auto"
-					loading={form.formState.isSubmitting}
-				>
-					{m.profile_email_submit()}
-				</Button>
+				<div className="flex justify-end">
+					<Button
+						type="submit"
+						className="w-full sm:w-auto"
+						loading={form.formState.isSubmitting}
+					>
+						{m.profile_email_submit()}
+					</Button>
+				</div>
 			</form>
 		</Form>
 	);

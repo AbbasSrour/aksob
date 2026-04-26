@@ -1,6 +1,6 @@
 import type { NavigationItem } from "@aksob/ui/context/navigation";
 import type { PermissionKeys } from "@aksob/ui/types/permission-keys";
-import { LayoutIcon, UsersIcon } from "lucide-react";
+import { LayoutDashboardIcon, UsersIcon } from "lucide-react";
 import { m } from "@/paraglide/messages";
 
 export const navigationConfig = {
@@ -8,10 +8,10 @@ export const navigationConfig = {
 		{
 			title: m.nav_dashboard(),
 			url: "/admin/dashboard",
-			icon: LayoutIcon,
+			icon: LayoutDashboardIcon,
 		},
 		{
-			title: m.nav_user_management(),
+			title: m.nav_staff(),
 			url: "/admin/users",
 			icon: UsersIcon,
 			permission: "user.view",
