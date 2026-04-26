@@ -6,12 +6,13 @@ import {
 import { userRoleTypes } from '@/app/users/constants/user-role-types';
 import type { AdminUser } from '@/app/users/hooks/api/users.functions.ts';
 import type { ListUsersParams } from '@/app/users/hooks/api/users.queries';
+import { m } from "@/paraglide/messages";
 
 type RoleConditions = Pick<ListUsersParams, 'role'>;
 
 export const userRoleFilter = createFilterDefinition({
   id: 'role',
-  title: 'Role',
+  title: m.users_table_column_role(),
   options: userRoleTypes,
   searchParam: 'role',
   multi: false,

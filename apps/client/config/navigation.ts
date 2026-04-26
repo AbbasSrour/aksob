@@ -11,7 +11,7 @@ export const navigationConfig = {
 			icon: LayoutDashboardIcon,
 		},
 		{
-			title: m.nav_staff(),
+			title: m.nav_coordinators(),
 			url: "/admin/users",
 			icon: UsersIcon,
 			permission: "user.view",

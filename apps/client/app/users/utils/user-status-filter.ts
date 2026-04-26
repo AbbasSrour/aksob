@@ -5,6 +5,7 @@ import {
 import type { ColumnFiltersState } from '@tanstack/react-table';
 import { userStatusType } from '@/app/users/constants/user-status-type';
 import type { ListUsersParams } from '@/app/users/hooks/api/users.queries';
+import { m } from "@/paraglide/messages";
 
 type UserStatusSource = {
   banned?: boolean | null;
@@ -15,7 +16,7 @@ type StatusConditions = Pick<ListUsersParams, 'banned' | 'emailVerified'>;
 
 export const userStatusFilter = createFilterDefinition({
   id: 'status',
-  title: 'Status',
+  title: m.users_table_column_status(),
   options: userStatusType,
   searchParam: 'status',
   multi: true,
