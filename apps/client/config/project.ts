@@ -1,6 +1,6 @@
-import { ProjectConfigOptions } from "@aksob/ui/context/project";
+import type { ProjectConfigOptions } from "@aksob/ui/context/project";
 
 export const projectConfig = {
-	logoSmall: "/images/logo-large.png",
-	logoLarge: "/images/logo-large.png",
+	logoSmall: "/images/logo-large.jpg",
+	logoLarge: "/images/logo-large.jpg",
 } satisfies ProjectConfigOptions;
