@@ -1,3 +1,5 @@
+import { t } from "elysia";
+
 interface PaginateInput {
 	page?: number;
 	limit?: number;
@@ -19,3 +21,17 @@ export const paginate = ({ page = 1, limit = 10 }: PaginateInput) => {
 		}),
 	};
 };
+
+export const paginationMeta = t.Object({
+	total: t.Number(),
+	page: t.Number(),
+	limit: t.Number(),
+	totalPages: t.Number(),
+});
+
+export const paginatedListResponse = <T extends t.TSchema>(item: T) =>
+	t.Object({
+		status: t.String(),
+		data: t.Array(item),
+		meta: paginationMeta,
+	});

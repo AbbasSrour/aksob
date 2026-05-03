@@ -15,6 +15,13 @@
 			"when": 1770389641555,
 			"tag": "0001_chunky_iron_fist",
 			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "6",
+			"when": 1777224137131,
+			"tag": "0002_rainy_invisible_woman",
+			"breakpoints": true
 		}
 	]
 }

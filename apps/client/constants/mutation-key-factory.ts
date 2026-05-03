@@ -33,4 +33,27 @@ export const mutationKeyFactory = {
 		sendVerification: () =>
 			[...mutationKeyFactory.users.entity, "sendVerification"] as const,
 	},
+
+	stories: {
+		entity: ["stories"] as const,
+		create: () =>
+			[
+				...mutationKeyFactory.stories.entity,
+				...mutationKeyFactory.create(),
+			] as const,
+		update: () =>
+			[
+				...mutationKeyFactory.stories.entity,
+				...mutationKeyFactory.update(),
+			] as const,
+		delete: () =>
+			[
+				...mutationKeyFactory.stories.entity,
+				...mutationKeyFactory.delete(),
+			] as const,
+		approve: () =>
+			[...mutationKeyFactory.stories.entity, "approve"] as const,
+		reject: () =>
+			[...mutationKeyFactory.stories.entity, "reject"] as const,
+	},
 } as const;

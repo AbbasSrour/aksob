@@ -19,12 +19,16 @@ import { Route as authPagesLoginRouteImport } from './app/auth/pages/login'
 import { Route as authPagesForgotPasswordRouteImport } from './app/auth/pages/forgot-password'
 import { Route as ApiMediaRouteImport } from './app/api/media'
 import { Route as usersLayoutRouteImport } from './app/users/layout'
+import { Route as storiesLayoutRouteImport } from './app/stories/layout'
 import { Route as dashboardPagesAdminDashboardRouteImport } from './app/dashboard/pages/admin-dashboard'
 import { Route as ApiAuthSplatRouteImport } from './app/api/auth/$'
 import { Route as usersPagesCreateRouteImport } from './app/users/pages/create'
+import { Route as storiesPagesCreateRouteImport } from './app/stories/pages/create'
 import { Route as usersPagesListRouteImport } from './app/users/pages/list'
+import { Route as storiesPagesListRouteImport } from './app/stories/pages/list'
 import { Route as ApiAuthAdminSplatRouteImport } from './app/api/auth/admin/$'
 import { Route as usersPagesUserIdEditRouteImport } from './app/users/pages/userId-edit'
+import { Route as storiesPagesEditRouteImport } from './app/stories/pages/edit'
 
 const maintenanceRoute = maintenanceRouteImport.update({
   id: '/maintenance',
@@ -76,6 +80,11 @@ const usersLayoutRoute = usersLayoutRouteImport.update({
   path: '/users',
   getParentRoute: () => adminDotrouteRoute,
 } as any)
+const storiesLayoutRoute = storiesLayoutRouteImport.update({
+  id: '/stories',
+  path: '/stories',
+  getParentRoute: () => adminDotrouteRoute,
+} as any)
 const dashboardPagesAdminDashboardRoute =
   dashboardPagesAdminDashboardRouteImport.update({
     id: '/dashboard',
@@ -92,10 +101,20 @@ const usersPagesCreateRoute = usersPagesCreateRouteImport.update({
   path: '/create',
   getParentRoute: () => usersLayoutRoute,
 } as any)
+const storiesPagesCreateRoute = storiesPagesCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => storiesLayoutRoute,
+} as any)
 const usersPagesListRoute = usersPagesListRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => usersLayoutRoute,
+} as any)
+const storiesPagesListRoute = storiesPagesListRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => storiesLayoutRoute,
 } as any)
 const ApiAuthAdminSplatRoute = ApiAuthAdminSplatRouteImport.update({
   id: '/api/auth/admin/$',
@@ -107,6 +126,11 @@ const usersPagesUserIdEditRoute = usersPagesUserIdEditRouteImport.update({
   path: '/$userId/edit',
   getParentRoute: () => usersLayoutRoute,
 } as any)
+const storiesPagesEditRoute = storiesPagesEditRouteImport.update({
+  id: '/$storyId/edit',
+  path: '/$storyId/edit',
+  getParentRoute: () => storiesLayoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof indexRoute
@@ -114,15 +138,19 @@ export interface FileRoutesByFullPath {
   '/auth': typeof authLayoutRouteWithChildren
   '/maintenance': typeof maintenanceRoute
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
+  '/admin/stories': typeof storiesLayoutRouteWithChildren
   '/admin/users': typeof usersLayoutRouteWithChildren
   '/api/media': typeof ApiMediaRoute
   '/auth/forgot-password': typeof authPagesForgotPasswordRoute
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
   '/admin/profile': typeof profilePagesIndexRoute
+  '/admin/stories/': typeof storiesPagesListRoute
   '/admin/users/': typeof usersPagesListRoute
+  '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/stories/$storyId/edit': typeof storiesPagesEditRoute
   '/admin/users/$userId/edit': typeof usersPagesUserIdEditRoute
   '/api/auth/admin/$': typeof ApiAuthAdminSplatRoute
 }
@@ -137,9 +165,12 @@ export interface FileRoutesByTo {
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
   '/admin/profile': typeof profilePagesIndexRoute
+  '/admin/stories': typeof storiesPagesListRoute
   '/admin/users': typeof usersPagesListRoute
+  '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/stories/$storyId/edit': typeof storiesPagesEditRoute
   '/admin/users/$userId/edit': typeof usersPagesUserIdEditRoute
   '/api/auth/admin/$': typeof ApiAuthAdminSplatRoute
 }
@@ -150,15 +181,19 @@ export interface FileRoutesById {
   '/auth': typeof authLayoutRouteWithChildren
   '/maintenance': typeof maintenanceRoute
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
+  '/admin/stories': typeof storiesLayoutRouteWithChildren
   '/admin/users': typeof usersLayoutRouteWithChildren
   '/api/media': typeof ApiMediaRoute
   '/auth/forgot-password': typeof authPagesForgotPasswordRoute
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
   '/admin/profile': typeof profilePagesIndexRoute
+  '/admin/stories/': typeof storiesPagesListRoute
   '/admin/users/': typeof usersPagesListRoute
+  '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/stories/$storyId/edit': typeof storiesPagesEditRoute
   '/admin/users/$userId/edit': typeof usersPagesUserIdEditRoute
   '/api/auth/admin/$': typeof ApiAuthAdminSplatRoute
 }
@@ -170,15 +205,19 @@ export interface FileRouteTypes {
     | '/auth'
     | '/maintenance'
     | '/admin/dashboard'
+    | '/admin/stories'
     | '/admin/users'
     | '/api/media'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
     | '/admin/profile'
+    | '/admin/stories/'
     | '/admin/users/'
+    | '/admin/stories/create'
     | '/admin/users/create'
     | '/api/auth/$'
+    | '/admin/stories/$storyId/edit'
     | '/admin/users/$userId/edit'
     | '/api/auth/admin/$'
   fileRoutesByTo: FileRoutesByTo
@@ -193,9 +232,12 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/admin/profile'
+    | '/admin/stories'
     | '/admin/users'
+    | '/admin/stories/create'
     | '/admin/users/create'
     | '/api/auth/$'
+    | '/admin/stories/$storyId/edit'
     | '/admin/users/$userId/edit'
     | '/api/auth/admin/$'
   id:
@@ -205,15 +247,19 @@ export interface FileRouteTypes {
     | '/auth'
     | '/maintenance'
     | '/admin/dashboard'
+    | '/admin/stories'
     | '/admin/users'
     | '/api/media'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
     | '/admin/profile'
+    | '/admin/stories/'
     | '/admin/users/'
+    | '/admin/stories/create'
     | '/admin/users/create'
     | '/api/auth/$'
+    | '/admin/stories/$storyId/edit'
     | '/admin/users/$userId/edit'
     | '/api/auth/admin/$'
   fileRoutesById: FileRoutesById
@@ -300,6 +346,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof usersLayoutRouteImport
       parentRoute: typeof adminDotrouteRoute
     }
+    '/admin/stories': {
+      id: '/admin/stories'
+      path: '/stories'
+      fullPath: '/admin/stories'
+      preLoaderRoute: typeof storiesLayoutRouteImport
+      parentRoute: typeof adminDotrouteRoute
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/dashboard'
@@ -321,12 +374,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof usersPagesCreateRouteImport
       parentRoute: typeof usersLayoutRoute
     }
+    '/admin/stories/create': {
+      id: '/admin/stories/create'
+      path: '/create'
+      fullPath: '/admin/stories/create'
+      preLoaderRoute: typeof storiesPagesCreateRouteImport
+      parentRoute: typeof storiesLayoutRoute
+    }
     '/admin/users/': {
       id: '/admin/users/'
       path: '/'
       fullPath: '/admin/users/'
       preLoaderRoute: typeof usersPagesListRouteImport
       parentRoute: typeof usersLayoutRoute
+    }
+    '/admin/stories/': {
+      id: '/admin/stories/'
+      path: '/'
+      fullPath: '/admin/stories/'
+      preLoaderRoute: typeof storiesPagesListRouteImport
+      parentRoute: typeof storiesLayoutRoute
     }
     '/api/auth/admin/$': {
       id: '/api/auth/admin/$'
@@ -342,8 +409,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof usersPagesUserIdEditRouteImport
       parentRoute: typeof usersLayoutRoute
     }
+    '/admin/stories/$storyId/edit': {
+      id: '/admin/stories/$storyId/edit'
+      path: '/$storyId/edit'
+      fullPath: '/admin/stories/$storyId/edit'
+      preLoaderRoute: typeof storiesPagesEditRouteImport
+      parentRoute: typeof storiesLayoutRoute
+    }
   }
 }
+
+interface storiesLayoutRouteChildren {
+  storiesPagesListRoute: typeof storiesPagesListRoute
+  storiesPagesCreateRoute: typeof storiesPagesCreateRoute
+  storiesPagesEditRoute: typeof storiesPagesEditRoute
+}
+
+const storiesLayoutRouteChildren: storiesLayoutRouteChildren = {
+  storiesPagesListRoute: storiesPagesListRoute,
+  storiesPagesCreateRoute: storiesPagesCreateRoute,
+  storiesPagesEditRoute: storiesPagesEditRoute,
+}
+
+const storiesLayoutRouteWithChildren = storiesLayoutRoute._addFileChildren(
+  storiesLayoutRouteChildren,
+)
 
 interface usersLayoutRouteChildren {
   usersPagesListRoute: typeof usersPagesListRoute
@@ -363,12 +453,14 @@ const usersLayoutRouteWithChildren = usersLayoutRoute._addFileChildren(
 
 interface adminDotrouteRouteChildren {
   dashboardPagesAdminDashboardRoute: typeof dashboardPagesAdminDashboardRoute
+  storiesLayoutRoute: typeof storiesLayoutRouteWithChildren
   usersLayoutRoute: typeof usersLayoutRouteWithChildren
   profilePagesIndexRoute: typeof profilePagesIndexRoute
 }
 
 const adminDotrouteRouteChildren: adminDotrouteRouteChildren = {
   dashboardPagesAdminDashboardRoute: dashboardPagesAdminDashboardRoute,
+  storiesLayoutRoute: storiesLayoutRouteWithChildren,
   usersLayoutRoute: usersLayoutRouteWithChildren,
   profilePagesIndexRoute: profilePagesIndexRoute,
 }

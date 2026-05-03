@@ -8,6 +8,7 @@ import { env } from "@/config/env";
 import { requestLogger } from "@/middleware/http-logger";
 import { chatModule } from "@/modules/chat/chat.routes";
 import { healthModule } from "@/modules/health/health.routes";
+import { storiesModule } from "@/modules/stories/stories.routes";
 import { usersModule } from "@/modules/users/users.routes";
 import { authPlugin } from "@/plugins/auth";
 import { dbPlugin } from "@/plugins/db";
@@ -50,6 +51,7 @@ export const app = new Elysia()
 	.use(authPlugin)
 	.use(uploadthingPlugin)
 	.use(healthModule)
+	.use(storiesModule)
 	.use(chatModule)
 	.use(usersModule)
 	.onError(({ code, error, set }) => {

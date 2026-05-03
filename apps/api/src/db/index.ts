@@ -7,6 +7,7 @@ import * as verificationSchema from "@/modules/auth/db/verification.db";
 import * as conversationSchema from "@/modules/chat/db/conversation.db";
 import * as conversationParticipantSchema from "@/modules/chat/db/conversation-participant.db";
 import * as messageSchema from "@/modules/chat/db/message.db";
+import * as storySchema from "@/modules/stories/db/story.db";
 import * as userSchema from "@/modules/users/db/user.db";
 
 const schema = {
@@ -17,6 +18,7 @@ const schema = {
 	...conversationSchema,
 	...conversationParticipantSchema,
 	...messageSchema,
+	...storySchema,
 };
 
 const client = createClient({

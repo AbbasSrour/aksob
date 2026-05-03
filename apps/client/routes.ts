@@ -26,6 +26,12 @@ export const routes = rootRoute("__root.tsx", [
 			route("/create", "users/pages/create.tsx"),
 			route("/$userId/edit", "users/pages/userId-edit.tsx"),
 		]),
+
+		route("/stories", "stories/layout.tsx", [
+			index("stories/pages/list.tsx"),
+			route("/create", "stories/pages/create.tsx"),
+			route("/$storyId/edit", "stories/pages/edit.tsx"),
+		]),
 	]),
 
 	// API routes
