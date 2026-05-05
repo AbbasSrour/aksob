@@ -9,7 +9,7 @@ RUN bun install
 FROM base AS builder
 COPY --from=deps /app /app
 WORKDIR /app/apps/client
-RUN bunx --bun run build
+RUN bun run build
 
 FROM base AS runner
 ENV NODE_ENV=production
@@ -26,4 +26,4 @@ COPY --from=builder . .
 
 WORKDIR /app/apps/client
 EXPOSE 3000
-CMD ["bun", "run", "dist/server/server.js"]
+CMD ["bun", "run", "start"]
