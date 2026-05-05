@@ -1,16 +1,16 @@
-FROM oven/bun:1.3.13 AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 COPY . .
+RUN corepack enable && npm install -g bun
 RUN bun install
 RUN bun run build --filter=client
 
-FROM oven/bun:1.3.13
+FROM node:22-alpine
 ENV NODE_ENV=production
 WORKDIR /app
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json /app/bun.lock /app/turbo.json ./
-COPY --from=builder /app/apps/client apps/client
-COPY --from=builder /app/packages packages
+COPY --from=builder . .
+RUN corepack enable && npm install -g bun
+RUN bun install
 WORKDIR /app/apps/client
 EXPOSE 3000
 CMD ["bun", "run", "preview"]
