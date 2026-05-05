@@ -6,7 +6,12 @@ export const env = createEnv({
 
 	client: {
 		VITE_API_URL: z.string().min(1),
-		VITE_APP_URL: z.string().min(1),
+		VITE_APP_URL: z
+			.string()
+			.min(1)
+			.transform((v) =>
+				v.startsWith("http://") || v.startsWith("https://") ? v : `https://${v}`,
+			),
 		VITE_MAINTENANCE: z.string().optional().default("false"),
 		VITE_APP_TITLE: z.string().min(1).optional(),
 	},
