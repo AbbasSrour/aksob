@@ -15,4 +15,4 @@ COPY --from=builder /app/apps/client apps/client
 COPY --from=builder /app/packages packages
 WORKDIR /app/apps/client
 EXPOSE 3000
-CMD ["bun", "run", "preview"]
+CMD ["bun", "run", ".output/server/index.mjs"]
