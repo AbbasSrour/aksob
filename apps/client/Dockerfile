@@ -3,7 +3,7 @@ WORKDIR /app
 
 FROM base AS deps
 COPY . .
-RUN bun install --frozen-lockfile
+RUN bun install
 
 FROM base AS builder
 COPY --from=deps /app /app
