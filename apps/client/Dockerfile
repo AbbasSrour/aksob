@@ -6,7 +6,6 @@ RUN bun install
 FROM node:22-alpine
 ENV NODE_ENV=production
 RUN corepack enable && npm install -g bun
-RUN bun install
 WORKDIR /app
 COPY --from=builder . .
 RUN bun run build --filter=client
