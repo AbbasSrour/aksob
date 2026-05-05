@@ -26,12 +26,22 @@
 #EXPOSE 3000
 #CMD ["bun", "run", "start"]
 
-##
-FROM oven/bun:1.3.13
+FROM node:22-slim AS builder
 WORKDIR /app
 COPY . .
+RUN corepack enable
+RUN npm install -g bun
 RUN bun install
 RUN bun run build --filter=client
+
+FROM oven/bun:1.3.13
+WORKDIR /app
+COPY --from=builder /app/apps/client/dist apps/client/dist
+COPY --from=builder /app/apps/client/package.json apps/client/package.json
+COPY --from=builder /app/packages packages
+COPY --from=builder /app/package.json .
+COPY --from=builder /app/bun.lock .
 WORKDIR /app/apps/client
+EXPOSE 3000
 CMD ["bun", "run", "preview"]
 
