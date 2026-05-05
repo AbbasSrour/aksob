@@ -12,4 +12,5 @@ COPY --from=builder /app/apps/api apps/api
 COPY --from=builder /app/packages packages
 WORKDIR /app/apps/api
 EXPOSE 3000
+RUN bun run db:migrate
 CMD ["bun", "run", "src/index.ts"]
