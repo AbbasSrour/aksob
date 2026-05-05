@@ -15,6 +15,9 @@ export const env = createEnv({
 		API_URL: z.url().optional(), // For server-side proxying if needed
 	},
 
-	runtimeEnv: import.meta.env,
+	runtimeEnv:
+		typeof process !== "undefined" && process.env
+			? process.env
+			: import.meta.env,
 	emptyStringAsUndefined: true,
 });
