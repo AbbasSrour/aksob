@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package.json bun.lock turbo.json ./
 COPY apps/api/package.json apps/api/
 COPY packages/ packages/
-RUN bun install --frozen-lockfile
+RUN bun install
 
 FROM oven/bun:1.3.13 AS builder
 WORKDIR /app
