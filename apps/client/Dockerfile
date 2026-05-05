@@ -1,7 +1,6 @@
-FROM node:22-alpine AS builder
+FROM oven/bun:1.3.13 AS builder
 WORKDIR /app
 COPY . .
-RUN corepack enable && npm install -g bun
 RUN bun install
 RUN bun run build --filter=client
 
