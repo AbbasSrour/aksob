@@ -1,28 +1,26 @@
-FROM oven/bun:1.3.13 AS base
+FROM oven/bun:1.3.13 AS deps
 WORKDIR /app
-
-FROM base AS deps
-
-COPY . .
-
+COPY package.json bun.lock turbo.json ./
+COPY apps/api/package.json apps/api/
+COPY packages/ packages/
 RUN bun install --frozen-lockfile
 
-FROM base AS builder
+FROM oven/bun:1.3.13 AS builder
+WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY --from=deps /app/package.json /app/bun.lock /app/turbo.json ./
+COPY apps/api/ apps/api/
+COPY packages/ packages/
 WORKDIR /app/apps/api
 RUN bun run build
 
-FROM base AS runner
+FROM oven/bun:1.3.13 AS runner
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/package.json /app/bun.lock /app/turbo.json ./
-COPY --from=builder /app/tsconfig.json ./tsconfig.json
 COPY --from=builder /app/apps/api/package.json apps/api/package.json
-COPY --from=builder /app/apps/api/tsconfig.json apps/api/tsconfig.json
 COPY --from=builder /app/apps/api/dist apps/api/dist
-COPY --from=builder /app/apps/api/src apps/api/src
-COPY --from=builder /app/packages/shared packages/shared
 WORKDIR /app/apps/api
+EXPOSE 3000
 CMD ["bun", "run", "start"]
