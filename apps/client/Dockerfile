@@ -3,12 +3,13 @@ WORKDIR /app
 
 FROM base AS deps
 COPY . .
+#RUN bun install --frozen-lockfile
 RUN bun install
 
 FROM base AS builder
 COPY --from=deps /app /app
 WORKDIR /app/apps/client
-RUN bunx --bun vite build
+RUN bunx --bun run build
 
 FROM base AS runner
 ENV NODE_ENV=production
