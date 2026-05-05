@@ -6,7 +6,7 @@ import { getFacetedUniqueValues } from "@tanstack/react-table";
 import { useCallback, useMemo } from "react";
 import type { AdminUser } from "@/app/users/hooks/api/users.functions.ts";
 import { userQueries } from "@/app/users/hooks/api/users.queries";
-import { userRoleFilter } from "@/app/users/utils/user-role-filter";
+// import { userRoleFilter } from "@/app/users/utils/user-role-filter";
 import { userStatusFilter } from "@/app/users/utils/user-status-filter";
 
 type UseUserFacetsValueArgs = {
@@ -18,7 +18,8 @@ export const useUserFacetsValue = ({
 }: UseUserFacetsValueArgs) => {
 	const { searchValue } = useSearch();
 	const statusConditions = userStatusFilter.toConditions(columnFilters);
-	const roleConditions = userRoleFilter.toConditions(columnFilters);
+	// const roleConditions = userRoleFilter.toConditions(columnFilters);
+	const roleConditions = { role: "admin" as const };
 
 	const facetQueries = useQueries({
 		queries: [
@@ -28,12 +29,12 @@ export const useUserFacetsValue = ({
 					otherFilters: roleConditions,
 				})
 				.map((query) => userQueries.list(query)),
-			...userRoleFilter
-				.facetQueries({
-					searchValue,
-					otherFilters: statusConditions,
-				})
-				.map((query) => userQueries.list(query)),
+			// ...userRoleFilter
+			// 	.facetQueries({
+			// 		searchValue,
+			// 		otherFilters: statusConditions,
+			// 	})
+			// 	.map((query) => userQueries.list(query)),
 		],
 	});
 
@@ -49,10 +50,10 @@ export const useUserFacetsValue = ({
 						columnId: userStatusFilter.id,
 						options: userStatusFilter.options,
 					},
-					{
-						columnId: userRoleFilter.id,
-						options: userRoleFilter.options,
-					},
+					// {
+					// 	columnId: userRoleFilter.id,
+					// 	options: userRoleFilter.options,
+					// },
 				],
 				facetQueries,
 			),

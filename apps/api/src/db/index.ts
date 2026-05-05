@@ -7,6 +7,9 @@ import * as verificationSchema from "@/modules/auth/db/verification.db";
 import * as conversationSchema from "@/modules/chat/db/conversation.db";
 import * as conversationParticipantSchema from "@/modules/chat/db/conversation-participant.db";
 import * as messageSchema from "@/modules/chat/db/message.db";
+import * as majorSchema from "@/modules/majors/db/major.db";
+import * as opportunitySchema from "@/modules/opportunities/db/opportunity.db";
+import * as researchSchema from "@/modules/research/db/research.db";
 import * as storySchema from "@/modules/stories/db/story.db";
 import * as userSchema from "@/modules/users/db/user.db";
 
@@ -19,6 +22,9 @@ const schema = {
 	...conversationParticipantSchema,
 	...messageSchema,
 	...storySchema,
+	...majorSchema,
+	...opportunitySchema,
+	...researchSchema,
 };
 
 const client = createClient({

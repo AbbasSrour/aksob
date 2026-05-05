@@ -1,15 +1,19 @@
 import { DataTableBadgeCell } from "@aksob/ui/components/data-table/cells/data-table-badge-cell";
+import { DataTableIconLabelCell } from "@aksob/ui/components/data-table/cells/data-table-icon-label-cell";
+import DataTableTextCell from "@aksob/ui/components/data-table/cells/data-table-text-cell";
 import { DataTableColumnHeader } from "@aksob/ui/components/data-table/data-table-column-header";
 import { DataTableRowActions } from "@aksob/ui/components/data-table/data-table-row-actions";
 import { createRowNumberColumn } from "@aksob/ui/components/data-table/utils/row-number-column-helper";
-import { Avatar, AvatarFallback, AvatarImage } from "@aksob/ui/core/avatar";
-import { IconCheck, IconPencil, IconTrash, IconX } from "@tabler/icons-react";
+import { IconCheck, IconPencil, IconTrash, IconUser } from "@tabler/icons-react";
 import { useNavigate } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
-import type { Story } from "@/app/stories/hooks/api/stories.functions";
-import { useApproveStory, useDeleteStory, useRejectStory } from "@/app/stories/hooks/api/stories.queries";
 import { storyCategoryOptions } from "@/app/stories/constants/story-category-options";
 import { storyStatusOptions } from "@/app/stories/constants/story-status-options";
+import type { Story } from "@/app/stories/hooks/api/stories.functions";
+import {
+	useApproveStory,
+	useDeleteStory,
+} from "@/app/stories/hooks/api/stories.queries";
 import { storyCategoryFilter } from "@/app/stories/utils/story-category-filter";
 import { storyStatusFilter } from "@/app/stories/utils/story-status-filter";
 import { m } from "@/paraglide/messages";
@@ -20,30 +24,45 @@ export const storiesDataTableColumns = [
 	// Row # Column
 	createRowNumberColumn<Story>(),
 
-	// Title + Author Column
+	// Title Column
 	columnHelper.accessor("title", {
 		id: "title",
 		header: ({ column }) => (
-			<DataTableColumnHeader title={m.stories_table_column_title()} column={column} />
+			<DataTableColumnHeader
+				title={m.stories_table_column_title()}
+				column={column}
+			/>
 		),
 		cell: ({ row }) => (
-			<div className="flex items-center gap-3">
-				<Avatar className="h-8 w-8">
-					<AvatarImage
-						src={row.original.author.image ?? undefined}
-						alt={row.original.author.name}
-					/>
-					<AvatarFallback>
-						{row.original.author.name.slice(0, 2).toUpperCase()}
-					</AvatarFallback>
-				</Avatar>
-				<div className="flex flex-col">
-					<span className="font-medium text-foreground">{row.original.title}</span>
-					<span className="text-xs text-muted-foreground">
-						{row.original.author.name}
-					</span>
-				</div>
+			<div className="flex min-w-[300px] max-w-[500px] flex-col gap-0.5">
+				<DataTableTextCell className="whitespace-normal font-medium leading-snug text-foreground">
+					{row.original.title}
+				</DataTableTextCell>
+				{row.original.description && (
+					<DataTableTextCell className="line-clamp-2 text-xs text-muted-foreground">
+						{row.original.description}
+					</DataTableTextCell>
+				)}
 			</div>
+		),
+		enableSorting: false,
+	}),
+
+	// Author Column
+	columnHelper.accessor("author", {
+		id: "author",
+		header: ({ column }) => (
+			<DataTableColumnHeader
+				title={m.stories_table_column_author()}
+				column={column}
+			/>
+		),
+		cell: ({ cell }) => (
+			<DataTableIconLabelCell
+				value={cell.getValue().name}
+				defaultIcon={IconUser}
+				capitalize={false}
+			/>
 		),
 		enableSorting: false,
 	}),
@@ -52,7 +71,10 @@ export const storiesDataTableColumns = [
 	columnHelper.accessor(storyCategoryFilter.getValue, {
 		id: storyCategoryFilter.id,
 		header: ({ column }) => (
-			<DataTableColumnHeader title={m.stories_table_column_category()} column={column} />
+			<DataTableColumnHeader
+				title={m.stories_table_column_category()}
+				column={column}
+			/>
 		),
 		cell: ({ cell }) => (
 			<DataTableBadgeCell
@@ -69,7 +91,10 @@ export const storiesDataTableColumns = [
 	columnHelper.accessor(storyStatusFilter.getValue, {
 		id: storyStatusFilter.id,
 		header: ({ column }) => (
-			<DataTableColumnHeader title={m.stories_table_column_status()} column={column} />
+			<DataTableColumnHeader
+				title={m.stories_table_column_status()}
+				column={column}
+			/>
 		),
 		cell: ({ cell }) => (
 			<DataTableBadgeCell
@@ -85,12 +110,19 @@ export const storiesDataTableColumns = [
 	columnHelper.accessor("storyDate", {
 		id: "storyDate",
 		header: ({ column }) => (
-			<DataTableColumnHeader title={m.stories_table_column_date()} column={column} />
+			<DataTableColumnHeader
+				title={m.stories_table_column_date()}
+				column={column}
+			/>
 		),
 		cell: ({ cell }) => {
 			const value = cell.getValue();
-			if (!value) return <span className="text-muted-foreground">-</span>;
-			return <span>{new Date(value).toLocaleDateString()}</span>;
+			if (!value) return <DataTableTextCell>-</DataTableTextCell>;
+			return (
+				<DataTableTextCell>
+					{new Date(value).toLocaleDateString()}
+				</DataTableTextCell>
+			);
 		},
 		enableSorting: false,
 		enableHiding: true,
@@ -101,7 +133,6 @@ export const storiesDataTableColumns = [
 		id: "actions",
 		cell: ({ row }) => {
 			const { mutate: approveStory } = useApproveStory();
-			const { mutate: rejectStory } = useRejectStory();
 			const { mutate: deleteStory } = useDeleteStory();
 
 			const isPending = row.original.status === "pending";

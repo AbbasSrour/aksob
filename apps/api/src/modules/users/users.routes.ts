@@ -24,6 +24,17 @@ const normalizeUserType = (userType: string): UserType => {
 	return "student";
 };
 
+const normalizeMajor = (
+	major: string | null,
+): (typeof AKSOB_MAJORS)[number] | null => {
+	if (!major) {
+		return null;
+	}
+	return AKSOB_MAJORS.includes(major as (typeof AKSOB_MAJORS)[number])
+		? (major as (typeof AKSOB_MAJORS)[number])
+		: null;
+};
+
 export const usersModule = new Elysia({ prefix: "/users" })
 	.get(
 		"/me",
@@ -51,11 +62,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 					name: currentUser.name,
 					email: currentUser.email,
 					userType: normalizeUserType(currentUser.userType),
-					major: AKSOB_MAJORS.includes(
-						currentUser.major as (typeof AKSOB_MAJORS)[number],
-					)
-						? (currentUser.major as (typeof AKSOB_MAJORS)[number])
-						: AKSOB_MAJORS[0],
+					major: normalizeMajor(currentUser.major),
 					company: currentUser.company,
 					title: currentUser.title,
 					image: currentUser.image,
@@ -81,11 +88,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 					name: currentUser.name,
 					email: currentUser.email,
 					userType: normalizeUserType(currentUser.userType),
-					major: AKSOB_MAJORS.includes(
-						currentUser.major as (typeof AKSOB_MAJORS)[number],
-					)
-						? (currentUser.major as (typeof AKSOB_MAJORS)[number])
-						: AKSOB_MAJORS[0],
+					major: normalizeMajor(currentUser.major),
 					company: currentUser.company,
 					title: currentUser.title,
 					image: currentUser.image,
@@ -116,11 +119,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 					name: currentUser.name,
 					email: currentUser.email,
 					userType: normalizeUserType(currentUser.userType),
-					major: AKSOB_MAJORS.includes(
-						currentUser.major as (typeof AKSOB_MAJORS)[number],
-					)
-						? (currentUser.major as (typeof AKSOB_MAJORS)[number])
-						: AKSOB_MAJORS[0],
+					major: normalizeMajor(currentUser.major),
 					company: currentUser.company,
 					title: currentUser.title,
 					image: currentUser.image,

@@ -10,8 +10,10 @@ export const story = sqliteTable(
 		title: text("title").notNull(),
 		description: text("description").notNull(),
 		content: text("content").notNull(),
+		coverImage: text("cover_image"),
+		thumbnailImage: text("thumbnail_image"),
 		category: text("category", { enum: storyCategories }).notNull(),
-		storyDate: integer("story_date", { mode: "timestamp_ms" }),
+		storyDate: integer("story_date", { mode: "timestamp_ms" }).notNull(),
 		status: text("status", { enum: ["pending", "approved", "rejected"] })
 			.default("pending")
 			.notNull(),

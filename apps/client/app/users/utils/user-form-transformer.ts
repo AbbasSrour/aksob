@@ -14,7 +14,6 @@ export const userToFormValues = (user: AdminUser): UserFormSchema => {
 		lastName,
 		email: user.email,
 		phoneNumber: user.phoneNumber ?? "",
-		role: user.role ?? "",
 		password: "",
 		passwordConfirmation: "",
 	};
@@ -30,7 +29,7 @@ export const formToCreateUserPayload = (
 		email: values.email,
 		password: values.password || undefined,
 		name,
-		role: values.role as CreateUserInput["role"],
+		role: "admin",
 		...(phoneNumber ? { data: { phoneNumber } } : {}),
 	} satisfies CreateUserInput;
 };
@@ -47,7 +46,7 @@ export const formToUpdateUserPayload = (
 		data: {
 			name,
 			email: values.email,
-			role: values.role as UpdateUserInput["data"]["role"],
+			role: "admin",
 			...(phoneNumber ? { phoneNumber } : {}),
 		},
 	} satisfies UpdateUserInput;

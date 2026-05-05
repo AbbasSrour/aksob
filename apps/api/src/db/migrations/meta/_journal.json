@@ -22,6 +22,34 @@
 			"when": 1777224137131,
 			"tag": "0002_rainy_invisible_woman",
 			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "6",
+			"when": 1777850837352,
+			"tag": "0003_bent_ultimates",
+			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "6",
+			"when": 1777860340351,
+			"tag": "0004_brown_stryfe",
+			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "6",
+			"when": 1777987586550,
+			"tag": "0005_wonderful_sharon_carter",
+			"breakpoints": true
+		},
+		{
+			"idx": 6,
+			"version": "6",
+			"when": 1777995922548,
+			"tag": "0006_talented_lord_hawal",
+			"breakpoints": true
 		}
 	]
 }

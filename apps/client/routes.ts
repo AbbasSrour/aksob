@@ -32,6 +32,30 @@ export const routes = rootRoute("__root.tsx", [
 			route("/create", "stories/pages/create.tsx"),
 			route("/$storyId/edit", "stories/pages/edit.tsx"),
 		]),
+
+		route("/members", "members/layout.tsx", [
+			index("members/pages/list.tsx"),
+			route("/create", "members/pages/create.tsx"),
+			route("/$memberId/edit", "members/pages/memberId-edit.tsx"),
+		]),
+
+		route("/majors", "majors/layout.tsx", [
+			index("majors/pages/list.tsx"),
+			route("/create", "majors/pages/create.tsx"),
+			route("/$majorId/edit", "majors/pages/majorId-edit.tsx"),
+		]),
+
+		route("/opportunities", "opportunities/layout.tsx", [
+			index("opportunities/pages/list.tsx"),
+			route("/create", "opportunities/pages/create.tsx"),
+			route("/$opportunityId/edit", "opportunities/pages/edit.tsx"),
+		]),
+
+		route("/research", "research/layout.tsx", [
+			index("research/pages/list.tsx"),
+			route("/create", "research/pages/create.tsx"),
+			route("/$researchId/edit", "research/pages/$researchId-edit.tsx"),
+		]),
 	]),
 
 	// API routes

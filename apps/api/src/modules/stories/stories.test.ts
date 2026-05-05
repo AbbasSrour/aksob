@@ -8,12 +8,12 @@ import {
 	storyCategoryEnum,
 } from "@/modules/stories/constant/story-categories.constant";
 import { listStoriesQuery } from "@/modules/stories/schema/stories-params.schema";
-import { updateStoryBody } from "@/modules/stories/schema/stories-update.schema";
 import { rejectStoryBody } from "@/modules/stories/schema/stories-reject.schema";
 import {
 	storiesListResponse,
 	storyResponseSchema,
 } from "@/modules/stories/schema/stories-response.schema";
+import { updateStoryBody } from "@/modules/stories/schema/stories-update.schema";
 import { toStoryDto } from "@/modules/stories/utils/stories.mapper";
 import { USER_ERRORS } from "@/modules/users/constant/user-errors.constant";
 import {
@@ -353,33 +353,23 @@ describe("stories-params.schema", () => {
 	});
 
 	it("accepts valid authorId", () => {
-		expect(
-			Value.Check(listStoriesQuery, { authorId: "user-abc-123" }),
-		).toBe(true);
+		expect(Value.Check(listStoriesQuery, { authorId: "user-abc-123" })).toBe(
+			true,
+		);
 	});
 
 	it("rejects non-string authorId", () => {
-		expect(
-			Value.Check(listStoriesQuery, { authorId: 123 }),
-		).toBe(false);
+		expect(Value.Check(listStoriesQuery, { authorId: 123 })).toBe(false);
 	});
 
 	it("accepts valid status values", () => {
-		expect(
-			Value.Check(listStoriesQuery, { status: "pending" }),
-		).toBe(true);
-		expect(
-			Value.Check(listStoriesQuery, { status: "approved" }),
-		).toBe(true);
-		expect(
-			Value.Check(listStoriesQuery, { status: "rejected" }),
-		).toBe(true);
+		expect(Value.Check(listStoriesQuery, { status: "pending" })).toBe(true);
+		expect(Value.Check(listStoriesQuery, { status: "approved" })).toBe(true);
+		expect(Value.Check(listStoriesQuery, { status: "rejected" })).toBe(true);
 	});
 
 	it("rejects invalid status", () => {
-		expect(
-			Value.Check(listStoriesQuery, { status: "archived" }),
-		).toBe(false);
+		expect(Value.Check(listStoriesQuery, { status: "archived" })).toBe(false);
 	});
 
 	it("all params compose together", () => {

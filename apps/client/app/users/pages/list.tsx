@@ -6,12 +6,12 @@ import { IconUserPlus } from "@tabler/icons-react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { UserInsights } from "@/app/users/components/insights/user-insights";
+// import { UserInsights } from "@/app/users/components/insights/user-insights";
 import { UserDataTable } from "@/app/users/components/list/user-data-table";
 import { UsersListSkeleton } from "@/app/users/components/loading/users-list-skeleton";
 import { userQueries } from "@/app/users/hooks/api/users.queries.ts";
 import { m } from "@/paraglide/messages";
-import { userRoleFilter } from "@/app/users/utils/user-role-filter";
+// import { userRoleFilter } from "@/app/users/utils/user-role-filter";
 import { userStatusFilter } from "@/app/users/utils/user-status-filter";
 
 export const Route = createFileRoute("/admin/users/")({
@@ -21,16 +21,17 @@ export const Route = createFileRoute("/admin/users/")({
 		page: fallback(z.coerce.number(), 1).default(1),
 		pageSize: fallback(z.coerce.number(), 10).default(10),
 		sort: z.string().optional(),
-		role: z.string().optional(),
+		// role: z.string().optional(),
 		status: z.array(z.string()).optional(),
 	}),
 	loaderDeps: ({ search }) => search,
 	loader: async ({ context, deps }) => {
 		const sortValue = parseSortParamSingle(deps.sort);
 
-		const roleConditions = userRoleFilter.toConditions(
-			deps.role ? [userRoleFilter.toColumnFilter([deps.role])] : [],
-		);
+		// const roleConditions = userRoleFilter.toConditions(
+		// 	deps.role ? [userRoleFilter.toColumnFilter([deps.role])] : [],
+		// );
+		const roleConditions = { role: "admin" as const };
 		const statusConditions = userStatusFilter.toConditions(
 			deps.status?.length ? [userStatusFilter.toColumnFilter(deps.status)] : [],
 		);
@@ -53,12 +54,12 @@ export const Route = createFileRoute("/admin/users/")({
 					otherFilters: roleConditions,
 				})
 				.map((query) => userQueries.list(query)),
-			...userRoleFilter
-				.facetQueries({
-					searchValue: deps.search,
-					otherFilters: statusConditions,
-				})
-				.map((query) => userQueries.list(query)),
+			// ...userRoleFilter
+			// 	.facetQueries({
+			// 		searchValue: deps.search,
+			// 		otherFilters: statusConditions,
+			// 	})
+			// 	.map((query) => userQueries.list(query)),
 		];
 
 		await Promise.all([
@@ -107,7 +108,7 @@ function UserListPage() {
 					</Button>
 				</Link>
 			</PageHeader>
-			<UserInsights />
+			{/* <UserInsights /> */}
 			<UserDataTable />
 		</Main>
 	);

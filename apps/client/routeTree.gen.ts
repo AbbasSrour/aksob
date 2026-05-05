@@ -20,15 +20,36 @@ import { Route as authPagesForgotPasswordRouteImport } from './app/auth/pages/fo
 import { Route as ApiMediaRouteImport } from './app/api/media'
 import { Route as usersLayoutRouteImport } from './app/users/layout'
 import { Route as storiesLayoutRouteImport } from './app/stories/layout'
+import { Route as researchLayoutRouteImport } from './app/research/layout'
+import { Route as opportunitiesLayoutRouteImport } from './app/opportunities/layout'
+import { Route as membersLayoutRouteImport } from './app/members/layout'
+import { Route as majorsLayoutRouteImport } from './app/majors/layout'
 import { Route as dashboardPagesAdminDashboardRouteImport } from './app/dashboard/pages/admin-dashboard'
+import { Route as ApiStoriesSplatRouteImport } from './app/api/stories/$'
+import { Route as ApiStatsSplatRouteImport } from './app/api/stats/$'
+import { Route as ApiResearchSplatRouteImport } from './app/api/research/$'
+import { Route as ApiOpportunitiesSplatRouteImport } from './app/api/opportunities/$'
+import { Route as ApiMajorsSplatRouteImport } from './app/api/majors/$'
 import { Route as ApiAuthSplatRouteImport } from './app/api/auth/$'
 import { Route as usersPagesCreateRouteImport } from './app/users/pages/create'
 import { Route as storiesPagesCreateRouteImport } from './app/stories/pages/create'
+import { Route as researchPagesCreateRouteImport } from './app/research/pages/create'
+import { Route as opportunitiesPagesCreateRouteImport } from './app/opportunities/pages/create'
+import { Route as membersPagesCreateRouteImport } from './app/members/pages/create'
+import { Route as majorsPagesCreateRouteImport } from './app/majors/pages/create'
 import { Route as usersPagesListRouteImport } from './app/users/pages/list'
 import { Route as storiesPagesListRouteImport } from './app/stories/pages/list'
+import { Route as researchPagesListRouteImport } from './app/research/pages/list'
+import { Route as opportunitiesPagesListRouteImport } from './app/opportunities/pages/list'
+import { Route as membersPagesListRouteImport } from './app/members/pages/list'
+import { Route as majorsPagesListRouteImport } from './app/majors/pages/list'
 import { Route as ApiAuthAdminSplatRouteImport } from './app/api/auth/admin/$'
 import { Route as usersPagesUserIdEditRouteImport } from './app/users/pages/userId-edit'
 import { Route as storiesPagesEditRouteImport } from './app/stories/pages/edit'
+import { Route as researchPagesResearchIdEditRouteImport } from './app/research/pages/$researchId-edit'
+import { Route as opportunitiesPagesEditRouteImport } from './app/opportunities/pages/edit'
+import { Route as membersPagesMemberIdEditRouteImport } from './app/members/pages/memberId-edit'
+import { Route as majorsPagesMajorIdEditRouteImport } from './app/majors/pages/majorId-edit'
 
 const maintenanceRoute = maintenanceRouteImport.update({
   id: '/maintenance',
@@ -85,12 +106,57 @@ const storiesLayoutRoute = storiesLayoutRouteImport.update({
   path: '/stories',
   getParentRoute: () => adminDotrouteRoute,
 } as any)
+const researchLayoutRoute = researchLayoutRouteImport.update({
+  id: '/research',
+  path: '/research',
+  getParentRoute: () => adminDotrouteRoute,
+} as any)
+const opportunitiesLayoutRoute = opportunitiesLayoutRouteImport.update({
+  id: '/opportunities',
+  path: '/opportunities',
+  getParentRoute: () => adminDotrouteRoute,
+} as any)
+const membersLayoutRoute = membersLayoutRouteImport.update({
+  id: '/members',
+  path: '/members',
+  getParentRoute: () => adminDotrouteRoute,
+} as any)
+const majorsLayoutRoute = majorsLayoutRouteImport.update({
+  id: '/majors',
+  path: '/majors',
+  getParentRoute: () => adminDotrouteRoute,
+} as any)
 const dashboardPagesAdminDashboardRoute =
   dashboardPagesAdminDashboardRouteImport.update({
     id: '/dashboard',
     path: '/dashboard',
     getParentRoute: () => adminDotrouteRoute,
   } as any)
+const ApiStoriesSplatRoute = ApiStoriesSplatRouteImport.update({
+  id: '/api/stories/$',
+  path: '/api/stories/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStatsSplatRoute = ApiStatsSplatRouteImport.update({
+  id: '/api/stats/$',
+  path: '/api/stats/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiResearchSplatRoute = ApiResearchSplatRouteImport.update({
+  id: '/api/research/$',
+  path: '/api/research/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOpportunitiesSplatRoute = ApiOpportunitiesSplatRouteImport.update({
+  id: '/api/opportunities/$',
+  path: '/api/opportunities/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMajorsSplatRoute = ApiMajorsSplatRouteImport.update({
+  id: '/api/majors/$',
+  path: '/api/majors/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -106,6 +172,27 @@ const storiesPagesCreateRoute = storiesPagesCreateRouteImport.update({
   path: '/create',
   getParentRoute: () => storiesLayoutRoute,
 } as any)
+const researchPagesCreateRoute = researchPagesCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => researchLayoutRoute,
+} as any)
+const opportunitiesPagesCreateRoute =
+  opportunitiesPagesCreateRouteImport.update({
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => opportunitiesLayoutRoute,
+  } as any)
+const membersPagesCreateRoute = membersPagesCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => membersLayoutRoute,
+} as any)
+const majorsPagesCreateRoute = majorsPagesCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => majorsLayoutRoute,
+} as any)
 const usersPagesListRoute = usersPagesListRouteImport.update({
   id: '/',
   path: '/',
@@ -115,6 +202,26 @@ const storiesPagesListRoute = storiesPagesListRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => storiesLayoutRoute,
+} as any)
+const researchPagesListRoute = researchPagesListRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => researchLayoutRoute,
+} as any)
+const opportunitiesPagesListRoute = opportunitiesPagesListRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => opportunitiesLayoutRoute,
+} as any)
+const membersPagesListRoute = membersPagesListRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => membersLayoutRoute,
+} as any)
+const majorsPagesListRoute = majorsPagesListRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => majorsLayoutRoute,
 } as any)
 const ApiAuthAdminSplatRoute = ApiAuthAdminSplatRouteImport.update({
   id: '/api/auth/admin/$',
@@ -131,6 +238,28 @@ const storiesPagesEditRoute = storiesPagesEditRouteImport.update({
   path: '/$storyId/edit',
   getParentRoute: () => storiesLayoutRoute,
 } as any)
+const researchPagesResearchIdEditRoute =
+  researchPagesResearchIdEditRouteImport.update({
+    id: '/$researchId/edit',
+    path: '/$researchId/edit',
+    getParentRoute: () => researchLayoutRoute,
+  } as any)
+const opportunitiesPagesEditRoute = opportunitiesPagesEditRouteImport.update({
+  id: '/$opportunityId/edit',
+  path: '/$opportunityId/edit',
+  getParentRoute: () => opportunitiesLayoutRoute,
+} as any)
+const membersPagesMemberIdEditRoute =
+  membersPagesMemberIdEditRouteImport.update({
+    id: '/$memberId/edit',
+    path: '/$memberId/edit',
+    getParentRoute: () => membersLayoutRoute,
+  } as any)
+const majorsPagesMajorIdEditRoute = majorsPagesMajorIdEditRouteImport.update({
+  id: '/$majorId/edit',
+  path: '/$majorId/edit',
+  getParentRoute: () => majorsLayoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof indexRoute
@@ -138,6 +267,10 @@ export interface FileRoutesByFullPath {
   '/auth': typeof authLayoutRouteWithChildren
   '/maintenance': typeof maintenanceRoute
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
+  '/admin/majors': typeof majorsLayoutRouteWithChildren
+  '/admin/members': typeof membersLayoutRouteWithChildren
+  '/admin/opportunities': typeof opportunitiesLayoutRouteWithChildren
+  '/admin/research': typeof researchLayoutRouteWithChildren
   '/admin/stories': typeof storiesLayoutRouteWithChildren
   '/admin/users': typeof usersLayoutRouteWithChildren
   '/api/media': typeof ApiMediaRoute
@@ -145,11 +278,28 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
   '/admin/profile': typeof profilePagesIndexRoute
+  '/admin/majors/': typeof majorsPagesListRoute
+  '/admin/members/': typeof membersPagesListRoute
+  '/admin/opportunities/': typeof opportunitiesPagesListRoute
+  '/admin/research/': typeof researchPagesListRoute
   '/admin/stories/': typeof storiesPagesListRoute
   '/admin/users/': typeof usersPagesListRoute
+  '/admin/majors/create': typeof majorsPagesCreateRoute
+  '/admin/members/create': typeof membersPagesCreateRoute
+  '/admin/opportunities/create': typeof opportunitiesPagesCreateRoute
+  '/admin/research/create': typeof researchPagesCreateRoute
   '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/majors/$': typeof ApiMajorsSplatRoute
+  '/api/opportunities/$': typeof ApiOpportunitiesSplatRoute
+  '/api/research/$': typeof ApiResearchSplatRoute
+  '/api/stats/$': typeof ApiStatsSplatRoute
+  '/api/stories/$': typeof ApiStoriesSplatRoute
+  '/admin/majors/$majorId/edit': typeof majorsPagesMajorIdEditRoute
+  '/admin/members/$memberId/edit': typeof membersPagesMemberIdEditRoute
+  '/admin/opportunities/$opportunityId/edit': typeof opportunitiesPagesEditRoute
+  '/admin/research/$researchId/edit': typeof researchPagesResearchIdEditRoute
   '/admin/stories/$storyId/edit': typeof storiesPagesEditRoute
   '/admin/users/$userId/edit': typeof usersPagesUserIdEditRoute
   '/api/auth/admin/$': typeof ApiAuthAdminSplatRoute
@@ -165,11 +315,28 @@ export interface FileRoutesByTo {
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
   '/admin/profile': typeof profilePagesIndexRoute
+  '/admin/majors': typeof majorsPagesListRoute
+  '/admin/members': typeof membersPagesListRoute
+  '/admin/opportunities': typeof opportunitiesPagesListRoute
+  '/admin/research': typeof researchPagesListRoute
   '/admin/stories': typeof storiesPagesListRoute
   '/admin/users': typeof usersPagesListRoute
+  '/admin/majors/create': typeof majorsPagesCreateRoute
+  '/admin/members/create': typeof membersPagesCreateRoute
+  '/admin/opportunities/create': typeof opportunitiesPagesCreateRoute
+  '/admin/research/create': typeof researchPagesCreateRoute
   '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/majors/$': typeof ApiMajorsSplatRoute
+  '/api/opportunities/$': typeof ApiOpportunitiesSplatRoute
+  '/api/research/$': typeof ApiResearchSplatRoute
+  '/api/stats/$': typeof ApiStatsSplatRoute
+  '/api/stories/$': typeof ApiStoriesSplatRoute
+  '/admin/majors/$majorId/edit': typeof majorsPagesMajorIdEditRoute
+  '/admin/members/$memberId/edit': typeof membersPagesMemberIdEditRoute
+  '/admin/opportunities/$opportunityId/edit': typeof opportunitiesPagesEditRoute
+  '/admin/research/$researchId/edit': typeof researchPagesResearchIdEditRoute
   '/admin/stories/$storyId/edit': typeof storiesPagesEditRoute
   '/admin/users/$userId/edit': typeof usersPagesUserIdEditRoute
   '/api/auth/admin/$': typeof ApiAuthAdminSplatRoute
@@ -181,6 +348,10 @@ export interface FileRoutesById {
   '/auth': typeof authLayoutRouteWithChildren
   '/maintenance': typeof maintenanceRoute
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
+  '/admin/majors': typeof majorsLayoutRouteWithChildren
+  '/admin/members': typeof membersLayoutRouteWithChildren
+  '/admin/opportunities': typeof opportunitiesLayoutRouteWithChildren
+  '/admin/research': typeof researchLayoutRouteWithChildren
   '/admin/stories': typeof storiesLayoutRouteWithChildren
   '/admin/users': typeof usersLayoutRouteWithChildren
   '/api/media': typeof ApiMediaRoute
@@ -188,11 +359,28 @@ export interface FileRoutesById {
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
   '/admin/profile': typeof profilePagesIndexRoute
+  '/admin/majors/': typeof majorsPagesListRoute
+  '/admin/members/': typeof membersPagesListRoute
+  '/admin/opportunities/': typeof opportunitiesPagesListRoute
+  '/admin/research/': typeof researchPagesListRoute
   '/admin/stories/': typeof storiesPagesListRoute
   '/admin/users/': typeof usersPagesListRoute
+  '/admin/majors/create': typeof majorsPagesCreateRoute
+  '/admin/members/create': typeof membersPagesCreateRoute
+  '/admin/opportunities/create': typeof opportunitiesPagesCreateRoute
+  '/admin/research/create': typeof researchPagesCreateRoute
   '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/majors/$': typeof ApiMajorsSplatRoute
+  '/api/opportunities/$': typeof ApiOpportunitiesSplatRoute
+  '/api/research/$': typeof ApiResearchSplatRoute
+  '/api/stats/$': typeof ApiStatsSplatRoute
+  '/api/stories/$': typeof ApiStoriesSplatRoute
+  '/admin/majors/$majorId/edit': typeof majorsPagesMajorIdEditRoute
+  '/admin/members/$memberId/edit': typeof membersPagesMemberIdEditRoute
+  '/admin/opportunities/$opportunityId/edit': typeof opportunitiesPagesEditRoute
+  '/admin/research/$researchId/edit': typeof researchPagesResearchIdEditRoute
   '/admin/stories/$storyId/edit': typeof storiesPagesEditRoute
   '/admin/users/$userId/edit': typeof usersPagesUserIdEditRoute
   '/api/auth/admin/$': typeof ApiAuthAdminSplatRoute
@@ -205,6 +393,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/maintenance'
     | '/admin/dashboard'
+    | '/admin/majors'
+    | '/admin/members'
+    | '/admin/opportunities'
+    | '/admin/research'
     | '/admin/stories'
     | '/admin/users'
     | '/api/media'
@@ -212,11 +404,28 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/admin/profile'
+    | '/admin/majors/'
+    | '/admin/members/'
+    | '/admin/opportunities/'
+    | '/admin/research/'
     | '/admin/stories/'
     | '/admin/users/'
+    | '/admin/majors/create'
+    | '/admin/members/create'
+    | '/admin/opportunities/create'
+    | '/admin/research/create'
     | '/admin/stories/create'
     | '/admin/users/create'
     | '/api/auth/$'
+    | '/api/majors/$'
+    | '/api/opportunities/$'
+    | '/api/research/$'
+    | '/api/stats/$'
+    | '/api/stories/$'
+    | '/admin/majors/$majorId/edit'
+    | '/admin/members/$memberId/edit'
+    | '/admin/opportunities/$opportunityId/edit'
+    | '/admin/research/$researchId/edit'
     | '/admin/stories/$storyId/edit'
     | '/admin/users/$userId/edit'
     | '/api/auth/admin/$'
@@ -232,11 +441,28 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/admin/profile'
+    | '/admin/majors'
+    | '/admin/members'
+    | '/admin/opportunities'
+    | '/admin/research'
     | '/admin/stories'
     | '/admin/users'
+    | '/admin/majors/create'
+    | '/admin/members/create'
+    | '/admin/opportunities/create'
+    | '/admin/research/create'
     | '/admin/stories/create'
     | '/admin/users/create'
     | '/api/auth/$'
+    | '/api/majors/$'
+    | '/api/opportunities/$'
+    | '/api/research/$'
+    | '/api/stats/$'
+    | '/api/stories/$'
+    | '/admin/majors/$majorId/edit'
+    | '/admin/members/$memberId/edit'
+    | '/admin/opportunities/$opportunityId/edit'
+    | '/admin/research/$researchId/edit'
     | '/admin/stories/$storyId/edit'
     | '/admin/users/$userId/edit'
     | '/api/auth/admin/$'
@@ -247,6 +473,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/maintenance'
     | '/admin/dashboard'
+    | '/admin/majors'
+    | '/admin/members'
+    | '/admin/opportunities'
+    | '/admin/research'
     | '/admin/stories'
     | '/admin/users'
     | '/api/media'
@@ -254,11 +484,28 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/admin/profile'
+    | '/admin/majors/'
+    | '/admin/members/'
+    | '/admin/opportunities/'
+    | '/admin/research/'
     | '/admin/stories/'
     | '/admin/users/'
+    | '/admin/majors/create'
+    | '/admin/members/create'
+    | '/admin/opportunities/create'
+    | '/admin/research/create'
     | '/admin/stories/create'
     | '/admin/users/create'
     | '/api/auth/$'
+    | '/api/majors/$'
+    | '/api/opportunities/$'
+    | '/api/research/$'
+    | '/api/stats/$'
+    | '/api/stories/$'
+    | '/admin/majors/$majorId/edit'
+    | '/admin/members/$memberId/edit'
+    | '/admin/opportunities/$opportunityId/edit'
+    | '/admin/research/$researchId/edit'
     | '/admin/stories/$storyId/edit'
     | '/admin/users/$userId/edit'
     | '/api/auth/admin/$'
@@ -271,6 +518,11 @@ export interface RootRouteChildren {
   maintenanceRoute: typeof maintenanceRoute
   ApiMediaRoute: typeof ApiMediaRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiMajorsSplatRoute: typeof ApiMajorsSplatRoute
+  ApiOpportunitiesSplatRoute: typeof ApiOpportunitiesSplatRoute
+  ApiResearchSplatRoute: typeof ApiResearchSplatRoute
+  ApiStatsSplatRoute: typeof ApiStatsSplatRoute
+  ApiStoriesSplatRoute: typeof ApiStoriesSplatRoute
   ApiAuthAdminSplatRoute: typeof ApiAuthAdminSplatRoute
 }
 
@@ -353,12 +605,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof storiesLayoutRouteImport
       parentRoute: typeof adminDotrouteRoute
     }
+    '/admin/research': {
+      id: '/admin/research'
+      path: '/research'
+      fullPath: '/admin/research'
+      preLoaderRoute: typeof researchLayoutRouteImport
+      parentRoute: typeof adminDotrouteRoute
+    }
+    '/admin/opportunities': {
+      id: '/admin/opportunities'
+      path: '/opportunities'
+      fullPath: '/admin/opportunities'
+      preLoaderRoute: typeof opportunitiesLayoutRouteImport
+      parentRoute: typeof adminDotrouteRoute
+    }
+    '/admin/members': {
+      id: '/admin/members'
+      path: '/members'
+      fullPath: '/admin/members'
+      preLoaderRoute: typeof membersLayoutRouteImport
+      parentRoute: typeof adminDotrouteRoute
+    }
+    '/admin/majors': {
+      id: '/admin/majors'
+      path: '/majors'
+      fullPath: '/admin/majors'
+      preLoaderRoute: typeof majorsLayoutRouteImport
+      parentRoute: typeof adminDotrouteRoute
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/dashboard'
       fullPath: '/admin/dashboard'
       preLoaderRoute: typeof dashboardPagesAdminDashboardRouteImport
       parentRoute: typeof adminDotrouteRoute
+    }
+    '/api/stories/$': {
+      id: '/api/stories/$'
+      path: '/api/stories/$'
+      fullPath: '/api/stories/$'
+      preLoaderRoute: typeof ApiStoriesSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stats/$': {
+      id: '/api/stats/$'
+      path: '/api/stats/$'
+      fullPath: '/api/stats/$'
+      preLoaderRoute: typeof ApiStatsSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/research/$': {
+      id: '/api/research/$'
+      path: '/api/research/$'
+      fullPath: '/api/research/$'
+      preLoaderRoute: typeof ApiResearchSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/opportunities/$': {
+      id: '/api/opportunities/$'
+      path: '/api/opportunities/$'
+      fullPath: '/api/opportunities/$'
+      preLoaderRoute: typeof ApiOpportunitiesSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/majors/$': {
+      id: '/api/majors/$'
+      path: '/api/majors/$'
+      fullPath: '/api/majors/$'
+      preLoaderRoute: typeof ApiMajorsSplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -381,6 +696,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof storiesPagesCreateRouteImport
       parentRoute: typeof storiesLayoutRoute
     }
+    '/admin/research/create': {
+      id: '/admin/research/create'
+      path: '/create'
+      fullPath: '/admin/research/create'
+      preLoaderRoute: typeof researchPagesCreateRouteImport
+      parentRoute: typeof researchLayoutRoute
+    }
+    '/admin/opportunities/create': {
+      id: '/admin/opportunities/create'
+      path: '/create'
+      fullPath: '/admin/opportunities/create'
+      preLoaderRoute: typeof opportunitiesPagesCreateRouteImport
+      parentRoute: typeof opportunitiesLayoutRoute
+    }
+    '/admin/members/create': {
+      id: '/admin/members/create'
+      path: '/create'
+      fullPath: '/admin/members/create'
+      preLoaderRoute: typeof membersPagesCreateRouteImport
+      parentRoute: typeof membersLayoutRoute
+    }
+    '/admin/majors/create': {
+      id: '/admin/majors/create'
+      path: '/create'
+      fullPath: '/admin/majors/create'
+      preLoaderRoute: typeof majorsPagesCreateRouteImport
+      parentRoute: typeof majorsLayoutRoute
+    }
     '/admin/users/': {
       id: '/admin/users/'
       path: '/'
@@ -394,6 +737,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/stories/'
       preLoaderRoute: typeof storiesPagesListRouteImport
       parentRoute: typeof storiesLayoutRoute
+    }
+    '/admin/research/': {
+      id: '/admin/research/'
+      path: '/'
+      fullPath: '/admin/research/'
+      preLoaderRoute: typeof researchPagesListRouteImport
+      parentRoute: typeof researchLayoutRoute
+    }
+    '/admin/opportunities/': {
+      id: '/admin/opportunities/'
+      path: '/'
+      fullPath: '/admin/opportunities/'
+      preLoaderRoute: typeof opportunitiesPagesListRouteImport
+      parentRoute: typeof opportunitiesLayoutRoute
+    }
+    '/admin/members/': {
+      id: '/admin/members/'
+      path: '/'
+      fullPath: '/admin/members/'
+      preLoaderRoute: typeof membersPagesListRouteImport
+      parentRoute: typeof membersLayoutRoute
+    }
+    '/admin/majors/': {
+      id: '/admin/majors/'
+      path: '/'
+      fullPath: '/admin/majors/'
+      preLoaderRoute: typeof majorsPagesListRouteImport
+      parentRoute: typeof majorsLayoutRoute
     }
     '/api/auth/admin/$': {
       id: '/api/auth/admin/$'
@@ -416,8 +787,99 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof storiesPagesEditRouteImport
       parentRoute: typeof storiesLayoutRoute
     }
+    '/admin/research/$researchId/edit': {
+      id: '/admin/research/$researchId/edit'
+      path: '/$researchId/edit'
+      fullPath: '/admin/research/$researchId/edit'
+      preLoaderRoute: typeof researchPagesResearchIdEditRouteImport
+      parentRoute: typeof researchLayoutRoute
+    }
+    '/admin/opportunities/$opportunityId/edit': {
+      id: '/admin/opportunities/$opportunityId/edit'
+      path: '/$opportunityId/edit'
+      fullPath: '/admin/opportunities/$opportunityId/edit'
+      preLoaderRoute: typeof opportunitiesPagesEditRouteImport
+      parentRoute: typeof opportunitiesLayoutRoute
+    }
+    '/admin/members/$memberId/edit': {
+      id: '/admin/members/$memberId/edit'
+      path: '/$memberId/edit'
+      fullPath: '/admin/members/$memberId/edit'
+      preLoaderRoute: typeof membersPagesMemberIdEditRouteImport
+      parentRoute: typeof membersLayoutRoute
+    }
+    '/admin/majors/$majorId/edit': {
+      id: '/admin/majors/$majorId/edit'
+      path: '/$majorId/edit'
+      fullPath: '/admin/majors/$majorId/edit'
+      preLoaderRoute: typeof majorsPagesMajorIdEditRouteImport
+      parentRoute: typeof majorsLayoutRoute
+    }
   }
 }
+
+interface majorsLayoutRouteChildren {
+  majorsPagesListRoute: typeof majorsPagesListRoute
+  majorsPagesCreateRoute: typeof majorsPagesCreateRoute
+  majorsPagesMajorIdEditRoute: typeof majorsPagesMajorIdEditRoute
+}
+
+const majorsLayoutRouteChildren: majorsLayoutRouteChildren = {
+  majorsPagesListRoute: majorsPagesListRoute,
+  majorsPagesCreateRoute: majorsPagesCreateRoute,
+  majorsPagesMajorIdEditRoute: majorsPagesMajorIdEditRoute,
+}
+
+const majorsLayoutRouteWithChildren = majorsLayoutRoute._addFileChildren(
+  majorsLayoutRouteChildren,
+)
+
+interface membersLayoutRouteChildren {
+  membersPagesListRoute: typeof membersPagesListRoute
+  membersPagesCreateRoute: typeof membersPagesCreateRoute
+  membersPagesMemberIdEditRoute: typeof membersPagesMemberIdEditRoute
+}
+
+const membersLayoutRouteChildren: membersLayoutRouteChildren = {
+  membersPagesListRoute: membersPagesListRoute,
+  membersPagesCreateRoute: membersPagesCreateRoute,
+  membersPagesMemberIdEditRoute: membersPagesMemberIdEditRoute,
+}
+
+const membersLayoutRouteWithChildren = membersLayoutRoute._addFileChildren(
+  membersLayoutRouteChildren,
+)
+
+interface opportunitiesLayoutRouteChildren {
+  opportunitiesPagesListRoute: typeof opportunitiesPagesListRoute
+  opportunitiesPagesCreateRoute: typeof opportunitiesPagesCreateRoute
+  opportunitiesPagesEditRoute: typeof opportunitiesPagesEditRoute
+}
+
+const opportunitiesLayoutRouteChildren: opportunitiesLayoutRouteChildren = {
+  opportunitiesPagesListRoute: opportunitiesPagesListRoute,
+  opportunitiesPagesCreateRoute: opportunitiesPagesCreateRoute,
+  opportunitiesPagesEditRoute: opportunitiesPagesEditRoute,
+}
+
+const opportunitiesLayoutRouteWithChildren =
+  opportunitiesLayoutRoute._addFileChildren(opportunitiesLayoutRouteChildren)
+
+interface researchLayoutRouteChildren {
+  researchPagesListRoute: typeof researchPagesListRoute
+  researchPagesCreateRoute: typeof researchPagesCreateRoute
+  researchPagesResearchIdEditRoute: typeof researchPagesResearchIdEditRoute
+}
+
+const researchLayoutRouteChildren: researchLayoutRouteChildren = {
+  researchPagesListRoute: researchPagesListRoute,
+  researchPagesCreateRoute: researchPagesCreateRoute,
+  researchPagesResearchIdEditRoute: researchPagesResearchIdEditRoute,
+}
+
+const researchLayoutRouteWithChildren = researchLayoutRoute._addFileChildren(
+  researchLayoutRouteChildren,
+)
 
 interface storiesLayoutRouteChildren {
   storiesPagesListRoute: typeof storiesPagesListRoute
@@ -453,6 +915,10 @@ const usersLayoutRouteWithChildren = usersLayoutRoute._addFileChildren(
 
 interface adminDotrouteRouteChildren {
   dashboardPagesAdminDashboardRoute: typeof dashboardPagesAdminDashboardRoute
+  majorsLayoutRoute: typeof majorsLayoutRouteWithChildren
+  membersLayoutRoute: typeof membersLayoutRouteWithChildren
+  opportunitiesLayoutRoute: typeof opportunitiesLayoutRouteWithChildren
+  researchLayoutRoute: typeof researchLayoutRouteWithChildren
   storiesLayoutRoute: typeof storiesLayoutRouteWithChildren
   usersLayoutRoute: typeof usersLayoutRouteWithChildren
   profilePagesIndexRoute: typeof profilePagesIndexRoute
@@ -460,6 +926,10 @@ interface adminDotrouteRouteChildren {
 
 const adminDotrouteRouteChildren: adminDotrouteRouteChildren = {
   dashboardPagesAdminDashboardRoute: dashboardPagesAdminDashboardRoute,
+  majorsLayoutRoute: majorsLayoutRouteWithChildren,
+  membersLayoutRoute: membersLayoutRouteWithChildren,
+  opportunitiesLayoutRoute: opportunitiesLayoutRouteWithChildren,
+  researchLayoutRoute: researchLayoutRouteWithChildren,
   storiesLayoutRoute: storiesLayoutRouteWithChildren,
   usersLayoutRoute: usersLayoutRouteWithChildren,
   profilePagesIndexRoute: profilePagesIndexRoute,
@@ -492,6 +962,11 @@ const rootRouteChildren: RootRouteChildren = {
   maintenanceRoute: maintenanceRoute,
   ApiMediaRoute: ApiMediaRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiMajorsSplatRoute: ApiMajorsSplatRoute,
+  ApiOpportunitiesSplatRoute: ApiOpportunitiesSplatRoute,
+  ApiResearchSplatRoute: ApiResearchSplatRoute,
+  ApiStatsSplatRoute: ApiStatsSplatRoute,
+  ApiStoriesSplatRoute: ApiStoriesSplatRoute,
   ApiAuthAdminSplatRoute: ApiAuthAdminSplatRoute,
 }
 export const routeTree = rootRouteImport

@@ -284,9 +284,9 @@ const TriggerButton = React.forwardRef<HTMLButtonElement, TriggerButtonProps>(
 				className={cn("w-full justify-between capitalize", props.className)}
 				disabled={disabled}
 			>
-				<div className="flex items-center gap-2">
+				<div className="flex min-w-0 items-center gap-2">
 					{icon}
-					{triggerContent}
+					<span className="truncate">{triggerContent}</span>
 				</div>
 				<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 			</Button>

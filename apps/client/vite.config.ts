@@ -22,10 +22,10 @@ const config = defineConfig({
 		],
 	},
 	optimizeDeps: {
-		include: ["@aksob/ui", "@aksob/rbac", "@aksob/sdk", "react-use"],
+		include: ["@aksob/ui", "@aksob/sdk", "react-use", "recharts"],
 	},
 	ssr: {
-		noExternal: ["@aksob/ui", "@aksob/rbac", "@aksob/sdk", "react-use"],
+		noExternal: ["@aksob/ui", "@aksob/sdk", "react-use", "recharts"],
 	},
 	server: {
 		host: "client.aksob.localhost",

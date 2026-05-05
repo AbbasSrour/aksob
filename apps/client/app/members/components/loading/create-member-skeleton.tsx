@@ -1,0 +1,105 @@
+import { Main } from "@aksob/ui/components/layout/main";
+import { PageHeader } from "@aksob/ui/components/layout/page-header";
+import { ButtonSkeleton } from "@aksob/ui/components/skeleton/button-skeleton";
+import { ComboboxSkeleton } from "@aksob/ui/components/skeleton/combobox-skeleton";
+import { FormFieldSkeleton } from "@aksob/ui/components/skeleton/form-field-skeleton";
+import { FormFooterSkeleton } from "@aksob/ui/components/skeleton/form-footer-skeleton";
+import { InputSkeleton } from "@aksob/ui/components/skeleton/input-skeleton";
+import {
+	FormContent,
+	FormRow,
+	FormSection,
+	FormSectionContent,
+	FormSectionDescription,
+	FormSectionHeader,
+	FormSectionTitle,
+} from "@aksob/ui/core/form";
+
+export function CreateMemberSkeleton() {
+	return (
+		<Main>
+			<PageHeader
+				title="Create Member"
+				description="Create a new member account."
+				withSeparator
+			>
+				<ButtonSkeleton className="h-8 w-28" />
+			</PageHeader>
+
+			<FormContent>
+				<FormSection layout="vertical">
+					<FormSectionHeader>
+						<FormSectionTitle>Personal Information</FormSectionTitle>
+						<FormSectionDescription>
+							Enter the member's basic personal information including their
+							name, email address, and contact details.
+						</FormSectionDescription>
+					</FormSectionHeader>
+
+					<FormSectionContent cols={1} spacing="lg">
+						<FormRow cols={3}>
+							<FormFieldSkeleton>
+								<FormFieldSkeleton.Label />
+								<InputSkeleton />
+							</FormFieldSkeleton>
+							<FormFieldSkeleton>
+								<FormFieldSkeleton.Label />
+								<InputSkeleton />
+							</FormFieldSkeleton>
+						</FormRow>
+
+						<FormRow cols={3}>
+							<FormFieldSkeleton>
+								<FormFieldSkeleton.Label />
+								<InputSkeleton />
+							</FormFieldSkeleton>
+						</FormRow>
+
+						<FormRow cols={3}>
+							<FormFieldSkeleton>
+								<FormFieldSkeleton.Label />
+								<InputSkeleton />
+							</FormFieldSkeleton>
+						</FormRow>
+					</FormSectionContent>
+				</FormSection>
+
+				<FormSection layout="vertical">
+					<FormSectionHeader>
+						<FormSectionTitle>Account Information</FormSectionTitle>
+						<FormSectionDescription>
+							Set up member access credentials and permissions by selecting a
+							role and creating a secure password.
+						</FormSectionDescription>
+					</FormSectionHeader>
+
+					<FormSectionContent layout="flex" direction="column" spacing="lg">
+						<FormRow className="w-1/4">
+							<FormFieldSkeleton>
+								<FormFieldSkeleton.Label />
+								<ComboboxSkeleton />
+							</FormFieldSkeleton>
+						</FormRow>
+
+						<FormRow cols={2} className="w-3/4">
+							<FormFieldSkeleton>
+								<FormFieldSkeleton.Label />
+								<InputSkeleton />
+							</FormFieldSkeleton>
+							<FormFieldSkeleton>
+								<FormFieldSkeleton.Label />
+								<InputSkeleton />
+								<FormFieldSkeleton.Description />
+							</FormFieldSkeleton>
+						</FormRow>
+					</FormSectionContent>
+				</FormSection>
+			</FormContent>
+
+			<FormFooterSkeleton>
+				<ButtonSkeleton className="h-9 w-40" />
+				<ButtonSkeleton className="h-9 w-40" />
+			</FormFooterSkeleton>
+		</Main>
+	);
+}

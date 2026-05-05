@@ -11,7 +11,6 @@ import { env } from "@/config/env";
 import { db, schema } from "@/db";
 import { sendEmail } from "@/lib/email";
 import { AUTH_ERRORS } from "@/modules/auth/auth.errors";
-import { AKSOB_MAJORS } from "@/modules/users/constant/aksob-majors";
 import { logger } from "@/utils/logger";
 
 const isSecureAuth = env.BETTER_AUTH_URL.startsWith("https://");
@@ -132,7 +131,6 @@ export const auth = betterAuth({
 			major: {
 				type: "string",
 				required: false,
-				defaultValue: AKSOB_MAJORS[0],
 			},
 			company: {
 				type: "string",

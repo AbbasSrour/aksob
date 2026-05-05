@@ -28,7 +28,7 @@ function getUploadThingApi(): UTApi | null {
 	return uploadThingApi;
 }
 
-function extractUploadThingFileKey(imageUrl: string): string | null {
+export function extractUploadThingFileKey(imageUrl: string): string | null {
 	try {
 		const trimmed = imageUrl.trim();
 		if (!trimmed) {
@@ -50,6 +50,35 @@ function extractUploadThingFileKey(imageUrl: string): string | null {
 		return null;
 	} catch {
 		return null;
+	}
+}
+
+/**
+ * Extract all image src URLs from an HTML string.
+ */
+export function extractImageUrlsFromHtml(html: string): string[] {
+	const matches = [...html.matchAll(/<img[^>]+src="([^"]+)"/g)];
+	return matches.map((m) => m[1]).filter(Boolean);
+}
+
+/**
+ * Delete UploadThing files by their URLs.
+ * Silently skips non-UploadThing URLs and failed deletions.
+ */
+export async function deleteUploadThingFiles(urls: string[]): Promise<void> {
+	const utApi = getUploadThingApi();
+	if (!utApi || urls.length === 0) return;
+
+	const keys = urls
+		.map((url) => extractUploadThingFileKey(url))
+		.filter((key): key is string => key !== null);
+
+	if (keys.length === 0) return;
+
+	try {
+		await utApi.deleteFiles(keys);
+	} catch (error) {
+		logger.warn("Failed to delete UploadThing files", { keys, error });
 	}
 }
 
@@ -100,6 +129,32 @@ export const mediaRouter = {
 				}
 			}
 
+			return {
+				mediaUrl: file.ufsUrl,
+				uploadedBy: metadata.userId,
+			};
+		}),
+	storyImage: f({
+		image: {
+			maxFileSize: "8MB",
+			maxFileCount: 1,
+		},
+	})
+		.middleware(async ({ req }) => {
+			const session = await auth.api.getSession({
+				headers: req.headers,
+			});
+			const user = session?.user;
+
+			if (!user) {
+				throw new UploadThingError("Unauthorized");
+			}
+
+			return {
+				userId: user.id,
+			};
+		})
+		.onUploadComplete(async ({ file, metadata }) => {
 			return {
 				mediaUrl: file.ufsUrl,
 				uploadedBy: metadata.userId,

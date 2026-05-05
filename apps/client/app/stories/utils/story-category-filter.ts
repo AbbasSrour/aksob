@@ -1,11 +1,11 @@
-import type { ColumnFiltersState } from "@tanstack/react-table";
 import {
 	createFilterDefinition,
 	type FacetContext,
 } from "@aksob/ui/components/data-table/utils/facets";
+import type { ColumnFiltersState } from "@tanstack/react-table";
 import { storyCategoryOptions } from "@/app/stories/constants/story-category-options";
-import type { ListStoriesQueryParams } from "@/app/stories/hooks/api/stories.queries";
 import type { Story } from "@/app/stories/hooks/api/stories.functions";
+import type { ListStoriesQueryParams } from "@/app/stories/hooks/api/stories.queries";
 import { m } from "@/paraglide/messages";
 
 type CategoryConditions = Pick<ListStoriesQueryParams, "category">;
@@ -20,7 +20,9 @@ export const storyCategoryFilter = createFilterDefinition({
 	toConditions: (columnFilters: ColumnFiltersState): CategoryConditions => {
 		const categoryFilter = columnFilters.find((f) => f.id === "category")
 			?.value as string[];
-		const category = Array.isArray(categoryFilter) ? categoryFilter[0] : categoryFilter;
+		const category = Array.isArray(categoryFilter)
+			? categoryFilter[0]
+			: categoryFilter;
 		return category ? { category } : {};
 	},
 	buildFacetQuery: (

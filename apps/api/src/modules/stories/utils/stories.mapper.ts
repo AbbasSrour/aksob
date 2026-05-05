@@ -24,6 +24,8 @@ export const toStoryDto = (story: StoryDtoInput) => {
 		title: story.title,
 		description: story.description,
 		content: story.content,
+		coverImage: story.coverImage,
+		thumbnailImage: story.thumbnailImage,
 		category: story.category,
 		storyDate: toIsoString(story.storyDate),
 		status: story.status,

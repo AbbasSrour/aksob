@@ -28,7 +28,7 @@ import type { AdminUser } from '@/app/users/hooks/api/users.functions.ts';
 import { userQueries } from '@/app/users/hooks/api/users.queries.ts';
 import { useUserFacetsValue } from '@/app/users/hooks/user-facets-value';
 import { Route } from '@/app/users/pages/list.tsx';
-import { userRoleFilter } from '@/app/users/utils/user-role-filter';
+// import { userRoleFilter } from '@/app/users/utils/user-role-filter';
 import { userStatusFilter } from '@/app/users/utils/user-status-filter';
 
 export function UserDataTable() {
@@ -40,7 +40,7 @@ export function UserDataTable() {
   const { sorting, setSorting, sortValue } = useSort();
   const { searchValue } = useSearch();
   const { columnFilters, setColumnFilters } = useFilters([
-    userRoleFilter,
+    // userRoleFilter,
     userStatusFilter,
   ]);
   const { pagination, setPagination } = usePagination({}, [
@@ -50,14 +50,15 @@ export function UserDataTable() {
   ]);
 
   const statusConditions = userStatusFilter.toConditions(columnFilters);
-  const roleConditions = userRoleFilter.toConditions(columnFilters);
+  // const roleConditions = userRoleFilter.toConditions(columnFilters);
 
   const { data } = useSuspenseQuery({
     ...userQueries.list({
       search: searchValue,
       ...pagination,
       ...sortValue,
-      ...roleConditions,
+      // ...roleConditions,
+      role: "admin",
       ...statusConditions,
     }),
   });
@@ -101,11 +102,11 @@ export function UserDataTable() {
               columnId={userStatusFilter.id}
               options={userStatusFilter.options}
             />
-            <DataTableFacetedFilter
+            {/* <DataTableFacetedFilter
               title={userRoleFilter.title}
               columnId={userRoleFilter.id}
               options={userRoleFilter.options}
-            />
+            /> */}
           </DataTableToolbarFilters>
           <DataTableToolbarActions>
             <DataTableViewOptions />

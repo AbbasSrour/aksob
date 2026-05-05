@@ -8,7 +8,7 @@ export interface StoryAuthor {
 	id: string;
 	name: string;
 	image: string | null;
-	major: string;
+	major: string | null;
 }
 
 export interface StoryReviewer {
@@ -34,8 +34,10 @@ export interface Story {
 	title: string;
 	description: string;
 	content: string;
+	coverImage: string | null;
+	thumbnailImage: string | null;
 	category: StoryCategory;
-	storyDate: string | null;
+	storyDate: string;
 	status: StoryStatus;
 	author: StoryAuthor;
 	reviewedBy: StoryReviewer | null;
@@ -56,6 +58,11 @@ export interface ListStoriesResponse {
 	};
 }
 
+export interface StoryResponse {
+	status: "ok";
+	data: Story;
+}
+
 export interface ListStoriesParams {
 	page?: number;
 	limit?: number;
@@ -67,9 +74,9 @@ export interface ListStoriesParams {
 
 // ---------------------------------------> Helpers <----------------------------------------------------------//
 
-function toFetchOptions(
-	headers?: Headers,
-): { fetch?: { headers: Record<string, string> } } {
+function toFetchOptions(headers?: Headers): {
+	fetch?: { headers: Record<string, string> };
+} {
 	if (!headers) return {};
 	return { fetch: { headers: Object.fromEntries(headers.entries()) } };
 }
@@ -105,13 +112,12 @@ export const approveStoryFn = async (
 	params: ApproveStoryParams,
 	headers?: Headers,
 ): Promise<Story> => {
-	const { data, error } = await api.stories({ id: params.id }).approve.post(
-		undefined,
-		toFetchOptions(headers),
-	);
+	const { data, error } = await api
+		.stories({ id: params.id })
+		.approve.post(undefined, toFetchOptions(headers));
 
 	if (error) throw error;
-	return data;
+	return (data as unknown as StoryResponse).data;
 };
 
 export const approveStoryServerFn = createIsomorphicFn()
@@ -131,13 +137,12 @@ export const rejectStoryFn = async (
 	params: RejectStoryParams,
 	headers?: Headers,
 ): Promise<Story> => {
-	const { data, error } = await api.stories({ id: params.id }).reject.post(
-		{ reviewNotes: params.reviewNotes },
-		toFetchOptions(headers),
-	);
+	const { data, error } = await api
+		.stories({ id: params.id })
+		.reject.post({ reviewNotes: params.reviewNotes }, toFetchOptions(headers));
 
 	if (error) throw error;
-	return data;
+	return (data as unknown as StoryResponse).data;
 };
 
 export const rejectStoryServerFn = createIsomorphicFn()
@@ -156,19 +161,17 @@ export const getStoryFn = async (
 	params: GetStoryParams,
 	headers?: Headers,
 ): Promise<Story> => {
-	const { data, error } = await api.stories({ id: params.id }).get(
-		toFetchOptions(headers),
-	);
+	const { data, error } = await api
+		.stories({ id: params.id })
+		.get(toFetchOptions(headers));
 
 	if (error) throw error;
-	return data;
+	return (data as unknown as StoryResponse).data;
 };
 
 export const getStoryServerFn = createIsomorphicFn()
 	.client((params: GetStoryParams) => getStoryFn(params))
-	.server((params: GetStoryParams) =>
-		getStoryFn(params, getRequestHeaders()),
-	);
+	.server((params: GetStoryParams) => getStoryFn(params, getRequestHeaders()));
 
 // ---------------------------------------> Create Story <----------------------------------------------------------//
 
@@ -176,18 +179,24 @@ export interface CreateStoryParams {
 	title: string;
 	description: string;
 	content: string;
+	coverImage?: string;
+	thumbnailImage?: string;
 	category: StoryCategory;
-	storyDate?: string;
+	storyDate: string;
+	authorId?: string;
 }
 
 export const createStoryFn = async (
 	params: CreateStoryParams,
 	headers?: Headers,
 ): Promise<Story> => {
-	const { data, error } = await api.stories.post(params, toFetchOptions(headers));
+	const { data, error } = await api.stories.post(
+		params,
+		toFetchOptions(headers),
+	);
 
 	if (error) throw error;
-	return data;
+	return (data as unknown as StoryResponse).data;
 };
 
 export const createStoryServerFn = createIsomorphicFn()
@@ -203,8 +212,10 @@ export interface UpdateStoryParams {
 	title: string;
 	description: string;
 	content: string;
+	coverImage?: string;
+	thumbnailImage?: string;
 	category: StoryCategory;
-	storyDate?: string;
+	storyDate: string;
 }
 
 export const updateStoryFn = async (
@@ -212,13 +223,12 @@ export const updateStoryFn = async (
 	headers?: Headers,
 ): Promise<Story> => {
 	const { id, ...body } = params;
-	const { data, error } = await api.stories({ id }).put(
-		body,
-		toFetchOptions(headers),
-	);
+	const { data, error } = await api
+		.stories({ id })
+		.put(body, toFetchOptions(headers));
 
 	if (error) throw error;
-	return data;
+	return (data as unknown as StoryResponse).data;
 };
 
 export const updateStoryServerFn = createIsomorphicFn()
@@ -237,10 +247,9 @@ export const deleteStoryFn = async (
 	params: DeleteStoryParams,
 	headers?: Headers,
 ): Promise<void> => {
-	const { error } = await api.stories({ id: params.id }).delete(
-		undefined,
-		toFetchOptions(headers),
-	);
+	const { error } = await api
+		.stories({ id: params.id })
+		.delete(undefined, toFetchOptions(headers));
 
 	if (error) throw error;
 };

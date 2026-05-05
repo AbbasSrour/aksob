@@ -9,7 +9,7 @@ export const usersInputSchema = t.Object({
 		t.Literal("alumni"),
 		t.Literal("faculty"),
 	]),
-	major: t.String(),
+	major: t.Optional(t.Nullable(t.String())),
 	company: t.Optional(t.Nullable(t.String())),
 	title: t.Optional(t.Nullable(t.String())),
 	image: t.Optional(t.Nullable(t.String())),

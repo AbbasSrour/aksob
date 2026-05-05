@@ -5,6 +5,8 @@ export const updateStoryBody = t.Object({
 	title: t.String({ minLength: 1 }),
 	description: t.String({ minLength: 1 }),
 	content: t.String({ minLength: 1 }),
+	coverImage: t.Optional(t.String()),
+	thumbnailImage: t.Optional(t.String()),
 	category: t.Enum(storyCategoryEnum),
-	storyDate: t.Optional(t.String()),
+	storyDate: t.String({ minLength: 1 }),
 });

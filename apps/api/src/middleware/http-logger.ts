@@ -10,14 +10,13 @@ export const requestLogger = new Elysia({ name: "logger" })
 	}))
 	.onRequest(({ request }) => {
 		request.headers.set("x-start-time", Date.now().toString());
-		logger.info(`Incoming ${request.method} ${request.url}`);
 	})
-	.onAfterHandle(({ request, set }) => {
+	.onAfterResponse({ as: "global" }, ({ request, set }) => {
 		const start = Number(request.headers.get("x-start-time"));
 		const duration = Date.now() - start;
-		const status = set.status;
+		const status = set.status ?? 200;
 
-		logger.info(`Completed ${request.method} ${request.url}`, {
+		logger.info(`${request.method} ${request.url}`, {
 			status,
 			duration: `${duration}ms`,
 		});

@@ -42,10 +42,7 @@ export function StoriesFormSkeleton() {
 							<div className="h-3 w-20 rounded bg-muted" />
 							<div className="space-y-2">
 								{Array.from({ length: 5 }).map((_, i) => (
-									<div
-										key={i}
-										className="h-10 rounded-lg bg-muted"
-									/>
+									<div key={i} className="h-10 rounded-lg bg-muted" />
 								))}
 							</div>
 						</div>

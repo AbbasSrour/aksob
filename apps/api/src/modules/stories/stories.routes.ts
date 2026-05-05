@@ -1,18 +1,22 @@
 import { and, count, desc, eq, inArray, like, or } from "drizzle-orm";
 import { Elysia } from "elysia";
 import { db, schema } from "@/db";
+import {
+	deleteUploadThingFiles,
+	extractImageUrlsFromHtml,
+} from "@/lib/uploadthing";
 import { STORIES_ERRORS } from "@/modules/stories/constant/stories-errors.constant";
 import { createStoryBody } from "@/modules/stories/schema/stories-create.schema";
-import { updateStoryBody } from "@/modules/stories/schema/stories-update.schema";
-import { rejectStoryBody } from "@/modules/stories/schema/stories-reject.schema";
 import { listStoriesQuery } from "@/modules/stories/schema/stories-params.schema";
+import { rejectStoryBody } from "@/modules/stories/schema/stories-reject.schema";
 import { storiesListResponse } from "@/modules/stories/schema/stories-response.schema";
+import { updateStoryBody } from "@/modules/stories/schema/stories-update.schema";
 import { toStoryDto } from "@/modules/stories/utils/stories.mapper";
 import { USER_ERRORS } from "@/modules/users/constant/user-errors.constant";
 import { authContext } from "@/plugins/auth";
 import { paginate } from "@/utils/paginate";
 
-export const storiesModule = new Elysia({ prefix: "/stories" })
+export const storiesModule = new Elysia({ prefix: "/api/stories" })
 	.use(authContext)
 	// List stories with visibility based on auth status and role
 	.get(
@@ -30,10 +34,7 @@ export const storiesModule = new Elysia({ prefix: "/stories" })
 					.from(schema.story)
 					.leftJoin(schema.user, eq(schema.story.authorId, schema.user.id))
 					.where(
-						or(
-							like(schema.story.title, term),
-							like(schema.user.name, term),
-						),
+						or(like(schema.story.title, term), like(schema.user.name, term)),
 					);
 
 				if (matchedIds.length === 0) {
@@ -99,8 +100,7 @@ export const storiesModule = new Elysia({ prefix: "/stories" })
 				conditions.push(eq(schema.story.category, category));
 			}
 
-			const where =
-				conditions.length > 0 ? and(...conditions) : undefined;
+			const where = conditions.length > 0 ? and(...conditions) : undefined;
 
 			const [countResult] = await db
 				.select({ count: count() })
@@ -263,8 +263,10 @@ export const storiesModule = new Elysia({ prefix: "/stories" })
 				title: body.title,
 				description: body.description,
 				content: body.content,
+				coverImage: body.coverImage ?? null,
+				thumbnailImage: body.thumbnailImage ?? null,
 				category: body.category,
-				storyDate: body.storyDate ? new Date(body.storyDate) : null,
+				storyDate: new Date(body.storyDate),
 				status,
 				authorId,
 				reviewedBy,
@@ -283,8 +285,10 @@ export const storiesModule = new Elysia({ prefix: "/stories" })
 					title: body.title,
 					description: body.description,
 					content: body.content,
+					coverImage: body.coverImage ?? null,
+					thumbnailImage: body.thumbnailImage ?? null,
 					category: body.category,
-					storyDate: body.storyDate ?? null,
+					storyDate: body.storyDate,
 					status,
 					author: storyAuthor,
 					reviewedBy: reviewerUser,
@@ -337,14 +341,23 @@ export const storiesModule = new Elysia({ prefix: "/stories" })
 			const now = new Date();
 			const isAdmin = user.role === "admin";
 
+			// Collect old image URLs before overwriting
+			const oldImageUrls: string[] = [
+				story.coverImage,
+				story.thumbnailImage,
+				...(story.content ? extractImageUrlsFromHtml(story.content) : []),
+			].filter((url): url is string => url !== null);
+
 			await db
 				.update(schema.story)
 				.set({
 					title: body.title,
 					description: body.description,
 					content: body.content,
+					coverImage: body.coverImage ?? null,
+					thumbnailImage: body.thumbnailImage ?? null,
 					category: body.category,
-					storyDate: body.storyDate ? new Date(body.storyDate) : null,
+					storyDate: new Date(body.storyDate),
 					status: isAdmin ? story.status : "pending",
 					reviewedBy: isAdmin ? story.reviewedBy : null,
 					reviewNotes: isAdmin ? story.reviewNotes : null,
@@ -366,6 +379,19 @@ export const storiesModule = new Elysia({ prefix: "/stories" })
 					},
 				},
 			});
+
+			// Delete old images that are no longer referenced
+			const newImageUrls: string[] = [
+				body.coverImage ?? null,
+				body.thumbnailImage ?? null,
+				...(body.content ? extractImageUrlsFromHtml(body.content) : []),
+			].filter((url): url is string => url !== null);
+			const orphanedUrls = oldImageUrls.filter(
+				(url) => !newImageUrls.includes(url),
+			);
+			if (orphanedUrls.length > 0) {
+				void deleteUploadThingFiles(orphanedUrls);
+			}
 
 			return { status: "ok", data: toStoryDto(updated!) };
 		},
@@ -409,6 +435,16 @@ export const storiesModule = new Elysia({ prefix: "/stories" })
 			}
 
 			await db.delete(schema.story).where(eq(schema.story.id, params.id));
+
+			// Delete all story images from storage
+			const allImageUrls: string[] = [
+				story.coverImage,
+				story.thumbnailImage,
+				...(story.content ? extractImageUrlsFromHtml(story.content) : []),
+			].filter((url): url is string => url !== null);
+			if (allImageUrls.length > 0) {
+				void deleteUploadThingFiles(allImageUrls);
+			}
 
 			return { status: "ok" };
 		},

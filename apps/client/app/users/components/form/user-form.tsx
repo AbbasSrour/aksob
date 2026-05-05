@@ -19,13 +19,6 @@ import {
 	FormSectionTitle,
 } from "@aksob/ui/core/form";
 import { Input } from "@aksob/ui/core/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@aksob/ui/core/select";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { useForm, useFormContext } from "react-hook-form";
@@ -34,7 +27,6 @@ import {
 	buildUserFormSchema,
 	type UserFormSchema,
 } from "@/app/users/components/form/user-form-schema.ts";
-import { userRoleTypes } from "@/app/users/constants/user-role-types.ts";
 import {
 	useCreateUser,
 	useUpdateUser,
@@ -145,10 +137,6 @@ export const UserForm = ({
 						</FormSectionHeader>
 
 						<FormSectionContent layout="flex" direction="column" spacing="lg">
-							<FormRow cols={4}>
-								<RoleField />
-							</FormRow>
-
 							{isCreate ? (
 								<FormRow cols={4}>
 									<PasswordField />
@@ -249,43 +237,6 @@ const PhoneField = () => {
 							placeholder={m.users_form_phone_placeholder()}
 							defaultCountry={"LB"}
 						/>
-					</FormControl>
-					<FormMessage />
-				</FormItem>
-			)}
-		/>
-	);
-};
-
-const RoleField = () => {
-	const { control } = useFormContext();
-
-	return (
-		<FormField
-			name={"role"}
-			control={control}
-			render={({ field }) => (
-				<FormItem>
-					<FormLabel>{m.users_form_role_label()}</FormLabel>
-					<FormControl>
-						<Select value={field.value} onValueChange={field.onChange}>
-							<SelectTrigger className="w-full">
-								<SelectValue placeholder={m.users_role_select_placeholder()} />
-							</SelectTrigger>
-							<SelectContent>
-								{userRoleTypes.map((role) => {
-									const Icon = role.icon;
-									return (
-										<SelectItem key={role.value} value={role.value}>
-											<div className="flex items-center gap-2">
-												{Icon && <Icon className="size-4" />}
-												{role.label}
-											</div>
-										</SelectItem>
-									);
-								})}
-							</SelectContent>
-						</Select>
 					</FormControl>
 					<FormMessage />
 				</FormItem>

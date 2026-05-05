@@ -1,0 +1,78 @@
+import type { UserFormSchema } from "@/app/members/components/form/member-form-schema.ts";
+import type {
+	AdminUser,
+	CreateUserInput,
+	UpdateUserInput,
+} from "@/app/users/hooks/api/users.functions.ts";
+
+export type MemberUser = AdminUser & {
+	userType?: string;
+	major?: string | null;
+	company?: string | null;
+	title?: string | null;
+};
+
+export const memberToFormValues = (user: MemberUser): UserFormSchema => {
+	const [firstName, ...rest] = user.name?.split(" ") || [""];
+	const lastName = rest.join(" ");
+
+	return {
+		firstName,
+		lastName,
+		email: user.email,
+		phoneNumber: user.phoneNumber ?? "",
+		userType: user.userType ?? "student",
+		major: user.major ?? "",
+		company: user.company ?? "",
+		title: user.title ?? "",
+		password: "",
+		passwordConfirmation: "",
+	};
+};
+
+export const formToCreateMemberPayload = (
+	values: UserFormSchema,
+): CreateUserInput => {
+	const phoneNumber = values.phoneNumber?.trim();
+	const name = `${values.firstName} ${values.lastName}`.trim();
+	const company = values.company?.trim();
+	const title = values.title?.trim();
+
+	return {
+		email: values.email,
+		password: values.password || undefined,
+		name,
+		role: "user",
+		data: {
+			...(phoneNumber ? { phoneNumber } : {}),
+			userType: values.userType,
+			major: values.major,
+			...(company ? { company } : {}),
+			...(title ? { title } : {}),
+		},
+	} satisfies CreateUserInput;
+};
+
+export const formToUpdateMemberPayload = (
+	values: UserFormSchema,
+	userId: string,
+): UpdateUserInput => {
+	const phoneNumber = values.phoneNumber?.trim();
+	const name = `${values.firstName} ${values.lastName}`.trim();
+	const company = values.company?.trim();
+	const title = values.title?.trim();
+
+	return {
+		userId,
+		data: {
+			name,
+			email: values.email,
+			role: "user",
+			...(phoneNumber ? { phoneNumber } : {}),
+			userType: values.userType,
+			major: values.major,
+			...(company ? { company } : {}),
+			...(title ? { title } : {}),
+		},
+	} satisfies UpdateUserInput;
+};

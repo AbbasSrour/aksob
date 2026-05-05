@@ -6,8 +6,8 @@ import { IconPlus } from "@tabler/icons-react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { StoriesListSkeleton } from "@/app/stories/components/list/stories-list-skeleton";
 import { StoriesDataTable } from "@/app/stories/components/list/stories-data-table";
+import { StoriesListSkeleton } from "@/app/stories/components/list/stories-list-skeleton";
 import { storyQueries } from "@/app/stories/hooks/api/stories.queries";
 import { storyCategoryFilter } from "@/app/stories/utils/story-category-filter";
 import { storyStatusFilter } from "@/app/stories/utils/story-status-filter";
@@ -33,9 +33,7 @@ export const Route = createFileRoute("/admin/stories/")({
 				: [],
 		);
 		const statusConditions = storyStatusFilter.toConditions(
-			deps.status
-				? [storyStatusFilter.toColumnFilter([deps.status])]
-				: [],
+			deps.status ? [storyStatusFilter.toColumnFilter([deps.status])] : [],
 		);
 
 		const baseListQuery = storyQueries.list({

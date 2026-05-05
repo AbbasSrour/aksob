@@ -1,6 +1,14 @@
 import type { NavigationItem } from "@aksob/ui/context/navigation";
 import type { PermissionKeys } from "@aksob/ui/types/permission-keys";
-import { BookOpenIcon, LayoutDashboardIcon, SparklesIcon, UsersIcon } from "lucide-react";
+import {
+	BookOpenIcon,
+	BriefcaseBusinessIcon,
+	GraduationCapIcon,
+	LayoutDashboardIcon,
+	MicroscopeIcon,
+	SparklesIcon,
+	UsersIcon,
+} from "lucide-react";
 import { m } from "@/paraglide/messages";
 
 export const navigationConfig = {
@@ -26,6 +34,24 @@ export const navigationConfig = {
 			title: m.nav_stories(),
 			url: "/admin/stories",
 			icon: BookOpenIcon,
+			permission: "user.view",
+		},
+		{
+			title: m.nav_opportunities(),
+			url: "/admin/opportunities",
+			icon: BriefcaseBusinessIcon,
+			permission: "user.view",
+		},
+		{
+			title: m.nav_research(),
+			url: "/admin/research",
+			icon: MicroscopeIcon,
+			permission: "user.view",
+		},
+		{
+			title: m.nav_majors(),
+			url: "/admin/majors",
+			icon: GraduationCapIcon,
 			permission: "user.view",
 		},
 	],

@@ -9,13 +9,14 @@ interface MainProps extends React.HTMLAttributes<HTMLElement> {
 export const Main = ({ fixed, ...props }: MainProps) => {
 	return (
 		<main
+			{...props}
 			className={cn(
 				"flex flex-col grow peer-[.header-fixed]/header:mt-16",
 				"px-4 space-y-4",
 				"py-6", // removed to ensure that there is no overflow for list with insights
 				fixed && "fixed-main flex grow flex-col overflow-hidden",
+				props.className,
 			)}
-			{...props}
 		/>
 	);
 };

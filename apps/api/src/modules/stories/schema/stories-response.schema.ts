@@ -12,7 +12,7 @@ const storyAuthorSchema = t.Object({
 	id: t.String(),
 	name: t.String(),
 	image: t.Union([t.String(), t.Null()]),
-	major: t.String(),
+	major: t.Optional(t.Nullable(t.String())),
 });
 
 const storyReviewerSchema = t.Object({
@@ -26,7 +26,7 @@ export const storyResponseSchema = t.Object({
 	description: t.String(),
 	content: t.String(),
 	category: t.Enum(storyCategoryEnum),
-	storyDate: t.Union([t.String(), t.Null()]),
+	storyDate: t.String(),
 	status: storyStatusEnum,
 	author: storyAuthorSchema,
 	reviewedBy: t.Union([storyReviewerSchema, t.Null()]),
