@@ -8,7 +8,7 @@ ENV NODE_ENV=production
 RUN corepack enable && npm install -g bun
 WORKDIR /app
 COPY --from=builder . .
-RUN bun run build --filter=client
 WORKDIR /app/apps/client
+RUN bun run build
 EXPOSE 3000
 CMD ["bun", "run", "preview"]
