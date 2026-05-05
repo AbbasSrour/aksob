@@ -32,5 +32,6 @@ WORKDIR /app
 COPY . .
 RUN bun install
 RUN bun run build --filter=client
-CMD ["bun", "run", "dev", "--filter=client"]
+WORKDIR /app/apps/client
+CMD ["bun", "run", "preview"]
 
