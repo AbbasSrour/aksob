@@ -6,13 +6,13 @@ export const env = createEnv({
 
 	client: {
 		VITE_API_URL: z.string().min(1),
-		VITE_APP_URL: z.url(),
+		VITE_APP_URL: z.string().min(1),
 		VITE_MAINTENANCE: z.string().optional().default("false"),
 		VITE_APP_TITLE: z.string().min(1).optional(),
 	},
 
 	server: {
-		API_URL: z.url().optional(), // For server-side proxying if needed
+		API_URL: z.string().optional(), // For server-side proxying if needed
 	},
 
 	runtimeEnv:
