@@ -9,6 +9,8 @@ FROM node:22-slim
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=builder . .
+RUN corepack enable && npm install -g bun
+RUN bun install
 WORKDIR /app/apps/client
 EXPOSE 3000
 CMD ["bun", "run", "preview"]
