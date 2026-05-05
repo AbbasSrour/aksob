@@ -5,15 +5,20 @@ export const env = createEnv({
 	clientPrefix: "VITE_",
 
 	client: {
-		VITE_API_URL: z.string().min(1),
+		VITE_API_URL: z
+			.string()
+			.min(1)
+			.default(import.meta.env.VITE_API_URL as string),
 		VITE_APP_URL: z
 			.string()
 			.min(1)
-			.transform((v) =>
-				v.startsWith("http://") || v.startsWith("https://") ? v : `https://${v}`,
-			),
+			.default(import.meta.env.VITE_APP_URL as string),
 		VITE_MAINTENANCE: z.string().optional().default("false"),
-		VITE_APP_TITLE: z.string().min(1).optional(),
+		VITE_APP_TITLE: z
+			.string()
+			.min(1)
+			.optional()
+			.default(import.meta.env.VITE_APP_TITLE as string),
 	},
 
 	server: {
