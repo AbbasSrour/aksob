@@ -30,7 +30,6 @@ import {
 	YAxis,
 } from "recharts";
 import { dashboardQueries } from "@/app/dashboard/hooks/api/dashboard.queries";
-import { env } from "@/config/env.ts";
 import { m } from "@/paraglide/messages";
 
 export const Route = createFileRoute("/admin/dashboard")({
@@ -202,26 +201,6 @@ function AdminDashboardPage() {
 				title={m.dashboard_title()}
 				description={m.dashboard_welcome()}
 			/>
-
-			{/*Start Of Environment Configuration*/}
-			<div className="mb-6">
-				<Card>
-					<CardHeader>
-						<CardTitle>Environment Configuration</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<div className="grid gap-2 text-sm">
-							{Object.entries(env).map(([key, value]) => (
-								<div key={key} className="flex justify-between border-b pb-2">
-									<span className="font-medium">{key}:</span>
-									<span className="text-muted-foreground">{String(value)}</span>
-								</div>
-							))}
-						</div>
-					</CardContent>
-				</Card>
-			</div>
-			{/*End of Environment Configuration*/}
 
 			<InsightGrid className="lg:grid-cols-4">
 				<InsightCard
