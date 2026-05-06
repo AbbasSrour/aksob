@@ -5,10 +5,7 @@ export const env = createEnv({
 	clientPrefix: "VITE_",
 
 	client: {
-		VITE_API_URL: z
-			.string()
-			.min(1)
-			.default(import.meta.env.VITE_API_URL as string),
+		VITE_API_URL: z.string().min(1).default("/api"),
 		VITE_APP_URL: z
 			.string()
 			.min(1)
@@ -25,9 +22,9 @@ export const env = createEnv({
 		API_URL: z.string().optional(), // For server-side proxying if needed
 	},
 
-	runtimeEnv:
-		typeof process !== "undefined" && process.env
-			? process.env
-			: import.meta.env,
+	runtimeEnv: {
+		...import.meta.env,
+		...(typeof process !== "undefined" ? process.env : {}),
+	},
 	emptyStringAsUndefined: true,
 });
