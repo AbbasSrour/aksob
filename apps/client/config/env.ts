@@ -6,16 +6,9 @@ export const env = createEnv({
 
 	client: {
 		VITE_API_URL: z.string().min(1).default("/api"),
-		VITE_APP_URL: z
-			.string()
-			.min(1)
-			.default(import.meta.env.VITE_APP_URL as string),
+		VITE_APP_URL: z.string().min(1),
 		VITE_MAINTENANCE: z.string().optional().default("false"),
-		VITE_APP_TITLE: z
-			.string()
-			.min(1)
-			.optional()
-			.default(import.meta.env.VITE_APP_TITLE as string),
+		VITE_APP_TITLE: z.string().min(1).optional(),
 	},
 
 	server: {
