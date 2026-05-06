@@ -1,5 +1,18 @@
 FROM node:22-slim AS builder
 WORKDIR /app
+
+# Accept build arguments for Vite client-side env vars (required at build time)
+ARG VITE_API_URL
+ARG VITE_APP_URL
+ARG VITE_MAINTENANCE
+ARG VITE_APP_TITLE
+
+# Make them available to Vite during build
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_APP_URL=$VITE_APP_URL
+ENV VITE_MAINTENANCE=$VITE_MAINTENANCE
+ENV VITE_APP_TITLE=$VITE_APP_TITLE
+
 COPY . .
 RUN corepack enable && npm install -g bun
 RUN bun install
