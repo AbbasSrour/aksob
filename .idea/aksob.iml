@@ -3,6 +3,11 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/apps/api/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/client/.output" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/client/.tanstack" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/client/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/client/paraglide" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/client/project.inlang" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
