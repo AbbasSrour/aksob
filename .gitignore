@@ -19,3 +19,8 @@ logs/
 .turbo/
 /.opencode/plans/*
 /worktrees/*
+
+# Misc
+/plans
+/inspo
+/docs
