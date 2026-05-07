@@ -8,6 +8,9 @@
       <excludeFolder url="file://$MODULE_DIR$/apps/client/.turbo" />
       <excludeFolder url="file://$MODULE_DIR$/apps/client/paraglide" />
       <excludeFolder url="file://$MODULE_DIR$/apps/client/project.inlang" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/web/.react-router" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/web/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/web/.vercel" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
