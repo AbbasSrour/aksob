@@ -16,7 +16,9 @@
 		"./types/*": "./src/types/*.ts"
 	},
 	"scripts": {
-		"lint": "eslint . --max-warnings 0",
+		"lint": "biome lint",
+		"format": "biome format --write .",
+		"check": "biome check --write .",
 		"shadcn": "pnpm dlx shadcn@latest"
 	},
 	"dependencies": {

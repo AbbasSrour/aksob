@@ -27,6 +27,12 @@ export const routes = rootRoute("__root.tsx", [
 			route("/$userId/edit", "users/pages/userId-edit.tsx"),
 		]),
 
+		route("/news", "news/layout.tsx", [
+			index("news/pages/list.tsx"),
+			route("/create", "news/pages/create.tsx"),
+			route("/$newsId/edit", "news/pages/edit.tsx"),
+		]),
+
 		route("/stories", "stories/layout.tsx", [
 			index("stories/pages/list.tsx"),
 			route("/create", "stories/pages/create.tsx"),

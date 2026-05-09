@@ -51,10 +51,8 @@ export const mutationKeyFactory = {
 				...mutationKeyFactory.stories.entity,
 				...mutationKeyFactory.delete(),
 			] as const,
-		approve: () =>
-			[...mutationKeyFactory.stories.entity, "approve"] as const,
-		reject: () =>
-			[...mutationKeyFactory.stories.entity, "reject"] as const,
+		approve: () => [...mutationKeyFactory.stories.entity, "approve"] as const,
+		reject: () => [...mutationKeyFactory.stories.entity, "reject"] as const,
 	},
 
 	opportunities: {
@@ -115,6 +113,31 @@ export const mutationKeyFactory = {
 			] as const,
 	},
 
+	news: {
+		entity: ["news"] as const,
+		create: () =>
+			[
+				...mutationKeyFactory.news.entity,
+				...mutationKeyFactory.create(),
+			] as const,
+		update: () =>
+			[
+				...mutationKeyFactory.news.entity,
+				...mutationKeyFactory.update(),
+			] as const,
+		delete: () =>
+			[
+				...mutationKeyFactory.news.entity,
+				...mutationKeyFactory.delete(),
+			] as const,
+		publish: () => [...mutationKeyFactory.news.entity, "publish"] as const,
+		unpublish: () => [...mutationKeyFactory.news.entity, "unpublish"] as const,
+		createCategory: () =>
+			[...mutationKeyFactory.news.entity, "createCategory"] as const,
+		deleteCategory: () =>
+			[...mutationKeyFactory.news.entity, "deleteCategory"] as const,
+	},
+
 	research: {
 		entity: ["research"] as const,
 		create: () =>
@@ -132,9 +155,7 @@ export const mutationKeyFactory = {
 				...mutationKeyFactory.research.entity,
 				...mutationKeyFactory.delete(),
 			] as const,
-		approve: () =>
-			[...mutationKeyFactory.research.entity, "approve"] as const,
-		reject: () =>
-			[...mutationKeyFactory.research.entity, "reject"] as const,
+		approve: () => [...mutationKeyFactory.research.entity, "approve"] as const,
+		reject: () => [...mutationKeyFactory.research.entity, "reject"] as const,
 	},
 } as const;

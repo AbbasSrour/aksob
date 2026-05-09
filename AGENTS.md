@@ -200,7 +200,7 @@ export const healthModule = new Elysia({ prefix: "/health" })
 - Use refs for animation state to avoid re-renders
 - Clean up resources in useEffect return
 
-## Design System (see DESIGN_GUIDELINES.md)
+## Design System (see `plans/design/DESIGN_SYSTEM.md`)
 
 ### Brand Colors
 | Token           | Hex       | Usage                 |

@@ -1,8 +1,10 @@
-import { AKSOB_MAJORS } from "@aksob/sdk";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import type { ChangeEvent, FormEvent } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { majorsQueries } from "~/app/auth/hooks/api/majors.queries";
+import { useSignUp } from "~/app/auth/hooks/api/auth.queries";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { PasswordStrengthIndicator } from "~/components/ui/password-strength-indicator";
@@ -14,16 +16,23 @@ export default function Register() {
 	const [userType, setUserType] = useState<"student" | "alumni" | "faculty">(
 		"student",
 	);
-	const [major, setMajor] = useState<string>(AKSOB_MAJORS[0]);
+	const [major, setMajor] = useState<string>("");
 	const [company, setCompany] = useState("");
 	const [title, setTitle] = useState("");
-	const [errorMessage, setErrorMessage] = useState<string | null>(null);
-	const [isLoading, setIsLoading] = useState(false);
+	const [clientError, setClientError] = useState<string | null>(null);
 
-	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+	const signUp = useSignUp();
+	const { data: majors } = useQuery(majorsQueries.active);
+
+	useEffect(() => {
+		if (majors && majors.length > 0 && !major) {
+			setMajor(majors[0].name);
+		}
+	}, [majors, major]);
+
+	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setErrorMessage(null);
-		setIsLoading(true);
+		setClientError(null);
 
 		const formData = new FormData(event.currentTarget);
 		const name = String(formData.get("fullName") ?? "");
@@ -31,19 +40,12 @@ export default function Register() {
 		const submittedPassword = String(formData.get("password") ?? "");
 
 		if (userType === "alumni" && !company.trim()) {
-			setErrorMessage("Company is required for alumni registrations.");
-			setIsLoading(false);
+			setClientError("Company is required for alumni registrations.");
 			return;
 		}
 
-		const apiBaseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
-		const response = await fetch(`${apiBaseUrl}/api/auth/sign-up/email`, {
-			method: "POST",
-			credentials: "include",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		signUp.mutate(
+			{
 				name,
 				email,
 				password: submittedPassword,
@@ -51,19 +53,13 @@ export default function Register() {
 				major,
 				company: company.trim() || undefined,
 				title: title.trim() || undefined,
-			}),
-		});
-
-		if (!response.ok) {
-			const bodyText = await response.text();
-			setErrorMessage(
-				bodyText || "Unable to create account. Please try again.",
-			);
-			setIsLoading(false);
-			return;
-		}
-
-		navigate("/galaxy");
+			},
+			{
+				onSuccess: () => {
+					navigate("/galaxy");
+				},
+			},
+		);
 	};
 
 	return (
@@ -85,7 +81,7 @@ export default function Register() {
 						</p>
 					</div>
 					<h2 className="mt-4 text-3xl font-bold tracking-tight text-(--aksob-darkest)">
-						Create your AKSOB account
+						Create your AKSOB Alumni account
 					</h2>
 					<p className="mt-2 max-w-md text-sm leading-relaxed text-(--gray-600)">
 						Join the community of faculty, alumni, and students to access your
@@ -181,9 +177,9 @@ export default function Register() {
 									onChange={(event) => setMajor(event.target.value)}
 									className="h-12 w-full rounded-md border border-[var(--gray-200)] bg-white px-4 text-[var(--aksob-darkest)] focus:border-[var(--aksob-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--aksob-primary)]/20"
 								>
-									{AKSOB_MAJORS.map((majorOption) => (
-										<option key={majorOption} value={majorOption}>
-											{majorOption}
+									{majors?.map((m) => (
+										<option key={m.id} value={m.name}>
+											{m.name}
 										</option>
 									))}
 								</select>
@@ -191,13 +187,13 @@ export default function Register() {
 						</div>
 					</div>
 
-					{errorMessage && (
-						<p className="text-sm text-[var(--error)]">{errorMessage}</p>
+					{clientError && (
+						<p className="text-sm text-[var(--error)]">{clientError}</p>
 					)}
 
 					<Button
 						type="submit"
-						isLoading={isLoading}
+						isLoading={signUp.isPending}
 						variant="primary"
 						fullWidth
 						size="lg"

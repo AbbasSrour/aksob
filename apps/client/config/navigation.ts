@@ -6,6 +6,7 @@ import {
 	GraduationCapIcon,
 	LayoutDashboardIcon,
 	MicroscopeIcon,
+	NewspaperIcon,
 	SparklesIcon,
 	UsersIcon,
 } from "lucide-react";
@@ -28,6 +29,12 @@ export const navigationConfig = {
 			title: m.nav_members(),
 			url: "/admin/members",
 			icon: SparklesIcon,
+			permission: "user.view",
+		},
+		{
+			title: "News",
+			url: "/admin/news",
+			icon: NewspaperIcon,
 			permission: "user.view",
 		},
 		{

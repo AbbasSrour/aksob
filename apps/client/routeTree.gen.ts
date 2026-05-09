@@ -22,6 +22,7 @@ import { Route as usersLayoutRouteImport } from './app/users/layout'
 import { Route as storiesLayoutRouteImport } from './app/stories/layout'
 import { Route as researchLayoutRouteImport } from './app/research/layout'
 import { Route as opportunitiesLayoutRouteImport } from './app/opportunities/layout'
+import { Route as newsLayoutRouteImport } from './app/news/layout'
 import { Route as membersLayoutRouteImport } from './app/members/layout'
 import { Route as majorsLayoutRouteImport } from './app/majors/layout'
 import { Route as dashboardPagesAdminDashboardRouteImport } from './app/dashboard/pages/admin-dashboard'
@@ -29,18 +30,21 @@ import { Route as ApiStoriesSplatRouteImport } from './app/api/stories/$'
 import { Route as ApiStatsSplatRouteImport } from './app/api/stats/$'
 import { Route as ApiResearchSplatRouteImport } from './app/api/research/$'
 import { Route as ApiOpportunitiesSplatRouteImport } from './app/api/opportunities/$'
+import { Route as ApiNewsSplatRouteImport } from './app/api/news/$'
 import { Route as ApiMajorsSplatRouteImport } from './app/api/majors/$'
 import { Route as ApiAuthSplatRouteImport } from './app/api/auth/$'
 import { Route as usersPagesCreateRouteImport } from './app/users/pages/create'
 import { Route as storiesPagesCreateRouteImport } from './app/stories/pages/create'
 import { Route as researchPagesCreateRouteImport } from './app/research/pages/create'
 import { Route as opportunitiesPagesCreateRouteImport } from './app/opportunities/pages/create'
+import { Route as newsPagesCreateRouteImport } from './app/news/pages/create'
 import { Route as membersPagesCreateRouteImport } from './app/members/pages/create'
 import { Route as majorsPagesCreateRouteImport } from './app/majors/pages/create'
 import { Route as usersPagesListRouteImport } from './app/users/pages/list'
 import { Route as storiesPagesListRouteImport } from './app/stories/pages/list'
 import { Route as researchPagesListRouteImport } from './app/research/pages/list'
 import { Route as opportunitiesPagesListRouteImport } from './app/opportunities/pages/list'
+import { Route as newsPagesListRouteImport } from './app/news/pages/list'
 import { Route as membersPagesListRouteImport } from './app/members/pages/list'
 import { Route as majorsPagesListRouteImport } from './app/majors/pages/list'
 import { Route as ApiAuthAdminSplatRouteImport } from './app/api/auth/admin/$'
@@ -48,6 +52,7 @@ import { Route as usersPagesUserIdEditRouteImport } from './app/users/pages/user
 import { Route as storiesPagesEditRouteImport } from './app/stories/pages/edit'
 import { Route as researchPagesResearchIdEditRouteImport } from './app/research/pages/$researchId-edit'
 import { Route as opportunitiesPagesEditRouteImport } from './app/opportunities/pages/edit'
+import { Route as newsPagesEditRouteImport } from './app/news/pages/edit'
 import { Route as membersPagesMemberIdEditRouteImport } from './app/members/pages/memberId-edit'
 import { Route as majorsPagesMajorIdEditRouteImport } from './app/majors/pages/majorId-edit'
 
@@ -116,6 +121,11 @@ const opportunitiesLayoutRoute = opportunitiesLayoutRouteImport.update({
   path: '/opportunities',
   getParentRoute: () => adminDotrouteRoute,
 } as any)
+const newsLayoutRoute = newsLayoutRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => adminDotrouteRoute,
+} as any)
 const membersLayoutRoute = membersLayoutRouteImport.update({
   id: '/members',
   path: '/members',
@@ -152,6 +162,11 @@ const ApiOpportunitiesSplatRoute = ApiOpportunitiesSplatRouteImport.update({
   path: '/api/opportunities/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiNewsSplatRoute = ApiNewsSplatRouteImport.update({
+  id: '/api/news/$',
+  path: '/api/news/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiMajorsSplatRoute = ApiMajorsSplatRouteImport.update({
   id: '/api/majors/$',
   path: '/api/majors/$',
@@ -183,6 +198,11 @@ const opportunitiesPagesCreateRoute =
     path: '/create',
     getParentRoute: () => opportunitiesLayoutRoute,
   } as any)
+const newsPagesCreateRoute = newsPagesCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => newsLayoutRoute,
+} as any)
 const membersPagesCreateRoute = membersPagesCreateRouteImport.update({
   id: '/create',
   path: '/create',
@@ -212,6 +232,11 @@ const opportunitiesPagesListRoute = opportunitiesPagesListRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => opportunitiesLayoutRoute,
+} as any)
+const newsPagesListRoute = newsPagesListRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => newsLayoutRoute,
 } as any)
 const membersPagesListRoute = membersPagesListRouteImport.update({
   id: '/',
@@ -249,6 +274,11 @@ const opportunitiesPagesEditRoute = opportunitiesPagesEditRouteImport.update({
   path: '/$opportunityId/edit',
   getParentRoute: () => opportunitiesLayoutRoute,
 } as any)
+const newsPagesEditRoute = newsPagesEditRouteImport.update({
+  id: '/$newsId/edit',
+  path: '/$newsId/edit',
+  getParentRoute: () => newsLayoutRoute,
+} as any)
 const membersPagesMemberIdEditRoute =
   membersPagesMemberIdEditRouteImport.update({
     id: '/$memberId/edit',
@@ -269,6 +299,7 @@ export interface FileRoutesByFullPath {
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
   '/admin/majors': typeof majorsLayoutRouteWithChildren
   '/admin/members': typeof membersLayoutRouteWithChildren
+  '/admin/news': typeof newsLayoutRouteWithChildren
   '/admin/opportunities': typeof opportunitiesLayoutRouteWithChildren
   '/admin/research': typeof researchLayoutRouteWithChildren
   '/admin/stories': typeof storiesLayoutRouteWithChildren
@@ -280,24 +311,28 @@ export interface FileRoutesByFullPath {
   '/admin/profile': typeof profilePagesIndexRoute
   '/admin/majors/': typeof majorsPagesListRoute
   '/admin/members/': typeof membersPagesListRoute
+  '/admin/news/': typeof newsPagesListRoute
   '/admin/opportunities/': typeof opportunitiesPagesListRoute
   '/admin/research/': typeof researchPagesListRoute
   '/admin/stories/': typeof storiesPagesListRoute
   '/admin/users/': typeof usersPagesListRoute
   '/admin/majors/create': typeof majorsPagesCreateRoute
   '/admin/members/create': typeof membersPagesCreateRoute
+  '/admin/news/create': typeof newsPagesCreateRoute
   '/admin/opportunities/create': typeof opportunitiesPagesCreateRoute
   '/admin/research/create': typeof researchPagesCreateRoute
   '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/majors/$': typeof ApiMajorsSplatRoute
+  '/api/news/$': typeof ApiNewsSplatRoute
   '/api/opportunities/$': typeof ApiOpportunitiesSplatRoute
   '/api/research/$': typeof ApiResearchSplatRoute
   '/api/stats/$': typeof ApiStatsSplatRoute
   '/api/stories/$': typeof ApiStoriesSplatRoute
   '/admin/majors/$majorId/edit': typeof majorsPagesMajorIdEditRoute
   '/admin/members/$memberId/edit': typeof membersPagesMemberIdEditRoute
+  '/admin/news/$newsId/edit': typeof newsPagesEditRoute
   '/admin/opportunities/$opportunityId/edit': typeof opportunitiesPagesEditRoute
   '/admin/research/$researchId/edit': typeof researchPagesResearchIdEditRoute
   '/admin/stories/$storyId/edit': typeof storiesPagesEditRoute
@@ -317,24 +352,28 @@ export interface FileRoutesByTo {
   '/admin/profile': typeof profilePagesIndexRoute
   '/admin/majors': typeof majorsPagesListRoute
   '/admin/members': typeof membersPagesListRoute
+  '/admin/news': typeof newsPagesListRoute
   '/admin/opportunities': typeof opportunitiesPagesListRoute
   '/admin/research': typeof researchPagesListRoute
   '/admin/stories': typeof storiesPagesListRoute
   '/admin/users': typeof usersPagesListRoute
   '/admin/majors/create': typeof majorsPagesCreateRoute
   '/admin/members/create': typeof membersPagesCreateRoute
+  '/admin/news/create': typeof newsPagesCreateRoute
   '/admin/opportunities/create': typeof opportunitiesPagesCreateRoute
   '/admin/research/create': typeof researchPagesCreateRoute
   '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/majors/$': typeof ApiMajorsSplatRoute
+  '/api/news/$': typeof ApiNewsSplatRoute
   '/api/opportunities/$': typeof ApiOpportunitiesSplatRoute
   '/api/research/$': typeof ApiResearchSplatRoute
   '/api/stats/$': typeof ApiStatsSplatRoute
   '/api/stories/$': typeof ApiStoriesSplatRoute
   '/admin/majors/$majorId/edit': typeof majorsPagesMajorIdEditRoute
   '/admin/members/$memberId/edit': typeof membersPagesMemberIdEditRoute
+  '/admin/news/$newsId/edit': typeof newsPagesEditRoute
   '/admin/opportunities/$opportunityId/edit': typeof opportunitiesPagesEditRoute
   '/admin/research/$researchId/edit': typeof researchPagesResearchIdEditRoute
   '/admin/stories/$storyId/edit': typeof storiesPagesEditRoute
@@ -350,6 +389,7 @@ export interface FileRoutesById {
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
   '/admin/majors': typeof majorsLayoutRouteWithChildren
   '/admin/members': typeof membersLayoutRouteWithChildren
+  '/admin/news': typeof newsLayoutRouteWithChildren
   '/admin/opportunities': typeof opportunitiesLayoutRouteWithChildren
   '/admin/research': typeof researchLayoutRouteWithChildren
   '/admin/stories': typeof storiesLayoutRouteWithChildren
@@ -361,24 +401,28 @@ export interface FileRoutesById {
   '/admin/profile': typeof profilePagesIndexRoute
   '/admin/majors/': typeof majorsPagesListRoute
   '/admin/members/': typeof membersPagesListRoute
+  '/admin/news/': typeof newsPagesListRoute
   '/admin/opportunities/': typeof opportunitiesPagesListRoute
   '/admin/research/': typeof researchPagesListRoute
   '/admin/stories/': typeof storiesPagesListRoute
   '/admin/users/': typeof usersPagesListRoute
   '/admin/majors/create': typeof majorsPagesCreateRoute
   '/admin/members/create': typeof membersPagesCreateRoute
+  '/admin/news/create': typeof newsPagesCreateRoute
   '/admin/opportunities/create': typeof opportunitiesPagesCreateRoute
   '/admin/research/create': typeof researchPagesCreateRoute
   '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/majors/$': typeof ApiMajorsSplatRoute
+  '/api/news/$': typeof ApiNewsSplatRoute
   '/api/opportunities/$': typeof ApiOpportunitiesSplatRoute
   '/api/research/$': typeof ApiResearchSplatRoute
   '/api/stats/$': typeof ApiStatsSplatRoute
   '/api/stories/$': typeof ApiStoriesSplatRoute
   '/admin/majors/$majorId/edit': typeof majorsPagesMajorIdEditRoute
   '/admin/members/$memberId/edit': typeof membersPagesMemberIdEditRoute
+  '/admin/news/$newsId/edit': typeof newsPagesEditRoute
   '/admin/opportunities/$opportunityId/edit': typeof opportunitiesPagesEditRoute
   '/admin/research/$researchId/edit': typeof researchPagesResearchIdEditRoute
   '/admin/stories/$storyId/edit': typeof storiesPagesEditRoute
@@ -395,6 +439,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/majors'
     | '/admin/members'
+    | '/admin/news'
     | '/admin/opportunities'
     | '/admin/research'
     | '/admin/stories'
@@ -406,24 +451,28 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin/majors/'
     | '/admin/members/'
+    | '/admin/news/'
     | '/admin/opportunities/'
     | '/admin/research/'
     | '/admin/stories/'
     | '/admin/users/'
     | '/admin/majors/create'
     | '/admin/members/create'
+    | '/admin/news/create'
     | '/admin/opportunities/create'
     | '/admin/research/create'
     | '/admin/stories/create'
     | '/admin/users/create'
     | '/api/auth/$'
     | '/api/majors/$'
+    | '/api/news/$'
     | '/api/opportunities/$'
     | '/api/research/$'
     | '/api/stats/$'
     | '/api/stories/$'
     | '/admin/majors/$majorId/edit'
     | '/admin/members/$memberId/edit'
+    | '/admin/news/$newsId/edit'
     | '/admin/opportunities/$opportunityId/edit'
     | '/admin/research/$researchId/edit'
     | '/admin/stories/$storyId/edit'
@@ -443,24 +492,28 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin/majors'
     | '/admin/members'
+    | '/admin/news'
     | '/admin/opportunities'
     | '/admin/research'
     | '/admin/stories'
     | '/admin/users'
     | '/admin/majors/create'
     | '/admin/members/create'
+    | '/admin/news/create'
     | '/admin/opportunities/create'
     | '/admin/research/create'
     | '/admin/stories/create'
     | '/admin/users/create'
     | '/api/auth/$'
     | '/api/majors/$'
+    | '/api/news/$'
     | '/api/opportunities/$'
     | '/api/research/$'
     | '/api/stats/$'
     | '/api/stories/$'
     | '/admin/majors/$majorId/edit'
     | '/admin/members/$memberId/edit'
+    | '/admin/news/$newsId/edit'
     | '/admin/opportunities/$opportunityId/edit'
     | '/admin/research/$researchId/edit'
     | '/admin/stories/$storyId/edit'
@@ -475,6 +528,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/majors'
     | '/admin/members'
+    | '/admin/news'
     | '/admin/opportunities'
     | '/admin/research'
     | '/admin/stories'
@@ -486,24 +540,28 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin/majors/'
     | '/admin/members/'
+    | '/admin/news/'
     | '/admin/opportunities/'
     | '/admin/research/'
     | '/admin/stories/'
     | '/admin/users/'
     | '/admin/majors/create'
     | '/admin/members/create'
+    | '/admin/news/create'
     | '/admin/opportunities/create'
     | '/admin/research/create'
     | '/admin/stories/create'
     | '/admin/users/create'
     | '/api/auth/$'
     | '/api/majors/$'
+    | '/api/news/$'
     | '/api/opportunities/$'
     | '/api/research/$'
     | '/api/stats/$'
     | '/api/stories/$'
     | '/admin/majors/$majorId/edit'
     | '/admin/members/$memberId/edit'
+    | '/admin/news/$newsId/edit'
     | '/admin/opportunities/$opportunityId/edit'
     | '/admin/research/$researchId/edit'
     | '/admin/stories/$storyId/edit'
@@ -519,6 +577,7 @@ export interface RootRouteChildren {
   ApiMediaRoute: typeof ApiMediaRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiMajorsSplatRoute: typeof ApiMajorsSplatRoute
+  ApiNewsSplatRoute: typeof ApiNewsSplatRoute
   ApiOpportunitiesSplatRoute: typeof ApiOpportunitiesSplatRoute
   ApiResearchSplatRoute: typeof ApiResearchSplatRoute
   ApiStatsSplatRoute: typeof ApiStatsSplatRoute
@@ -619,6 +678,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof opportunitiesLayoutRouteImport
       parentRoute: typeof adminDotrouteRoute
     }
+    '/admin/news': {
+      id: '/admin/news'
+      path: '/news'
+      fullPath: '/admin/news'
+      preLoaderRoute: typeof newsLayoutRouteImport
+      parentRoute: typeof adminDotrouteRoute
+    }
     '/admin/members': {
       id: '/admin/members'
       path: '/members'
@@ -668,6 +734,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiOpportunitiesSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/news/$': {
+      id: '/api/news/$'
+      path: '/api/news/$'
+      fullPath: '/api/news/$'
+      preLoaderRoute: typeof ApiNewsSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/majors/$': {
       id: '/api/majors/$'
       path: '/api/majors/$'
@@ -710,6 +783,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof opportunitiesPagesCreateRouteImport
       parentRoute: typeof opportunitiesLayoutRoute
     }
+    '/admin/news/create': {
+      id: '/admin/news/create'
+      path: '/create'
+      fullPath: '/admin/news/create'
+      preLoaderRoute: typeof newsPagesCreateRouteImport
+      parentRoute: typeof newsLayoutRoute
+    }
     '/admin/members/create': {
       id: '/admin/members/create'
       path: '/create'
@@ -751,6 +831,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/opportunities/'
       preLoaderRoute: typeof opportunitiesPagesListRouteImport
       parentRoute: typeof opportunitiesLayoutRoute
+    }
+    '/admin/news/': {
+      id: '/admin/news/'
+      path: '/'
+      fullPath: '/admin/news/'
+      preLoaderRoute: typeof newsPagesListRouteImport
+      parentRoute: typeof newsLayoutRoute
     }
     '/admin/members/': {
       id: '/admin/members/'
@@ -801,6 +888,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof opportunitiesPagesEditRouteImport
       parentRoute: typeof opportunitiesLayoutRoute
     }
+    '/admin/news/$newsId/edit': {
+      id: '/admin/news/$newsId/edit'
+      path: '/$newsId/edit'
+      fullPath: '/admin/news/$newsId/edit'
+      preLoaderRoute: typeof newsPagesEditRouteImport
+      parentRoute: typeof newsLayoutRoute
+    }
     '/admin/members/$memberId/edit': {
       id: '/admin/members/$memberId/edit'
       path: '/$memberId/edit'
@@ -848,6 +942,22 @@ const membersLayoutRouteChildren: membersLayoutRouteChildren = {
 
 const membersLayoutRouteWithChildren = membersLayoutRoute._addFileChildren(
   membersLayoutRouteChildren,
+)
+
+interface newsLayoutRouteChildren {
+  newsPagesListRoute: typeof newsPagesListRoute
+  newsPagesCreateRoute: typeof newsPagesCreateRoute
+  newsPagesEditRoute: typeof newsPagesEditRoute
+}
+
+const newsLayoutRouteChildren: newsLayoutRouteChildren = {
+  newsPagesListRoute: newsPagesListRoute,
+  newsPagesCreateRoute: newsPagesCreateRoute,
+  newsPagesEditRoute: newsPagesEditRoute,
+}
+
+const newsLayoutRouteWithChildren = newsLayoutRoute._addFileChildren(
+  newsLayoutRouteChildren,
 )
 
 interface opportunitiesLayoutRouteChildren {
@@ -917,6 +1027,7 @@ interface adminDotrouteRouteChildren {
   dashboardPagesAdminDashboardRoute: typeof dashboardPagesAdminDashboardRoute
   majorsLayoutRoute: typeof majorsLayoutRouteWithChildren
   membersLayoutRoute: typeof membersLayoutRouteWithChildren
+  newsLayoutRoute: typeof newsLayoutRouteWithChildren
   opportunitiesLayoutRoute: typeof opportunitiesLayoutRouteWithChildren
   researchLayoutRoute: typeof researchLayoutRouteWithChildren
   storiesLayoutRoute: typeof storiesLayoutRouteWithChildren
@@ -928,6 +1039,7 @@ const adminDotrouteRouteChildren: adminDotrouteRouteChildren = {
   dashboardPagesAdminDashboardRoute: dashboardPagesAdminDashboardRoute,
   majorsLayoutRoute: majorsLayoutRouteWithChildren,
   membersLayoutRoute: membersLayoutRouteWithChildren,
+  newsLayoutRoute: newsLayoutRouteWithChildren,
   opportunitiesLayoutRoute: opportunitiesLayoutRouteWithChildren,
   researchLayoutRoute: researchLayoutRouteWithChildren,
   storiesLayoutRoute: storiesLayoutRouteWithChildren,
@@ -963,6 +1075,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiMediaRoute: ApiMediaRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiMajorsSplatRoute: ApiMajorsSplatRoute,
+  ApiNewsSplatRoute: ApiNewsSplatRoute,
   ApiOpportunitiesSplatRoute: ApiOpportunitiesSplatRoute,
   ApiResearchSplatRoute: ApiResearchSplatRoute,
   ApiStatsSplatRoute: ApiStatsSplatRoute,

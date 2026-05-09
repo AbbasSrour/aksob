@@ -38,6 +38,13 @@
 		"db:migrate": {
 			"cache": false
 		},
+		"typecheck": {
+			"dependsOn": ["^build"]
+		},
+		"start": {
+			"cache": false,
+			"persistent": true
+		},
 		"db:studio": {
 			"cache": false,
 			"persistent": true

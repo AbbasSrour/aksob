@@ -9,6 +9,8 @@ import { requestLogger } from "@/middleware/http-logger";
 import { chatModule } from "@/modules/chat/chat.routes";
 import { healthModule } from "@/modules/health/health.routes";
 import { majorsModule } from "@/modules/majors/majors.routes";
+import { newsModule } from "@/modules/news/news.routes";
+import { newsCategoriesModule } from "@/modules/news/news-categories.routes";
 import { opportunitiesModule } from "@/modules/opportunities/opportunities.routes";
 import { researchModule } from "@/modules/research/research.routes";
 import { statsModule } from "@/modules/stats/stats.routes";
@@ -57,6 +59,8 @@ export const app = new Elysia()
 	.use(statsModule)
 	.use(healthModule)
 	.use(majorsModule)
+	.use(newsCategoriesModule)
+	.use(newsModule)
 	.use(opportunitiesModule)
 	.use(researchModule)
 	.use(storiesModule)

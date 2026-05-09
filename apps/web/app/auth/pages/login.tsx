@@ -59,7 +59,7 @@ export default function Login() {
 						</p>
 					</div>
 					<h2 className="mt-4 text-3xl font-bold tracking-tight text-(--aksob-darkest)">
-						Sign in to your AKSOB account
+						Sign in to your AKSOB Alumni account
 					</h2>
 					<p className="mt-2 max-w-md text-sm leading-relaxed text-(--gray-600)">
 						Faculty, alumni, and students can access their network space from

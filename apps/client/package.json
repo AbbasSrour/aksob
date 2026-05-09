@@ -3,13 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start:dev": "vite dev --port 3000",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "vitest run",
-    "format": "biome format",
-    "lint": "biome lint",
-    "check": "biome check"
+		"dev": "vite dev --port 3000",
+		"build": "vite build",
+		"preview": "vite preview",
+		"test": "vitest run",
+		"lint": "biome lint",
+		"format": "biome format --write .",
+		"check": "biome check --write .",
+		"typecheck": "bunx tsc --noEmit"
   },
   "dependencies": {
     "@aksob/api": "workspace:*",

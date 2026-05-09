@@ -15,11 +15,22 @@ export const requestLogger = new Elysia({ name: "logger" })
 		const start = Number(request.headers.get("x-start-time"));
 		const duration = Date.now() - start;
 		const status = set.status ?? 200;
+		const success = status >= 200 && status < 300;
 
-		logger.info(`${request.method} ${request.url}`, {
-			status,
-			duration: `${duration}ms`,
-		});
+		const color = success ? "\x1b[32m" : "\x1b[31m";
+		const coloredStatus = `${color}${status}\x1b[39m`;
+
+		if (success) {
+			logger.info(`${request.method} ${request.url}`, {
+				status: coloredStatus,
+				duration: `${duration}ms`,
+			});
+		} else {
+			logger.error(`${request.method} ${request.url}`, {
+				status: coloredStatus,
+				duration: `${duration}ms`,
+			});
+		}
 	})
 	.onError(({ error, request }) => {
 		logger.error(`Error processing ${request.method} ${request.url}`, {

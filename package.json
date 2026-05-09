@@ -13,8 +13,10 @@
 		"dev": "turbo run dev",
 		"build": "turbo run build",
 		"lint": "turbo run lint",
-		"format": "biome format --write .",
-		"check": "biome check --write .",
+		"format": "turbo run format",
+		"check": "turbo run check",
+		"typecheck": "turbo run typecheck",
+		"start": "turbo run start",
 		"db:generate": "turbo run db:generate",
 		"db:migrate": "turbo run db:migrate",
 		"db:studio": "turbo run db:studio"

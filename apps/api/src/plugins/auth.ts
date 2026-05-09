@@ -7,8 +7,8 @@ import { auth } from "@/lib/auth";
  *  Usage per route:
  *    { auth: true }        — require login, 401 if not. user = User.
  *    { auth: "optional" }  — no 401. user = User | null.
- *    { role: "admin" }     — 401+403. user = User with matching role.
- *                              (pairs with { auth: true } or standalone) */
+ *    { role: "admin" }     — 403 if logged-in user lacks role.
+ *                              Must be paired with { auth: true } for 401 + user context. */
 export const authContext = new Elysia({ name: "auth-context" }).macro({
 	auth: (enabled?: true | "optional") => ({
 		async resolve({ status, request: { headers } }) {

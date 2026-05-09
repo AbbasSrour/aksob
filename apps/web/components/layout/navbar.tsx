@@ -3,6 +3,7 @@ import {
 	LogIn,
 	LogOut,
 	MessageSquare,
+	Sparkles,
 	UserPlus,
 } from "lucide-react";
 import type React from "react";
@@ -28,7 +29,9 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 
 	const bgClass = isGalaxy
 		? "bg-transparent pointer-events-none"
-		: "bg-white/80 backdrop-blur-md text-[var(--aksob-darkest)] shadow-sm pointer-events-auto";
+		: isHome
+			? "bg-transparent text-[var(--aksob-darkest)] pointer-events-auto"
+			: "bg-(--off-white) text-[var(--aksob-darkest)] pointer-events-auto";
 
 	const normalBtnClass =
 		"p-2 rounded-full transition-colors border hover:bg-[var(--gray-100)] text-[var(--gray-500)] hover:text-[var(--aksob-primary)] border-[var(--gray-200)] pointer-events-auto";
@@ -52,23 +55,13 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 
 					<Link
 						to="/"
-						className="flex items-center gap-3 pointer-events-auto transition-transform duration-500 hover:scale-[1.02]"
+						className="pointer-events-auto transition-transform duration-500 hover:scale-[1.02]"
 					>
 						<img
 							src="/logo.png"
 							alt="LAU"
-							className={`h-10 w-auto ${isGalaxy ? "brightness-0 invert" : ""}`}
+							className={`h-16 w-auto ${isGalaxy ? "brightness-0 invert" : ""}`}
 						/>
-						<div
-							className={`hidden md:block leading-tight ${isGalaxy ? "text-white" : "text-[var(--aksob-darkest)]"}`}
-						>
-							<div className="text-xs font-semibold tracking-wide">
-								Adnan Kassar
-							</div>
-							<div className="text-xs font-medium opacity-70">
-								School of Business
-							</div>
-						</div>
 					</Link>
 				</div>
 
@@ -81,6 +74,12 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 								: "flex items-center gap-3"
 						}
 					>
+						{!isGalaxy && (
+							<Link to="/galaxy" className={normalBtnClass} title="Galaxy">
+								<Sparkles size={18} />
+							</Link>
+						)}
+
 						{isAuthenticated ? (
 							<>
 								{/* Chat Icon */}

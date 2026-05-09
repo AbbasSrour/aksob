@@ -8,6 +8,7 @@ import * as conversationSchema from "@/modules/chat/db/conversation.db";
 import * as conversationParticipantSchema from "@/modules/chat/db/conversation-participant.db";
 import * as messageSchema from "@/modules/chat/db/message.db";
 import * as majorSchema from "@/modules/majors/db/major.db";
+import * as newsSchema from "@/modules/news/db/news.db";
 import * as opportunitySchema from "@/modules/opportunities/db/opportunity.db";
 import * as researchSchema from "@/modules/research/db/research.db";
 import * as storySchema from "@/modules/stories/db/story.db";
@@ -23,6 +24,7 @@ const schema = {
 	...messageSchema,
 	...storySchema,
 	...majorSchema,
+	...newsSchema,
 	...opportunitySchema,
 	...researchSchema,
 };
