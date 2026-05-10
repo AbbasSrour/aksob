@@ -4,6 +4,17 @@ import { logger } from "@/utils/logger";
 /**
  * Request logger middleware using Winston
  */
+
+const methodColors: Record<string, string> = {
+	GET: "\x1b[36m",
+	POST: "\x1b[32m",
+	PUT: "\x1b[33m",
+	PATCH: "\x1b[35m",
+	DELETE: "\x1b[31m",
+	OPTIONS: "\x1b[90m",
+	HEAD: "\x1b[90m",
+};
+
 export const requestLogger = new Elysia({ name: "logger" })
 	.derive(() => ({
 		log: logger,
@@ -14,22 +25,23 @@ export const requestLogger = new Elysia({ name: "logger" })
 	.onAfterResponse({ as: "global" }, ({ request, set }) => {
 		const start = Number(request.headers.get("x-start-time"));
 		const duration = Date.now() - start;
-		const status = set.status ?? 200;
-		const success = status >= 200 && status < 300;
+		const status = Number(set.status ?? 200);
+		const statusColor =
+			status >= 500
+				? "\x1b[31m"
+				: status >= 400
+					? "\x1b[33m"
+					: status >= 300
+						? "\x1b[36m"
+						: "\x1b[32m";
 
-		const color = success ? "\x1b[32m" : "\x1b[31m";
-		const coloredStatus = `${color}${status}\x1b[39m`;
+		const methodColor = methodColors[request.method] ?? "\x1b[37m";
+		const msg = `${methodColor}${request.method}\x1b[39m ${statusColor}${status}\x1b[39m ${statusColor}${duration}\x1b[39mms ${request.url}`;
 
-		if (success) {
-			logger.info(`${request.method} ${request.url}`, {
-				status: coloredStatus,
-				duration: `${duration}ms`,
-			});
+		if (status >= 400) {
+			logger.error(msg);
 		} else {
-			logger.error(`${request.method} ${request.url}`, {
-				status: coloredStatus,
-				duration: `${duration}ms`,
-			});
+			logger.info(msg);
 		}
 	})
 	.onError(({ error, request }) => {
