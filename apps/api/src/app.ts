@@ -7,8 +7,10 @@ import { Elysia } from "elysia";
 import { env } from "@/config/env";
 import { requestLogger } from "@/middleware/http-logger";
 import { chatModule } from "@/modules/chat/chat.routes";
+import { connectionsModule } from "@/modules/connections/connections.routes";
+import { eventsModule } from "@/modules/events/events.routes";
 import { healthModule } from "@/modules/health/health.routes";
-import { majorsModule } from "@/modules/majors/majors.routes";
+import { programsModule } from "@/modules/programs/programs.routes";
 import { newsModule } from "@/modules/news/news.routes";
 import { newsCategoriesModule } from "@/modules/news/news-categories.routes";
 import { opportunitiesModule } from "@/modules/opportunities/opportunities.routes";
@@ -58,13 +60,15 @@ export const app = new Elysia()
 	.use(uploadthingPlugin)
 	.use(statsModule)
 	.use(healthModule)
-	.use(majorsModule)
+	.use(programsModule)
 	.use(newsCategoriesModule)
 	.use(newsModule)
+	.use(eventsModule)
 	.use(opportunitiesModule)
 	.use(researchModule)
 	.use(storiesModule)
 	.use(chatModule)
+	.use(connectionsModule)
 	.use(usersModule)
 	.onError(({ code, error, set }) => {
 		if (code === "NOT_FOUND") {

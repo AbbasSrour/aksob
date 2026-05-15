@@ -113,7 +113,6 @@ export const researchModule = new Elysia({ prefix: "/api/research" })
 							id: true,
 							name: true,
 							image: true,
-							major: true,
 						} as const,
 					},
 				},
@@ -151,7 +150,6 @@ export const researchModule = new Elysia({ prefix: "/api/research" })
 							id: true,
 							name: true,
 							image: true,
-							major: true,
 						} as const,
 					},
 					reviewer: {
@@ -215,7 +213,7 @@ export const researchModule = new Elysia({ prefix: "/api/research" })
 				id: user.id,
 				name: user.name,
 				image: user.image,
-				major: user.major,
+				major: null,
 			};
 
 			const now = new Date();
@@ -353,7 +351,6 @@ export const researchModule = new Elysia({ prefix: "/api/research" })
 							id: true,
 							name: true,
 							image: true,
-							major: true,
 						} as const,
 					},
 				},
@@ -452,7 +449,6 @@ export const researchModule = new Elysia({ prefix: "/api/research" })
 							id: true,
 							name: true,
 							image: true,
-							major: true,
 						} as const,
 					},
 					reviewer: {
@@ -514,7 +510,6 @@ export const researchModule = new Elysia({ prefix: "/api/research" })
 							id: true,
 							name: true,
 							image: true,
-							major: true,
 						} as const,
 					},
 					reviewer: {

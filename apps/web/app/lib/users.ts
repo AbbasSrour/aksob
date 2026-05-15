@@ -1,4 +1,4 @@
-import type { AksobMajor } from "@aksob/sdk";
+import type { AksobProgram } from "@aksob/sdk";
 import { apiFetch } from "~/app/lib/api";
 
 export type UserType = "student" | "alumni" | "faculty";
@@ -7,8 +7,9 @@ export interface ApiUser {
 	id: string;
 	name: string;
 	email: string;
-	userType: UserType;
-	major: AksobMajor;
+	type: UserType;
+	program: AksobProgram;
+	bio: string | null;
 	company: string | null;
 	title: string | null;
 	image: string | null;

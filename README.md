@@ -97,3 +97,26 @@ cd apps/web && bun run dev    # Web on http://localhost:5173
 - Your app tables go in `apps/api/src/db/schema.ts`
 - Better Auth tables are **auto-generated** by running `bunx @better-auth/cli generate`
 - Run `bun run db:generate` after modifying the schema to create migrations
+
+## Future Events Ideas
+
+Ideas to revisit after the core events feature ships:
+
+- Event categories/tags with icons.
+- Custom reminder times beyond the default 24h and 1h reminders.
+- Speakers with bios, topics, and headshots on the event page.
+- Volunteers and staff assigned to shifts or roles within an event.
+- Sponsors recognized with logos and dedicated sections on the event page.
+- Multi-ticket support — issue more than one ticket per attendee and revoke tickets after issue.
+- Ticket scan history and check-in logs for organizers and admins.
+- Multiple check-ins — support check-out and re-check-in for multi-day or multi-session events.
+- Event photo gallery — organizers can upload and display event photos.
+- Calendar integration — one-click exports for Google Calendar, Outlook, and iCal.
+- Unlisted events — invite-only events hidden from public browsing but accessible by link.
+- Event announcements — organizers can message all registered attendees.
+- Attendance analytics — reports on registrations, check-ins, no-shows, and waitlist activity.
+- Manual waitlist management — organizers can reorder or promote waitlisted attendees.
+- Rejected event diff — when an organizer edits and resubmits a rejected event, show admins what changed compared to the previously rejected version.
+- Recurring events — daily, weekly, or monthly event series with linked instances.
+- Maps and directions — embedded location details for in-person and hybrid events.
+- Post-event resources — slides, recordings, and downloadable materials shared after an event.

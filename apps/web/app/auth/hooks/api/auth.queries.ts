@@ -6,8 +6,8 @@ export interface SignUpInput {
 	name: string;
 	email: string;
 	password: string;
-	userType?: string;
-	major?: string;
+	type?: string;
+	program?: string;
 	company?: string;
 	title?: string;
 }

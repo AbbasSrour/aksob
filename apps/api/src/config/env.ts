@@ -52,6 +52,11 @@ const EnvSchema = TypeCompiler.Compile(
 			default: "noreply@aksob.lau.edu.lb",
 		}),
 
+		// Frontend
+		FRONTEND_URL: t.String({
+			default: "http://localhost:5173",
+		}),
+
 		// Media uploads (UploadThing API token)
 		UPLOADTHING_TOKEN: t.Optional(t.String()),
 	}),

@@ -1,24 +1,24 @@
-import { AKSOB_MAJORS, type AksobMajor } from "@aksob/sdk";
+import { AKSOB_PROGRAMS, type AksobProgram } from "@aksob/sdk";
 import type { ApiUser } from "~/app/lib/users";
 
 export interface Alumnus {
 	id: string;
 	name: string;
-	major: AksobMajor;
+	program: AksobProgram;
 	year: number;
 	position: string;
 	company: string;
 	image: string | null;
-	userType: ApiUser["userType"];
+	userType: ApiUser["type"];
 }
 
-export interface MajorCluster {
-	name: AksobMajor;
+export interface ProgramCluster {
+	name: AksobProgram;
 	color: string;
 	alumni: Alumnus[];
 }
 
-const MAJOR_COLORS: Record<AksobMajor, string> = {
+const PROGRAM_COLORS: Record<AksobProgram, string> = {
 	"BS in Business": "#076951",
 	"BS in Economics": "#2E8B57",
 	"BS Hospitality Management": "#20B2AA",
@@ -29,19 +29,19 @@ const MAJOR_COLORS: Record<AksobMajor, string> = {
 	"LLM & Master of Laws": "#4682B4",
 };
 
-export const buildGalaxyData = (users: ApiUser[]): MajorCluster[] => {
-	const clusters: MajorCluster[] = AKSOB_MAJORS.map((major) => ({
-		name: major,
-		color: MAJOR_COLORS[major],
+export const buildGalaxyData = (users: ApiUser[]): ProgramCluster[] => {
+	const clusters: ProgramCluster[] = AKSOB_PROGRAMS.map((program) => ({
+		name: program,
+		color: PROGRAM_COLORS[program],
 		alumni: [],
 	}));
 
-	const clusterByMajor = new Map(
+	const clusterByProgram = new Map(
 		clusters.map((cluster) => [cluster.name, cluster]),
 	);
 
 	for (const user of users) {
-		const cluster = clusterByMajor.get(user.major);
+		const cluster = clusterByProgram.get(user.program);
 		if (!cluster) {
 			continue;
 		}
@@ -49,12 +49,12 @@ export const buildGalaxyData = (users: ApiUser[]): MajorCluster[] => {
 		cluster.alumni.push({
 			id: user.id,
 			name: user.name,
-			major: user.major,
+			program: user.program,
 			year: new Date(user.createdAt).getFullYear(),
 			position: user.title ?? "",
 			company: user.company ?? "",
 			image: user.image,
-			userType: user.userType,
+			userType: user.type,
 		});
 	}
 

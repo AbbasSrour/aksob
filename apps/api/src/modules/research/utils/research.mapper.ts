@@ -2,7 +2,7 @@ import type { schema } from "@/db";
 
 type ResearchAuthor = Pick<
 	typeof schema.user.$inferSelect,
-	"id" | "name" | "image" | "major"
+	"id" | "name" | "image"
 >;
 
 type ResearchReviewer = Pick<typeof schema.user.$inferSelect, "id" | "name">;
@@ -41,7 +41,7 @@ export const toResearchDto = (item: ResearchDtoInput) => {
 			id: item.author.id,
 			name: item.author.name,
 			image: item.author.image,
-			major: item.author.major,
+			major: null,
 		},
 		reviewedBy: item.reviewer
 			? {

@@ -118,7 +118,6 @@ export const storiesModule = new Elysia({ prefix: "/api/stories" })
 							id: true,
 							name: true,
 							image: true,
-							major: true,
 						} as const,
 					},
 				},
@@ -156,7 +155,6 @@ export const storiesModule = new Elysia({ prefix: "/api/stories" })
 							id: true,
 							name: true,
 							image: true,
-							major: true,
 						} as const,
 					},
 					reviewer: {
@@ -217,7 +215,7 @@ export const storiesModule = new Elysia({ prefix: "/api/stories" })
 				id: user.id,
 				name: user.name,
 				image: user.image,
-				major: user.major,
+				major: null,
 			};
 			const status: "pending" | "approved" = isAdmin ? "approved" : "pending";
 			const reviewedBy: string | null = isAdmin ? user.id : null;
@@ -251,7 +249,7 @@ export const storiesModule = new Elysia({ prefix: "/api/stories" })
 					id: assignedUser.id,
 					name: assignedUser.name,
 					image: assignedUser.image,
-					major: assignedUser.major,
+					major: null,
 				};
 			}
 
@@ -374,7 +372,6 @@ export const storiesModule = new Elysia({ prefix: "/api/stories" })
 							id: true,
 							name: true,
 							image: true,
-							major: true,
 						} as const,
 					},
 				},
@@ -495,7 +492,6 @@ export const storiesModule = new Elysia({ prefix: "/api/stories" })
 							id: true,
 							name: true,
 							image: true,
-							major: true,
 						} as const,
 					},
 					reviewer: {
@@ -556,7 +552,6 @@ export const storiesModule = new Elysia({ prefix: "/api/stories" })
 							id: true,
 							name: true,
 							image: true,
-							major: true,
 						} as const,
 					},
 					reviewer: {

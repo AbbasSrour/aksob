@@ -6,7 +6,7 @@ import type {
 } from "@/app/users/hooks/api/users.functions.ts";
 
 export type MemberUser = AdminUser & {
-	userType?: string;
+	type?: string;
 	major?: string | null;
 	company?: string | null;
 	title?: string | null;
@@ -21,7 +21,7 @@ export const memberToFormValues = (user: MemberUser): UserFormSchema => {
 		lastName,
 		email: user.email,
 		phoneNumber: user.phoneNumber ?? "",
-		userType: user.userType ?? "student",
+		userType: user.type ?? "student",
 		major: user.major ?? "",
 		company: user.company ?? "",
 		title: user.title ?? "",
@@ -35,8 +35,6 @@ export const formToCreateMemberPayload = (
 ): CreateUserInput => {
 	const phoneNumber = values.phoneNumber?.trim();
 	const name = `${values.firstName} ${values.lastName}`.trim();
-	const company = values.company?.trim();
-	const title = values.title?.trim();
 
 	return {
 		email: values.email,
@@ -45,10 +43,10 @@ export const formToCreateMemberPayload = (
 		role: "user",
 		data: {
 			...(phoneNumber ? { phoneNumber } : {}),
-			userType: values.userType,
+			type: values.userType,
 			major: values.major,
-			...(company ? { company } : {}),
-			...(title ? { title } : {}),
+			company: values.company?.trim(),
+			title: values.title?.trim(),
 		},
 	} satisfies CreateUserInput;
 };
@@ -59,8 +57,6 @@ export const formToUpdateMemberPayload = (
 ): UpdateUserInput => {
 	const phoneNumber = values.phoneNumber?.trim();
 	const name = `${values.firstName} ${values.lastName}`.trim();
-	const company = values.company?.trim();
-	const title = values.title?.trim();
 
 	return {
 		userId,
@@ -69,10 +65,10 @@ export const formToUpdateMemberPayload = (
 			email: values.email,
 			role: "user",
 			...(phoneNumber ? { phoneNumber } : {}),
-			userType: values.userType,
+			type: values.userType,
 			major: values.major,
-			...(company ? { company } : {}),
-			...(title ? { title } : {}),
+			company: values.company?.trim(),
+			title: values.title?.trim(),
 		},
 	} satisfies UpdateUserInput;
 };

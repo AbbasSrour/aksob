@@ -27,6 +27,7 @@ export const ensureDefaultAdmin = async () => {
 	await db
 		.update(schema.user)
 		.set({
+			type: "faculty",
 			role: "admin",
 			emailVerified: true,
 		})

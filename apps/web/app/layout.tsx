@@ -50,9 +50,9 @@ export default function AppLayout() {
 					isHome || isGalaxy
 						? ""
 						: isChat
-							? "pt-16 h-[calc(100vh-4rem)]"
-							: "pt-16 min-h-screen"
-				}`}
+							? "pt-20 h-[calc(100vh-5rem)]"
+							: "pt-20 min-h-screen"
+					}`}
 			>
 				<Outlet />
 			</div>

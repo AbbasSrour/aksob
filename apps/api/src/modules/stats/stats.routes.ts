@@ -1,4 +1,4 @@
-import { count, sql } from "drizzle-orm";
+import { and, count, eq, sql } from "drizzle-orm";
 import { Elysia } from "elysia";
 import { db, schema } from "@/db";
 import { authContext } from "@/plugins/auth";
@@ -20,17 +20,17 @@ export const statsModule = new Elysia({ prefix: "/api/stats" })
 				totalResearch,
 				researchByStatus,
 				researchByType,
-				usersByMajor,
+				usersByProgram,
 			] = await Promise.all([
 				db.select({ count: count() }).from(schema.user),
 
 				db
 					.select({
-						userType: schema.user.userType,
+						type: schema.user.type,
 						count: count(),
 					})
 					.from(schema.user)
-					.groupBy(schema.user.userType),
+					.groupBy(schema.user.type),
 
 				db.select({ count: count() }).from(schema.opportunity),
 
@@ -88,11 +88,22 @@ export const statsModule = new Elysia({ prefix: "/api/stats" })
 
 				db
 					.select({
-						major: schema.user.major,
+						program: schema.program.name,
 						count: count(),
 					})
 					.from(schema.user)
-					.groupBy(schema.user.major),
+					.innerJoin(
+						schema.userEducation,
+						and(
+							eq(schema.user.id, schema.userEducation.userId),
+							eq(schema.userEducation.isPrimary, true),
+						),
+					)
+					.innerJoin(
+						schema.program,
+						eq(schema.userEducation.programId, schema.program.id),
+					)
+					.groupBy(schema.program.name),
 			]);
 
 			const recentUsers = await db.query.user.findMany({
@@ -102,8 +113,7 @@ export const statsModule = new Elysia({ prefix: "/api/stats" })
 					id: true,
 					name: true,
 					email: true,
-					userType: true,
-					major: true,
+					type: true,
 					image: true,
 					createdAt: true,
 				},
@@ -157,13 +167,13 @@ export const statsModule = new Elysia({ prefix: "/api/stats" })
 					users: {
 						total: totalUsers[0]?.count ?? 0,
 						byType: Object.fromEntries(
-							usersByType.map((r) => [r.userType, r.count]),
+							usersByType.map((r) => [r.type, r.count]),
 						),
-						byMajor: Object.fromEntries(
-							usersByMajor
-								.filter((r) => r.major !== null)
-								.map((r) => [r.major, r.count]),
-						),
+					byProgram: Object.fromEntries(
+						usersByProgram
+							.filter((r) => r.program !== null)
+							.map((r) => [r.program, r.count]),
+					),
 					},
 					opportunities: {
 						total: totalOpportunities[0]?.count ?? 0,
@@ -193,15 +203,14 @@ export const statsModule = new Elysia({ prefix: "/api/stats" })
 						),
 					},
 					recent: {
-						users: recentUsers.map((u) => ({
-							id: u.id,
-							name: u.name,
-							email: u.email,
-							userType: u.userType,
-							major: u.major,
-							image: u.image,
-							createdAt: u.createdAt?.toISOString() ?? null,
-						})),
+					users: recentUsers.map((u) => ({
+						id: u.id,
+						name: u.name,
+						email: u.email,
+						userType: u.type,
+						image: u.image,
+						createdAt: u.createdAt?.toISOString() ?? null,
+					})),
 						opportunities: recentOpportunities.map((o) => ({
 							id: o.id,
 							type: o.type,

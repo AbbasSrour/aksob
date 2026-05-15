@@ -16,7 +16,7 @@ const researchAuthorSchema = t.Object({
 	id: t.String(),
 	name: t.String(),
 	image: t.Union([t.String(), t.Null()]),
-	major: t.Optional(t.Nullable(t.String())),
+	program: t.Optional(t.Nullable(t.String())),
 });
 
 const researchReviewerSchema = t.Object({

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { ChooseUs } from "~/app/home/components/choose-us";
 import { Contact } from "~/app/home/components/contact";
+import { EventSpotlight } from "~/app/home/components/event-spotlight";
 import { Events } from "~/app/home/components/events";
 import { Glance } from "~/app/home/components/glance";
 import { Hero } from "~/app/home/components/hero";
@@ -126,6 +127,9 @@ export default function HomePage() {
 			<Programs />
 			<ChooseUs />
 			<Events />
+			<div className="py-16 md:py-24" />
+			<EventSpotlight />
+			<div className="py-16 md:py-24" />
 			<News />
 			<Contact />
 		</main>

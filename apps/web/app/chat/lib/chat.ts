@@ -6,7 +6,7 @@ export interface ChatConversation {
 		id: string;
 		name: string;
 		email: string;
-		major: string;
+		program: string;
 		image: string | null;
 	};
 	lastMessage: {

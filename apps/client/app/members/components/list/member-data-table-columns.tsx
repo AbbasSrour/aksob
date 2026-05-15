@@ -90,7 +90,7 @@ export const memberDataTableColumns = [
 		enableHiding: false,
 	}),
 	// --------------------> User Type Column <------------------- //
-	columnHelper.accessor("userType", {
+	columnHelper.accessor("type", {
 		header: ({ column }) => (
 			<DataTableColumnHeader
 				column={column}

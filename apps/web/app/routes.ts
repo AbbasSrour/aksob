@@ -21,6 +21,10 @@ export default [
 		}),
 
 		route("galaxy", "galaxy/pages/galaxy.tsx"),
+		route("events", "events/pages/events.tsx"),
+		route("news", "news/pages/news.tsx"),
+		route("stories", "stories/pages/stories.tsx"),
+		route("series", "series/pages/series.tsx"),
 		route("profile", "profile/pages/index.tsx"),
 
 		layout("chat/pages/layout.tsx", [

@@ -3,7 +3,7 @@ import { ArrowRight, ShieldCheck } from "lucide-react";
 import type { ChangeEvent, FormEvent } from "react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { majorsQueries } from "~/app/auth/hooks/api/majors.queries";
+import { programsQueries } from "~/app/auth/hooks/api/programs.queries";
 import { useSignUp } from "~/app/auth/hooks/api/auth.queries";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -16,19 +16,19 @@ export default function Register() {
 	const [userType, setUserType] = useState<"student" | "alumni" | "faculty">(
 		"student",
 	);
-	const [major, setMajor] = useState<string>("");
+	const [program, setProgram] = useState<string>("");
 	const [company, setCompany] = useState("");
 	const [title, setTitle] = useState("");
 	const [clientError, setClientError] = useState<string | null>(null);
 
 	const signUp = useSignUp();
-	const { data: majors } = useQuery(majorsQueries.active);
+	const { data: programs } = useQuery(programsQueries.active);
 
 	useEffect(() => {
-		if (majors && majors.length > 0 && !major) {
-			setMajor(majors[0].name);
+		if (programs && programs.length > 0 && !program) {
+			setProgram(programs[0].name);
 		}
-	}, [majors, major]);
+	}, [programs, program]);
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -49,8 +49,8 @@ export default function Register() {
 				name,
 				email,
 				password: submittedPassword,
-				userType,
-				major,
+				type: userType,
+				program,
 				company: company.trim() || undefined,
 				title: title.trim() || undefined,
 			},
@@ -164,25 +164,25 @@ export default function Register() {
 							</div>
 
 							<div className="space-y-1 pt-2">
-								<label
-									htmlFor="major"
-									className="block text-sm font-medium text-[var(--aksob-darkest)]"
-								>
-									Major
-								</label>
-								<select
-									id="major"
-									name="major"
-									value={major}
-									onChange={(event) => setMajor(event.target.value)}
-									className="h-12 w-full rounded-md border border-[var(--gray-200)] bg-white px-4 text-[var(--aksob-darkest)] focus:border-[var(--aksob-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--aksob-primary)]/20"
-								>
-									{majors?.map((m) => (
-										<option key={m.id} value={m.name}>
-											{m.name}
-										</option>
-									))}
-								</select>
+							<label
+								htmlFor="program"
+								className="block text-sm font-medium text-[var(--aksob-darkest)]"
+							>
+								Program
+							</label>
+							<select
+								id="program"
+								name="program"
+								value={program}
+								onChange={(event) => setProgram(event.target.value)}
+								className="h-12 w-full rounded-md border border-[var(--gray-200)] bg-white px-4 text-[var(--aksob-darkest)] focus:border-[var(--aksob-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--aksob-primary)]/20"
+							>
+								{programs?.map((p) => (
+									<option key={p.id} value={p.name}>
+										{p.name}
+									</option>
+								))}
+							</select>
 							</div>
 						</div>
 					</div>

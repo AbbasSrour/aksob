@@ -2,7 +2,7 @@ import type { App } from "@aksob/api/app";
 import type { Treaty } from "@elysiajs/eden";
 import { treaty } from "@elysiajs/eden";
 
-export const AKSOB_MAJORS = [
+export const AKSOB_PROGRAMS = [
 	"BS in Business",
 	"BS in Economics",
 	"BS Hospitality Management",
@@ -13,7 +13,7 @@ export const AKSOB_MAJORS = [
 	"LLM & Master of Laws",
 ] as const;
 
-export type AksobMajor = (typeof AKSOB_MAJORS)[number];
+export type AksobProgram = (typeof AKSOB_PROGRAMS)[number];
 
 export type { App } from "@aksob/api/app";
 

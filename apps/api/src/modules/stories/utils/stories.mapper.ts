@@ -2,7 +2,7 @@ import type { schema } from "@/db";
 
 type StoryAuthor = Pick<
 	typeof schema.user.$inferSelect,
-	"id" | "name" | "image" | "major"
+	"id" | "name" | "image"
 >;
 
 type StoryReviewer = Pick<typeof schema.user.$inferSelect, "id" | "name">;
@@ -33,7 +33,7 @@ export const toStoryDto = (story: StoryDtoInput) => {
 			id: story.author.id,
 			name: story.author.name,
 			image: story.author.image,
-			major: story.author.major,
+			major: null,
 		},
 		reviewedBy: story.reviewer
 			? {

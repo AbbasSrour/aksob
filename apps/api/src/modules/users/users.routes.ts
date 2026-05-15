@@ -1,8 +1,8 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 import { db, schema } from "@/db";
+import { CONNECTION_TYPES } from "@/modules/connections/constant/connection-types.constant";
 import { auth } from "@/lib/auth";
-import { AKSOB_MAJORS } from "@/modules/users/constant/aksob-majors";
 import type { UserType } from "@/modules/users/constant/user-types";
 
 const usersIdParamSchema = t.Object({
@@ -13,26 +13,15 @@ const usersOpenApiDetail = {
 	tags: ["Users"],
 };
 
-const normalizeUserType = (userType: string): UserType => {
+const normalizeUserType = (type: string): UserType => {
 	if (
-		userType === "alumni" ||
-		userType === "faculty" ||
-		userType === "student"
+		type === "alumni" ||
+		type === "faculty" ||
+		type === "student"
 	) {
-		return userType;
+		return type;
 	}
 	return "student";
-};
-
-const normalizeMajor = (
-	major: string | null,
-): (typeof AKSOB_MAJORS)[number] | null => {
-	if (!major) {
-		return null;
-	}
-	return AKSOB_MAJORS.includes(major as (typeof AKSOB_MAJORS)[number])
-		? (major as (typeof AKSOB_MAJORS)[number])
-		: null;
 };
 
 export const usersModule = new Elysia({ prefix: "/users" })
@@ -46,14 +35,63 @@ export const usersModule = new Elysia({ prefix: "/users" })
 				return { status: "error", error: "Not authenticated" };
 			}
 
-			const currentUser = await db.query.user.findFirst({
-				where: eq(schema.user.id, session.user.id),
-			});
+			const [currentUser] = await db
+				.select({
+					id: schema.user.id,
+					name: schema.user.name,
+					email: schema.user.email,
+					type: schema.user.type,
+					program: schema.program.name,
+					bio: schema.user.bio,
+					image: schema.user.image,
+					createdAt: schema.user.createdAt,
+					alumniCompany: schema.alumniProfile.company,
+					alumniTitle: schema.alumniProfile.title,
+					facultyTitle: schema.facultyProfile.title,
+					isVisibleInGalaxy: schema.userSettings.isVisibleInGalaxy,
+					emailVisible: schema.userSettings.emailVisible,
+					phoneNumberVisible: schema.userSettings.phoneNumberVisible,
+				})
+				.from(schema.user)
+				.leftJoin(
+					schema.alumniProfile,
+					eq(schema.user.id, schema.alumniProfile.userId),
+				)
+				.leftJoin(
+					schema.facultyProfile,
+					eq(schema.user.id, schema.facultyProfile.userId),
+				)
+				.leftJoin(
+					schema.userSettings,
+					eq(schema.user.id, schema.userSettings.userId),
+				)
+				.leftJoin(
+					schema.userEducation,
+					and(
+						eq(schema.user.id, schema.userEducation.userId),
+						eq(schema.userEducation.isPrimary, true),
+					),
+				)
+				.leftJoin(
+					schema.program,
+					eq(schema.userEducation.programId, schema.program.id),
+				)
+				.where(eq(schema.user.id, session.user.id));
 
 			if (!currentUser) {
 				set.status = 404;
 				return { status: "error", error: "User not found" };
 			}
+
+			const connectionPrefs = await db
+				.select({ type: schema.userConnectionPreference.type })
+				.from(schema.userConnectionPreference)
+				.where(
+					eq(
+						schema.userConnectionPreference.userId,
+						session.user.id!,
+					),
+				);
 
 			return {
 				status: "ok",
@@ -61,12 +99,17 @@ export const usersModule = new Elysia({ prefix: "/users" })
 					id: currentUser.id,
 					name: currentUser.name,
 					email: currentUser.email,
-					userType: normalizeUserType(currentUser.userType),
-					major: normalizeMajor(currentUser.major),
-					company: currentUser.company,
-					title: currentUser.title,
+					type: normalizeUserType(currentUser.type),
+					program: currentUser.program ?? null,
+					bio: currentUser.bio,
+					company: currentUser.alumniCompany ?? null,
+					title: currentUser.alumniTitle ?? currentUser.facultyTitle ?? null,
 					image: currentUser.image,
 					createdAt: currentUser.createdAt,
+					isVisibleInGalaxy: currentUser.isVisibleInGalaxy ?? true,
+					emailVisible: currentUser.emailVisible ?? false,
+					phoneNumberVisible: currentUser.phoneNumberVisible ?? false,
+					connectionTypes: connectionPrefs.map((p) => p.type),
 				},
 			};
 		},
@@ -76,23 +119,146 @@ export const usersModule = new Elysia({ prefix: "/users" })
 	)
 	.get(
 		"/",
-		async () => {
-			const users = await db.query.user.findMany({
-				orderBy: [desc(schema.user.createdAt)],
-			});
+		async ({ query }) => {
+			const userType = query.type as UserType | undefined;
+			const connectionType = query.connectionType as string | undefined;
+
+			const whereClauses = [];
+
+			if (userType && ["alumni", "faculty", "student"].includes(userType)) {
+				whereClauses.push(eq(schema.user.type, userType));
+			}
+
+			if (connectionType) {
+				// Filter to users open to this connection type and visible in galaxy
+				const ct = connectionType as typeof CONNECTION_TYPES[number];
+				const users = await db
+					.select({
+						id: schema.user.id,
+						name: schema.user.name,
+						email: schema.user.email,
+						type: schema.user.type,
+						program: schema.program.name,
+						bio: schema.user.bio,
+						image: schema.user.image,
+						createdAt: schema.user.createdAt,
+						alumniCompany: schema.alumniProfile.company,
+						alumniTitle: schema.alumniProfile.title,
+						facultyTitle: schema.facultyProfile.title,
+					})
+					.from(schema.user)
+					.innerJoin(
+						schema.userConnectionPreference,
+						eq(
+							schema.user.id,
+							schema.userConnectionPreference.userId,
+						),
+					)
+					.leftJoin(
+						schema.userSettings,
+						eq(schema.user.id, schema.userSettings.userId),
+					)
+					.leftJoin(
+						schema.alumniProfile,
+						eq(schema.user.id, schema.alumniProfile.userId),
+					)
+					.leftJoin(
+						schema.facultyProfile,
+						eq(schema.user.id, schema.facultyProfile.userId),
+					)
+					.leftJoin(
+						schema.userEducation,
+						and(
+							eq(schema.user.id, schema.userEducation.userId),
+							eq(schema.userEducation.isPrimary, true),
+						),
+					)
+					.leftJoin(
+						schema.program,
+						eq(schema.userEducation.programId, schema.program.id),
+					)
+					.where(
+						and(
+							eq(
+								schema.userConnectionPreference.type,
+								ct,
+							),
+							eq(
+								schema.userSettings.isVisibleInGalaxy,
+								true,
+							),
+							...whereClauses,
+						),
+					)
+					.orderBy(desc(schema.user.createdAt));
+
+				return {
+					status: "ok",
+					data: users.map((user) => ({
+						id: user.id,
+						name: user.name,
+						email: user.email,
+						type: normalizeUserType(user.type),
+						program: user.program ?? null,
+						bio: user.bio,
+						company: user.alumniCompany ?? null,
+						title: user.alumniTitle ?? user.facultyTitle ?? null,
+						image: user.image,
+						createdAt: user.createdAt,
+					})),
+				};
+			}
+
+			const users = await db
+				.select({
+					id: schema.user.id,
+					name: schema.user.name,
+					email: schema.user.email,
+					type: schema.user.type,
+					program: schema.program.name,
+					bio: schema.user.bio,
+					image: schema.user.image,
+					createdAt: schema.user.createdAt,
+					alumniCompany: schema.alumniProfile.company,
+					alumniTitle: schema.alumniProfile.title,
+					facultyTitle: schema.facultyProfile.title,
+				})
+				.from(schema.user)
+				.leftJoin(
+					schema.alumniProfile,
+					eq(schema.user.id, schema.alumniProfile.userId),
+				)
+				.leftJoin(
+					schema.facultyProfile,
+					eq(schema.user.id, schema.facultyProfile.userId),
+				)
+				.leftJoin(
+					schema.userEducation,
+					and(
+						eq(schema.user.id, schema.userEducation.userId),
+						eq(schema.userEducation.isPrimary, true),
+					),
+				)
+				.leftJoin(
+					schema.program,
+					eq(schema.userEducation.programId, schema.program.id),
+				)
+				.where(and(...whereClauses))
+				.orderBy(desc(schema.user.createdAt));
 
 			return {
 				status: "ok",
-				data: users.map((currentUser) => ({
-					id: currentUser.id,
-					name: currentUser.name,
-					email: currentUser.email,
-					userType: normalizeUserType(currentUser.userType),
-					major: normalizeMajor(currentUser.major),
-					company: currentUser.company,
-					title: currentUser.title,
-					image: currentUser.image,
-					createdAt: currentUser.createdAt,
+				data: users.map((user) => ({
+					id: user.id,
+					name: user.name,
+					email: user.email,
+					type: normalizeUserType(user.type),
+					program: user.program ?? null,
+					bio: user.bio,
+					company: user.alumniCompany ?? null,
+					title: user.alumniTitle ?? user.facultyTitle ?? null,
+					image: user.image,
+					createdAt: user.createdAt,
 				})),
 			};
 		},
@@ -103,9 +269,41 @@ export const usersModule = new Elysia({ prefix: "/users" })
 	.get(
 		"/:id",
 		async ({ params, set }) => {
-			const currentUser = await db.query.user.findFirst({
-				where: eq(schema.user.id, params.id),
-			});
+			const [currentUser] = await db
+				.select({
+					id: schema.user.id,
+					name: schema.user.name,
+					email: schema.user.email,
+					type: schema.user.type,
+					program: schema.program.name,
+					bio: schema.user.bio,
+					image: schema.user.image,
+					createdAt: schema.user.createdAt,
+					alumniCompany: schema.alumniProfile.company,
+					alumniTitle: schema.alumniProfile.title,
+					facultyTitle: schema.facultyProfile.title,
+				})
+				.from(schema.user)
+				.leftJoin(
+					schema.alumniProfile,
+					eq(schema.user.id, schema.alumniProfile.userId),
+				)
+				.leftJoin(
+					schema.facultyProfile,
+					eq(schema.user.id, schema.facultyProfile.userId),
+				)
+				.leftJoin(
+					schema.userEducation,
+					and(
+						eq(schema.user.id, schema.userEducation.userId),
+						eq(schema.userEducation.isPrimary, true),
+					),
+				)
+				.leftJoin(
+					schema.program,
+					eq(schema.userEducation.programId, schema.program.id),
+				)
+				.where(eq(schema.user.id, params.id));
 
 			if (!currentUser) {
 				set.status = 404;
@@ -118,10 +316,11 @@ export const usersModule = new Elysia({ prefix: "/users" })
 					id: currentUser.id,
 					name: currentUser.name,
 					email: currentUser.email,
-					userType: normalizeUserType(currentUser.userType),
-					major: normalizeMajor(currentUser.major),
-					company: currentUser.company,
-					title: currentUser.title,
+					type: normalizeUserType(currentUser.type),
+					program: currentUser.program ?? null,
+					bio: currentUser.bio,
+					company: currentUser.alumniCompany ?? null,
+					title: currentUser.alumniTitle ?? currentUser.facultyTitle ?? null,
 					image: currentUser.image,
 					createdAt: currentUser.createdAt,
 				},

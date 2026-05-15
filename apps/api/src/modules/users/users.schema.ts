@@ -4,14 +4,13 @@ export const usersInputSchema = t.Object({
 	id: t.String(),
 	name: t.String(),
 	email: t.String({ format: "email" }),
-	userType: t.Union([
+	type: t.Union([
 		t.Literal("student"),
 		t.Literal("alumni"),
 		t.Literal("faculty"),
 	]),
-	major: t.Optional(t.Nullable(t.String())),
-	company: t.Optional(t.Nullable(t.String())),
-	title: t.Optional(t.Nullable(t.String())),
+	program: t.Optional(t.Nullable(t.String())),
+	bio: t.Optional(t.Nullable(t.String())),
 	image: t.Optional(t.Nullable(t.String())),
 	createdAt: t.Date(),
 });

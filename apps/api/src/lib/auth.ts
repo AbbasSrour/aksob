@@ -6,11 +6,14 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { admin, phoneNumber } from "better-auth/plugins";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { env } from "@/config/env";
 import { db, schema } from "@/db";
 import { sendEmail } from "@/lib/email";
 import { AUTH_ERRORS } from "@/modules/auth/auth.errors";
+import { CONNECTION_TYPE_ELIGIBILITY } from "@/modules/connections/constant/connection-eligibility.constant";
+import { CONNECTION_TYPES } from "@/modules/connections/constant/connection-types.constant";
+import type { UserType } from "@/modules/users/constant/user-types";
 import { logger } from "@/utils/logger";
 
 const isSecureAuth = env.BETTER_AUTH_URL.startsWith("https://");
@@ -123,20 +126,12 @@ export const auth = betterAuth({
 			enabled: true,
 		},
 		additionalFields: {
-			userType: {
+			type: {
 				type: "string",
 				required: false,
 				defaultValue: "student",
 			},
-			major: {
-				type: "string",
-				required: false,
-			},
-			company: {
-				type: "string",
-				required: false,
-			},
-			title: {
+		bio: {
 				type: "string",
 				required: false,
 			},
@@ -182,13 +177,150 @@ export const auth = betterAuth({
 				return;
 			}
 
-			const body = ctx.body as { userType?: string; company?: string };
+			const body = ctx.body as { type?: string; company?: string };
 
-			if (body.userType === "alumni" && !body.company?.trim()) {
+			if (body.type === "alumni" && !body.company?.trim()) {
 				throw new APIError(
 					AUTH_ERRORS.ALUMNI_COMPANY_REQUIRED.httpStatus,
 					AUTH_ERRORS.ALUMNI_COMPANY_REQUIRED,
 				);
+			}
+		}),
+		after: createAuthMiddleware(async (ctx) => {
+			if (ctx.path !== "/update-user") {
+				return;
+			}
+
+			const body = ctx.body as {
+				isVisibleInGalaxy?: boolean;
+				emailVisible?: boolean;
+				phoneNumberVisible?: boolean;
+				connectionTypes?: string[];
+			};
+
+			const userId = ctx.context.user?.id;
+			if (!userId) return;
+
+			const userType = (ctx.context.user?.type ?? "student") as UserType;
+
+			// ── Visibility gate ──────────────────────────
+			const exposureFlags = [
+				body.emailVisible,
+				body.phoneNumberVisible,
+			].some((f) => f === true);
+			const hasConnectionTypes =
+				body.connectionTypes !== undefined &&
+				body.connectionTypes.length > 0;
+
+			if (
+				body.isVisibleInGalaxy === false &&
+				(exposureFlags || hasConnectionTypes)
+			) {
+				throw new APIError("BAD_REQUEST", {
+					code: "VISIBILITY_GATE",
+					message:
+						"Cannot set exposure flags or connection preferences while isVisibleInGalaxy is off",
+				});
+			}
+
+			// ── Update settings ─────────────────────────
+			if (
+				body.isVisibleInGalaxy !== undefined ||
+				body.emailVisible !== undefined ||
+				body.phoneNumberVisible !== undefined
+			) {
+				const sets: Record<string, unknown> = {};
+
+				if (body.isVisibleInGalaxy !== undefined) {
+					sets.isVisibleInGalaxy =
+						body.isVisibleInGalaxy;
+				}
+				if (body.emailVisible !== undefined) {
+					sets.emailVisible = body.emailVisible;
+				}
+				if (body.phoneNumberVisible !== undefined) {
+					sets.phoneNumberVisible =
+						body.phoneNumberVisible;
+				}
+
+				await db
+					.insert(schema.userSettings)
+					.values({ userId, ...sets })
+					.onConflictDoUpdate({
+						target: schema.userSettings.userId,
+						set: sets,
+					});
+			}
+
+			// ── Visibility off → clear exposure + prefs ─
+			if (body.isVisibleInGalaxy === false) {
+				await db
+					.update(schema.userSettings)
+					.set({
+						emailVisible: false,
+						phoneNumberVisible: false,
+					})
+					.where(
+						eq(schema.userSettings.userId, userId),
+					);
+
+				await db
+					.delete(schema.userConnectionPreference)
+					.where(
+						eq(
+							schema.userConnectionPreference.userId,
+							userId,
+						),
+					);
+			}
+
+			// ── Update connection preferences ───────────
+			if (body.connectionTypes !== undefined) {
+				const eligibleTypes =
+					CONNECTION_TYPE_ELIGIBILITY[userType];
+
+				for (const ct of body.connectionTypes) {
+					if (
+						!CONNECTION_TYPES.includes(
+							ct as typeof CONNECTION_TYPES[number],
+						)
+					) {
+						throw new APIError("BAD_REQUEST", {
+							code: "INVALID_CONNECTION_TYPE",
+							message: `Invalid connection type: ${ct}`,
+						});
+					}
+					if (
+						!eligibleTypes.includes(
+							ct as typeof CONNECTION_TYPES[number],
+						)
+					) {
+						throw new APIError("BAD_REQUEST", {
+							code: "CONNECTION_TYPE_NOT_ELIGIBLE",
+							message: `Not eligible for connection type: ${ct}`,
+						});
+					}
+				}
+
+				await db
+					.delete(schema.userConnectionPreference)
+					.where(
+						eq(
+							schema.userConnectionPreference.userId,
+							userId,
+						),
+					);
+
+				if (body.connectionTypes.length > 0) {
+					await db
+						.insert(schema.userConnectionPreference)
+						.values(
+							body.connectionTypes.map((ct) => ({
+								userId,
+								type: ct as typeof CONNECTION_TYPES[number],
+							})),
+						);
+				}
 			}
 		}),
 	},

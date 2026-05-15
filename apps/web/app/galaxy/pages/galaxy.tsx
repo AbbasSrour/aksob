@@ -8,7 +8,7 @@ import "./galaxy.css";
 import {
 	type Alumnus,
 	buildGalaxyData,
-	type MajorCluster,
+	type ProgramCluster,
 } from "../utils/galaxy-data";
 
 interface ClusterUserData {
@@ -34,7 +34,7 @@ export function meta() {
 export default function Galaxy() {
 	const navigate = useNavigate();
 	const mountRef = useRef<HTMLDivElement>(null);
-	const [galaxyData, setGalaxyData] = useState<MajorCluster[]>([]);
+	const [galaxyData, setGalaxyData] = useState<ProgramCluster[]>([]);
 	const [isLoadingUsers, setIsLoadingUsers] = useState(true);
 	const [isStartingConversation, setIsStartingConversation] = useState(false);
 	const [viewMode, setViewMode] = useState<"overview" | "cluster">("overview");
@@ -265,7 +265,7 @@ export default function Galaxy() {
 		clusterCentersRef.current = [];
 		const clusterHitMeshes: THREE.Mesh[] = [];
 
-		galaxyData.forEach((cluster: MajorCluster, clusterIndex: number) => {
+		galaxyData.forEach((cluster: ProgramCluster, clusterIndex: number) => {
 			const particleCount = cluster.alumni.length;
 			const geometry = new THREE.BufferGeometry();
 			const positions = new Float32Array(particleCount * 3);
@@ -764,7 +764,7 @@ export default function Galaxy() {
 				</div>
 			)}
 			{/* Labels */}
-			{galaxyData.map((cluster: MajorCluster, i: number) => (
+			{galaxyData.map((cluster: ProgramCluster, i: number) => (
 				<div
 					key={i}
 					id={`cluster-label-${i}`}
@@ -807,7 +807,7 @@ export default function Galaxy() {
 						<div className="popup-info">
 							<h3>{hoveredStar.data.name}</h3>
 							<p>
-								{hoveredStar.data.major} '
+								{hoveredStar.data.program} '
 								{hoveredStar.data.year.toString().slice(-2)}
 							</p>
 						</div>
@@ -845,10 +845,10 @@ export default function Galaxy() {
 							</div>
 							<div>
 								<h2>{selectedStar.data.name}</h2>
-								<p className="sidebar-subtitle">
-									{selectedStar.data.major} '
-									{selectedStar.data.year.toString().slice(-2)}
-								</p>
+							<p className="sidebar-subtitle">
+								{selectedStar.data.program} '
+								{selectedStar.data.year.toString().slice(-2)}
+							</p>
 							</div>
 						</div>
 

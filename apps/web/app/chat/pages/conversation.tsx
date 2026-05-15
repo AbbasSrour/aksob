@@ -158,7 +158,7 @@ export default function ChatConversationPage() {
 				avatarSrc={activeConversation?.otherUser.image ?? undefined}
 				email={activeConversation?.otherUser.email}
 				isOnline={false}
-				statusText={activeConversation?.otherUser.major ?? ""}
+				statusText={activeConversation?.otherUser.program ?? ""}
 				showBack={true}
 				onBack={() => navigate("/chat")}
 			/>
