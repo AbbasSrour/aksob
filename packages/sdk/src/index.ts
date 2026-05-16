@@ -17,6 +17,18 @@ export type AksobProgram = (typeof AKSOB_PROGRAMS)[number];
 
 export type { App } from "@aksob/api/app";
 
+export interface Connection {
+	id: string;
+	type: string;
+	requesterId: string;
+	matchedUserId: string;
+	status: "pending" | "active" | "declined" | "cancelled" | "completed";
+	message: string | null;
+	matchExplanation: string | null;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
 export function createApiClient(
 	baseUrl: string,
 	options?: Treaty.Config,

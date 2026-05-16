@@ -7,6 +7,12 @@ export const matchConnectionBody = t.Object({
 	message: t.Optional(t.String()),
 });
 
+export const createConnectionRequestBody = t.Object({
+	type: t.String({ enum: CONNECTION_TYPES as unknown as string[] }),
+	matchedUserId: t.String(),
+	message: t.Optional(t.String()),
+});
+
 export const listConnectionsQuery = t.Object({
 	type: t.Optional(
 		t.String({ enum: CONNECTION_TYPES as unknown as string[] }),

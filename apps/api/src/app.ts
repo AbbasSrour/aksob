@@ -23,6 +23,20 @@ import { dbPlugin } from "@/plugins/db";
 import { uploadthingPlugin } from "@/plugins/uploadthing";
 import { logger } from "@/utils/logger";
 
+const apiRoutes = new Elysia({ prefix: "/api" })
+	.use(statsModule)
+	.use(healthModule)
+	.use(programsModule)
+	.use(newsCategoriesModule)
+	.use(newsModule)
+	.use(eventsModule)
+	.use(opportunitiesModule)
+	.use(researchModule)
+	.use(storiesModule)
+	.use(chatModule)
+	.use(connectionsModule)
+	.use(usersModule);
+
 export const app = new Elysia()
 	.use(requestLogger)
 	.use(
@@ -58,18 +72,7 @@ export const app = new Elysia()
 	.use(dbPlugin)
 	.use(authPlugin)
 	.use(uploadthingPlugin)
-	.use(statsModule)
-	.use(healthModule)
-	.use(programsModule)
-	.use(newsCategoriesModule)
-	.use(newsModule)
-	.use(eventsModule)
-	.use(opportunitiesModule)
-	.use(researchModule)
-	.use(storiesModule)
-	.use(chatModule)
-	.use(connectionsModule)
-	.use(usersModule)
+	.use(apiRoutes)
 	.onError(({ code, error, set }) => {
 		if (code === "NOT_FOUND") {
 			set.status = 404;

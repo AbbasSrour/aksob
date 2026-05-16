@@ -99,17 +99,6 @@ const RESEARCH_TYPE_LABELS: Record<string, string> = {
 	other: "Other",
 };
 
-const MAJOR_LABELS: Record<string, string> = {
-	"BS in Business": "BS Business",
-	"BS in Economics": "BS Economics",
-	"BS Hospitality Management": "BS Hospitality",
-	"MBA & Executive MBA": "MBA",
-	"MS Data Analytics": "MS Data Analytics",
-	"MS Human Resources": "MS HR",
-	"MA Applied Economics": "MA Applied Econ",
-	"LLM & Master of Laws": "LLM",
-};
-
 function AdminDashboardPage() {
 	const stats = Route.useLoaderData();
 
@@ -121,11 +110,11 @@ function AdminDashboardPage() {
 		}),
 	);
 
-	const usersByMajorData = Object.entries(stats.users.byMajor)
-		.map(([major, count]) => ({
-			name: MAJOR_LABELS[major] ?? major,
+	const usersByProgramData = Object.entries(stats.users.byProgram)
+		.map(([program, count]) => ({
+			name: program,
 			value: count,
-			major,
+			program,
 		}))
 		.sort((a, b) => b.value - a.value);
 
@@ -165,11 +154,11 @@ function AdminDashboardPage() {
 		rejected: { label: "Rejected", color: "#ef4444" },
 	};
 
-	const majorChartConfig: ChartConfig = Object.fromEntries(
-		Object.keys(stats.users.byMajor).map((major, i) => [
-			major,
+	const programChartConfig: ChartConfig = Object.fromEntries(
+		Object.keys(stats.users.byProgram).map((program, i) => [
+			program,
 			{
-				label: MAJOR_LABELS[major] ?? major,
+				label: program,
 				color: PIE_COLORS[i % PIE_COLORS.length],
 			},
 		]),
@@ -326,27 +315,27 @@ function AdminDashboardPage() {
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
 							<GraduationCap className="h-4 w-4 text-emerald-600" />
-							Members by Major
+							Members by Program
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<ChartContainer
-							config={majorChartConfig}
+							config={programChartConfig}
 							className="mx-auto aspect-square max-h-[280px]"
 						>
 							<PieChart>
 								<Tooltip content={<ChartTooltipContent hideLabel />} />
 								<Pie
-									data={usersByMajorData}
+									data={usersByProgramData}
 									dataKey="value"
 									nameKey="name"
 									innerRadius={50}
 									outerRadius={90}
 									paddingAngle={1}
 								>
-									{usersByMajorData.map((entry, index) => (
+									{usersByProgramData.map((entry, index) => (
 										<Cell
-											key={entry.major}
+											key={entry.program}
 											fill={PIE_COLORS[index % PIE_COLORS.length]}
 										/>
 									))}
@@ -354,16 +343,16 @@ function AdminDashboardPage() {
 							</PieChart>
 						</ChartContainer>
 						<div className="mt-4 flex flex-wrap justify-center gap-2">
-							{usersByMajorData.map((item) => (
+							{usersByProgramData.map((item) => (
 								<div
-									key={item.major}
+									key={item.program}
 									className="flex items-center gap-1.5 text-xs"
 								>
 									<div
 										className="h-2 w-2 rounded-full"
 										style={{
 											backgroundColor:
-												majorChartConfig[item.major]?.color ?? "#6b7280",
+												programChartConfig[item.program]?.color ?? "#6b7280",
 										}}
 									/>
 									<span className="text-muted-foreground">{item.name}</span>

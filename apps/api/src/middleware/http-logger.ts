@@ -35,8 +35,9 @@ export const requestLogger = new Elysia({ name: "logger" })
 						? "\x1b[36m"
 						: "\x1b[32m";
 
+		const method = request.method.padEnd(7);
 		const methodColor = methodColors[request.method] ?? "\x1b[37m";
-		const msg = `${methodColor}${request.method}\x1b[39m ${statusColor}${status}\x1b[39m ${statusColor}${duration}\x1b[39mms ${request.url}`;
+		const msg = `${methodColor}${method}\x1b[39m ${statusColor}${status}\x1b[39m ${statusColor}${duration}\x1b[39mms ${request.url}`;
 
 		if (status >= 400) {
 			logger.error(msg);

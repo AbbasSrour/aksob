@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ChooseUs } from "~/app/home/components/choose-us";
 import { Contact } from "~/app/home/components/contact";
 import { EventSpotlight } from "~/app/home/components/event-spotlight";
-import { Events } from "~/app/home/components/events";
+import { SuccessStories } from "~/app/home/components/success-stories";
 import { Glance } from "~/app/home/components/glance";
 import { Hero } from "~/app/home/components/hero";
 import { News } from "~/app/home/components/news";
@@ -126,7 +126,7 @@ export default function HomePage() {
 			<Glance />
 			<Programs />
 			<ChooseUs />
-			<Events />
+			<SuccessStories />
 			<div className="py-16 md:py-24" />
 			<EventSpotlight />
 			<div className="py-16 md:py-24" />

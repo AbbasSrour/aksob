@@ -30,7 +30,7 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { useForm, useFormContext } from "react-hook-form";
-import { majorQueries } from "@/app/majors/hooks/api/majors.queries";
+import { programQueries } from "@/app/programs/hooks/api/programs.queries";
 import { memberFormDefaultValues } from "@/app/members/components/form/member-form-default-values";
 import {
 	buildMemberFormSchema,
@@ -59,8 +59,8 @@ export const MemberForm = ({
 	const navigate = useNavigate();
 	const isCreate = location.pathname.endsWith("/create");
 
-	const { data: majorsData } = useSuspenseQuery(majorQueries.list());
-	const majors = majorsData?.data || [];
+	const { data: programsData } = useSuspenseQuery(programQueries.list());
+	const programs = programsData?.data || [];
 
 	const form = useForm<UserFormSchema>({
 		mode: "onSubmit",
@@ -153,7 +153,7 @@ export const MemberForm = ({
 							</FormRow>
 
 							<FormRow cols={4}>
-								<MajorField majors={majors.map((m) => m.name)} />
+								<ProgramField programs={programs.map((p) => p.name)} />
 							</FormRow>
 
 							<FormRow cols={4}>
@@ -321,25 +321,25 @@ const UserTypeField = () => {
 	);
 };
 
-const MajorField = ({ majors }: { majors: string[] }) => {
+const ProgramField = ({ programs }: { programs: string[] }) => {
 	const { control } = useFormContext();
 
 	return (
 		<FormField
-			name={"major"}
+			name={"program"}
 			control={control}
 			render={({ field }) => (
 				<FormItem>
-					<FormLabel>{m.members_form_major_label()}</FormLabel>
+					<FormLabel>{m.members_form_program_label()}</FormLabel>
 					<FormControl>
 						<Select value={field.value} onValueChange={field.onChange}>
 							<SelectTrigger className="w-full">
-								<SelectValue placeholder={m.members_form_major_placeholder()} />
+								<SelectValue placeholder={m.members_form_program_placeholder()} />
 							</SelectTrigger>
 							<SelectContent>
-								{majors.map((major) => (
-									<SelectItem key={major} value={major}>
-										{major}
+								{programs.map((program) => (
+									<SelectItem key={program} value={program}>
+										{program}
 									</SelectItem>
 								))}
 							</SelectContent>

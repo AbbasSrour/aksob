@@ -1,1 +1,0 @@
-ALTER TABLE `news` ADD `thumbnail_image` text;

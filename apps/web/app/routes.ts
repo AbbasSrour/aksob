@@ -26,6 +26,7 @@ export default [
 		route("stories", "stories/pages/stories.tsx"),
 		route("series", "series/pages/series.tsx"),
 		route("profile", "profile/pages/index.tsx"),
+		route("onboarding", "onboarding/pages/index.tsx"),
 
 		layout("chat/pages/layout.tsx", [
 			route("chat", "chat/pages/index.tsx"),

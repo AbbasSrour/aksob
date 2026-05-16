@@ -6,7 +6,7 @@ export interface DashboardStats {
 	users: {
 		total: number;
 		byType: Record<string, number>;
-		byMajor: Record<string, number>;
+		byProgram: Record<string, number>;
 	};
 	opportunities: {
 		total: number;

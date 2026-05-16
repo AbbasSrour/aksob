@@ -3,7 +3,14 @@ import { useNavigate } from "react-router";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { createOrGetDm } from "~/app/chat/lib/chat";
+import {
+	findConnectionMatch,
+	sendConnectionRequest,
+	type Connection,
+	type ConnectionType,
+} from "~/app/lib/connections";
 import { listUsers } from "~/app/lib/users";
+import { useSession } from "~/app/lib/auth";
 import "./galaxy.css";
 import {
 	type Alumnus,
@@ -33,6 +40,7 @@ export function meta() {
 
 export default function Galaxy() {
 	const navigate = useNavigate();
+	const { data: session } = useSession();
 	const mountRef = useRef<HTMLDivElement>(null);
 	const [galaxyData, setGalaxyData] = useState<ProgramCluster[]>([]);
 	const [isLoadingUsers, setIsLoadingUsers] = useState(true);
@@ -48,6 +56,30 @@ export default function Galaxy() {
 		y: number;
 		data: Alumnus;
 	} | null>(null); // Re-added for tooltip
+	const [introPhase, setIntroPhase] = useState<
+		"prefix" | "cycle" | "easter" | "fading" | "done"
+	>("prefix");
+	const [cycleText, setCycleText] = useState("");
+	const [visibleEasterLines, setVisibleEasterLines] = useState(0);
+
+	// Connection finder state
+	const [showConnectionSheet, setShowConnectionSheet] = useState(false);
+	const [connectionStep, setConnectionStep] = useState<"agent" | "type" | "form">("type");
+	const [connectionType, setConnectionType] = useState<ConnectionType | null>(null);
+	const [connectionDescription, setConnectionDescription] = useState("");
+	const [matches, setMatches] = useState<Alumnus[]>([]);
+	const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
+	const [showMatchCard, setShowMatchCard] = useState(false);
+	const [createdConnection, setCreatedConnection] = useState<Connection | null>(null);
+	const [isSendingRequest, setIsSendingRequest] = useState(false);
+	const [connectionError, setConnectionError] = useState<string | null>(null);
+
+	// Agent UI state
+	const [agentTools, setAgentTools] = useState<
+		Array<{ name: string; status: "thinking" | "done" | "error" }>
+	>([]);
+	const [agentThinking, setAgentThinking] = useState(false);
+
 	// Track sidebar visibility for animation in loop
 	const sidebarOpenRef = useRef(false);
 
@@ -56,8 +88,16 @@ export default function Galaxy() {
 	const controlsRef = useRef<OrbitControls | null>(null);
 	const targetCameraPos = useRef(new THREE.Vector3(0, 100, 400));
 	const targetControlsTarget = useRef(new THREE.Vector3(0, 0, 0));
+	const introCameraZ = useRef(400);
+	const introProgressRef = useRef(0);
+	const lastIntroProgressRef = useRef(-1);
+	const introPhaseRef = useRef(introPhase);
+	const introSkippedRef = useRef(false);
 	const isTransitioning = useRef(false);
 	const viewModeRef = useRef<"overview" | "cluster">("overview");
+	const activeClusterIndexRef = useRef<number | null>(null);
+	const navigateToMatchRef = useRef<((match: Alumnus) => void) | null>(null);
+	const selectedMatchMarkerRef = useRef<THREE.Sprite | null>(null);
 	const currentViewOffset = useRef(0); // For smooth sidebar camera shift
 
 	// Store cluster meshes to toggle visibility
@@ -84,8 +124,12 @@ export default function Galaxy() {
 	const handleBackClick = () => {
 		setViewMode("overview"); // Update UI
 		viewModeRef.current = "overview"; // Update Logic
+		activeClusterIndexRef.current = null;
+		if (selectedMatchMarkerRef.current) {
+			selectedMatchMarkerRef.current.visible = false;
+		}
 		// Reset Camera Target
-		targetCameraPos.current.set(0, 100, 400);
+		targetCameraPos.current.set(0, 100, introCameraZ.current);
 		targetControlsTarget.current.set(0, 0, 0);
 		isTransitioning.current = true;
 
@@ -129,6 +173,141 @@ export default function Galaxy() {
 		return star.company.trim() || "Not specified";
 	};
 
+	// Connection types from API
+	const CONNECTION_TYPE_OPTIONS: Array<{
+		value: ConnectionType;
+		label: string;
+		icon: string;
+	}> = [
+		{ value: "mentorship", label: "Mentorship", icon: "🎓" },
+		{ value: "career_coaching", label: "Career Coaching", icon: "💼" },
+		{ value: "study_partner", label: "Study Partner", icon: "📚" },
+		{ value: "buddy", label: "Buddy", icon: "🤝" },
+		{ value: "research", label: "Research", icon: "🔬" },
+		{ value: "project", label: "Project", icon: "🚀" },
+	];
+
+	// Fly camera to a match position
+	const flyToMatch = (match: Alumnus) => {
+		navigateToMatchRef.current?.(match);
+	};
+
+	const getConnectionErrorMessage = (error: unknown) => {
+		if (error instanceof Error) {
+			try {
+				const parsed = JSON.parse(error.message) as { error?: unknown };
+				if (typeof parsed.error === "string") {
+					return parsed.error;
+				}
+			} catch {
+				return error.message;
+			}
+			return error.message;
+		}
+
+		return "Could not find a connection match right now.";
+	};
+
+	const findAlumnusById = (userId: string) => {
+		for (const cluster of galaxyData) {
+			const alumnus = cluster.alumni.find((item) => item.id === userId);
+			if (alumnus) {
+				return alumnus;
+			}
+		}
+
+		return null;
+	};
+
+	// Handle connection search through the API.
+	const handleSearch = async () => {
+		if (!connectionType) return;
+		setConnectionStep("agent");
+		setAgentThinking(true);
+		setConnectionError(null);
+		setCreatedConnection(null);
+		setAgentTools([{ name: "Finding connection options", status: "thinking" }]);
+
+		try {
+			const response = await findConnectionMatch({
+				type: connectionType,
+				message: connectionDescription.trim() || undefined,
+			});
+			const candidateMatches = response.data.candidates
+				.map((candidate) => findAlumnusById(candidate.id))
+				.filter((match): match is Alumnus => match !== null);
+
+			setAgentTools([{ name: "Finding connection options", status: "done" }]);
+
+			if (candidateMatches.length === 0) {
+				setConnectionError(
+					"Matches were found, but those users are not visible in the current galaxy.",
+				);
+				return;
+			}
+
+			setMatches(candidateMatches);
+			setCurrentMatchIndex(0);
+			setShowConnectionSheet(false);
+			setShowMatchCard(true);
+			setTimeout(() => flyToMatch(candidateMatches[0]), 100);
+		} catch (error) {
+			if (
+				error instanceof Error &&
+				"status" in error &&
+				(error as Error & { status: number }).status === 401
+			) {
+				const redirectTo = encodeURIComponent("/galaxy");
+				navigate(`/auth/login?redirectTo=${redirectTo}`);
+				return;
+			}
+			setAgentTools((prev) =>
+				prev.map((tool) => ({ ...tool, status: "error" })),
+			);
+			setConnectionError(getConnectionErrorMessage(error));
+		} finally {
+			setAgentThinking(false);
+		}
+	};
+
+	const handleSendRequest = async () => {
+		if (!connectionType || !matches[currentMatchIndex]) return;
+
+		setIsSendingRequest(true);
+		setConnectionError(null);
+
+		try {
+			const response = await sendConnectionRequest({
+				type: connectionType,
+				matchedUserId: matches[currentMatchIndex].id,
+				message: connectionDescription.trim() || undefined,
+			});
+
+			setCreatedConnection(response.data);
+		} catch (error) {
+			if (
+				error instanceof Error &&
+				"status" in error &&
+				(error as Error & { status: number }).status === 401
+			) {
+				const redirectTo = encodeURIComponent("/galaxy");
+				navigate(`/auth/login?redirectTo=${redirectTo}`);
+				return;
+			}
+
+			setConnectionError(getConnectionErrorMessage(error));
+		} finally {
+			setIsSendingRequest(false);
+		}
+	};
+
+	// Navigate between matches
+	const goToMatch = (index: number) => {
+		if (index < 0 || index >= matches.length) return;
+		setCurrentMatchIndex(index);
+		flyToMatch(matches[index]);
+	};
+
 	useEffect(() => {
 		let isMounted = true;
 
@@ -158,9 +337,99 @@ export default function Galaxy() {
 		};
 	}, []);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: This effect should only run once on mount to setup Three.js scene
+	// Keep ref in sync with introPhase state for 3D click handler
+	useEffect(() => {
+		introPhaseRef.current = introPhase;
+	}, [introPhase]);
+
+	// Intro animation — rotating typewriter: cycle words, end on LOVE
+	useEffect(() => {
+		const WORDS = [
+			"STUDY BUDDY",
+			"RESEARCH PARTNER",
+			"MENTOR",
+			"CAREER COACH",
+			"PROJECT PARTNER",
+			"BUDDY",
+			"LOVE 💕",
+		] as const;
+		const EASTER_LINES = [
+			"ohh embarrassing 😳",
+			"maybe there is something for that already 🤭",
+		] as const;
+		const sleep = (ms: number) =>
+			new Promise((resolve) => setTimeout(resolve, ms));
+
+		let cancelled = false;
+		const shouldStopIntro = () => cancelled || introSkippedRef.current;
+
+		const run = async () => {
+			await sleep(500);
+
+			// Prefix fades in
+			if (shouldStopIntro()) return;
+			setIntroPhase("cycle");
+			await sleep(500);
+
+			// Cycle through words: type → pause → backspace → next
+			for (let w = 0; w < WORDS.length; w++) {
+				if (shouldStopIntro()) return;
+				const word = WORDS[w];
+
+				// Type out
+				for (let i = 1; i <= word.length; i++) {
+					if (shouldStopIntro()) return;
+					setCycleText(word.slice(0, i));
+					await sleep(75);
+				}
+
+				// Pause — much longer on LOVE (the easter egg)
+				await sleep(w === WORDS.length - 1 ? 1800 : 700);
+
+				// Backspace (except after LOVE — the final word)
+				if (w < WORDS.length - 1) {
+					for (let i = word.length - 1; i >= 0; i--) {
+						if (shouldStopIntro()) return;
+						setCycleText(word.slice(0, i));
+						await sleep(40);
+					}
+					await sleep(250);
+				}
+			}
+
+			await sleep(500);
+
+			// Easter egg footnotes appear below LOVE
+			if (shouldStopIntro()) return;
+			setIntroPhase("easter");
+			for (let i = 0; i < EASTER_LINES.length; i++) {
+				if (shouldStopIntro()) return;
+				setVisibleEasterLines(i + 1);
+				await sleep(550);
+			}
+
+			await sleep(1200);
+
+			// Fade out overlay + camera pull-back
+			if (shouldStopIntro()) return;
+			setIntroPhase("fading");
+			introCameraZ.current = 520;
+			await sleep(1000);
+			setIntroPhase("done");
+		};
+
+		run();
+
+		return () => {
+			cancelled = true;
+		};
+	}, []);
+
 	useEffect(() => {
 		if (!mountRef.current || galaxyData.length === 0) return;
+
+		introProgressRef.current = 0;
+		lastIntroProgressRef.current = -1;
 
 		// --- Scene Setup ---
 		const scene = new THREE.Scene();
@@ -189,9 +458,91 @@ export default function Galaxy() {
 		controls.dampingFactor = 0.05;
 		controls.autoRotate = true;
 		controls.autoRotateSpeed = 0.3; // Slower, majestic rotation
+		controls.enablePan = false;
 		controls.maxDistance = 1200;
 		controls.minDistance = 20;
 		controlsRef.current = controls;
+
+		const overviewTarget = new THREE.Vector3(0, 0, 0);
+
+		const createStarTexture = () => {
+			const canvas = document.createElement("canvas");
+			canvas.width = 64; // Higher res
+			canvas.height = 64;
+			const context = canvas.getContext("2d");
+			if (!context) return new THREE.Texture();
+
+			// Soft glow gradient
+			const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
+			gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
+			gradient.addColorStop(0.15, "rgba(255, 255, 255, 0.9)");
+			gradient.addColorStop(0.4, "rgba(255, 255, 255, 0.2)");
+			gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+			context.fillStyle = gradient;
+			context.fillRect(0, 0, 64, 64);
+
+			const texture = new THREE.CanvasTexture(canvas);
+			return texture;
+		};
+
+		const texture = createStarTexture();
+
+		const createSelectedMarkerTexture = () => {
+			const canvas = document.createElement("canvas");
+			canvas.width = 128;
+			canvas.height = 128;
+			const context = canvas.getContext("2d");
+			if (!context) return new THREE.Texture();
+
+			context.clearRect(0, 0, 128, 128);
+			context.strokeStyle = "rgba(212, 175, 55, 0.95)";
+			context.lineWidth = 5;
+			context.beginPath();
+			context.arc(64, 64, 34, 0, Math.PI * 2);
+			context.stroke();
+
+			context.strokeStyle = "rgba(255, 255, 255, 0.55)";
+			context.lineWidth = 2;
+			context.beginPath();
+			context.arc(64, 64, 46, 0, Math.PI * 2);
+			context.stroke();
+
+			const markerTexture = new THREE.CanvasTexture(canvas);
+			return markerTexture;
+		};
+
+		const selectedMarkerTexture = createSelectedMarkerTexture();
+		const selectedMarkerMaterial = new THREE.SpriteMaterial({
+			map: selectedMarkerTexture,
+			transparent: true,
+			opacity: 0,
+			depthWrite: false,
+			depthTest: false,
+		});
+		const selectedMarker = new THREE.Sprite(selectedMarkerMaterial);
+		selectedMarker.visible = false;
+		selectedMarker.scale.set(34, 34, 1);
+		selectedMarker.renderOrder = 10;
+		scene.add(selectedMarker);
+		selectedMatchMarkerRef.current = selectedMarker;
+
+		const FORMATION_DURATION = 10000; // 10 seconds
+		let formationStart: number | null = null;
+		const formationInterval = setInterval(() => {
+			if (introPhaseRef.current !== "done") return;
+
+			formationStart ??= Date.now();
+
+			const elapsed = Date.now() - formationStart;
+			const progress = Math.min(elapsed / FORMATION_DURATION, 1);
+			// Ease out cubic
+			introProgressRef.current = 1 - (1 - progress) ** 3;
+
+			if (progress >= 1) {
+				clearInterval(formationInterval);
+			}
+		}, 16);
 
 		// --- Background Stars (Deep Field) ---
 		// Thousands of tiny static stars to create depth
@@ -226,40 +577,19 @@ export default function Galaxy() {
 		bgGeometry.setAttribute("size", new THREE.BufferAttribute(bgSizes, 1));
 
 		const bgMaterial = new THREE.PointsMaterial({
-			size: 2.5,
+			size: 3.5,
+			map: texture,
 			vertexColors: true,
 			transparent: true,
-			opacity: 1.0,
-			sizeAttenuation: true,
+			opacity: 0.8,
+			sizeAttenuation: false,
 			blending: THREE.AdditiveBlending,
+			depthWrite: false,
 		});
 		const bgStars = new THREE.Points(bgGeometry, bgMaterial);
 		scene.add(bgStars);
 
 		// --- Galaxy Generation (Per Cluster) ---
-		const createStarTexture = () => {
-			const canvas = document.createElement("canvas");
-			canvas.width = 64; // Higher res
-			canvas.height = 64;
-			const context = canvas.getContext("2d");
-			if (!context) return new THREE.Texture();
-
-			// Soft glow gradient
-			const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
-			gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-			gradient.addColorStop(0.15, "rgba(255, 255, 255, 0.9)");
-			gradient.addColorStop(0.4, "rgba(255, 255, 255, 0.2)");
-			gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
-
-			context.fillStyle = gradient;
-			context.fillRect(0, 0, 64, 64);
-
-			const texture = new THREE.CanvasTexture(canvas);
-			return texture;
-		};
-
-		const texture = createStarTexture();
-
 		const alumniDataGrid: Alumnus[][] = [];
 		clusterMeshesRef.current = [];
 		clusterCentersRef.current = [];
@@ -356,7 +686,7 @@ export default function Galaxy() {
 			const lineMaterial = new THREE.LineBasicMaterial({
 				color: cluster.color,
 				transparent: true,
-				opacity: 0.12, // Subtle lines
+				opacity: 0, // Fade links in as the intro formation completes
 				blending: THREE.AdditiveBlending,
 				depthWrite: false,
 			});
@@ -364,6 +694,19 @@ export default function Galaxy() {
 			scene.add(linesMesh);
 			// Bind lines visibility to points
 			// We can attach it to the points object in userData or manage parallel array
+
+			// Pre-calculate Intro Start Positions (stars form from edges)
+			const introStartPositions = new Float32Array(particleCount * 3);
+			for (let i = 0; i < particleCount; i++) {
+				// Distribute on a very large sphere, biased toward equator for edge effect
+				const introRadius = 1400 + Math.random() * 1000;
+				const theta = Math.random() * Math.PI * 2;
+				// Bias toward equator so particles come from sides, not poles
+				const phi = Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.6;
+				introStartPositions[i * 3] = introRadius * Math.sin(phi) * Math.cos(theta);
+				introStartPositions[i * 3 + 1] = introRadius * Math.sin(phi) * Math.sin(theta);
+				introStartPositions[i * 3 + 2] = introRadius * Math.cos(phi);
+			}
 
 			// Pre-calculate Grid Positions
 			const gridPositions = new Float32Array(particleCount * 3);
@@ -401,11 +744,15 @@ export default function Galaxy() {
 
 			geometry.setAttribute(
 				"position",
-				new THREE.BufferAttribute(positions, 3),
+				new THREE.BufferAttribute(introStartPositions.slice(), 3),
 			);
 			geometry.setAttribute(
 				"initialPosition",
 				new THREE.BufferAttribute(positions.slice(), 3),
+			);
+			geometry.setAttribute(
+				"introStartPosition",
+				new THREE.BufferAttribute(introStartPositions, 3),
 			);
 			geometry.setAttribute(
 				"gridPosition",
@@ -454,7 +801,7 @@ export default function Galaxy() {
 		raycaster.params.Points.threshold = 5;
 		const mouse = new THREE.Vector2();
 
-		const onMouseMove = (event: MouseEvent) => {
+		const updateMousePosition = (event: MouseEvent) => {
 			mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
 			mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 		};
@@ -462,6 +809,7 @@ export default function Galaxy() {
 		const enterCluster = (index: number) => {
 			setViewMode("cluster");
 			viewModeRef.current = "cluster";
+			activeClusterIndexRef.current = index;
 			const center = clusterCentersRef.current[index];
 
 			// Hide other clusters, transition colors for the active one
@@ -486,6 +834,85 @@ export default function Galaxy() {
 
 			isTransitioning.current = true;
 			controls.autoRotate = false;
+		};
+
+		const highlightStarInCluster = (clusterIndex: number, particleIndex: number) => {
+			const mesh = clusterMeshesRef.current[clusterIndex];
+			if (!mesh) return;
+
+			const grid = mesh.geometry.attributes.gridPosition.array as Float32Array;
+			const targetPos = new THREE.Vector3(
+				grid[particleIndex * 3],
+				grid[particleIndex * 3 + 1],
+				grid[particleIndex * 3 + 2],
+			);
+
+			if (selectedMatchMarkerRef.current) {
+				selectedMatchMarkerRef.current.position.copy(targetPos);
+				selectedMatchMarkerRef.current.visible = true;
+				(selectedMatchMarkerRef.current.material as THREE.SpriteMaterial).opacity = 1;
+			}
+		};
+
+		const returnToOverview = () => {
+			setViewMode("overview");
+			viewModeRef.current = "overview";
+			activeClusterIndexRef.current = null;
+			targetCameraPos.current.set(0, 100, introCameraZ.current);
+			targetControlsTarget.current.set(0, 0, 0);
+			isTransitioning.current = true;
+
+			if (controlsRef.current) {
+				controlsRef.current.autoRotate = false;
+			}
+
+			clusterMeshesRef.current.forEach((mesh) => {
+				mesh.visible = true;
+				if (mesh.userData.linesMesh) mesh.userData.linesMesh.visible = true;
+				(mesh.userData as ClusterUserData).targetState = "cloud";
+				(mesh.userData as ClusterUserData).transitionTime = 0;
+				(mesh.material as THREE.PointsMaterial).opacity = 1;
+			});
+
+			if (selectedMatchMarkerRef.current) {
+				selectedMatchMarkerRef.current.visible = false;
+			}
+		};
+
+		navigateToMatchRef.current = (match: Alumnus) => {
+			const clusterIndex = galaxyData.findIndex(
+				(cluster) => cluster.name === match.program,
+			);
+			if (clusterIndex === -1) return;
+
+			const particleIndex = galaxyData[clusterIndex]?.alumni.findIndex(
+				(alumnus) => alumnus.id === match.id,
+			);
+			if (particleIndex === undefined || particleIndex === -1) return;
+
+			const focusSelected = () => {
+				enterCluster(clusterIndex);
+				window.setTimeout(
+					() => highlightStarInCluster(clusterIndex, particleIndex),
+					900,
+				);
+			};
+
+			if (
+				viewModeRef.current === "cluster" &&
+				activeClusterIndexRef.current !== clusterIndex
+			) {
+				returnToOverview();
+				window.setTimeout(focusSelected, 900);
+				return;
+			}
+
+			if (viewModeRef.current === "overview") {
+				focusSelected();
+				return;
+			}
+
+			highlightStarInCluster(clusterIndex, particleIndex);
 		};
 
 		// --- Animation Loop ---
@@ -514,6 +941,46 @@ export default function Galaxy() {
 						controls.autoRotate = true;
 					}
 				}
+			}
+
+			if (viewModeRef.current === "overview" && !isTransitioning.current) {
+				controls.target.lerp(overviewTarget, 0.02);
+			}
+
+			// Intro camera pull-back
+			if (Math.abs(camera.position.z - introCameraZ.current) > 0.5) {
+				camera.position.z += (introCameraZ.current - camera.position.z) * 0.03;
+			}
+
+			if (selectedMatchMarkerRef.current?.visible) {
+				const pulse = 1 + Math.sin(Date.now() * 0.006) * 0.1;
+				selectedMatchMarkerRef.current.scale.set(34 * pulse, 34 * pulse, 1);
+			}
+
+			// --- Galaxy Formation (Intro) ---
+			if (introProgressRef.current !== lastIntroProgressRef.current) {
+				const t = introProgressRef.current;
+				clusterMeshesRef.current.forEach((points) => {
+					const positions = points.geometry.attributes.position.array as Float32Array;
+					const initial = points.geometry.attributes.initialPosition.array as Float32Array;
+					const introStart = points.geometry.attributes.introStartPosition?.array as Float32Array | undefined;
+					if (!introStart) return;
+
+					for (let i = 0; i < positions.length; i++) {
+						positions[i] = introStart[i] + (initial[i] - introStart[i]) * t;
+					}
+					points.geometry.attributes.position.needsUpdate = true;
+
+					const linesMesh = points.userData.linesMesh as THREE.LineSegments | undefined;
+					const linesMaterial = linesMesh?.material as
+						| THREE.LineBasicMaterial
+						| undefined;
+					if (linesMaterial) {
+						const lineFade = Math.max(0, Math.min(1, (t - 0.96) / 0.04));
+						linesMaterial.opacity = lineFade * 0.12;
+					}
+				});
+				lastIntroProgressRef.current = introProgressRef.current;
 			}
 
 			// --- Twinkle Animation ---
@@ -596,6 +1063,14 @@ export default function Galaxy() {
 				const labelEl = document.getElementById(`cluster-label-${i}`);
 
 				if (labelEl) {
+					if (
+						introPhaseRef.current !== "done" ||
+						introProgressRef.current < 0.98
+					) {
+						labelEl.style.display = "none";
+						return;
+					}
+
 					// Determine visibility based on logic
 					let isVisible = true;
 					if (viewModeRef.current === "cluster") {
@@ -622,7 +1097,43 @@ export default function Galaxy() {
 				}
 			});
 
-			// Mouse Interaction
+			// Handle Camera Offset for Sidebar
+			// We want to shift the view so the center of the 3D scene appears to the LEFT
+			// to make room for the sidebar on the RIGHT.
+			// setViewOffset(fullW, fullH, x, y, w, h)
+			// Positive x shifts the finding window to the right, which makes the image shift LEFT.
+			const targetOffset = sidebarOpenRef.current ? window.innerWidth * 0.15 : 0;
+
+			// Smoothly interpolate offset
+			if (Math.abs(currentViewOffset.current - targetOffset) > 0.5) {
+				currentViewOffset.current +=
+					(targetOffset - currentViewOffset.current) * 0.1;
+
+				camera.setViewOffset(
+					window.innerWidth,
+					window.innerHeight,
+					currentViewOffset.current,
+					0,
+					window.innerWidth,
+					window.innerHeight,
+				);
+			}
+
+			renderer.render(scene, camera);
+		};
+
+		animate();
+
+		// Mouse Interaction
+		const onMouseMove = (_event: MouseEvent) => {
+			if (introPhaseRef.current !== "done") {
+				document.body.style.cursor = "default";
+				setHoveredStar(null);
+				return;
+			}
+
+			updateMousePosition(_event);
+
 			raycaster.setFromCamera(mouse, camera);
 
 			if (viewModeRef.current === "overview") {
@@ -666,39 +1177,13 @@ export default function Galaxy() {
 					hoveredClusterIndex = -1;
 				}
 			}
-
-			// Handle Camera Offset for Sidebar
-			// We want to shift the view so the center of the 3D scene appears to the LEFT
-			// to make room for the sidebar on the RIGHT.
-			// setViewOffset(fullW, fullH, x, y, w, h)
-			// Positive x shifts the finding window to the right, which makes the image shift LEFT.
-			const targetOffset = sidebarOpenRef.current
-				? window.innerWidth * 0.15
-				: 0;
-
-			// Smoothly interpolate offset
-			if (Math.abs(currentViewOffset.current - targetOffset) > 0.5) {
-				currentViewOffset.current +=
-					(targetOffset - currentViewOffset.current) * 0.1;
-
-				camera.setViewOffset(
-					window.innerWidth,
-					window.innerHeight,
-					currentViewOffset.current,
-					0,
-					window.innerWidth,
-					window.innerHeight,
-				);
-			}
-
-			renderer.render(scene, camera);
 		};
-
-		animate();
 
 		// Click Handler (Interaction)
 		const onClick = (_event: MouseEvent) => {
+			if (introPhaseRef.current !== "done") return;
 			if (isTransitioning.current) return;
+			updateMousePosition(_event);
 			raycaster.setFromCamera(mouse, camera);
 
 			if (viewModeRef.current === "overview") {
@@ -741,6 +1226,9 @@ export default function Galaxy() {
 		window.addEventListener("resize", handleResize);
 
 		return () => {
+			navigateToMatchRef.current = null;
+			selectedMatchMarkerRef.current = null;
+			clearInterval(formationInterval);
 			window.removeEventListener("resize", handleResize);
 			window.removeEventListener("mousemove", onMouseMove);
 			window.removeEventListener("click", onClick);
@@ -752,12 +1240,294 @@ export default function Galaxy() {
 				mesh.geometry.dispose();
 				(mesh.material as THREE.Material).dispose();
 			});
+			bgGeometry.dispose();
+			bgMaterial.dispose();
+			texture.dispose();
+			selectedMarkerTexture.dispose();
+			selectedMarkerMaterial.dispose();
+			controls.dispose();
 			renderer.dispose();
 		};
 	}, [galaxyData]);
 
 	return (
 		<div className="galaxy-container" ref={mountRef}>
+			{/* Intro Overlay */}
+			{introPhase !== "done" && (
+				<div
+					className={`galaxy-intro-overlay${introPhase === "fading" ? " fading" : ""}`}
+				>
+					<div className="galaxy-typewriter-container">
+						<div
+							className={`galaxy-typewriter-prefix${introPhase !== "prefix" ? " visible" : ""}`}
+						>
+							Looking for a
+						</div>
+						<div className="galaxy-typewriter-word">
+							{cycleText}
+							{introPhase !== "fading" && (
+								<span className="galaxy-typewriter-cursor" />
+							)}
+						</div>
+						<div className="galaxy-easter-lines">
+							{[
+								"ohh embarrassing 😳",
+								"maybe there is something for that already 🤭",
+							].map(
+								(line, i) =>
+									i < visibleEasterLines ? (
+											<div
+												key={`easter-${i}`}
+												className="galaxy-easter-line visible"
+												style={{
+													animationDelay: `${i * 0.12}s`,
+												}}
+											>
+												{line}
+											</div>
+										) : null,
+								)}
+						</div>
+					</div>
+				</div>
+			)}
+
+			{/* Action Button — persists after intro */}
+			{viewMode === "overview" && !showConnectionSheet && !showMatchCard && (
+				<button
+					className={`galaxy-action-btn${introPhase === "done" ? " expanded" : ""}`}
+						onClick={(e) => {
+							e.stopPropagation();
+							if (introPhase !== "done") {
+								introSkippedRef.current = true;
+								setVisibleEasterLines(0);
+								setIntroPhase("fading");
+								introCameraZ.current = 520;
+								setTimeout(() => setIntroPhase("done"), 900);
+					} else {
+							if (!session) {
+								const redirectTo = encodeURIComponent("/galaxy");
+								navigate(`/auth/login?redirectTo=${redirectTo}`);
+								return;
+							}
+							setShowConnectionSheet(true);
+							setConnectionStep("type");
+							setConnectionType(null);
+							setConnectionDescription("");
+						setConnectionError(null);
+						setCreatedConnection(null);
+						setIsSendingRequest(false);
+						setAgentTools([]);
+					}
+					}}
+					type="button"
+				>
+					<span className="galaxy-action-btn-text">
+						{introPhase === "done" ? "Find connections" : "Skip intro"}
+					</span>
+					<span className="galaxy-action-btn-icon">✦</span>
+				</button>
+			)}
+
+			{/* Connection Sheet */}
+			{showConnectionSheet && (
+				<div className="galaxy-sheet-overlay">
+					<button
+						aria-label="Close connection finder"
+						className="galaxy-sheet-backdrop"
+						onClick={() => setShowConnectionSheet(false)}
+						type="button"
+					/>
+					<div
+						className="galaxy-sheet"
+					>
+					{connectionStep === "agent" && (
+						<div className="galaxy-agent">
+							<div className="galaxy-agent-header">
+								<div className="galaxy-agent-dot" />
+								<span className="galaxy-agent-name">AKSOB Agent</span>
+								{agentThinking && <span className="galaxy-agent-thinking">thinking</span>}
+							</div>
+							<div className="galaxy-agent-tools">
+								{agentTools.map((tool, i) => (
+									<div
+										key={i}
+										className={`galaxy-agent-tool${tool.status === "done" ? " done" : ""}${tool.status === "error" ? " error" : ""}`}
+									>
+										<span className="galaxy-agent-tool-icon">
+											{tool.status === "done" ? "✓" : tool.status === "error" ? "!" : "◌"}
+										</span>
+										<span className="galaxy-agent-tool-name">{tool.name}</span>
+										{tool.status === "thinking" && (
+											<span className="galaxy-agent-tool-dots">
+												<span />
+												<span />
+												<span />
+											</span>
+										)}
+									</div>
+								))}
+							</div>
+							{connectionError && (
+								<>
+									<p className="galaxy-sheet-error">{connectionError}</p>
+									<button
+										className="galaxy-sheet-btn secondary"
+										onClick={() => setConnectionStep("form")}
+										type="button"
+									>
+										Back
+									</button>
+								</>
+							)}
+						</div>
+					)}
+
+					{connectionStep === "type" && (
+						<>
+							<h2 className="galaxy-sheet-title">What are you looking for?</h2>
+							<div className="galaxy-type-grid">
+								{CONNECTION_TYPE_OPTIONS.map((type) => (
+									<button
+										key={type.value}
+										className={`galaxy-type-card${connectionType === type.value ? " selected" : ""}`}
+										onClick={() => setConnectionType(type.value)}
+										type="button"
+									>
+										<span className="galaxy-type-icon">{type.icon}</span>
+										<span className="galaxy-type-label">{type.label}</span>
+									</button>
+								))}
+							</div>
+							<button
+								className="galaxy-sheet-btn full"
+								disabled={!connectionType}
+								onClick={() => setConnectionStep("form")}
+								type="button"
+							>
+								Continue
+							</button>
+						</>
+					)}
+
+						{connectionStep === "form" && (
+							<>
+								<h2 className="galaxy-sheet-title">
+									{CONNECTION_TYPE_OPTIONS.find((t) => t.value === connectionType)?.label}
+								</h2>
+								<p className="galaxy-sheet-subtitle">
+									Tell us what you are looking for and we will find the best match
+								</p>
+								<textarea
+									className="galaxy-sheet-input"
+									placeholder="I am looking for..."
+									rows={4}
+									value={connectionDescription}
+									onChange={(e) => setConnectionDescription(e.target.value)}
+								/>
+								<div className="galaxy-sheet-actions">
+									<button
+										className="galaxy-sheet-btn secondary"
+										onClick={() => setConnectionStep("type")}
+										type="button"
+									>
+										Back
+									</button>
+									<button
+										className="galaxy-sheet-btn"
+										onClick={handleSearch}
+										type="button"
+									>
+										Find matches
+									</button>
+								</div>
+							</>
+						)}
+
+
+					</div>
+				</div>
+			)}
+
+			{/* Match Card */}
+			{showMatchCard && matches.length > 0 && (
+				<div className="galaxy-match-card">
+					<button
+						className="galaxy-match-nav prev"
+						onClick={() => goToMatch(currentMatchIndex - 1)}
+						disabled={currentMatchIndex === 0}
+						type="button"
+					>
+						←
+					</button>
+
+					<div className="galaxy-match-content">
+						<div className="galaxy-match-avatar">
+							{matches[currentMatchIndex].name.charAt(0)}
+						</div>
+						<h3 className="galaxy-match-name">
+							{matches[currentMatchIndex].name}
+						</h3>
+						<p className="galaxy-match-meta">
+							{matches[currentMatchIndex].program} • {matches[currentMatchIndex].graduationYear}
+						</p>
+						<p className="galaxy-match-bio">
+							{matches[currentMatchIndex].bio || "No bio available"}
+						</p>
+						<div className="galaxy-match-counter">
+							{currentMatchIndex + 1} / {matches.length}
+						</div>
+						{connectionError && (
+							<p className="galaxy-sheet-error">{connectionError}</p>
+						)}
+						{createdConnection?.matchedUserId === matches[currentMatchIndex].id ? (
+							<div className="galaxy-match-action sent">
+								Request sent • {createdConnection.status}
+							</div>
+						) : (
+							<button
+								className="galaxy-match-action"
+								disabled={isSendingRequest}
+								onClick={handleSendRequest}
+								type="button"
+							>
+								{isSendingRequest ? "Sending..." : "Send request"}
+							</button>
+						)}
+						<button
+							className="galaxy-match-close"
+							onClick={() => {
+								setShowMatchCard(false);
+								setMatches([]);
+								setCurrentMatchIndex(0);
+								setCreatedConnection(null);
+								setIsSendingRequest(false);
+								setConnectionError(null);
+								if (selectedMatchMarkerRef.current) {
+									selectedMatchMarkerRef.current.visible = false;
+								}
+								// Reset camera
+								targetCameraPos.current.set(0, 100, introCameraZ.current);
+								targetControlsTarget.current.set(0, 0, 0);
+								isTransitioning.current = true;
+							}}
+							type="button"
+						>
+							Close
+						</button>
+					</div>
+
+					<button
+						className="galaxy-match-nav next"
+						onClick={() => goToMatch(currentMatchIndex + 1)}
+						disabled={currentMatchIndex === matches.length - 1}
+						type="button"
+					>
+						→
+					</button>
+				</div>
+			)}
+
 			{isLoadingUsers && (
 				<div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 text-white">
 					Loading galaxy...

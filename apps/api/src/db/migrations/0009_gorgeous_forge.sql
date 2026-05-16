@@ -1,1 +1,0 @@
-ALTER TABLE `news` ADD `date` integer;

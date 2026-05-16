@@ -6,7 +6,7 @@ export const memberFormDefaultValues: UserFormSchema = {
 	email: "",
 	phoneNumber: "",
 	userType: "student",
-	major: "",
+	program: "",
 	company: "",
 	title: "",
 	password: "",

@@ -7,9 +7,6 @@ export interface SignUpInput {
 	email: string;
 	password: string;
 	type?: string;
-	program?: string;
-	company?: string;
-	title?: string;
 }
 
 export function useSignUp() {

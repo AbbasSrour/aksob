@@ -3,6 +3,7 @@ import type { PermissionKeys } from "@aksob/ui/types/permission-keys";
 import {
 	BookOpenIcon,
 	BriefcaseBusinessIcon,
+	CalendarIcon,
 	GraduationCapIcon,
 	LayoutDashboardIcon,
 	MicroscopeIcon,
@@ -56,9 +57,15 @@ export const navigationConfig = {
 			permission: "user.view",
 		},
 		{
-			title: m.nav_majors(),
-			url: "/admin/majors",
+			title: m.nav_programs(),
+			url: "/admin/programs",
 			icon: GraduationCapIcon,
+			permission: "user.view",
+		},
+		{
+			title: "Events",
+			url: "/admin/events",
+			icon: CalendarIcon,
 			permission: "user.view",
 		},
 	],

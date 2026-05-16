@@ -99,16 +99,16 @@ export const mutationKeyFactory = {
 			[...mutationKeyFactory.members.entity, "sendVerification"] as const,
 	},
 
-	majors: {
-		entity: ["majors"] as const,
+	programs: {
+		entity: ["programs"] as const,
 		create: () =>
 			[
-				...mutationKeyFactory.majors.entity,
+				...mutationKeyFactory.programs.entity,
 				...mutationKeyFactory.create(),
 			] as const,
 		update: () =>
 			[
-				...mutationKeyFactory.majors.entity,
+				...mutationKeyFactory.programs.entity,
 				...mutationKeyFactory.update(),
 			] as const,
 	},
@@ -157,5 +157,24 @@ export const mutationKeyFactory = {
 			] as const,
 		approve: () => [...mutationKeyFactory.research.entity, "approve"] as const,
 		reject: () => [...mutationKeyFactory.research.entity, "reject"] as const,
+	},
+
+	events: {
+		entity: ["events"] as const,
+		create: () =>
+			[
+				...mutationKeyFactory.events.entity,
+				...mutationKeyFactory.create(),
+			] as const,
+		update: () =>
+			[
+				...mutationKeyFactory.events.entity,
+				...mutationKeyFactory.update(),
+			] as const,
+		delete: () =>
+			[
+				...mutationKeyFactory.events.entity,
+				...mutationKeyFactory.delete(),
+			] as const,
 	},
 } as const;

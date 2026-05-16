@@ -1,9 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import type { ChangeEvent, FormEvent } from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { programsQueries } from "~/app/auth/hooks/api/programs.queries";
 import { useSignUp } from "~/app/auth/hooks/api/auth.queries";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -16,19 +14,9 @@ export default function Register() {
 	const [userType, setUserType] = useState<"student" | "alumni" | "faculty">(
 		"student",
 	);
-	const [program, setProgram] = useState<string>("");
-	const [company, setCompany] = useState("");
-	const [title, setTitle] = useState("");
 	const [clientError, setClientError] = useState<string | null>(null);
 
 	const signUp = useSignUp();
-	const { data: programs } = useQuery(programsQueries.active);
-
-	useEffect(() => {
-		if (programs && programs.length > 0 && !program) {
-			setProgram(programs[0].name);
-		}
-	}, [programs, program]);
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -39,24 +27,16 @@ export default function Register() {
 		const email = String(formData.get("email") ?? "");
 		const submittedPassword = String(formData.get("password") ?? "");
 
-		if (userType === "alumni" && !company.trim()) {
-			setClientError("Company is required for alumni registrations.");
-			return;
-		}
-
 		signUp.mutate(
 			{
 				name,
 				email,
 				password: submittedPassword,
 				type: userType,
-				program,
-				company: company.trim() || undefined,
-				title: title.trim() || undefined,
 			},
 			{
 				onSuccess: () => {
-					navigate("/galaxy");
+					navigate("/onboarding");
 				},
 			},
 		);
@@ -132,58 +112,7 @@ export default function Register() {
 								<input type="hidden" name="userType" value={userType} />
 							</div>
 
-							{(userType === "alumni" || userType === "faculty") && (
-								<div className="space-y-1 pt-2">
-									<Input
-										type="text"
-										name="title"
-										label="Title (Optional)"
-										placeholder="e.g. Senior Analyst, Professor"
-										value={title}
-										onChange={(event) => setTitle(event.target.value)}
-										fullWidth
-									/>
-								</div>
-							)}
-
-							<div className="space-y-1 pt-2">
-								<Input
-									type="text"
-									name="company"
-									label={
-										userType === "alumni"
-											? "Company (Required for Alumni)"
-											: "Company (Optional)"
-									}
-									placeholder="Current company or institution"
-									value={company}
-									onChange={(event) => setCompany(event.target.value)}
-									required={userType === "alumni"}
-									fullWidth
-								/>
-							</div>
-
-							<div className="space-y-1 pt-2">
-							<label
-								htmlFor="program"
-								className="block text-sm font-medium text-[var(--aksob-darkest)]"
-							>
-								Program
-							</label>
-							<select
-								id="program"
-								name="program"
-								value={program}
-								onChange={(event) => setProgram(event.target.value)}
-								className="h-12 w-full rounded-md border border-[var(--gray-200)] bg-white px-4 text-[var(--aksob-darkest)] focus:border-[var(--aksob-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--aksob-primary)]/20"
-							>
-								{programs?.map((p) => (
-									<option key={p.id} value={p.name}>
-										{p.name}
-									</option>
-								))}
-							</select>
-							</div>
+	
 						</div>
 					</div>
 

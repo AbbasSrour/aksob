@@ -45,10 +45,10 @@ export const routes = rootRoute("__root.tsx", [
 			route("/$memberId/edit", "members/pages/memberId-edit.tsx"),
 		]),
 
-		route("/majors", "majors/layout.tsx", [
-			index("majors/pages/list.tsx"),
-			route("/create", "majors/pages/create.tsx"),
-			route("/$majorId/edit", "majors/pages/majorId-edit.tsx"),
+		route("/programs", "programs/layout.tsx", [
+			index("programs/pages/list.tsx"),
+			route("/create", "programs/pages/create.tsx"),
+			route("/$programId/edit", "programs/pages/programId-edit.tsx"),
 		]),
 
 		route("/opportunities", "opportunities/layout.tsx", [
@@ -61,6 +61,13 @@ export const routes = rootRoute("__root.tsx", [
 			index("research/pages/list.tsx"),
 			route("/create", "research/pages/create.tsx"),
 			route("/$researchId/edit", "research/pages/$researchId-edit.tsx"),
+		]),
+
+		route("/events", "events/layout.tsx", [
+			index("events/pages/list.tsx"),
+			route("/create", "events/pages/create.tsx"),
+			route("/$eventId", "events/pages/$eventId-index.tsx"),
+			route("/$eventId/edit", "events/pages/eventId-edit.tsx"),
 		]),
 	]),
 

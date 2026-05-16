@@ -7,6 +7,7 @@ export const user = sqliteTable("user", {
 	email: text("email").notNull().unique(),
 	type: text("type").default("student").notNull(),
 	bio: text("bio"),
+	onboarding: text("onboarding").default("welcome").notNull(),
 	emailVerified: integer("email_verified", { mode: "boolean" })
 		.default(false)
 		.notNull(),

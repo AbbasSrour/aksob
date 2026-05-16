@@ -5,85 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1770078659605,
-      "tag": "0000_slow_mikhail_rasputin",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1770389641555,
-      "tag": "0001_chunky_iron_fist",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1777224137131,
-      "tag": "0002_rainy_invisible_woman",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1777850837352,
-      "tag": "0003_bent_ultimates",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1777860340351,
-      "tag": "0004_brown_stryfe",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1777987586550,
-      "tag": "0005_wonderful_sharon_carter",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1777995922548,
-      "tag": "0006_talented_lord_hawal",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1778253156195,
-      "tag": "0007_lively_doctor_octopus",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "6",
-      "when": 1778327885446,
-      "tag": "0008_empty_trauma",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "6",
-      "when": 1778331508303,
-      "tag": "0009_gorgeous_forge",
-      "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "6",
-      "when": 1778334928432,
-      "tag": "0010_gifted_senator_kelly",
-      "breakpoints": true
-    },
-    {
-      "idx": 11,
-      "version": "6",
-      "when": 1778415993187,
-      "tag": "0011_unknown_mephisto",
+      "when": 1778934501662,
+      "tag": "0000_wooden_night_thrasher",
       "breakpoints": true
     }
   ]

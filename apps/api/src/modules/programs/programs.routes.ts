@@ -23,7 +23,7 @@ const toProgramDto = (p: typeof schema.program.$inferSelect) => ({
 	updatedAt: p.updatedAt.toISOString(),
 });
 
-export const programsModule = new Elysia({ prefix: "/api/programs" })
+export const programsModule = new Elysia({ prefix: "/programs" })
 	.use(authContext)
 	// List active programs (optionally filter by level)
 	.get(

@@ -112,12 +112,12 @@ export const memberDataTableColumns = [
 		enableSorting: true,
 		enableHiding: false,
 	}),
-	// --------------------> Major Column <------------------- //
-	columnHelper.accessor("major", {
+	// --------------------> Program Column <------------------- //
+	columnHelper.accessor("program", {
 		header: ({ column }) => (
 			<DataTableColumnHeader
 				column={column}
-				title={m.members_table_column_major()}
+				title={m.members_table_column_program()}
 			/>
 		),
 		cell: ({ cell }) => cell.getValue() || "—",

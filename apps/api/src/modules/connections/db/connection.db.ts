@@ -24,6 +24,7 @@ export const connection = sqliteTable(
 			.default("pending")
 			.notNull(),
 		message: text("message"),
+		matchExplanation: text("match_explanation"),
 		createdAt: integer("created_at", { mode: "timestamp_ms" })
 			.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
 			.notNull(),

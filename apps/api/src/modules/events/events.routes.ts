@@ -45,7 +45,6 @@ import {
 	attendeeResponseSchema,
 	checkInResponseSchema,
 	eventErrorResponseSchema,
-	eventListResponse,
 	organizerMemberResponseSchema,
 } from "@/modules/events/schema/events-response.schema";
 import { updateEventBody } from "@/modules/events/schema/events-update.schema";
@@ -240,7 +239,7 @@ async function regenerateReminders(
 	await generateReminders(eventId, startDate, now);
 }
 
-export const eventsModule = new Elysia({ prefix: "/api/events" })
+export const eventsModule = new Elysia({ prefix: "/events" })
 	.use(authContext)
 	// ──────────────── List events ────────────────
 	.get(
@@ -292,6 +291,8 @@ export const eventsModule = new Elysia({ prefix: "/api/events" })
 				.from(schema.event)
 				.where(where);
 
+			const isAdmin = user?.role === "admin";
+
 			const events = await db.query.event.findMany({
 				where,
 				orderBy: [desc(schema.event.createdAt)],
@@ -304,19 +305,19 @@ export const eventsModule = new Elysia({ prefix: "/api/events" })
 							user: { columns: { id: true, name: true, image: true } as const },
 						},
 					},
+					...(isAdmin ? { surveys: true as const } : {}),
 				},
 			});
 
 			return {
 				status: "ok" as const,
-				data: events.map(toPublicEventDto),
+				data: events.map(isAdmin ? toAdminEventDto : toPublicEventDto),
 				meta: page.meta(countResult?.count ?? 0),
 			};
 		},
 		{
 			auth: "optional",
 			query: listEventsQuery,
-			response: eventListResponse,
 			detail: {
 				tags: ["Events"],
 				summary: "List events",

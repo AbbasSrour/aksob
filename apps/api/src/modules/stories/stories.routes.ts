@@ -16,7 +16,7 @@ import { USER_ERRORS } from "@/modules/users/constant/user-errors.constant";
 import { authContext } from "@/plugins/auth";
 import { paginate } from "@/utils/paginate";
 
-export const storiesModule = new Elysia({ prefix: "/api/stories" })
+export const storiesModule = new Elysia({ prefix: "/stories" })
 	.use(authContext)
 	// List stories with visibility based on auth status and role
 	.get(

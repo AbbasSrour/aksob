@@ -144,7 +144,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 				</div>
 
 				{/* ── Right actions pill ── */}
-				<div className={`hidden lg:flex items-center gap-0 pl-2 pr-0 py-0 ${pillBase} ${pillFill}`}>
+				<div className={`hidden lg:flex items-center gap-0 pl-2 pr-1 py-1 ${pillBase} ${pillFill}`}>
 					{/* Search */}
 					<div
 						ref={searchContainerRef}

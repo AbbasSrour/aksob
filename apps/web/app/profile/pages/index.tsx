@@ -1,256 +1,539 @@
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+	BookOpen,
 	Briefcase,
+	Calendar,
 	Edit2,
-	GraduationCap,
+	Link2,
 	Mail,
-	MapPin,
 	Phone,
 	Save,
+	User,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { authClient, useSession } from "~/app/lib/auth";
 import { getCurrentUser } from "~/app/lib/users";
+import { ConnectionsSection } from "~/app/profile/components/connections-section";
+import { EducationSection } from "~/app/profile/components/education-section";
+import { EventsSection } from "~/app/profile/components/events-section";
+import { ExperienceSection } from "~/app/profile/components/experience-section";
+import { LinksSection } from "~/app/profile/components/links-section";
+import { SettingsSection } from "~/app/profile/components/settings-section";
+import { StoriesSection } from "~/app/profile/components/stories-section";
+import { TagsSection } from "~/app/profile/components/tags-section";
 import { Avatar } from "~/components/ui/avatar";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { Card } from "~/components/ui/card";
-import { Divider } from "~/components/ui/divider";
+
+/* ─── Types ─── */
+
+type TabKey = "about" | "connections" | "events" | "stories";
+
+interface TabDef {
+	key: TabKey;
+	label: string;
+	icon: React.ReactNode;
+	count?: number;
+}
+
+/* ─── Animated floating star dot ─── */
+function StarDot({
+	size,
+	top,
+	left,
+	delay,
+}: {
+	size: number;
+	top: string;
+	left: string;
+	delay: string;
+}) {
+	return (
+		<div
+			className="absolute rounded-full animate-pulse"
+			style={{
+				width: size,
+				height: size,
+				top,
+				left,
+				background: "rgba(255,255,255,0.6)",
+				boxShadow: `0 0 ${size * 2}px ${size}px rgba(7,105,81,0.25)`,
+				animationDelay: delay,
+				animationDuration: "3s",
+			}}
+		/>
+	);
+}
+
+/* ─── Section header with editorial line ─── */
+function SectionHeader({ label, number }: { label: string; number: string }) {
+	return (
+		<div className="flex items-center gap-4 mb-5">
+			<span
+				className="text-[var(--gray-400)] text-xs tracking-[0.2em] uppercase"
+				style={{ fontFamily: "var(--font-display)" }}
+			>
+				{number}
+			</span>
+			<div className="flex-1 h-px bg-[var(--gray-200)]" />
+			<span
+				className="text-[var(--aksob-darkest)] text-xs tracking-[0.2em] uppercase font-medium"
+				style={{ fontFamily: "var(--font-display)" }}
+			>
+				{label}
+			</span>
+		</div>
+	);
+}
+
+/* ─── Glass card wrapper ─── */
+function GlassCard({
+	children,
+	className,
+	animate = false,
+}: {
+	children: React.ReactNode;
+	className?: string;
+	animate?: boolean;
+}) {
+	return (
+		<div
+			className={`
+				bg-white/80 backdrop-blur-md
+				border border-white/40
+				rounded-2xl
+				shadow-[0_4px_24px_rgba(0,0,0,0.06)]
+				${animate ? "animate-editorial-slide-up" : ""}
+				${className || ""}
+			`}
+		>
+			{children}
+		</div>
+	);
+}
+
+/* ─── Main Page ─── */
 
 export default function Profile() {
-	const [isEditing, setIsEditing] = useState(false);
-	const [user, setUser] = useState({
-		name: "Alex Johnson",
-		headline: "Senior Software Engineer at TechCorp",
-		bio: "Passionate about building scalable web applications and mentoring junior developers. Alumni of AKSOB class of 2018.",
-		location: "Beirut, Lebanon",
-		email: "alex.johnson@example.com",
-		phone: "+961 3 123 456",
-		program: "BS in Business",
-		department: "MS Data Analytics",
-		year: 2018,
-		company: "TechCorp",
-		position: "Senior Engineer",
+	const queryClient = useQueryClient();
+	const { data: sessionData, refetch: refetchSession } = useSession();
+	const sessionUser = sessionData?.user as Record<string, unknown> | undefined;
+	const [activeTab, setActiveTab] = useState<TabKey>("about");
+
+	const { data, isLoading, error } = useQuery({
+		queryKey: ["profile-me"],
+		queryFn: () => getCurrentUser().then((r) => r.data),
 	});
-	const [loadError, setLoadError] = useState<string | null>(null);
 
-	useEffect(() => {
-		let isMounted = true;
+	const user = data;
+	const refetch = () =>
+		queryClient.invalidateQueries({ queryKey: ["profile-me"] });
 
-		const loadProfile = async () => {
-			try {
-				const response = await getCurrentUser();
-				if (!isMounted) {
-					return;
-				}
+	/* Header editing */
+	const [editing, setEditing] = useState(false);
+	const [draftName, setDraftName] = useState("");
+	const [draftBio, setDraftBio] = useState("");
+	const [saving, setSaving] = useState(false);
 
-				setUser((prev) => ({
-					...prev,
-					name: response.data.name,
-					email: response.data.email,
-					program: response.data.program,
-					department: response.data.program,
-					headline: response.data.title ?? prev.headline,
-					company: response.data.company ?? prev.company,
-					position: response.data.title ?? prev.position,
-					year: new Date(response.data.createdAt).getFullYear(),
-				}));
-			} catch {
-				if (!isMounted) {
-					return;
-				}
-				setLoadError("Could not refresh profile from server.");
-			}
-		};
-
-		void loadProfile();
-
-		return () => {
-			isMounted = false;
-		};
-	}, []);
-
-	const handleSave = (e: React.FormEvent) => {
-		e.preventDefault();
-		setIsEditing(false);
+	const handleHeaderEdit = () => {
+		if (!user) return;
+		setDraftName(user.name);
+		setDraftBio(user.bio ?? "");
+		setEditing(true);
 	};
 
-	return (
-		<div className="w-full min-h-full bg-white">
-			<div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
-				{loadError && (
-					<p className="mb-4 text-sm text-[var(--error)]">{loadError}</p>
-				)}
+	const handleHeaderSave = async () => {
+		if (!user) return;
+		setSaving(true);
+		try {
+			await authClient.updateUser({ name: draftName, bio: draftBio });
+			await refetchSession();
+			refetch();
+			setEditing(false);
+		} finally {
+			setSaving(false);
+		}
+	};
 
-				{/* Profile Header Card */}
-				<Card className="p-6 mb-6">
-					<div className="flex flex-col sm:flex-row gap-6">
+	const handleSettingsSave = async (settings: {
+		isVisibleInGalaxy: boolean;
+		emailVisible: boolean;
+		phoneNumberVisible: boolean;
+		connectionTypes: string[];
+	}) => {
+		await authClient.updateUser({
+			isVisibleInGalaxy: settings.isVisibleInGalaxy,
+			emailVisible: settings.emailVisible,
+			phoneNumberVisible: settings.phoneNumberVisible,
+			connectionTypes: settings.connectionTypes,
+		});
+		refetch();
+	};
+
+	/* ─── Loading skeleton ─── */
+	if (isLoading) {
+		return (
+			<div className="min-h-screen bg-[var(--off-white)]">
+				<div className="relative w-full h-56 sm:h-64 bg-[var(--aksob-darkest)] animate-pulse" />
+				<div className="max-w-5xl mx-auto px-4 sm:px-6 -mt-16 relative z-10">
+					<div className="h-40 bg-gray-200 rounded-2xl animate-pulse" />
+				</div>
+			</div>
+		);
+	}
+
+	/* ─── Error state ─── */
+	if (error || !user) {
+		return (
+			<div className="min-h-screen bg-[var(--off-white)] flex items-center justify-center">
+				<div className="text-center animate-editorial-reveal">
+					<p
+						className="text-2xl font-light text-[var(--aksob-darkest)]"
+						style={{ fontFamily: "var(--font-display)" }}
+					>
+						Failed to load profile
+					</p>
+					<p className="text-sm text-[var(--gray-500)] mt-2">
+						Please try refreshing the page.
+					</p>
+				</div>
+			</div>
+		);
+	}
+
+	const userType = user.type || "student";
+
+	const tabs: TabDef[] = [
+		{ key: "about", label: "About", icon: <User size={14} /> },
+		{
+			key: "connections",
+			label: "Connections",
+			icon: <Link2 size={14} />,
+		},
+		{ key: "events", label: "Events", icon: <Calendar size={14} /> },
+		{ key: "stories", label: "Stories", icon: <BookOpen size={14} /> },
+	];
+
+	return (
+		<div className="min-h-screen bg-[var(--off-white)] pb-20">
+			{/* ═══ GALAXY HERO ═══ */}
+			<div className="relative w-full h-52 sm:h-64 overflow-hidden">
+				{/* Radial galaxy background */}
+				<div
+					className="absolute inset-0"
+					style={{
+						background: "var(--galaxy-bg)",
+					}}
+				/>
+
+				{/* Animated orbit rings */}
+				<div className="absolute inset-0 pointer-events-none">
+					<svg
+						className="absolute -top-1/2 -right-1/4 w-[800px] h-[800px] animate-orbit-drift opacity-10"
+						viewBox="0 0 800 800"
+						fill="none"
+					>
+						<circle
+							cx="400"
+							cy="400"
+							r="398"
+							stroke="#076951"
+							strokeWidth="1"
+						/>
+						<circle
+							cx="400"
+							cy="400"
+							r="320"
+							stroke="#076951"
+							strokeWidth="1"
+						/>
+					</svg>
+				</div>
+
+				{/* Floating star dots */}
+				<StarDot size={3} top="20%" left="15%" delay="0s" />
+				<StarDot size={2} top="35%" left="75%" delay="0.7s" />
+				<StarDot size={4} top="60%" left="25%" delay="1.2s" />
+				<StarDot size={2} top="45%" left="60%" delay="1.8s" />
+				<StarDot size={3} top="75%" left="85%" delay="2.3s" />
+				<StarDot size={2} top="15%" left="45%" delay="0.4s" />
+
+				{/* Top-left label */}
+				<div className="absolute top-6 left-4 sm:left-6 z-10">
+					<span
+						className="text-white/30 text-[10px] tracking-[0.3em] uppercase"
+						style={{ fontFamily: "var(--font-display)" }}
+					>
+						Profile
+					</span>
+				</div>
+			</div>
+
+			{/* ═══ PROFILE CARD ═══ */}
+			<div className="max-w-5xl mx-auto px-4 sm:px-6 -mt-20 sm:-mt-24 relative z-10">
+				<GlassCard className="p-6 sm:p-8 animate-editorial-slide-up" animate>
+					<div className="flex flex-col sm:flex-row gap-6 items-start">
 						{/* Avatar */}
-						<div className="flex justify-center sm:justify-start">
-							<Avatar
-								name={user.name}
-								size="xl"
-								className="w-24 h-24 text-2xl"
-							/>
+						<div className="flex-shrink-0 mx-auto sm:mx-0">
+							<div className="relative">
+								<Avatar
+									name={user.name}
+									src={user.image ?? undefined}
+									size="xl"
+									className="w-24 h-24 sm:w-28 sm:h-28 text-2xl ring-[3px] ring-white/60 shadow-xl"
+								/>
+								{/* Online indicator */}
+								<div className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-[var(--success)] border-[2.5px] border-white" />
+							</div>
 						</div>
 
 						{/* Info */}
-						<div className="flex-1 text-center sm:text-left">
-							{isEditing ? (
-								<input
-									value={user.name}
-									onChange={(e) => setUser({ ...user, name: e.target.value })}
-									className="text-xl font-bold bg-transparent border-b-2 border-gray-200 focus:border-[var(--aksob-primary)] focus:outline-none w-full text-gray-900 mb-1"
-								/>
+						<div className="flex-1 min-w-0 text-center sm:text-left">
+							{editing ? (
+								<div className="space-y-3 max-w-md">
+									<input
+										value={draftName}
+										onChange={(e) => setDraftName(e.target.value)}
+										className="w-full text-xl sm:text-2xl font-medium bg-transparent border-b border-[var(--gray-300)] focus:border-[var(--aksob-primary)] focus:outline-none text-[var(--aksob-darkest)] pb-1"
+										style={{ fontFamily: "var(--font-display)" }}
+										placeholder="Your name"
+									/>
+									<textarea
+										value={draftBio}
+										onChange={(e) => setDraftBio(e.target.value)}
+										rows={2}
+										className="w-full p-3 text-sm bg-[var(--gray-50)] border border-[var(--gray-200)] rounded-xl focus:ring-2 focus:ring-[var(--aksob-primary)]/20 focus:border-[var(--aksob-primary)] transition resize-none text-[var(--gray-600)]"
+										placeholder="About yourself..."
+									/>
+									<div className="flex gap-2 justify-center sm:justify-start">
+										<Button
+											variant="ghost"
+											size="sm"
+											onClick={() => setEditing(false)}
+											disabled={saving}
+										>
+											Cancel
+										</Button>
+										<Button
+											variant="primary"
+											size="sm"
+											onClick={handleHeaderSave}
+											leftIcon={<Save size={14} />}
+											isLoading={saving}
+										>
+											Save
+										</Button>
+									</div>
+								</div>
 							) : (
-								<h1 className="text-xl font-bold text-gray-900">{user.name}</h1>
-							)}
+								<>
+									{/* Name row */}
+									<div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+										<h1
+											className="text-2xl sm:text-3xl font-medium text-[var(--aksob-darkest)] tracking-tight"
+											style={{ fontFamily: "var(--font-display)" }}
+										>
+											{user.name}
+										</h1>
+										<Badge
+											variant="primary"
+											className="text-[10px] px-2.5 py-0.5 w-fit mx-auto sm:mx-0 capitalize tracking-wide"
+										>
+											{userType}
+										</Badge>
+									</div>
 
-							{isEditing ? (
-								<input
-									value={user.headline}
-									onChange={(e) =>
-										setUser({ ...user, headline: e.target.value })
+									{/* Title */}
+									{user.title ? (
+										<p
+											className="text-sm text-[var(--gray-500)] mt-1 font-light"
+											style={{ fontFamily: "var(--font-display)" }}
+										>
+											{user.title}
+										</p>
+									) : null}
+
+									{/* Bio */}
+									{user.bio ? (
+										<p className="text-sm text-[var(--gray-600)] mt-3 leading-relaxed max-w-lg">
+											{user.bio}
+										</p>
+									) : null}
+
+									{/* Meta row */}
+									<div className="flex flex-wrap justify-center sm:justify-start gap-x-5 gap-y-1.5 mt-4 text-xs text-[var(--gray-500)]">
+										<span className="flex items-center gap-1.5">
+											<Mail size={11} className="text-[var(--gray-400)]" />
+											{user.email}
+										</span>
+										{sessionUser?.phoneNumber ? (
+											<span className="flex items-center gap-1.5">
+												<Phone size={11} className="text-[var(--gray-400)]" />
+												{sessionUser.phoneNumber as string}
+											</span>
+										) : null}
+										{user.company ? (
+											<span className="flex items-center gap-1.5">
+												<Briefcase
+													size={11}
+													className="text-[var(--gray-400)]"
+												/>
+												{user.company}
+											</span>
+										) : null}
+									</div>
+								</>
+							)}
+						</div>
+
+						{/* Edit button */}
+						{!editing && (
+							<div className="flex-shrink-0 mx-auto sm:mx-0">
+								<Button
+									variant="secondary"
+									size="sm"
+									onClick={handleHeaderEdit}
+									leftIcon={<Edit2 size={13} />}
+									className="rounded-full px-5"
+								>
+									Edit
+								</Button>
+							</div>
+						)}
+					</div>
+				</GlassCard>
+			</div>
+
+			{/* ═══ TABS ═══ */}
+			<div className="max-w-5xl mx-auto px-4 sm:px-6 mt-8">
+				<div className="flex items-center gap-1 border-b border-[var(--gray-200)]">
+					{tabs.map((t) => (
+						<button
+							type="button"
+							key={t.key}
+							onClick={() => setActiveTab(t.key)}
+							className={`relative px-4 py-3 text-xs tracking-[0.1em] uppercase font-medium transition-colors cursor-pointer ${
+								activeTab === t.key
+									? "text-[var(--aksob-darkest)]"
+									: "text-[var(--gray-400)] hover:text-[var(--gray-600)]"
+							}`}
+							style={{ fontFamily: "var(--font-display)" }}
+						>
+							<span className="flex items-center gap-2">
+								{t.icon}
+								{t.label}
+							</span>
+							{activeTab === t.key && (
+								<div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--aksob-primary)]" />
+							)}
+						</button>
+					))}
+				</div>
+			</div>
+
+			{/* ═══ TAB CONTENT ═══ */}
+			<div className="max-w-5xl mx-auto px-4 sm:px-6 mt-8">
+				{activeTab === "about" && (
+					<div className="space-y-10">
+						{/* Education */}
+						<section className="animate-editorial-slide-up">
+							<SectionHeader label="Education" number="01" />
+							<GlassCard>
+								<EducationSection entries={user.majors} onRefetch={refetch} />
+							</GlassCard>
+						</section>
+
+						{/* Experience */}
+						<section
+							className="animate-editorial-slide-up"
+							style={{ animationDelay: "0.1s" }}
+						>
+							<SectionHeader label="Experience" number="02" />
+							<GlassCard>
+								<ExperienceSection
+									entries={user.experience ?? []}
+									onRefetch={refetch}
+								/>
+							</GlassCard>
+						</section>
+
+						{/* Skills */}
+						<section
+							className="animate-editorial-slide-up"
+							style={{ animationDelay: "0.2s" }}
+						>
+							<SectionHeader label="Skills & Interests" number="03" />
+							<GlassCard>
+								<TagsSection
+									tags={
+										user.tags ?? {
+											skills: [],
+											goals: [],
+											hobbies: [],
+										}
 									}
-									className="text-gray-500 bg-transparent border-b border-gray-200 focus:border-[var(--aksob-primary)] focus:outline-none w-full text-sm"
+									onRefetch={refetch}
 								/>
-							) : (
-								<p className="text-gray-500 text-sm">{user.headline}</p>
-							)}
+							</GlassCard>
+						</section>
 
-							{/* Quick Info */}
-							<div className="flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-1 mt-3 text-xs text-gray-400">
-								<span className="flex items-center gap-1">
-									<MapPin size={12} />
-									{user.location}
-								</span>
-								<span className="flex items-center gap-1">
-									<Briefcase size={12} />
-									{user.company}
-								</span>
-								<span className="flex items-center gap-1">
-									<GraduationCap size={12} />
-									{user.department} '{user.year.toString().slice(-2)}
-								</span>
-							</div>
-						</div>
+						{/* Links */}
+						<section
+							className="animate-editorial-slide-up"
+							style={{ animationDelay: "0.3s" }}
+						>
+							<SectionHeader label="Links" number="04" />
+							<GlassCard>
+								<LinksSection links={user.links ?? []} onRefetch={refetch} />
+							</GlassCard>
+						</section>
 
-						{/* Action */}
-						<div className="flex justify-center sm:justify-start">
-							<Button
-								variant={isEditing ? "primary" : "secondary"}
-								size="sm"
-								onClick={isEditing ? handleSave : () => setIsEditing(true)}
-								leftIcon={isEditing ? <Save size={14} /> : <Edit2 size={14} />}
-							>
-								{isEditing ? "Save" : "Edit"}
-							</Button>
-						</div>
+						{/* Settings */}
+						<section
+							className="animate-editorial-slide-up"
+							style={{ animationDelay: "0.4s" }}
+						>
+							<SectionHeader label="Privacy" number="05" />
+							<GlassCard>
+								<SettingsSection
+									isVisibleInGalaxy={user.isVisibleInGalaxy ?? true}
+									emailVisible={user.emailVisible ?? false}
+									phoneNumberVisible={user.phoneNumberVisible ?? false}
+									connectionTypes={user.connectionTypes ?? []}
+									userType={userType}
+									onSave={handleSettingsSave}
+								/>
+							</GlassCard>
+						</section>
 					</div>
-				</Card>
+				)}
 
-				{/* Contact Card - Full Width */}
-				<Card className="p-5 mb-6">
-					<h3 className="text-sm font-semibold text-gray-900 mb-4">
-						Contact Information
-					</h3>
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-						<div className="flex items-center gap-3">
-							<div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-								<Mail size={18} className="text-gray-500" />
-							</div>
-							<div className="min-w-0">
-								<p className="text-xs text-gray-400">Email</p>
-								{isEditing ? (
-									<input
-										value={user.email}
-										onChange={(e) =>
-											setUser({ ...user, email: e.target.value })
-										}
-										className="text-sm text-gray-700 bg-transparent border-b border-gray-200 focus:border-[var(--aksob-primary)] focus:outline-none w-full"
-									/>
-								) : (
-									<p className="text-sm text-gray-700 truncate">{user.email}</p>
-								)}
-							</div>
-						</div>
-						<div className="flex items-center gap-3">
-							<div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-								<Phone size={18} className="text-gray-500" />
-							</div>
-							<div>
-								<p className="text-xs text-gray-400">Phone</p>
-								{isEditing ? (
-									<input
-										value={user.phone}
-										onChange={(e) =>
-											setUser({ ...user, phone: e.target.value })
-										}
-										className="text-sm text-gray-700 bg-transparent border-b border-gray-200 focus:border-[var(--aksob-primary)] focus:outline-none w-full"
-									/>
-								) : (
-									<p className="text-sm text-gray-700">{user.phone}</p>
-								)}
-							</div>
-						</div>
+				{activeTab === "connections" && (
+					<div className="animate-editorial-slide-up">
+						<SectionHeader label="My Connections" number="01" />
+						<GlassCard>
+							<ConnectionsSection userId={user.id} />
+						</GlassCard>
 					</div>
-				</Card>
+				)}
 
-				{/* About Card */}
-				<Card className="p-5 mb-6">
-					<h3 className="text-sm font-semibold text-gray-900 mb-3">About</h3>
-					{isEditing ? (
-						<textarea
-							value={user.bio}
-							onChange={(e) => setUser({ ...user, bio: e.target.value })}
-							rows={3}
-							className="w-full p-3 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--aksob-primary)]/20 focus:border-[var(--aksob-primary)] transition resize-none text-gray-700"
-						/>
-					) : (
-						<p className="text-sm text-gray-600 leading-relaxed">{user.bio}</p>
-					)}
-				</Card>
-
-				{/* Experience Card */}
-				<Card className="p-5">
-					<h3 className="text-sm font-semibold text-gray-900 mb-4">
-						Experience
-					</h3>
-					<div className="space-y-4">
-						{/* Current Job */}
-						<div className="flex gap-3">
-							<div className="w-10 h-10 bg-[var(--aksob-primary)]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-								<Briefcase size={18} className="text-[var(--aksob-primary)]" />
-							</div>
-							<div className="min-w-0 flex-1">
-								<h4 className="text-sm font-medium text-gray-900">
-									{user.position}
-								</h4>
-								<p className="text-xs text-[var(--aksob-primary)]">
-									{user.company}
-								</p>
-								<p className="text-xs text-gray-400 mt-0.5">
-									Jan 2020 - Present
-								</p>
-							</div>
-						</div>
-
-						<Divider />
-
-						{/* Past Job */}
-						<div className="flex gap-3">
-							<div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-								<Briefcase size={18} className="text-gray-400" />
-							</div>
-							<div className="min-w-0 flex-1">
-								<h4 className="text-sm font-medium text-gray-900">
-									Junior Developer
-								</h4>
-								<p className="text-xs text-gray-500">WebSolutions Inc.</p>
-								<p className="text-xs text-gray-400 mt-0.5">
-									Jun 2018 - Dec 2019
-								</p>
-							</div>
-						</div>
+				{activeTab === "events" && (
+					<div className="animate-editorial-slide-up">
+						<SectionHeader label="My Events" number="01" />
+						<GlassCard>
+							<EventsSection />
+						</GlassCard>
 					</div>
-				</Card>
+				)}
+
+				{activeTab === "stories" && (
+					<div className="animate-editorial-slide-up">
+						<SectionHeader label="My Stories" number="01" />
+						<GlassCard>
+							<StoriesSection userId={user.id} />
+						</GlassCard>
+					</div>
+				)}
 			</div>
 		</div>
 	);

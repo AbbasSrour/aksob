@@ -6,7 +6,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { admin, phoneNumber } from "better-auth/plugins";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { env } from "@/config/env";
 import { db, schema } from "@/db";
 import { sendEmail } from "@/lib/email";
@@ -14,6 +14,7 @@ import { AUTH_ERRORS } from "@/modules/auth/auth.errors";
 import { CONNECTION_TYPE_ELIGIBILITY } from "@/modules/connections/constant/connection-eligibility.constant";
 import { CONNECTION_TYPES } from "@/modules/connections/constant/connection-types.constant";
 import type { UserType } from "@/modules/users/constant/user-types";
+import { generateAndStoreEmbedding } from "@/modules/ai/ai-embedding";
 import { logger } from "@/utils/logger";
 
 const isSecureAuth = env.BETTER_AUTH_URL.startsWith("https://");
@@ -131,9 +132,14 @@ export const auth = betterAuth({
 				required: false,
 				defaultValue: "student",
 			},
-		bio: {
+			bio: {
 				type: "string",
 				required: false,
+			},
+			onboarding: {
+				type: "string",
+				required: false,
+				defaultValue: "welcome",
 			},
 		},
 	},
@@ -173,18 +179,6 @@ export const auth = betterAuth({
 				return;
 			}
 
-			if (ctx.path !== "/sign-up/email") {
-				return;
-			}
-
-			const body = ctx.body as { type?: string; company?: string };
-
-			if (body.type === "alumni" && !body.company?.trim()) {
-				throw new APIError(
-					AUTH_ERRORS.ALUMNI_COMPANY_REQUIRED.httpStatus,
-					AUTH_ERRORS.ALUMNI_COMPANY_REQUIRED,
-				);
-			}
 		}),
 		after: createAuthMiddleware(async (ctx) => {
 			if (ctx.path !== "/update-user") {
@@ -196,6 +190,7 @@ export const auth = betterAuth({
 				emailVisible?: boolean;
 				phoneNumberVisible?: boolean;
 				connectionTypes?: string[];
+				onboarding?: string;
 			};
 
 			const userId = ctx.context.user?.id;
@@ -321,6 +316,11 @@ export const auth = betterAuth({
 							})),
 						);
 				}
+			}
+
+			// ── Onboarding completed → generate embedding ─
+			if (body.onboarding === "complete") {
+				await generateAndStoreEmbedding(userId);
 			}
 		}),
 	},

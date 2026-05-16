@@ -21,40 +21,46 @@ import { Route as ApiMediaRouteImport } from './app/api/media'
 import { Route as usersLayoutRouteImport } from './app/users/layout'
 import { Route as storiesLayoutRouteImport } from './app/stories/layout'
 import { Route as researchLayoutRouteImport } from './app/research/layout'
+import { Route as programsLayoutRouteImport } from './app/programs/layout'
 import { Route as opportunitiesLayoutRouteImport } from './app/opportunities/layout'
 import { Route as newsLayoutRouteImport } from './app/news/layout'
 import { Route as membersLayoutRouteImport } from './app/members/layout'
-import { Route as majorsLayoutRouteImport } from './app/majors/layout'
+import { Route as eventsLayoutRouteImport } from './app/events/layout'
 import { Route as dashboardPagesAdminDashboardRouteImport } from './app/dashboard/pages/admin-dashboard'
 import { Route as ApiStoriesSplatRouteImport } from './app/api/stories/$'
 import { Route as ApiStatsSplatRouteImport } from './app/api/stats/$'
 import { Route as ApiResearchSplatRouteImport } from './app/api/research/$'
+import { Route as ApiProgramsSplatRouteImport } from './app/api/programs/$'
 import { Route as ApiOpportunitiesSplatRouteImport } from './app/api/opportunities/$'
 import { Route as ApiNewsSplatRouteImport } from './app/api/news/$'
-import { Route as ApiMajorsSplatRouteImport } from './app/api/majors/$'
+import { Route as ApiEventsSplatRouteImport } from './app/api/events/$'
 import { Route as ApiAuthSplatRouteImport } from './app/api/auth/$'
 import { Route as usersPagesCreateRouteImport } from './app/users/pages/create'
 import { Route as storiesPagesCreateRouteImport } from './app/stories/pages/create'
 import { Route as researchPagesCreateRouteImport } from './app/research/pages/create'
+import { Route as programsPagesCreateRouteImport } from './app/programs/pages/create'
 import { Route as opportunitiesPagesCreateRouteImport } from './app/opportunities/pages/create'
 import { Route as newsPagesCreateRouteImport } from './app/news/pages/create'
 import { Route as membersPagesCreateRouteImport } from './app/members/pages/create'
-import { Route as majorsPagesCreateRouteImport } from './app/majors/pages/create'
+import { Route as eventsPagesCreateRouteImport } from './app/events/pages/create'
+import { Route as eventsPagesEventIdIndexRouteImport } from './app/events/pages/$eventId-index'
 import { Route as usersPagesListRouteImport } from './app/users/pages/list'
 import { Route as storiesPagesListRouteImport } from './app/stories/pages/list'
 import { Route as researchPagesListRouteImport } from './app/research/pages/list'
+import { Route as programsPagesListRouteImport } from './app/programs/pages/list'
 import { Route as opportunitiesPagesListRouteImport } from './app/opportunities/pages/list'
 import { Route as newsPagesListRouteImport } from './app/news/pages/list'
 import { Route as membersPagesListRouteImport } from './app/members/pages/list'
-import { Route as majorsPagesListRouteImport } from './app/majors/pages/list'
+import { Route as eventsPagesListRouteImport } from './app/events/pages/list'
 import { Route as ApiAuthAdminSplatRouteImport } from './app/api/auth/admin/$'
 import { Route as usersPagesUserIdEditRouteImport } from './app/users/pages/userId-edit'
 import { Route as storiesPagesEditRouteImport } from './app/stories/pages/edit'
 import { Route as researchPagesResearchIdEditRouteImport } from './app/research/pages/$researchId-edit'
+import { Route as programsPagesProgramIdEditRouteImport } from './app/programs/pages/programId-edit'
 import { Route as opportunitiesPagesEditRouteImport } from './app/opportunities/pages/edit'
 import { Route as newsPagesEditRouteImport } from './app/news/pages/edit'
 import { Route as membersPagesMemberIdEditRouteImport } from './app/members/pages/memberId-edit'
-import { Route as majorsPagesMajorIdEditRouteImport } from './app/majors/pages/majorId-edit'
+import { Route as eventsPagesEventIdEditRouteImport } from './app/events/pages/eventId-edit'
 
 const maintenanceRoute = maintenanceRouteImport.update({
   id: '/maintenance',
@@ -116,6 +122,11 @@ const researchLayoutRoute = researchLayoutRouteImport.update({
   path: '/research',
   getParentRoute: () => adminDotrouteRoute,
 } as any)
+const programsLayoutRoute = programsLayoutRouteImport.update({
+  id: '/programs',
+  path: '/programs',
+  getParentRoute: () => adminDotrouteRoute,
+} as any)
 const opportunitiesLayoutRoute = opportunitiesLayoutRouteImport.update({
   id: '/opportunities',
   path: '/opportunities',
@@ -131,9 +142,9 @@ const membersLayoutRoute = membersLayoutRouteImport.update({
   path: '/members',
   getParentRoute: () => adminDotrouteRoute,
 } as any)
-const majorsLayoutRoute = majorsLayoutRouteImport.update({
-  id: '/majors',
-  path: '/majors',
+const eventsLayoutRoute = eventsLayoutRouteImport.update({
+  id: '/events',
+  path: '/events',
   getParentRoute: () => adminDotrouteRoute,
 } as any)
 const dashboardPagesAdminDashboardRoute =
@@ -157,6 +168,11 @@ const ApiResearchSplatRoute = ApiResearchSplatRouteImport.update({
   path: '/api/research/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiProgramsSplatRoute = ApiProgramsSplatRouteImport.update({
+  id: '/api/programs/$',
+  path: '/api/programs/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiOpportunitiesSplatRoute = ApiOpportunitiesSplatRouteImport.update({
   id: '/api/opportunities/$',
   path: '/api/opportunities/$',
@@ -167,9 +183,9 @@ const ApiNewsSplatRoute = ApiNewsSplatRouteImport.update({
   path: '/api/news/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiMajorsSplatRoute = ApiMajorsSplatRouteImport.update({
-  id: '/api/majors/$',
-  path: '/api/majors/$',
+const ApiEventsSplatRoute = ApiEventsSplatRouteImport.update({
+  id: '/api/events/$',
+  path: '/api/events/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -192,6 +208,11 @@ const researchPagesCreateRoute = researchPagesCreateRouteImport.update({
   path: '/create',
   getParentRoute: () => researchLayoutRoute,
 } as any)
+const programsPagesCreateRoute = programsPagesCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => programsLayoutRoute,
+} as any)
 const opportunitiesPagesCreateRoute =
   opportunitiesPagesCreateRouteImport.update({
     id: '/create',
@@ -208,10 +229,15 @@ const membersPagesCreateRoute = membersPagesCreateRouteImport.update({
   path: '/create',
   getParentRoute: () => membersLayoutRoute,
 } as any)
-const majorsPagesCreateRoute = majorsPagesCreateRouteImport.update({
+const eventsPagesCreateRoute = eventsPagesCreateRouteImport.update({
   id: '/create',
   path: '/create',
-  getParentRoute: () => majorsLayoutRoute,
+  getParentRoute: () => eventsLayoutRoute,
+} as any)
+const eventsPagesEventIdIndexRoute = eventsPagesEventIdIndexRouteImport.update({
+  id: '/$eventId',
+  path: '/$eventId',
+  getParentRoute: () => eventsLayoutRoute,
 } as any)
 const usersPagesListRoute = usersPagesListRouteImport.update({
   id: '/',
@@ -228,6 +254,11 @@ const researchPagesListRoute = researchPagesListRouteImport.update({
   path: '/',
   getParentRoute: () => researchLayoutRoute,
 } as any)
+const programsPagesListRoute = programsPagesListRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => programsLayoutRoute,
+} as any)
 const opportunitiesPagesListRoute = opportunitiesPagesListRouteImport.update({
   id: '/',
   path: '/',
@@ -243,10 +274,10 @@ const membersPagesListRoute = membersPagesListRouteImport.update({
   path: '/',
   getParentRoute: () => membersLayoutRoute,
 } as any)
-const majorsPagesListRoute = majorsPagesListRouteImport.update({
+const eventsPagesListRoute = eventsPagesListRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => majorsLayoutRoute,
+  getParentRoute: () => eventsLayoutRoute,
 } as any)
 const ApiAuthAdminSplatRoute = ApiAuthAdminSplatRouteImport.update({
   id: '/api/auth/admin/$',
@@ -269,6 +300,12 @@ const researchPagesResearchIdEditRoute =
     path: '/$researchId/edit',
     getParentRoute: () => researchLayoutRoute,
   } as any)
+const programsPagesProgramIdEditRoute =
+  programsPagesProgramIdEditRouteImport.update({
+    id: '/$programId/edit',
+    path: '/$programId/edit',
+    getParentRoute: () => programsLayoutRoute,
+  } as any)
 const opportunitiesPagesEditRoute = opportunitiesPagesEditRouteImport.update({
   id: '/$opportunityId/edit',
   path: '/$opportunityId/edit',
@@ -285,10 +322,10 @@ const membersPagesMemberIdEditRoute =
     path: '/$memberId/edit',
     getParentRoute: () => membersLayoutRoute,
   } as any)
-const majorsPagesMajorIdEditRoute = majorsPagesMajorIdEditRouteImport.update({
-  id: '/$majorId/edit',
-  path: '/$majorId/edit',
-  getParentRoute: () => majorsLayoutRoute,
+const eventsPagesEventIdEditRoute = eventsPagesEventIdEditRouteImport.update({
+  id: '/$eventId/edit',
+  path: '/$eventId/edit',
+  getParentRoute: () => eventsLayoutRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -297,10 +334,11 @@ export interface FileRoutesByFullPath {
   '/auth': typeof authLayoutRouteWithChildren
   '/maintenance': typeof maintenanceRoute
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
-  '/admin/majors': typeof majorsLayoutRouteWithChildren
+  '/admin/events': typeof eventsLayoutRouteWithChildren
   '/admin/members': typeof membersLayoutRouteWithChildren
   '/admin/news': typeof newsLayoutRouteWithChildren
   '/admin/opportunities': typeof opportunitiesLayoutRouteWithChildren
+  '/admin/programs': typeof programsLayoutRouteWithChildren
   '/admin/research': typeof researchLayoutRouteWithChildren
   '/admin/stories': typeof storiesLayoutRouteWithChildren
   '/admin/users': typeof usersLayoutRouteWithChildren
@@ -309,31 +347,36 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
   '/admin/profile': typeof profilePagesIndexRoute
-  '/admin/majors/': typeof majorsPagesListRoute
+  '/admin/events/': typeof eventsPagesListRoute
   '/admin/members/': typeof membersPagesListRoute
   '/admin/news/': typeof newsPagesListRoute
   '/admin/opportunities/': typeof opportunitiesPagesListRoute
+  '/admin/programs/': typeof programsPagesListRoute
   '/admin/research/': typeof researchPagesListRoute
   '/admin/stories/': typeof storiesPagesListRoute
   '/admin/users/': typeof usersPagesListRoute
-  '/admin/majors/create': typeof majorsPagesCreateRoute
+  '/admin/events/$eventId': typeof eventsPagesEventIdIndexRoute
+  '/admin/events/create': typeof eventsPagesCreateRoute
   '/admin/members/create': typeof membersPagesCreateRoute
   '/admin/news/create': typeof newsPagesCreateRoute
   '/admin/opportunities/create': typeof opportunitiesPagesCreateRoute
+  '/admin/programs/create': typeof programsPagesCreateRoute
   '/admin/research/create': typeof researchPagesCreateRoute
   '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/api/majors/$': typeof ApiMajorsSplatRoute
+  '/api/events/$': typeof ApiEventsSplatRoute
   '/api/news/$': typeof ApiNewsSplatRoute
   '/api/opportunities/$': typeof ApiOpportunitiesSplatRoute
+  '/api/programs/$': typeof ApiProgramsSplatRoute
   '/api/research/$': typeof ApiResearchSplatRoute
   '/api/stats/$': typeof ApiStatsSplatRoute
   '/api/stories/$': typeof ApiStoriesSplatRoute
-  '/admin/majors/$majorId/edit': typeof majorsPagesMajorIdEditRoute
+  '/admin/events/$eventId/edit': typeof eventsPagesEventIdEditRoute
   '/admin/members/$memberId/edit': typeof membersPagesMemberIdEditRoute
   '/admin/news/$newsId/edit': typeof newsPagesEditRoute
   '/admin/opportunities/$opportunityId/edit': typeof opportunitiesPagesEditRoute
+  '/admin/programs/$programId/edit': typeof programsPagesProgramIdEditRoute
   '/admin/research/$researchId/edit': typeof researchPagesResearchIdEditRoute
   '/admin/stories/$storyId/edit': typeof storiesPagesEditRoute
   '/admin/users/$userId/edit': typeof usersPagesUserIdEditRoute
@@ -350,31 +393,36 @@ export interface FileRoutesByTo {
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
   '/admin/profile': typeof profilePagesIndexRoute
-  '/admin/majors': typeof majorsPagesListRoute
+  '/admin/events': typeof eventsPagesListRoute
   '/admin/members': typeof membersPagesListRoute
   '/admin/news': typeof newsPagesListRoute
   '/admin/opportunities': typeof opportunitiesPagesListRoute
+  '/admin/programs': typeof programsPagesListRoute
   '/admin/research': typeof researchPagesListRoute
   '/admin/stories': typeof storiesPagesListRoute
   '/admin/users': typeof usersPagesListRoute
-  '/admin/majors/create': typeof majorsPagesCreateRoute
+  '/admin/events/$eventId': typeof eventsPagesEventIdIndexRoute
+  '/admin/events/create': typeof eventsPagesCreateRoute
   '/admin/members/create': typeof membersPagesCreateRoute
   '/admin/news/create': typeof newsPagesCreateRoute
   '/admin/opportunities/create': typeof opportunitiesPagesCreateRoute
+  '/admin/programs/create': typeof programsPagesCreateRoute
   '/admin/research/create': typeof researchPagesCreateRoute
   '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/api/majors/$': typeof ApiMajorsSplatRoute
+  '/api/events/$': typeof ApiEventsSplatRoute
   '/api/news/$': typeof ApiNewsSplatRoute
   '/api/opportunities/$': typeof ApiOpportunitiesSplatRoute
+  '/api/programs/$': typeof ApiProgramsSplatRoute
   '/api/research/$': typeof ApiResearchSplatRoute
   '/api/stats/$': typeof ApiStatsSplatRoute
   '/api/stories/$': typeof ApiStoriesSplatRoute
-  '/admin/majors/$majorId/edit': typeof majorsPagesMajorIdEditRoute
+  '/admin/events/$eventId/edit': typeof eventsPagesEventIdEditRoute
   '/admin/members/$memberId/edit': typeof membersPagesMemberIdEditRoute
   '/admin/news/$newsId/edit': typeof newsPagesEditRoute
   '/admin/opportunities/$opportunityId/edit': typeof opportunitiesPagesEditRoute
+  '/admin/programs/$programId/edit': typeof programsPagesProgramIdEditRoute
   '/admin/research/$researchId/edit': typeof researchPagesResearchIdEditRoute
   '/admin/stories/$storyId/edit': typeof storiesPagesEditRoute
   '/admin/users/$userId/edit': typeof usersPagesUserIdEditRoute
@@ -387,10 +435,11 @@ export interface FileRoutesById {
   '/auth': typeof authLayoutRouteWithChildren
   '/maintenance': typeof maintenanceRoute
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
-  '/admin/majors': typeof majorsLayoutRouteWithChildren
+  '/admin/events': typeof eventsLayoutRouteWithChildren
   '/admin/members': typeof membersLayoutRouteWithChildren
   '/admin/news': typeof newsLayoutRouteWithChildren
   '/admin/opportunities': typeof opportunitiesLayoutRouteWithChildren
+  '/admin/programs': typeof programsLayoutRouteWithChildren
   '/admin/research': typeof researchLayoutRouteWithChildren
   '/admin/stories': typeof storiesLayoutRouteWithChildren
   '/admin/users': typeof usersLayoutRouteWithChildren
@@ -399,31 +448,36 @@ export interface FileRoutesById {
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
   '/admin/profile': typeof profilePagesIndexRoute
-  '/admin/majors/': typeof majorsPagesListRoute
+  '/admin/events/': typeof eventsPagesListRoute
   '/admin/members/': typeof membersPagesListRoute
   '/admin/news/': typeof newsPagesListRoute
   '/admin/opportunities/': typeof opportunitiesPagesListRoute
+  '/admin/programs/': typeof programsPagesListRoute
   '/admin/research/': typeof researchPagesListRoute
   '/admin/stories/': typeof storiesPagesListRoute
   '/admin/users/': typeof usersPagesListRoute
-  '/admin/majors/create': typeof majorsPagesCreateRoute
+  '/admin/events/$eventId': typeof eventsPagesEventIdIndexRoute
+  '/admin/events/create': typeof eventsPagesCreateRoute
   '/admin/members/create': typeof membersPagesCreateRoute
   '/admin/news/create': typeof newsPagesCreateRoute
   '/admin/opportunities/create': typeof opportunitiesPagesCreateRoute
+  '/admin/programs/create': typeof programsPagesCreateRoute
   '/admin/research/create': typeof researchPagesCreateRoute
   '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/api/majors/$': typeof ApiMajorsSplatRoute
+  '/api/events/$': typeof ApiEventsSplatRoute
   '/api/news/$': typeof ApiNewsSplatRoute
   '/api/opportunities/$': typeof ApiOpportunitiesSplatRoute
+  '/api/programs/$': typeof ApiProgramsSplatRoute
   '/api/research/$': typeof ApiResearchSplatRoute
   '/api/stats/$': typeof ApiStatsSplatRoute
   '/api/stories/$': typeof ApiStoriesSplatRoute
-  '/admin/majors/$majorId/edit': typeof majorsPagesMajorIdEditRoute
+  '/admin/events/$eventId/edit': typeof eventsPagesEventIdEditRoute
   '/admin/members/$memberId/edit': typeof membersPagesMemberIdEditRoute
   '/admin/news/$newsId/edit': typeof newsPagesEditRoute
   '/admin/opportunities/$opportunityId/edit': typeof opportunitiesPagesEditRoute
+  '/admin/programs/$programId/edit': typeof programsPagesProgramIdEditRoute
   '/admin/research/$researchId/edit': typeof researchPagesResearchIdEditRoute
   '/admin/stories/$storyId/edit': typeof storiesPagesEditRoute
   '/admin/users/$userId/edit': typeof usersPagesUserIdEditRoute
@@ -437,10 +491,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/maintenance'
     | '/admin/dashboard'
-    | '/admin/majors'
+    | '/admin/events'
     | '/admin/members'
     | '/admin/news'
     | '/admin/opportunities'
+    | '/admin/programs'
     | '/admin/research'
     | '/admin/stories'
     | '/admin/users'
@@ -449,31 +504,36 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/admin/profile'
-    | '/admin/majors/'
+    | '/admin/events/'
     | '/admin/members/'
     | '/admin/news/'
     | '/admin/opportunities/'
+    | '/admin/programs/'
     | '/admin/research/'
     | '/admin/stories/'
     | '/admin/users/'
-    | '/admin/majors/create'
+    | '/admin/events/$eventId'
+    | '/admin/events/create'
     | '/admin/members/create'
     | '/admin/news/create'
     | '/admin/opportunities/create'
+    | '/admin/programs/create'
     | '/admin/research/create'
     | '/admin/stories/create'
     | '/admin/users/create'
     | '/api/auth/$'
-    | '/api/majors/$'
+    | '/api/events/$'
     | '/api/news/$'
     | '/api/opportunities/$'
+    | '/api/programs/$'
     | '/api/research/$'
     | '/api/stats/$'
     | '/api/stories/$'
-    | '/admin/majors/$majorId/edit'
+    | '/admin/events/$eventId/edit'
     | '/admin/members/$memberId/edit'
     | '/admin/news/$newsId/edit'
     | '/admin/opportunities/$opportunityId/edit'
+    | '/admin/programs/$programId/edit'
     | '/admin/research/$researchId/edit'
     | '/admin/stories/$storyId/edit'
     | '/admin/users/$userId/edit'
@@ -490,31 +550,36 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/admin/profile'
-    | '/admin/majors'
+    | '/admin/events'
     | '/admin/members'
     | '/admin/news'
     | '/admin/opportunities'
+    | '/admin/programs'
     | '/admin/research'
     | '/admin/stories'
     | '/admin/users'
-    | '/admin/majors/create'
+    | '/admin/events/$eventId'
+    | '/admin/events/create'
     | '/admin/members/create'
     | '/admin/news/create'
     | '/admin/opportunities/create'
+    | '/admin/programs/create'
     | '/admin/research/create'
     | '/admin/stories/create'
     | '/admin/users/create'
     | '/api/auth/$'
-    | '/api/majors/$'
+    | '/api/events/$'
     | '/api/news/$'
     | '/api/opportunities/$'
+    | '/api/programs/$'
     | '/api/research/$'
     | '/api/stats/$'
     | '/api/stories/$'
-    | '/admin/majors/$majorId/edit'
+    | '/admin/events/$eventId/edit'
     | '/admin/members/$memberId/edit'
     | '/admin/news/$newsId/edit'
     | '/admin/opportunities/$opportunityId/edit'
+    | '/admin/programs/$programId/edit'
     | '/admin/research/$researchId/edit'
     | '/admin/stories/$storyId/edit'
     | '/admin/users/$userId/edit'
@@ -526,10 +591,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/maintenance'
     | '/admin/dashboard'
-    | '/admin/majors'
+    | '/admin/events'
     | '/admin/members'
     | '/admin/news'
     | '/admin/opportunities'
+    | '/admin/programs'
     | '/admin/research'
     | '/admin/stories'
     | '/admin/users'
@@ -538,31 +604,36 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/admin/profile'
-    | '/admin/majors/'
+    | '/admin/events/'
     | '/admin/members/'
     | '/admin/news/'
     | '/admin/opportunities/'
+    | '/admin/programs/'
     | '/admin/research/'
     | '/admin/stories/'
     | '/admin/users/'
-    | '/admin/majors/create'
+    | '/admin/events/$eventId'
+    | '/admin/events/create'
     | '/admin/members/create'
     | '/admin/news/create'
     | '/admin/opportunities/create'
+    | '/admin/programs/create'
     | '/admin/research/create'
     | '/admin/stories/create'
     | '/admin/users/create'
     | '/api/auth/$'
-    | '/api/majors/$'
+    | '/api/events/$'
     | '/api/news/$'
     | '/api/opportunities/$'
+    | '/api/programs/$'
     | '/api/research/$'
     | '/api/stats/$'
     | '/api/stories/$'
-    | '/admin/majors/$majorId/edit'
+    | '/admin/events/$eventId/edit'
     | '/admin/members/$memberId/edit'
     | '/admin/news/$newsId/edit'
     | '/admin/opportunities/$opportunityId/edit'
+    | '/admin/programs/$programId/edit'
     | '/admin/research/$researchId/edit'
     | '/admin/stories/$storyId/edit'
     | '/admin/users/$userId/edit'
@@ -576,9 +647,10 @@ export interface RootRouteChildren {
   maintenanceRoute: typeof maintenanceRoute
   ApiMediaRoute: typeof ApiMediaRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  ApiMajorsSplatRoute: typeof ApiMajorsSplatRoute
+  ApiEventsSplatRoute: typeof ApiEventsSplatRoute
   ApiNewsSplatRoute: typeof ApiNewsSplatRoute
   ApiOpportunitiesSplatRoute: typeof ApiOpportunitiesSplatRoute
+  ApiProgramsSplatRoute: typeof ApiProgramsSplatRoute
   ApiResearchSplatRoute: typeof ApiResearchSplatRoute
   ApiStatsSplatRoute: typeof ApiStatsSplatRoute
   ApiStoriesSplatRoute: typeof ApiStoriesSplatRoute
@@ -671,6 +743,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof researchLayoutRouteImport
       parentRoute: typeof adminDotrouteRoute
     }
+    '/admin/programs': {
+      id: '/admin/programs'
+      path: '/programs'
+      fullPath: '/admin/programs'
+      preLoaderRoute: typeof programsLayoutRouteImport
+      parentRoute: typeof adminDotrouteRoute
+    }
     '/admin/opportunities': {
       id: '/admin/opportunities'
       path: '/opportunities'
@@ -692,11 +771,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof membersLayoutRouteImport
       parentRoute: typeof adminDotrouteRoute
     }
-    '/admin/majors': {
-      id: '/admin/majors'
-      path: '/majors'
-      fullPath: '/admin/majors'
-      preLoaderRoute: typeof majorsLayoutRouteImport
+    '/admin/events': {
+      id: '/admin/events'
+      path: '/events'
+      fullPath: '/admin/events'
+      preLoaderRoute: typeof eventsLayoutRouteImport
       parentRoute: typeof adminDotrouteRoute
     }
     '/admin/dashboard': {
@@ -727,6 +806,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiResearchSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/programs/$': {
+      id: '/api/programs/$'
+      path: '/api/programs/$'
+      fullPath: '/api/programs/$'
+      preLoaderRoute: typeof ApiProgramsSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/opportunities/$': {
       id: '/api/opportunities/$'
       path: '/api/opportunities/$'
@@ -741,11 +827,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiNewsSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/majors/$': {
-      id: '/api/majors/$'
-      path: '/api/majors/$'
-      fullPath: '/api/majors/$'
-      preLoaderRoute: typeof ApiMajorsSplatRouteImport
+    '/api/events/$': {
+      id: '/api/events/$'
+      path: '/api/events/$'
+      fullPath: '/api/events/$'
+      preLoaderRoute: typeof ApiEventsSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -776,6 +862,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof researchPagesCreateRouteImport
       parentRoute: typeof researchLayoutRoute
     }
+    '/admin/programs/create': {
+      id: '/admin/programs/create'
+      path: '/create'
+      fullPath: '/admin/programs/create'
+      preLoaderRoute: typeof programsPagesCreateRouteImport
+      parentRoute: typeof programsLayoutRoute
+    }
     '/admin/opportunities/create': {
       id: '/admin/opportunities/create'
       path: '/create'
@@ -797,12 +890,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof membersPagesCreateRouteImport
       parentRoute: typeof membersLayoutRoute
     }
-    '/admin/majors/create': {
-      id: '/admin/majors/create'
+    '/admin/events/create': {
+      id: '/admin/events/create'
       path: '/create'
-      fullPath: '/admin/majors/create'
-      preLoaderRoute: typeof majorsPagesCreateRouteImport
-      parentRoute: typeof majorsLayoutRoute
+      fullPath: '/admin/events/create'
+      preLoaderRoute: typeof eventsPagesCreateRouteImport
+      parentRoute: typeof eventsLayoutRoute
+    }
+    '/admin/events/$eventId': {
+      id: '/admin/events/$eventId'
+      path: '/$eventId'
+      fullPath: '/admin/events/$eventId'
+      preLoaderRoute: typeof eventsPagesEventIdIndexRouteImport
+      parentRoute: typeof eventsLayoutRoute
     }
     '/admin/users/': {
       id: '/admin/users/'
@@ -825,6 +925,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof researchPagesListRouteImport
       parentRoute: typeof researchLayoutRoute
     }
+    '/admin/programs/': {
+      id: '/admin/programs/'
+      path: '/'
+      fullPath: '/admin/programs/'
+      preLoaderRoute: typeof programsPagesListRouteImport
+      parentRoute: typeof programsLayoutRoute
+    }
     '/admin/opportunities/': {
       id: '/admin/opportunities/'
       path: '/'
@@ -846,12 +953,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof membersPagesListRouteImport
       parentRoute: typeof membersLayoutRoute
     }
-    '/admin/majors/': {
-      id: '/admin/majors/'
+    '/admin/events/': {
+      id: '/admin/events/'
       path: '/'
-      fullPath: '/admin/majors/'
-      preLoaderRoute: typeof majorsPagesListRouteImport
-      parentRoute: typeof majorsLayoutRoute
+      fullPath: '/admin/events/'
+      preLoaderRoute: typeof eventsPagesListRouteImport
+      parentRoute: typeof eventsLayoutRoute
     }
     '/api/auth/admin/$': {
       id: '/api/auth/admin/$'
@@ -881,6 +988,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof researchPagesResearchIdEditRouteImport
       parentRoute: typeof researchLayoutRoute
     }
+    '/admin/programs/$programId/edit': {
+      id: '/admin/programs/$programId/edit'
+      path: '/$programId/edit'
+      fullPath: '/admin/programs/$programId/edit'
+      preLoaderRoute: typeof programsPagesProgramIdEditRouteImport
+      parentRoute: typeof programsLayoutRoute
+    }
     '/admin/opportunities/$opportunityId/edit': {
       id: '/admin/opportunities/$opportunityId/edit'
       path: '/$opportunityId/edit'
@@ -902,30 +1016,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof membersPagesMemberIdEditRouteImport
       parentRoute: typeof membersLayoutRoute
     }
-    '/admin/majors/$majorId/edit': {
-      id: '/admin/majors/$majorId/edit'
-      path: '/$majorId/edit'
-      fullPath: '/admin/majors/$majorId/edit'
-      preLoaderRoute: typeof majorsPagesMajorIdEditRouteImport
-      parentRoute: typeof majorsLayoutRoute
+    '/admin/events/$eventId/edit': {
+      id: '/admin/events/$eventId/edit'
+      path: '/$eventId/edit'
+      fullPath: '/admin/events/$eventId/edit'
+      preLoaderRoute: typeof eventsPagesEventIdEditRouteImport
+      parentRoute: typeof eventsLayoutRoute
     }
   }
 }
 
-interface majorsLayoutRouteChildren {
-  majorsPagesListRoute: typeof majorsPagesListRoute
-  majorsPagesCreateRoute: typeof majorsPagesCreateRoute
-  majorsPagesMajorIdEditRoute: typeof majorsPagesMajorIdEditRoute
+interface eventsLayoutRouteChildren {
+  eventsPagesListRoute: typeof eventsPagesListRoute
+  eventsPagesEventIdIndexRoute: typeof eventsPagesEventIdIndexRoute
+  eventsPagesCreateRoute: typeof eventsPagesCreateRoute
+  eventsPagesEventIdEditRoute: typeof eventsPagesEventIdEditRoute
 }
 
-const majorsLayoutRouteChildren: majorsLayoutRouteChildren = {
-  majorsPagesListRoute: majorsPagesListRoute,
-  majorsPagesCreateRoute: majorsPagesCreateRoute,
-  majorsPagesMajorIdEditRoute: majorsPagesMajorIdEditRoute,
+const eventsLayoutRouteChildren: eventsLayoutRouteChildren = {
+  eventsPagesListRoute: eventsPagesListRoute,
+  eventsPagesEventIdIndexRoute: eventsPagesEventIdIndexRoute,
+  eventsPagesCreateRoute: eventsPagesCreateRoute,
+  eventsPagesEventIdEditRoute: eventsPagesEventIdEditRoute,
 }
 
-const majorsLayoutRouteWithChildren = majorsLayoutRoute._addFileChildren(
-  majorsLayoutRouteChildren,
+const eventsLayoutRouteWithChildren = eventsLayoutRoute._addFileChildren(
+  eventsLayoutRouteChildren,
 )
 
 interface membersLayoutRouteChildren {
@@ -974,6 +1090,22 @@ const opportunitiesLayoutRouteChildren: opportunitiesLayoutRouteChildren = {
 
 const opportunitiesLayoutRouteWithChildren =
   opportunitiesLayoutRoute._addFileChildren(opportunitiesLayoutRouteChildren)
+
+interface programsLayoutRouteChildren {
+  programsPagesListRoute: typeof programsPagesListRoute
+  programsPagesCreateRoute: typeof programsPagesCreateRoute
+  programsPagesProgramIdEditRoute: typeof programsPagesProgramIdEditRoute
+}
+
+const programsLayoutRouteChildren: programsLayoutRouteChildren = {
+  programsPagesListRoute: programsPagesListRoute,
+  programsPagesCreateRoute: programsPagesCreateRoute,
+  programsPagesProgramIdEditRoute: programsPagesProgramIdEditRoute,
+}
+
+const programsLayoutRouteWithChildren = programsLayoutRoute._addFileChildren(
+  programsLayoutRouteChildren,
+)
 
 interface researchLayoutRouteChildren {
   researchPagesListRoute: typeof researchPagesListRoute
@@ -1025,10 +1157,11 @@ const usersLayoutRouteWithChildren = usersLayoutRoute._addFileChildren(
 
 interface adminDotrouteRouteChildren {
   dashboardPagesAdminDashboardRoute: typeof dashboardPagesAdminDashboardRoute
-  majorsLayoutRoute: typeof majorsLayoutRouteWithChildren
+  eventsLayoutRoute: typeof eventsLayoutRouteWithChildren
   membersLayoutRoute: typeof membersLayoutRouteWithChildren
   newsLayoutRoute: typeof newsLayoutRouteWithChildren
   opportunitiesLayoutRoute: typeof opportunitiesLayoutRouteWithChildren
+  programsLayoutRoute: typeof programsLayoutRouteWithChildren
   researchLayoutRoute: typeof researchLayoutRouteWithChildren
   storiesLayoutRoute: typeof storiesLayoutRouteWithChildren
   usersLayoutRoute: typeof usersLayoutRouteWithChildren
@@ -1037,10 +1170,11 @@ interface adminDotrouteRouteChildren {
 
 const adminDotrouteRouteChildren: adminDotrouteRouteChildren = {
   dashboardPagesAdminDashboardRoute: dashboardPagesAdminDashboardRoute,
-  majorsLayoutRoute: majorsLayoutRouteWithChildren,
+  eventsLayoutRoute: eventsLayoutRouteWithChildren,
   membersLayoutRoute: membersLayoutRouteWithChildren,
   newsLayoutRoute: newsLayoutRouteWithChildren,
   opportunitiesLayoutRoute: opportunitiesLayoutRouteWithChildren,
+  programsLayoutRoute: programsLayoutRouteWithChildren,
   researchLayoutRoute: researchLayoutRouteWithChildren,
   storiesLayoutRoute: storiesLayoutRouteWithChildren,
   usersLayoutRoute: usersLayoutRouteWithChildren,
@@ -1074,9 +1208,10 @@ const rootRouteChildren: RootRouteChildren = {
   maintenanceRoute: maintenanceRoute,
   ApiMediaRoute: ApiMediaRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  ApiMajorsSplatRoute: ApiMajorsSplatRoute,
+  ApiEventsSplatRoute: ApiEventsSplatRoute,
   ApiNewsSplatRoute: ApiNewsSplatRoute,
   ApiOpportunitiesSplatRoute: ApiOpportunitiesSplatRoute,
+  ApiProgramsSplatRoute: ApiProgramsSplatRoute,
   ApiResearchSplatRoute: ApiResearchSplatRoute,
   ApiStatsSplatRoute: ApiStatsSplatRoute,
   ApiStoriesSplatRoute: ApiStoriesSplatRoute,

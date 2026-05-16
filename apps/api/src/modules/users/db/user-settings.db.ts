@@ -15,4 +15,5 @@ export const userSettings = sqliteTable("user_settings", {
 	isVisibleInGalaxy: integer("is_visible_in_galaxy", { mode: "boolean" })
 		.default(true)
 		.notNull(),
+	embedding: text("embedding"),
 });
