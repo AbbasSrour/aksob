@@ -14,7 +14,7 @@ import { AUTH_ERRORS } from "@/modules/auth/auth.errors";
 import { CONNECTION_TYPE_ELIGIBILITY } from "@/modules/connections/constant/connection-eligibility.constant";
 import { CONNECTION_TYPES } from "@/modules/connections/constant/connection-types.constant";
 import type { UserType } from "@/modules/users/constant/user-types";
-import { generateAndStoreEmbedding } from "@/modules/ai/ai-embedding";
+import { generateAndStoreEmbedding } from "@/lib/ai/embedding";
 import { logger } from "@/utils/logger";
 
 const isSecureAuth = env.BETTER_AUTH_URL.startsWith("https://");
@@ -178,7 +178,6 @@ export const auth = betterAuth({
 
 				return;
 			}
-
 		}),
 		after: createAuthMiddleware(async (ctx) => {
 			if (ctx.path !== "/update-user") {
@@ -199,13 +198,11 @@ export const auth = betterAuth({
 			const userType = (ctx.context.user?.type ?? "student") as UserType;
 
 			// ── Visibility gate ──────────────────────────
-			const exposureFlags = [
-				body.emailVisible,
-				body.phoneNumberVisible,
-			].some((f) => f === true);
+			const exposureFlags = [body.emailVisible, body.phoneNumberVisible].some(
+				(f) => f === true,
+			);
 			const hasConnectionTypes =
-				body.connectionTypes !== undefined &&
-				body.connectionTypes.length > 0;
+				body.connectionTypes !== undefined && body.connectionTypes.length > 0;
 
 			if (
 				body.isVisibleInGalaxy === false &&
@@ -227,15 +224,13 @@ export const auth = betterAuth({
 				const sets: Record<string, unknown> = {};
 
 				if (body.isVisibleInGalaxy !== undefined) {
-					sets.isVisibleInGalaxy =
-						body.isVisibleInGalaxy;
+					sets.isVisibleInGalaxy = body.isVisibleInGalaxy;
 				}
 				if (body.emailVisible !== undefined) {
 					sets.emailVisible = body.emailVisible;
 				}
 				if (body.phoneNumberVisible !== undefined) {
-					sets.phoneNumberVisible =
-						body.phoneNumberVisible;
+					sets.phoneNumberVisible = body.phoneNumberVisible;
 				}
 
 				await db
@@ -255,30 +250,20 @@ export const auth = betterAuth({
 						emailVisible: false,
 						phoneNumberVisible: false,
 					})
-					.where(
-						eq(schema.userSettings.userId, userId),
-					);
+					.where(eq(schema.userSettings.userId, userId));
 
 				await db
 					.delete(schema.userConnectionPreference)
-					.where(
-						eq(
-							schema.userConnectionPreference.userId,
-							userId,
-						),
-					);
+					.where(eq(schema.userConnectionPreference.userId, userId));
 			}
 
 			// ── Update connection preferences ───────────
 			if (body.connectionTypes !== undefined) {
-				const eligibleTypes =
-					CONNECTION_TYPE_ELIGIBILITY[userType];
+				const eligibleTypes = CONNECTION_TYPE_ELIGIBILITY[userType];
 
 				for (const ct of body.connectionTypes) {
 					if (
-						!CONNECTION_TYPES.includes(
-							ct as typeof CONNECTION_TYPES[number],
-						)
+						!CONNECTION_TYPES.includes(ct as (typeof CONNECTION_TYPES)[number])
 					) {
 						throw new APIError("BAD_REQUEST", {
 							code: "INVALID_CONNECTION_TYPE",
@@ -286,9 +271,7 @@ export const auth = betterAuth({
 						});
 					}
 					if (
-						!eligibleTypes.includes(
-							ct as typeof CONNECTION_TYPES[number],
-						)
+						!eligibleTypes.includes(ct as (typeof CONNECTION_TYPES)[number])
 					) {
 						throw new APIError("BAD_REQUEST", {
 							code: "CONNECTION_TYPE_NOT_ELIGIBLE",
@@ -299,22 +282,15 @@ export const auth = betterAuth({
 
 				await db
 					.delete(schema.userConnectionPreference)
-					.where(
-						eq(
-							schema.userConnectionPreference.userId,
-							userId,
-						),
-					);
+					.where(eq(schema.userConnectionPreference.userId, userId));
 
 				if (body.connectionTypes.length > 0) {
-					await db
-						.insert(schema.userConnectionPreference)
-						.values(
-							body.connectionTypes.map((ct) => ({
-								userId,
-								type: ct as typeof CONNECTION_TYPES[number],
-							})),
-						);
+					await db.insert(schema.userConnectionPreference).values(
+						body.connectionTypes.map((ct) => ({
+							userId,
+							type: ct as (typeof CONNECTION_TYPES)[number],
+						})),
+					);
 				}
 			}
 

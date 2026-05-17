@@ -5,8 +5,8 @@ export interface ChatConversation {
 	otherUser: {
 		id: string;
 		name: string;
-		email: string;
-		program: string;
+		email: string | null;
+		program: string | null;
 		image: string | null;
 	};
 	lastMessage: {
@@ -28,19 +28,19 @@ export interface ChatMessage {
 
 export async function listConversations() {
 	return apiFetch<{ status: "ok"; data: ChatConversation[] }>(
-		"/chat/conversations",
+		"/api/chat/conversations",
 	);
 }
 
 export async function listMessages(conversationId: string, limit = 150) {
 	return apiFetch<{ status: "ok"; data: ChatMessage[] }>(
-		`/chat/${conversationId}/messages?limit=${limit}`,
+		`/api/chat/${conversationId}/messages?limit=${limit}`,
 	);
 }
 
 export async function sendMessage(conversationId: string, content: string) {
 	return apiFetch<{ status: "ok"; data: ChatMessage }>(
-		`/chat/${conversationId}/messages`,
+		`/api/chat/${conversationId}/messages`,
 		{
 			method: "POST",
 			body: JSON.stringify({ content }),
@@ -50,7 +50,7 @@ export async function sendMessage(conversationId: string, content: string) {
 
 export async function createOrGetDm(userId: string) {
 	return apiFetch<{ status: "ok"; data: { conversationId: string } }>(
-		"/chat/dm",
+		"/api/chat/dm",
 		{
 			method: "POST",
 			body: JSON.stringify({ userId }),

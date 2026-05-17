@@ -1,9 +1,4 @@
-import {
-	ArrowLeft,
-	ArrowRight,
-	Sparkles,
-	SkipForward,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, SkipForward } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { useSession } from "~/app/lib/auth";
@@ -26,6 +21,7 @@ import { DoneStep } from "~/app/onboarding/components/done-step";
 import {
 	advanceOnboarding,
 	completeOnboarding,
+	fetchUserProfile,
 	saveEducation,
 	saveExperience,
 	saveSettings,
@@ -105,8 +101,46 @@ export default function OnboardingPage() {
 		if (idx >= 0 && idx > step) {
 			setStep(idx + 1);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isPending, session?.user]);
+
+	// Pre-populate refs with saved data from the API
+	useEffect(() => {
+		let cancelled = false;
+		fetchUserProfile().then((profile) => {
+			if (cancelled || !profile) return;
+			// Only populate if refs are still empty (don't overwrite unsaved changes)
+			if (educationRef.current.length === 0 && profile.majors.length > 0) {
+				educationRef.current = profile.majors;
+			}
+			if (experienceRef.current.length === 0 && profile.experience.length > 0) {
+				experienceRef.current = profile.experience;
+			}
+			if (
+				tagsRef.current.skills.length === 0 &&
+				tagsRef.current.goals.length === 0 &&
+				tagsRef.current.hobbies.length === 0 &&
+				(profile.tags.skills.length > 0 ||
+					profile.tags.goals.length > 0 ||
+					profile.tags.hobbies.length > 0)
+			) {
+				tagsRef.current = profile.tags;
+			}
+			// Only overwrite settings if they're still the defaults
+			if (
+				settingsRef.current.isVisibleInGalaxy === true &&
+				settingsRef.current.emailVisible === false &&
+				settingsRef.current.phoneNumberVisible === false &&
+				settingsRef.current.connectionTypes.length === 0
+			) {
+				settingsRef.current = profile.settings;
+			}
+		});
+		return () => {
+			cancelled = true;
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const saveCurrentStep = useCallback(
 		async (targetStep: string): Promise<boolean> => {

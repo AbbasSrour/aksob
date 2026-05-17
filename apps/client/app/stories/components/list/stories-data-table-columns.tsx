@@ -4,7 +4,12 @@ import DataTableTextCell from "@aksob/ui/components/data-table/cells/data-table-
 import { DataTableColumnHeader } from "@aksob/ui/components/data-table/data-table-column-header";
 import { DataTableRowActions } from "@aksob/ui/components/data-table/data-table-row-actions";
 import { createRowNumberColumn } from "@aksob/ui/components/data-table/utils/row-number-column-helper";
-import { IconCheck, IconPencil, IconTrash, IconUser } from "@tabler/icons-react";
+import {
+	IconCheck,
+	IconPencil,
+	IconTrash,
+	IconUser,
+} from "@tabler/icons-react";
 import { useNavigate } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { storyCategoryOptions } from "@/app/stories/constants/story-category-options";

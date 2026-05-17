@@ -80,24 +80,29 @@ export function ExperienceEntryRow({
 					disabled={disabled}
 				/>
 				<input
+					type="date"
 					className={inputClass}
-					placeholder="Start date (e.g. Jan 2020)"
 					value={entry.startDate ?? ""}
 					onChange={(e) => onUpdate(index, "startDate", e.target.value || null)}
 					disabled={disabled}
 				/>
-				<input
-					className={inputClass}
-					placeholder="End date"
-					value={entry.endDate ?? ""}
-					onChange={(e) => onUpdate(index, "endDate", e.target.value || null)}
-					disabled={disabled || entry.isCurrent}
-				/>
+				{!entry.isCurrent && (
+					<input
+						type="date"
+						className={inputClass}
+						value={entry.endDate ?? ""}
+						onChange={(e) => onUpdate(index, "endDate", e.target.value || null)}
+						disabled={disabled}
+					/>
+				)}
 				<label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
 					<input
 						type="checkbox"
 						checked={entry.isCurrent}
-						onChange={(e) => onUpdate(index, "isCurrent", e.target.checked)}
+						onChange={(e) => {
+							onUpdate(index, "isCurrent", e.target.checked);
+							if (e.target.checked) onUpdate(index, "endDate", null);
+						}}
 						disabled={disabled}
 						className="rounded"
 					/>

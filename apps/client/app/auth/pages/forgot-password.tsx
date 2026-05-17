@@ -44,8 +44,8 @@ function ForgotPasswordPage() {
 					<div>
 						<CardTitle className="mb-1.5 text-2xl">Forgot password</CardTitle>
 						<CardDescription className="text-base">
-							Enter the email address tied to your account and we will send
-							you a reset link.
+							Enter the email address tied to your account and we will send you
+							a reset link.
 						</CardDescription>
 					</div>
 				</CardHeader>

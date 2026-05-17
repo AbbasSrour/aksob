@@ -1,5 +1,5 @@
-import { Edit2, Plus, Save } from "lucide-react";
-import { useCallback, useState } from "react";
+import { Plus, Save } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { type ExperienceEntry, updateExperience } from "~/app/lib/users";
 import { ExperienceEntryRow } from "~/app/profile/components/experience-entry";
 import { Button } from "~/components/ui/button";
@@ -7,22 +7,29 @@ import { Button } from "~/components/ui/button";
 interface Props {
 	entries: ExperienceEntry[];
 	onRefetch: () => void;
+	isEditing?: boolean;
+	onDone?: () => void;
 }
 
-export function ExperienceSection({ entries, onRefetch }: Props) {
-	const [editing, setEditing] = useState(false);
+export function ExperienceSection({
+	entries,
+	onRefetch,
+	isEditing = false,
+	onDone,
+}: Props) {
 	const [draft, setDraft] = useState<ExperienceEntry[]>([]);
 	const [saving, setSaving] = useState(false);
 
-	const handleEdit = useCallback(() => {
-		setDraft(entries.map((e) => ({ ...e })));
-		setEditing(true);
-	}, [entries]);
+	useEffect(() => {
+		if (isEditing) {
+			setDraft(entries.map((e) => ({ ...e })));
+		}
+	}, [isEditing, entries]);
 
 	const handleCancel = useCallback(() => {
 		setDraft([]);
-		setEditing(false);
-	}, []);
+		onDone?.();
+	}, [onDone]);
 
 	const handleSave = useCallback(async () => {
 		setSaving(true);
@@ -37,12 +44,12 @@ export function ExperienceSection({ entries, onRefetch }: Props) {
 					isCurrent: e.isCurrent,
 				})),
 			});
-			setEditing(false);
 			onRefetch();
+			onDone?.();
 		} finally {
 			setSaving(false);
 		}
-	}, [draft, onRefetch]);
+	}, [draft, onRefetch, onDone]);
 
 	const handleAdd = useCallback(() => {
 		setDraft((prev) => [
@@ -71,53 +78,20 @@ export function ExperienceSection({ entries, onRefetch }: Props) {
 		[],
 	);
 
-	const display = editing ? draft : entries;
+	const display = isEditing ? draft : entries;
 
 	return (
 		<div className="p-5">
-			<div className="flex items-center justify-between mb-4">
-				<h3 className="text-sm font-semibold text-gray-900">Experience</h3>
-				{!editing ? (
-					<Button
-						variant="secondary"
-						size="sm"
-						onClick={handleEdit}
-						leftIcon={<Edit2 size={14} />}
-					>
-						Edit
-					</Button>
-				) : (
-					<div className="flex gap-2">
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={handleCancel}
-							disabled={saving}
-						>
-							Cancel
-						</Button>
-						<Button
-							variant="primary"
-							size="sm"
-							onClick={handleSave}
-							leftIcon={<Save size={14} />}
-							isLoading={saving}
-						>
-							Save
-						</Button>
-					</div>
-				)}
-			</div>
-			{display.length === 0 && !editing ? (
+			{display.length === 0 && !isEditing ? (
 				<p className="text-sm text-gray-400 py-2">No experience entries yet.</p>
 			) : (
 				<div className="divide-y divide-gray-100">
 					{display.map((entry, i) => (
 						<ExperienceEntryRow
-							key={editing ? i : entry.id}
+							key={isEditing ? i : entry.id}
 							entry={entry}
 							index={i}
-							editing={editing}
+							editing={isEditing}
 							onUpdate={handleUpdate}
 							onRemove={handleRemove}
 							disabled={saving}
@@ -125,17 +99,36 @@ export function ExperienceSection({ entries, onRefetch }: Props) {
 					))}
 				</div>
 			)}
-			{editing ? (
-				<Button
-					variant="ghost"
-					size="sm"
-					className="mt-3"
-					onClick={handleAdd}
-					leftIcon={<Plus size={14} />}
-					disabled={saving}
-				>
-					Add experience
-				</Button>
+			{isEditing ? (
+				<div className="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={handleAdd}
+						leftIcon={<Plus size={14} />}
+						disabled={saving}
+					>
+						Add experience
+					</Button>
+					<div className="flex-1" />
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={handleCancel}
+						disabled={saving}
+					>
+						Cancel
+					</Button>
+					<Button
+						variant="primary"
+						size="sm"
+						onClick={handleSave}
+						leftIcon={<Save size={14} />}
+						isLoading={saving}
+					>
+						Save
+					</Button>
+				</div>
 			) : null}
 		</div>
 	);

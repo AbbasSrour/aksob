@@ -36,7 +36,8 @@ export function EditProgramSkeleton() {
 					<FormSectionHeader>
 						<FormSectionTitle>Program Details</FormSectionTitle>
 						<FormSectionDescription>
-							Update the program's name, level, description, credits, and duration.
+							Update the program's name, level, description, credits, and
+							duration.
 						</FormSectionDescription>
 					</FormSectionHeader>
 

@@ -3,7 +3,7 @@ import { Elysia } from "elysia";
 import { db, schema } from "@/db";
 import { authContext } from "@/plugins/auth";
 
-export const statsModule = new Elysia({ prefix: "/api/stats" })
+export const statsModule = new Elysia({ prefix: "/stats" })
 	.use(authContext)
 	.get(
 		"/",
@@ -169,11 +169,11 @@ export const statsModule = new Elysia({ prefix: "/api/stats" })
 						byType: Object.fromEntries(
 							usersByType.map((r) => [r.type, r.count]),
 						),
-					byProgram: Object.fromEntries(
-						usersByProgram
-							.filter((r) => r.program !== null)
-							.map((r) => [r.program, r.count]),
-					),
+						byProgram: Object.fromEntries(
+							usersByProgram
+								.filter((r) => r.program !== null)
+								.map((r) => [r.program, r.count]),
+						),
 					},
 					opportunities: {
 						total: totalOpportunities[0]?.count ?? 0,
@@ -203,14 +203,14 @@ export const statsModule = new Elysia({ prefix: "/api/stats" })
 						),
 					},
 					recent: {
-					users: recentUsers.map((u) => ({
-						id: u.id,
-						name: u.name,
-						email: u.email,
-						userType: u.type,
-						image: u.image,
-						createdAt: u.createdAt?.toISOString() ?? null,
-					})),
+						users: recentUsers.map((u) => ({
+							id: u.id,
+							name: u.name,
+							email: u.email,
+							userType: u.type,
+							image: u.image,
+							createdAt: u.createdAt?.toISOString() ?? null,
+						})),
 						opportunities: recentOpportunities.map((o) => ({
 							id: o.id,
 							type: o.type,

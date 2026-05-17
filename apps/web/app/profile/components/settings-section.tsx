@@ -1,5 +1,5 @@
-import { Edit2, Save } from "lucide-react";
-import { useCallback, useState } from "react";
+import { Save } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 
@@ -15,6 +15,8 @@ interface Props {
 		phoneNumberVisible: boolean;
 		connectionTypes: string[];
 	}) => Promise<void>;
+	isEditing?: boolean;
+	onDone?: () => void;
 }
 
 const CONNECTION_LABELS: Record<string, string> = {
@@ -46,8 +48,9 @@ export function SettingsSection({
 	connectionTypes,
 	userType,
 	onSave,
+	isEditing = false,
+	onDone,
 }: Props) {
-	const [editing, setEditing] = useState(false);
 	const [draft, setDraft] = useState({
 		isVisibleInGalaxy,
 		emailVisible,
@@ -56,29 +59,38 @@ export function SettingsSection({
 	});
 	const [saving, setSaving] = useState(false);
 
-	const eligibleTypes = ELIGIBILITY[userType] ?? [];
+	useEffect(() => {
+		if (isEditing) {
+			setDraft({
+				isVisibleInGalaxy,
+				emailVisible,
+				phoneNumberVisible,
+				connectionTypes: [...connectionTypes],
+			});
+		}
+	}, [
+		isEditing,
+		isVisibleInGalaxy,
+		emailVisible,
+		phoneNumberVisible,
+		connectionTypes,
+	]);
 
-	const handleEdit = useCallback(() => {
-		setDraft({
-			isVisibleInGalaxy,
-			emailVisible,
-			phoneNumberVisible,
-			connectionTypes: [...connectionTypes],
-		});
-		setEditing(true);
-	}, [isVisibleInGalaxy, emailVisible, phoneNumberVisible, connectionTypes]);
-
-	const handleCancel = useCallback(() => setEditing(false), []);
+	const handleCancel = useCallback(() => {
+		onDone?.();
+	}, [onDone]);
 
 	const handleSave = useCallback(async () => {
 		setSaving(true);
 		try {
 			await onSave(draft);
-			setEditing(false);
+			onDone?.();
 		} finally {
 			setSaving(false);
 		}
-	}, [draft, onSave]);
+	}, [draft, onSave, onDone]);
+
+	const eligibleTypes = ELIGIBILITY[userType] ?? [];
 
 	const handleGalaxyChange = useCallback((checked: boolean) => {
 		setDraft((prev) => ({
@@ -105,21 +117,82 @@ export function SettingsSection({
 
 	return (
 		<div className="p-5">
-			<div className="flex items-center justify-between mb-4">
-				<h3 className="text-sm font-semibold text-gray-900">
-					Privacy & Connectivity
-				</h3>
-				{!editing ? (
-					<Button
-						variant="secondary"
-						size="sm"
-						onClick={handleEdit}
-						leftIcon={<Edit2 size={14} />}
-					>
-						Edit
-					</Button>
-				) : (
-					<div className="flex gap-2">
+			{isEditing ? (
+				<div className="space-y-4">
+					{/* Galaxy visibility */}
+					<div>
+						<div className="flex items-center gap-3">
+							<label className="flex items-center gap-2 text-sm cursor-pointer">
+								<input
+									type="checkbox"
+									checked={draft.isVisibleInGalaxy}
+									onChange={(e) => handleGalaxyChange(e.target.checked)}
+									disabled={saving}
+									className="h-5 w-5 rounded border-2 border-[var(--gray-300)] text-[var(--aksob-primary)]"
+								/>
+								<span>Visible in Galaxy</span>
+							</label>
+						</div>
+						<p className="text-xs text-gray-400 mt-1 ml-8">
+							Appear in the 3D Galaxy visualization
+						</p>
+					</div>
+
+					{/* Email visibility */}
+					<div className="flex items-center gap-3">
+						<Checkbox
+							checked={draft.emailVisible}
+							onChange={(e) =>
+								setDraft((prev) => ({
+									...prev,
+									emailVisible: e.target.checked,
+								}))
+							}
+							disabled={saving || !draft.isVisibleInGalaxy}
+							label="Show email on profile"
+						/>
+					</div>
+
+					{/* Phone visibility */}
+					<div className="flex items-center gap-3">
+						<Checkbox
+							checked={draft.phoneNumberVisible}
+							onChange={(e) =>
+								setDraft((prev) => ({
+									...prev,
+									phoneNumberVisible: e.target.checked,
+								}))
+							}
+							disabled={saving || !draft.isVisibleInGalaxy}
+							label="Show phone on profile"
+						/>
+					</div>
+
+					{/* Connection types */}
+					<div>
+						<p className="text-xs text-gray-400 mb-2">Open to connections</p>
+						<div className="space-y-2">
+							{eligibleTypes.map((ct) => (
+								<Checkbox
+									key={ct}
+									checked={draft.connectionTypes.includes(ct)}
+									onChange={() => toggleConnectionType(ct)}
+									disabled={saving || !draft.isVisibleInGalaxy}
+									label={CONNECTION_LABELS[ct] ?? ct}
+								/>
+							))}
+						</div>
+					</div>
+
+					{!draft.isVisibleInGalaxy && (
+						<p className="text-xs text-amber-600 bg-amber-50 p-2 rounded-lg">
+							You are hidden from the Galaxy. Other profile sections are not
+							affected.
+						</p>
+					)}
+
+					<div className="flex items-center gap-3 pt-2">
+						<div className="flex-1" />
 						<Button
 							variant="ghost"
 							size="sm"
@@ -138,95 +211,33 @@ export function SettingsSection({
 							Save
 						</Button>
 					</div>
-				)}
-			</div>
-
-			<div className="space-y-4">
-				{/* Galaxy visibility */}
-				<div>
-					<div className="flex items-center gap-3">
-						{editing ? (
-							<label className="flex items-center gap-2 text-sm cursor-pointer">
-								<input
-									type="checkbox"
-									checked={draft.isVisibleInGalaxy}
-									onChange={(e) => handleGalaxyChange(e.target.checked)}
-									disabled={saving}
-									className="h-5 w-5 rounded border-2 border-[var(--gray-300)] text-[var(--aksob-primary)]"
-								/>
-								<span>Visible in Galaxy</span>
-							</label>
-						) : (
-							<span className="text-sm text-gray-700">
-								{isVisibleInGalaxy ? "Visible in Galaxy" : "Hidden from Galaxy"}
-							</span>
-						)}
-					</div>
-					{editing ? (
-						<p className="text-xs text-gray-400 mt-1 ml-8">
-							Appear in the 3D Galaxy visualization
-						</p>
-					) : null}
 				</div>
+			) : (
+				<div className="space-y-4">
+					{/* Galaxy visibility */}
+					<div>
+						<span className="text-sm text-gray-700">
+							{isVisibleInGalaxy ? "Visible in Galaxy" : "Hidden from Galaxy"}
+						</span>
+					</div>
 
-				{/* Email visibility */}
-				<div className="flex items-center gap-3">
-					{editing ? (
-						<Checkbox
-							checked={draft.emailVisible}
-							onChange={(e) =>
-								setDraft((prev) => ({
-									...prev,
-									emailVisible: e.target.checked,
-								}))
-							}
-							disabled={saving || !draft.isVisibleInGalaxy}
-							label="Show email on profile"
-						/>
-					) : (
+					{/* Email visibility */}
+					<div className="flex items-center gap-3">
 						<span className="text-sm text-gray-700">
 							{emailVisible ? "Email visible" : "Email hidden"}
 						</span>
-					)}
-				</div>
+					</div>
 
-				{/* Phone visibility */}
-				<div className="flex items-center gap-3">
-					{editing ? (
-						<Checkbox
-							checked={draft.phoneNumberVisible}
-							onChange={(e) =>
-								setDraft((prev) => ({
-									...prev,
-									phoneNumberVisible: e.target.checked,
-								}))
-							}
-							disabled={saving || !draft.isVisibleInGalaxy}
-							label="Show phone on profile"
-						/>
-					) : (
+					{/* Phone visibility */}
+					<div className="flex items-center gap-3">
 						<span className="text-sm text-gray-700">
 							{phoneNumberVisible ? "Phone visible" : "Phone hidden"}
 						</span>
-					)}
-				</div>
+					</div>
 
-				{/* Connection types */}
-				<div>
-					<p className="text-xs text-gray-400 mb-2">Open to connections</p>
-					{editing ? (
-						<div className="space-y-2">
-							{eligibleTypes.map((ct) => (
-								<Checkbox
-									key={ct}
-									checked={draft.connectionTypes.includes(ct)}
-									onChange={() => toggleConnectionType(ct)}
-									disabled={saving || !draft.isVisibleInGalaxy}
-									label={CONNECTION_LABELS[ct] ?? ct}
-								/>
-							))}
-						</div>
-					) : (
+					{/* Connection types */}
+					<div>
+						<p className="text-xs text-gray-400 mb-2">Open to connections</p>
 						<div className="flex flex-wrap gap-1.5">
 							{connectionTypes.length === 0 ? (
 								<span className="text-sm text-gray-400">None selected</span>
@@ -241,16 +252,16 @@ export function SettingsSection({
 								))
 							)}
 						</div>
+					</div>
+
+					{!isVisibleInGalaxy && (
+						<p className="text-xs text-amber-600 bg-amber-50 p-2 rounded-lg">
+							You are hidden from the Galaxy. Other profile sections are not
+							affected.
+						</p>
 					)}
 				</div>
-
-				{!editing && !isVisibleInGalaxy ? (
-					<p className="text-xs text-amber-600 bg-amber-50 p-2 rounded-lg">
-						You are hidden from the Galaxy. Other profile sections are not
-						affected.
-					</p>
-				) : null}
-			</div>
+			)}
 		</div>
 	);
 }

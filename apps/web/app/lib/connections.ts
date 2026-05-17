@@ -38,13 +38,10 @@ export async function findConnectionMatch(input: {
 			recommendedUserId: string | null;
 			matchExplanation: string | null;
 		};
-	}>(
-		"/api/connections/match",
-		{
-			method: "POST",
-			body: JSON.stringify(input),
-		},
-	);
+	}>("/api/connections/match", {
+		method: "POST",
+		body: JSON.stringify(input),
+	});
 }
 
 export async function sendConnectionRequest(input: {

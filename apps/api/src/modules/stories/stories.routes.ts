@@ -506,6 +506,7 @@ export const storiesModule = new Elysia({ prefix: "/stories" })
 			return { status: "ok", data: toStoryDto(updated!) };
 		},
 		{
+			auth: true,
 			role: "admin",
 			detail: {
 				tags: ["Stories"],
@@ -566,6 +567,7 @@ export const storiesModule = new Elysia({ prefix: "/stories" })
 			return { status: "ok", data: toStoryDto(updated!) };
 		},
 		{
+			auth: true,
 			role: "admin",
 			body: rejectStoryBody,
 			detail: {

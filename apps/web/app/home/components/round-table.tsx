@@ -171,7 +171,10 @@ function TableScene() {
 			envMapIntensity: 0.55,
 		});
 
-		const calibrateMaterial = (material: THREE.Material, objectName: string) => {
+		const calibrateMaterial = (
+			material: THREE.Material,
+			objectName: string,
+		) => {
 			if (!(material instanceof THREE.MeshStandardMaterial)) return;
 
 			if (material.map) material.map.colorSpace = THREE.SRGBColorSpace;
@@ -216,7 +219,10 @@ function TableScene() {
 				material.metalness = 0.0;
 				material.roughness = 0.42;
 				material.envMapIntensity = 0.48;
-			} else if (materialName.includes("pedestal") || meshName.includes("pedestal")) {
+			} else if (
+				materialName.includes("pedestal") ||
+				meshName.includes("pedestal")
+			) {
 				material.metalness = 0.0;
 				material.roughness = 0.52;
 				material.envMapIntensity = 0.55;
@@ -413,9 +419,9 @@ export function RoundTable() {
 						className={`mt-6 max-w-xl mx-auto text-sm md:text-base text-[var(--gray-500)] leading-relaxed ${isVisible ? "animate-editorial-slide-up" : "opacity-0"}`}
 						style={{ animationDelay: "0.3s" }}
 					>
-						Three intimate discussion groups bring together alumni and
-						students for focused conversations on entrepreneurship, finance,
-						and leadership.
+						Three intimate discussion groups bring together alumni and students
+						for focused conversations on entrepreneurship, finance, and
+						leadership.
 					</p>
 				</div>
 
@@ -496,9 +502,7 @@ export function RoundTable() {
 									style={{ fontFamily: "var(--font-display)" }}
 								>
 									Join a{" "}
-									<span className="text-(--aksob-secondary)">
-										Round Table
-									</span>{" "}
+									<span className="text-(--aksob-secondary)">Round Table</span>{" "}
 									Discussion
 								</h3>
 

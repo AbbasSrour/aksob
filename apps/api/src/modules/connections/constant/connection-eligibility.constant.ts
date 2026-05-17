@@ -5,10 +5,7 @@ import type { UserType } from "@/modules/users/constant/user-types";
  * Which connection types each user type is eligible for.
  * Used to validate preferences and match requests.
  */
-export const CONNECTION_TYPE_ELIGIBILITY: Record<
-	UserType,
-	ConnectionType[]
-> = {
+export const CONNECTION_TYPE_ELIGIBILITY: Record<UserType, ConnectionType[]> = {
 	alumni: ["mentorship", "career_coaching", "research", "project"],
 	student: [
 		"mentorship",

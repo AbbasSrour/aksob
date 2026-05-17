@@ -168,9 +168,9 @@ export function ChooseUs() {
 							}}
 						>
 							From world-renowned academics to a powerful global alumni network,
-							discover what sets the AKSOB Alumni community apart — and why it's the
-							first choice for professionals, entrepreneurs, and leaders from around
-							the globe.
+							discover what sets the AKSOB Alumni community apart — and why it's
+							the first choice for professionals, entrepreneurs, and leaders
+							from around the globe.
 						</p>
 
 						<ValueCard
@@ -230,9 +230,9 @@ export function ChooseUs() {
 							}}
 						>
 							From world-renowned academics to a powerful global alumni network,
-							discover what sets the AKSOB Alumni community apart — and why it's the
-							first choice for professionals, entrepreneurs, and leaders from around
-							the globe.
+							discover what sets the AKSOB Alumni community apart — and why it's
+							the first choice for professionals, entrepreneurs, and leaders
+							from around the globe.
 						</p>
 
 						<div className="mt-10 grid gap-5 sm:grid-cols-2">

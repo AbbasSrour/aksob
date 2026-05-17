@@ -14,15 +14,17 @@ export const CONNECTION_ERRORS = {
 		httpStatus: 400,
 		message: "You are not eligible for this connection type",
 	},
-	CONNECTION_LIMIT_REACHED: {
-		code: "CONNECTION_LIMIT_REACHED",
-		httpStatus: 400,
-		message: "You have reached the maximum of 3 active/pending connections",
+	RATE_LIMIT_REACHED: {
+		code: "RATE_LIMIT_REACHED",
+		httpStatus: 429,
+		message:
+			"You have sent the maximum of 50 connection requests today. Please try again tomorrow.",
 	},
 	ALREADY_MATCHED: {
 		code: "ALREADY_MATCHED",
 		httpStatus: 409,
-		message: "You already have a pending or active connection with this user for this type",
+		message:
+			"You already have a pending or active connection with this user for this type",
 	},
 	CANNOT_MATCH_SELF: {
 		code: "CANNOT_MATCH_SELF",
@@ -43,6 +45,11 @@ export const CONNECTION_ERRORS = {
 		code: "NOT_ACTIVE",
 		httpStatus: 400,
 		message: "Connection is not active",
+	},
+	CANNOT_CANCEL_PENDING: {
+		code: "CANNOT_CANCEL_PENDING",
+		httpStatus: 403,
+		message: "Only the requester can cancel a pending connection request",
 	},
 	NOT_PARTICIPANT: {
 		code: "NOT_PARTICIPANT",

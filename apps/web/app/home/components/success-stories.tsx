@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 
 import {
@@ -5,101 +6,6 @@ import {
 	STORY_CATEGORY_LABELS,
 	type Story,
 } from "~/app/lib/stories";
-
-// ─── Fallback placeholder stories ────────────────────────────────────
-
-const FALLBACK_STORIES: Story[] = [
-	{
-		id: "fallback-1",
-		title: "Leading AI Research at Google DeepMind",
-		description:
-			"From ACSOB labs to the forefront of artificial intelligence research.",
-		content: "",
-		coverImage: "/home/events/event-1.jpg",
-		thumbnailImage: null,
-		category: "career_advancement",
-		storyDate: "2024-01-01T00:00:00.000Z",
-		status: "approved",
-		author: { id: "f1", name: "Nadia Hamdan", image: null, major: null },
-		reviewedBy: null,
-		reviewNotes: null,
-		reviewedAt: null,
-		createdAt: "2024-01-01T00:00:00.000Z",
-		updatedAt: "2024-01-01T00:00:00.000Z",
-	},
-	{
-		id: "fallback-2",
-		title: "Launching a FinTech Startup in Dubai",
-		description:
-			"Turning a classroom project into a multi-million dollar company.",
-		content: "",
-		coverImage: "/home/events/event-2.jpg",
-		thumbnailImage: null,
-		category: "entrepreneurship",
-		storyDate: "2024-06-01T00:00:00.000Z",
-		status: "approved",
-		author: { id: "f2", name: "Rami Chami", image: null, major: null },
-		reviewedBy: null,
-		reviewNotes: null,
-		reviewedAt: null,
-		createdAt: "2024-06-01T00:00:00.000Z",
-		updatedAt: "2024-06-01T00:00:00.000Z",
-	},
-	{
-		id: "fallback-3",
-		title: "Award-Winning Architect Redesigning Beirut",
-		description:
-			"Using sustainable design to rebuild communities after the blast.",
-		content: "",
-		coverImage: "/home/events/event-3.jpg",
-		thumbnailImage: null,
-		category: "social_impact",
-		storyDate: "2023-09-01T00:00:00.000Z",
-		status: "approved",
-		author: { id: "f3", name: "Layla Khoury", image: null, major: null },
-		reviewedBy: null,
-		reviewNotes: null,
-		reviewedAt: null,
-		createdAt: "2023-09-01T00:00:00.000Z",
-		updatedAt: "2023-09-01T00:00:00.000Z",
-	},
-	{
-		id: "fallback-4",
-		title: "Publishing in Nature at 26",
-		description:
-			"A breakthrough in renewable energy research from our alumni labs.",
-		content: "",
-		coverImage: "/home/events/event-4.jpg",
-		thumbnailImage: null,
-		category: "academic_achievement",
-		storyDate: "2024-03-01T00:00:00.000Z",
-		status: "approved",
-		author: { id: "f4", name: "Tarek Mansour", image: null, major: null },
-		reviewedBy: null,
-		reviewNotes: null,
-		reviewedAt: null,
-		createdAt: "2024-03-01T00:00:00.000Z",
-		updatedAt: "2024-03-01T00:00:00.000Z",
-	},
-	{
-		id: "fallback-5",
-		title: "Chief Innovation Officer at Amazon MENA",
-		description:
-			"From student projects to shaping the future of cloud computing.",
-		content: "",
-		coverImage: "/home/events/event-5.jpg",
-		thumbnailImage: null,
-		category: "leadership",
-		storyDate: "2024-08-01T00:00:00.000Z",
-		status: "approved",
-		author: { id: "f5", name: "Sarah Beydoun", image: null, major: null },
-		reviewedBy: null,
-		reviewNotes: null,
-		reviewedAt: null,
-		createdAt: "2024-08-01T00:00:00.000Z",
-		updatedAt: "2024-08-01T00:00:00.000Z",
-	},
-];
 
 // ─── Editorial story positions ────────────────────────────────────────
 
@@ -259,7 +165,11 @@ function ConnectionLines({ isVisible }: { isVisible: boolean }) {
 export function SuccessStories() {
 	const sectionRef = useRef<HTMLElement>(null);
 	const [isVisible, setIsVisible] = useState(false);
-	const [stories, setStories] = useState<Story[]>(FALLBACK_STORIES);
+
+	const { data: stories = [], isPending } = useQuery({
+		queryKey: ["stories", "home"],
+		queryFn: () => listApprovedStories(5).then((r) => r.data),
+	});
 
 	useEffect(() => {
 		const el = sectionRef.current;
@@ -285,27 +195,6 @@ export function SuccessStories() {
 
 		observer.observe(el);
 		return () => observer.disconnect();
-	}, []);
-
-	useEffect(() => {
-		let isMounted = true;
-
-		const loadStories = async () => {
-			try {
-				const response = await listApprovedStories(5);
-				if (isMounted && response.data.length > 0) {
-					setStories(response.data);
-				}
-			} catch {
-				// Keep fallback stories
-			}
-		};
-
-		void loadStories();
-
-		return () => {
-			isMounted = false;
-		};
 	}, []);
 
 	return (
@@ -350,20 +239,22 @@ export function SuccessStories() {
 				</div>
 
 				{/* Editorial freeform layout */}
-				<div className="relative flex flex-col gap-14 md:block md:h-262.5 lg:h-295">
-					{/* Connection lines between cards */}
-					<ConnectionLines isVisible={isVisible} />
+				{!isPending && stories.length > 0 && (
+					<div className="relative flex flex-col gap-14 md:block md:h-262.5 lg:h-295">
+						{/* Connection lines between cards */}
+						<ConnectionLines isVisible={isVisible} />
 
-					{stories.slice(0, 5).map((story, i) => (
-						<StoryCard
-							key={story.id}
-							story={story}
-							layout={CARD_LAYOUT[i % CARD_LAYOUT.length]}
-							index={i}
-							isVisible={isVisible}
-						/>
-					))}
-				</div>
+						{stories.map((story, i) => (
+							<StoryCard
+								key={story.id}
+								story={story}
+								layout={CARD_LAYOUT[i % CARD_LAYOUT.length]}
+								index={i}
+								isVisible={isVisible}
+							/>
+						))}
+					</div>
+				)}
 			</div>
 		</section>
 	);

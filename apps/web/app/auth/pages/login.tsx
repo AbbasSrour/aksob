@@ -46,7 +46,7 @@ export default function Login() {
 				<div>
 					<Link to="/" className="mb-5 inline-block w-full max-w-[24rem]">
 						<img
-							src="/logo.png"
+							src="/common/aksob-logo-large.png"
 							alt="Lebanese American University - Adnan Kassar School of Business"
 							className="h-auto w-full"
 						/>

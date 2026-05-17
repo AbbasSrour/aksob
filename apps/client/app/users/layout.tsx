@@ -1,9 +1,9 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/admin/users')({
-  component: UsersLayout,
+export const Route = createFileRoute("/admin/users")({
+	component: UsersLayout,
 });
 
 function UsersLayout() {
-  return <Outlet />;
+	return <Outlet />;
 }

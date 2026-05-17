@@ -30,11 +30,7 @@ export type ResearchType =
 
 export type FundingOption = "funded" | "partial" | "unfunded" | "negotiable";
 
-export type EducationLevel =
-	| "undergraduate"
-	| "masters"
-	| "phd"
-	| "postdoc";
+export type EducationLevel = "undergraduate" | "masters" | "phd" | "postdoc";
 
 export interface Research {
 	id: string;

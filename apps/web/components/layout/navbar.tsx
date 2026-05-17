@@ -1,17 +1,14 @@
-import {
-	LogOut,
-	Menu,
-	MessageSquare,
-	Search,
-	X,
-} from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { LogOut, Menu, MessageSquare, Search, UserPlus, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
+import { listConnections } from "~/app/lib/users";
 import { Avatar } from "~/components/ui/avatar";
 
 interface NavbarProps {
 	user?: {
+		id: string;
 		name: string;
 		avatar?: string;
 	};
@@ -30,8 +27,19 @@ const NAV_LINKS = [
 export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 	const location = useLocation();
 	const isAuthenticated = Boolean(user);
+	const userId = user?.id;
 	const userName = user?.name?.trim() ? user.name : "User";
 	const userAvatar = user?.avatar;
+	const { data: pendingConnections } = useQuery({
+		queryKey: ["connections", "pending", "navbar"],
+		queryFn: () => listConnections("pending").then((r) => r.data),
+		enabled: Boolean(userId),
+	});
+	const hasIncomingConnectionRequest = Boolean(
+		pendingConnections?.some(
+			(connection) => connection.matchedUserId === userId,
+		),
+	);
 
 	const isGalaxy = location.pathname === "/galaxy";
 	const isDark = isGalaxy;
@@ -71,7 +79,9 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 
 	const isActive = (path: string) => {
 		if (path === "/") return location.pathname === "/";
-		return location.pathname === path || location.pathname.startsWith(`${path}/`);
+		return (
+			location.pathname === path || location.pathname.startsWith(`${path}/`)
+		);
 	};
 
 	/* ── Theme tokens ── */
@@ -120,17 +130,19 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 						className="pointer-events-auto shrink-0 transition-opacity duration-200 hover:opacity-80"
 					>
 						<img
-							src="/logo.png"
+							src="/common/aksob-logo-large.png"
 							alt="LAU"
 							className={`w-auto transition-all duration-300 ${
-								scrolled ? "h-9" : "h-14"
+								scrolled ? "h-9" : "h-12"
 							} ${isDark ? "brightness-0 invert" : ""}`}
 						/>
 					</Link>
 				</div>
 
 				{/* ── Center nav pill ── */}
-				<div className={`hidden lg:flex items-center px-2 py-1 ${pillBase} ${pillFill}`}>
+				<div
+					className={`hidden lg:flex items-center px-2 py-1 ${pillBase} ${pillFill}`}
+				>
 					{NAV_LINKS.map(({ label, path }, index) => (
 						<Link
 							key={path}
@@ -144,7 +156,9 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 				</div>
 
 				{/* ── Right actions pill ── */}
-				<div className={`hidden lg:flex items-center gap-0 pl-2 pr-1 py-1 ${pillBase} ${pillFill}`}>
+				<div
+					className={`hidden lg:flex items-center gap-0 pl-2 pr-1 py-1 ${pillBase} ${pillFill}`}
+				>
 					{/* Search */}
 					<div
 						ref={searchContainerRef}
@@ -215,16 +229,23 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 								<MessageSquare size={20} strokeWidth={1.5} />
 							</Link>
 
+							{hasIncomingConnectionRequest && (
+								<Link
+									to="/profile"
+									className={`relative p-2.5 rounded-full transition-colors pointer-events-auto ${navText}`}
+									title="Connection request"
+								>
+									<UserPlus size={20} strokeWidth={1.5} />
+									<span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-(--aksob-primary)" />
+								</Link>
+							)}
+
 							{/* Profile — direct link */}
 							<Link
 								to="/profile"
 								className={`p-1.5 rounded-full transition-colors pointer-events-auto ${isDark ? "hover:bg-white/10" : "hover:bg-[var(--gray-100)]"}`}
 							>
-								<Avatar
-									name={userName}
-									src={userAvatar}
-									size="sm"
-								/>
+								<Avatar name={userName} src={userAvatar} size="sm" />
 							</Link>
 						</>
 					) : (
@@ -315,11 +336,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 										}`}
 										style={{ fontFamily: "var(--font-display)" }}
 									>
-										<Avatar
-											name={userName}
-											src={userAvatar}
-											size="sm"
-										/>
+										<Avatar name={userName} src={userAvatar} size="sm" />
 										Profile
 									</Link>
 									<button

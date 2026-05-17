@@ -6,6 +6,10 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
+	route("api/auth/admin/*", "api/auth-admin-proxy.ts"),
+	route("api/auth/*", "api/auth-proxy.ts"),
+	route("api/media", "api/media-proxy.ts"),
+
 	layout("auth.layout.tsx", [
 		route("auth/login", "auth/pages/login.tsx"),
 		route("auth/register", "auth/pages/register.tsx"),
@@ -23,7 +27,11 @@ export default [
 		route("galaxy", "galaxy/pages/galaxy.tsx"),
 		route("events", "events/pages/events.tsx"),
 		route("news", "news/pages/news.tsx"),
+		route("news/:id", "news/pages/news-detail.tsx"),
 		route("stories", "stories/pages/stories.tsx"),
+		route("stories/new", "stories/pages/story-editor.tsx", { id: "stories-new" }),
+		route("stories/:id/edit", "stories/pages/story-editor.tsx", { id: "stories-edit" }),
+		route("stories/:id", "stories/pages/story-detail.tsx"),
 		route("series", "series/pages/series.tsx"),
 		route("profile", "profile/pages/index.tsx"),
 		route("onboarding", "onboarding/pages/index.tsx"),

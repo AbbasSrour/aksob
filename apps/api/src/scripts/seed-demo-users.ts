@@ -4,7 +4,7 @@ import { db, schema } from "@/db";
 import { auth } from "@/lib/auth";
 import { AKSOB_PROGRAMS } from "@/modules/users/constant/aksob-programs";
 import { CONNECTION_TYPE_ELIGIBILITY } from "@/modules/connections/constant/connection-eligibility.constant";
-import { generateAndStoreEmbedding } from "@/modules/ai/ai-embedding";
+import { generateAndStoreEmbedding } from "@/lib/ai/embedding";
 import { logger } from "@/utils/logger";
 
 const DEMO_PASSWORD = "AksobDemo123!";

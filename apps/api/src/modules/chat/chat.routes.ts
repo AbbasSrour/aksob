@@ -68,18 +68,78 @@ export const chatModule = new Elysia({ prefix: "/chat" })
 			},
 		});
 
-		const messages = await db.query.message.findMany({
-			where: inArray(schema.message.conversationId, conversationIds),
-			orderBy: [desc(schema.message.createdAt)],
-		});
+		const participantUserIds = [
+			...new Set(allParticipants.map((participant) => participant.userId)),
+		];
+		const userSettings =
+			participantUserIds.length > 0
+				? await db
+						.select({
+							userId: schema.userSettings.userId,
+							emailVisible: schema.userSettings.emailVisible,
+						})
+						.from(schema.userSettings)
+						.where(inArray(schema.userSettings.userId, participantUserIds))
+				: [];
+		const emailVisibleByUserId = new Map(
+			userSettings.map((settings) => [
+				settings.userId,
+				settings.emailVisible === true,
+			]),
+		);
 
+		// Fetch program names for all participants
+		const educationRows =
+			participantUserIds.length > 0
+				? await db
+						.select({
+							userId: schema.userEducation.userId,
+							programName: schema.program.name,
+							isPrimary: schema.userEducation.isPrimary,
+						})
+						.from(schema.userEducation)
+						.innerJoin(
+							schema.program,
+							eq(schema.userEducation.programId, schema.program.id),
+						)
+						.where(inArray(schema.userEducation.userId, participantUserIds))
+				: [];
+
+		// Group by user, prefer primary program
+		const programByUserId = new Map<string, string>();
+		for (const row of educationRows) {
+			if (!row.programName) continue;
+			const existing = programByUserId.get(row.userId);
+			if (!existing || row.isPrimary) {
+				programByUserId.set(row.userId, row.programName);
+			}
+		}
+
+		// Fetch only the latest message per conversation (not ALL messages)
 		const latestMessageByConversation = new Map<
 			string,
-			(typeof messages)[number]
+			{
+				id: string;
+				conversationId: string;
+				senderId: string;
+				content: string;
+				createdAt: Date;
+			}
 		>();
-		for (const message of messages) {
-			if (!latestMessageByConversation.has(message.conversationId)) {
-				latestMessageByConversation.set(message.conversationId, message);
+		for (const convId of conversationIds) {
+			const [latest] = await db.query.message.findMany({
+				where: eq(schema.message.conversationId, convId),
+				orderBy: [desc(schema.message.createdAt)],
+				limit: 1,
+			});
+			if (latest) {
+				latestMessageByConversation.set(latest.conversationId, {
+					id: latest.id,
+					conversationId: latest.conversationId,
+					senderId: latest.senderId,
+					content: latest.content,
+					createdAt: latest.createdAt,
+				});
 			}
 		}
 
@@ -110,8 +170,10 @@ export const chatModule = new Elysia({ prefix: "/chat" })
 					otherUser: {
 						id: otherParticipant.user.id,
 						name: otherParticipant.user.name,
-						email: otherParticipant.user.email,
-						major: otherParticipant.user.major,
+						email: emailVisibleByUserId.get(otherParticipant.user.id)
+							? otherParticipant.user.email
+							: null,
+						program: programByUserId.get(otherParticipant.user.id) ?? null,
 						image: otherParticipant.user.image,
 					},
 					lastMessage: latestMessage
@@ -246,8 +308,8 @@ export const chatModule = new Elysia({ prefix: "/chat" })
 			});
 
 			if (!participant) {
-				set.status = 403;
-				return { status: "error", error: "Access denied" };
+				set.status = 404;
+				return { status: "error", error: "Conversation not found" };
 			}
 
 			const messageLimit = query.limit ?? 100;
@@ -315,8 +377,8 @@ export const chatModule = new Elysia({ prefix: "/chat" })
 			});
 
 			if (!participant) {
-				set.status = 403;
-				return { status: "error", error: "Access denied" };
+				set.status = 404;
+				return { status: "error", error: "Conversation not found" };
 			}
 
 			const messageId = crypto.randomUUID();

@@ -1,11 +1,13 @@
-import { Edit2, Link, Plus, Save } from "lucide-react";
-import { useCallback, useState } from "react";
+import { Link, Plus, Save } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { type LinkEntry, updateLinks } from "~/app/lib/users";
 import { Button } from "~/components/ui/button";
 
 interface Props {
 	links: LinkEntry[];
 	onRefetch: () => void;
+	isEditing?: boolean;
+	onDone?: () => void;
 }
 
 const PLATFORM_LABELS: Record<string, string> = {
@@ -15,31 +17,37 @@ const PLATFORM_LABELS: Record<string, string> = {
 	website: "Website",
 };
 
-export function LinksSection({ links, onRefetch }: Props) {
-	const [editing, setEditing] = useState(false);
+export function LinksSection({
+	links,
+	onRefetch,
+	isEditing = false,
+	onDone,
+}: Props) {
 	const [draft, setDraft] = useState<LinkEntry[]>([]);
 	const [saving, setSaving] = useState(false);
 
-	const handleEdit = useCallback(() => {
-		setDraft(links.map((l) => ({ ...l })));
-		setEditing(true);
-	}, [links]);
+	useEffect(() => {
+		if (isEditing) {
+			setDraft(links.map((l) => ({ ...l })));
+		}
+	}, [isEditing, links]);
+
 	const handleCancel = useCallback(() => {
 		setDraft([]);
-		setEditing(false);
-	}, []);
+		onDone?.();
+	}, [onDone]);
 	const handleSave = useCallback(async () => {
 		setSaving(true);
 		try {
 			await updateLinks({
 				entries: draft.map((d) => ({ platform: d.platform, url: d.url })),
 			});
-			setEditing(false);
 			onRefetch();
+			onDone?.();
 		} finally {
 			setSaving(false);
 		}
-	}, [draft, onRefetch]);
+	}, [draft, onRefetch, onDone]);
 	const handleAdd = useCallback(
 		() =>
 			setDraft((prev) => [
@@ -63,53 +71,20 @@ export function LinksSection({ links, onRefetch }: Props) {
 	const inputClass =
 		"h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:ring-2 focus:ring-[var(--aksob-primary)]/20 focus:border-[var(--aksob-primary)] transition disabled:opacity-50";
 
-	const display = editing ? draft : links;
+	const display = isEditing ? draft : links;
 
 	return (
 		<div className="p-5">
-			<div className="flex items-center justify-between mb-4">
-				<h3 className="text-sm font-semibold text-gray-900">Links</h3>
-				{!editing ? (
-					<Button
-						variant="secondary"
-						size="sm"
-						onClick={handleEdit}
-						leftIcon={<Edit2 size={14} />}
-					>
-						Edit
-					</Button>
-				) : (
-					<div className="flex gap-2">
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={handleCancel}
-							disabled={saving}
-						>
-							Cancel
-						</Button>
-						<Button
-							variant="primary"
-							size="sm"
-							onClick={handleSave}
-							leftIcon={<Save size={14} />}
-							isLoading={saving}
-						>
-							Save
-						</Button>
-					</div>
-				)}
-			</div>
-			{display.length === 0 && !editing ? (
+			{display.length === 0 && !isEditing ? (
 				<p className="text-sm text-gray-400 py-2">No links added yet.</p>
 			) : (
 				<div className="divide-y divide-gray-100">
 					{display.map((link, i) => (
 						<div
-							key={editing ? i : link.id}
+							key={isEditing ? i : link.id}
 							className="flex items-center justify-between py-3"
 						>
-							{!editing ? (
+							{!isEditing ? (
 								<div className="flex items-center gap-3 min-w-0">
 									<div className="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
 										<Link size={16} className="text-gray-500" />
@@ -170,17 +145,36 @@ export function LinksSection({ links, onRefetch }: Props) {
 					))}
 				</div>
 			)}
-			{editing ? (
-				<Button
-					variant="ghost"
-					size="sm"
-					className="mt-3"
-					onClick={handleAdd}
-					leftIcon={<Plus size={14} />}
-					disabled={saving}
-				>
-					Add link
-				</Button>
+			{isEditing ? (
+				<div className="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={handleAdd}
+						leftIcon={<Plus size={14} />}
+						disabled={saving}
+					>
+						Add link
+					</Button>
+					<div className="flex-1" />
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={handleCancel}
+						disabled={saving}
+					>
+						Cancel
+					</Button>
+					<Button
+						variant="primary"
+						size="sm"
+						onClick={handleSave}
+						leftIcon={<Save size={14} />}
+						isLoading={saving}
+					>
+						Save
+					</Button>
+				</div>
 			) : null}
 		</div>
 	);

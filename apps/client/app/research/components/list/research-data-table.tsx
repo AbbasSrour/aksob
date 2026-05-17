@@ -33,8 +33,7 @@ import { m } from "@/paraglide/messages";
 
 export function ResearchDataTable() {
 	const [rowSelection, setRowSelection] = useState({});
-	const [columnVisibility, setColumnVisibility] =
-		useState<VisibilityState>({});
+	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
 	const { sorting, setSorting, sortValue } = useSort();
 	const { searchValue } = useSearch();
@@ -94,9 +93,7 @@ export function ResearchDataTable() {
 	return (
 		<ListSection>
 			<DataTableProvider {...table}>
-				<DataTableToolbar
-					placeholder={m.research_table_search_placeholder()}
-				>
+				<DataTableToolbar placeholder={m.research_table_search_placeholder()}>
 					<DataTableToolbarFilters>
 						<DataTableFacetedFilter
 							title={researchStatusFilter.title}

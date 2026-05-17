@@ -64,7 +64,11 @@ export const ForgotPasswordForm = () => {
 						{successMessage}
 					</p>
 				) : null}
-				<Button className="w-full" type="submit" loading={form.formState.isSubmitting}>
+				<Button
+					className="w-full"
+					type="submit"
+					loading={form.formState.isSubmitting}
+				>
 					Send reset link
 				</Button>
 			</form>

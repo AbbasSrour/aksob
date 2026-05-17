@@ -27,10 +27,8 @@ import {
 	SelectValue,
 } from "@aksob/ui/core/select";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { useForm, useFormContext } from "react-hook-form";
-import { programQueries } from "@/app/programs/hooks/api/programs.queries";
 import { memberFormDefaultValues } from "@/app/members/components/form/member-form-default-values";
 import {
 	buildMemberFormSchema,
@@ -58,9 +56,6 @@ export const MemberForm = ({
 	const location = useLocation();
 	const navigate = useNavigate();
 	const isCreate = location.pathname.endsWith("/create");
-
-	const { data: programsData } = useSuspenseQuery(programQueries.list());
-	const programs = programsData?.data || [];
 
 	const form = useForm<UserFormSchema>({
 		mode: "onSubmit",
@@ -150,15 +145,6 @@ export const MemberForm = ({
 						<FormSectionContent cols={1} spacing="lg">
 							<FormRow cols={4}>
 								<UserTypeField />
-							</FormRow>
-
-							<FormRow cols={4}>
-								<ProgramField programs={programs.map((p) => p.name)} />
-							</FormRow>
-
-							<FormRow cols={4}>
-								<CompanyField />
-								<TitleField />
 							</FormRow>
 						</FormSectionContent>
 					</FormSection>
@@ -313,83 +299,6 @@ const UserTypeField = () => {
 								})}
 							</SelectContent>
 						</Select>
-					</FormControl>
-					<FormMessage />
-				</FormItem>
-			)}
-		/>
-	);
-};
-
-const ProgramField = ({ programs }: { programs: string[] }) => {
-	const { control } = useFormContext();
-
-	return (
-		<FormField
-			name={"program"}
-			control={control}
-			render={({ field }) => (
-				<FormItem>
-					<FormLabel>{m.members_form_program_label()}</FormLabel>
-					<FormControl>
-						<Select value={field.value} onValueChange={field.onChange}>
-							<SelectTrigger className="w-full">
-								<SelectValue placeholder={m.members_form_program_placeholder()} />
-							</SelectTrigger>
-							<SelectContent>
-								{programs.map((program) => (
-									<SelectItem key={program} value={program}>
-										{program}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
-					</FormControl>
-					<FormMessage />
-				</FormItem>
-			)}
-		/>
-	);
-};
-
-const CompanyField = () => {
-	const { control } = useFormContext();
-
-	return (
-		<FormField
-			control={control}
-			name={"company"}
-			render={({ field }) => (
-				<FormItem>
-					<FormLabel>{m.members_form_company_label()}</FormLabel>
-					<FormControl>
-						<Input
-							{...field}
-							placeholder={m.members_form_company_placeholder()}
-						/>
-					</FormControl>
-					<FormMessage />
-				</FormItem>
-			)}
-		/>
-	);
-};
-
-const TitleField = () => {
-	const { control } = useFormContext();
-
-	return (
-		<FormField
-			control={control}
-			name={"title"}
-			render={({ field }) => (
-				<FormItem>
-					<FormLabel>{m.members_form_title_label()}</FormLabel>
-					<FormControl>
-						<Input
-							{...field}
-							placeholder={m.members_form_title_placeholder()}
-						/>
 					</FormControl>
 					<FormMessage />
 				</FormItem>

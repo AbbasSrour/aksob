@@ -124,13 +124,13 @@ export default function HomePage() {
 				<Hero />
 			</div>
 			<Glance />
-			<Programs />
-			<ChooseUs />
 			<SuccessStories />
 			<div className="py-16 md:py-24" />
 			<EventSpotlight />
 			<div className="py-16 md:py-24" />
 			<News />
+			<Programs />
+			<ChooseUs />
 			<Contact />
 		</main>
 	);

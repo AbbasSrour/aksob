@@ -4,6 +4,55 @@ import type { EducationEntry } from "~/app/onboarding/components/education-step"
 import type { ExperienceEntry } from "~/app/onboarding/components/experience-step";
 import type { SettingsData } from "~/app/onboarding/components/settings-step";
 
+export interface UserProfile {
+	majors: EducationEntry[];
+	experience: ExperienceEntry[];
+	tags: { skills: string[]; goals: string[]; hobbies: string[] };
+	settings: SettingsData;
+}
+
+export async function fetchUserProfile(): Promise<UserProfile | null> {
+	try {
+		const res = await apiFetch<{
+			status: string;
+			data: {
+				majors: Array<{
+					programId: string;
+					graduationYear: number | null;
+					isPrimary: boolean;
+				}>;
+				experience: Array<{
+					type: string;
+					title: string;
+					company: string;
+					startDate: string;
+					endDate: string | null;
+					isCurrent: boolean;
+				}>;
+				tags: { skills: string[]; goals: string[]; hobbies: string[] };
+				isVisibleInGalaxy: boolean;
+				emailVisible: boolean;
+				phoneNumberVisible: boolean;
+				connectionTypes: string[];
+			};
+		}>("/api/users/me");
+
+		return {
+			majors: res.data.majors,
+			experience: res.data.experience,
+			tags: res.data.tags,
+			settings: {
+				isVisibleInGalaxy: res.data.isVisibleInGalaxy,
+				emailVisible: res.data.emailVisible,
+				phoneNumberVisible: res.data.phoneNumberVisible,
+				connectionTypes: res.data.connectionTypes,
+			},
+		};
+	} catch {
+		return null;
+	}
+}
+
 export async function saveEducation(entries: EducationEntry[]) {
 	const filled = entries.filter((e) => e.programId);
 	return apiFetch("/api/users/me/education", {
@@ -20,7 +69,11 @@ export async function saveExperience(entries: ExperienceEntry[]) {
 	});
 }
 
-export async function saveTags(data: { skills: string[]; goals: string[]; hobbies: string[] }) {
+export async function saveTags(data: {
+	skills: string[];
+	goals: string[];
+	hobbies: string[];
+}) {
 	return apiFetch("/api/users/me/tags", {
 		method: "PUT",
 		body: JSON.stringify(data),

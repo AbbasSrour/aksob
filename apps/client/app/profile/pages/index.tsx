@@ -238,7 +238,7 @@ function ProfilePage() {
 									</span>
 								</Badge>
 							</div>
-					</div>
+						</div>
 					</div>
 				</header>
 

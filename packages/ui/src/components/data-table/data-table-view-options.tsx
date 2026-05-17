@@ -1,61 +1,60 @@
-
-import { useDataTableContext } from '@aksob/ui/components/data-table/data-table-provider';
-import { Button } from '@aksob/ui/core/button';
+import { useDataTableContext } from "@aksob/ui/components/data-table/data-table-provider";
+import { Button } from "@aksob/ui/core/button";
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-} from '@aksob/ui/core/dropdown-menu';
-import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
-import { MixerHorizontalIcon } from '@radix-ui/react-icons';
-import { PropsWithChildren, useMemo } from 'react';
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+} from "@aksob/ui/core/dropdown-menu";
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { MixerHorizontalIcon } from "@radix-ui/react-icons";
+import { PropsWithChildren, useMemo } from "react";
 
 export function DataTableViewOptions() {
-  const table = useDataTableContext();
+	const table = useDataTableContext();
 
-  const columns = useMemo(
-    () =>
-      table
-        .getAllColumns()
-        .filter(
-          (column) =>
-            typeof column.accessorFn !== 'undefined' && column.getCanHide(),
-        ),
-    [table],
-  );
+	const columns = useMemo(
+		() =>
+			table
+				.getAllColumns()
+				.filter(
+					(column) =>
+						typeof column.accessorFn !== "undefined" && column.getCanHide(),
+				),
+		[table],
+	);
 
-  if (!columns.length) {
-    return null;
-  }
+	if (!columns.length) {
+		return null;
+	}
 
-  return (
-    <DropdownMenu modal={false}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="ml-auto hidden h-8 lg:flex"
-        >
-          <MixerHorizontalIcon className="mr-2 h-4 w-4" />
-          View
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {columns.map((column) => (
-          <DropdownMenuCheckboxItem
-            key={column.id}
-            className="capitalize"
-            checked={column.getIsVisible()}
-            onCheckedChange={(value) => column.toggleVisibility(!!value)}
-          >
-            {column.id}
-          </DropdownMenuCheckboxItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
+	return (
+		<DropdownMenu modal={false}>
+			<DropdownMenuTrigger asChild>
+				<Button
+					variant="outline"
+					size="sm"
+					className="ml-auto hidden h-8 lg:flex"
+				>
+					<MixerHorizontalIcon className="mr-2 h-4 w-4" />
+					View
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="end" className="w-[150px]">
+				<DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+				<DropdownMenuSeparator />
+				{columns.map((column) => (
+					<DropdownMenuCheckboxItem
+						key={column.id}
+						className="capitalize"
+						checked={column.getIsVisible()}
+						onCheckedChange={(value) => column.toggleVisibility(!!value)}
+					>
+						{column.id}
+					</DropdownMenuCheckboxItem>
+				))}
+			</DropdownMenuContent>
+		</DropdownMenu>
+	);
 }

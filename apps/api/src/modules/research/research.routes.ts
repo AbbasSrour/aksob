@@ -11,7 +11,7 @@ import { toResearchDto } from "@/modules/research/utils/research.mapper";
 import { authContext } from "@/plugins/auth";
 import { paginate } from "@/utils/paginate";
 
-export const researchModule = new Elysia({ prefix: "/api/research" })
+export const researchModule = new Elysia({ prefix: "/research" })
 	.use(authContext)
 	// List research with visibility based on auth status and role
 	.get(
@@ -463,6 +463,7 @@ export const researchModule = new Elysia({ prefix: "/api/research" })
 			return { status: "ok", data: toResearchDto(updated!) };
 		},
 		{
+			auth: true,
 			role: "admin",
 			detail: {
 				tags: ["Research"],
@@ -524,6 +525,7 @@ export const researchModule = new Elysia({ prefix: "/api/research" })
 			return { status: "ok", data: toResearchDto(updated!) };
 		},
 		{
+			auth: true,
 			role: "admin",
 			body: rejectResearchBody,
 			detail: {

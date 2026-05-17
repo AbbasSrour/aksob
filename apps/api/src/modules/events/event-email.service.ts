@@ -315,9 +315,7 @@ export async function getSurveyRecipients(
 
 	return members
 		.filter(
-			(m) =>
-				m.attendees[0]?.status === "approved" &&
-				m.user.type === audience,
+			(m) => m.attendees[0]?.status === "approved" && m.user.type === audience,
 		)
 		.map((m) => ({ email: m.user.email, name: m.user.name }));
 }

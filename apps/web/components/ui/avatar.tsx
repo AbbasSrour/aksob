@@ -49,13 +49,14 @@ export const Avatar: React.FC<AvatarProps> = ({
 	};
 
 	return (
-		<div className={`relative inline-block ${className || ""}`}>
+		<div className="relative inline-block">
 			<div
 				className={`
           ${sizeClasses[size]}
           rounded-full flex items-center justify-center
-          overflow-hidden bg-[var(--aksob-muted)]
-          text-white font-semibold select-none
+          overflow-hidden bg-(--gray-100) border-2 border-(--gray-200)
+          text-(--aksob-darkest) font-semibold select-none
+          ${className || ""}
         `}
 			>
 				{src ? (

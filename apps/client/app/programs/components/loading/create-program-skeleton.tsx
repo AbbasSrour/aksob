@@ -28,7 +28,8 @@ export function CreateProgramSkeleton() {
 					<FormSectionHeader>
 						<FormSectionTitle>Program Details</FormSectionTitle>
 						<FormSectionDescription>
-							Enter the program's name, level, description, credits, and duration.
+							Enter the program's name, level, description, credits, and
+							duration.
 						</FormSectionDescription>
 					</FormSectionHeader>
 

@@ -19,7 +19,9 @@ export const programActiveFilter = createFilterDefinition({
 	toConditions: (_columnFilters: ColumnFiltersState): ActiveConditions => {
 		return {};
 	},
-	buildFacetQuery: (ctx: FacetContext<Record<string, never>, ActiveConditions>) =>
+	buildFacetQuery: (
+		ctx: FacetContext<Record<string, never>, ActiveConditions>,
+	) =>
 		programActiveTypes.map((option) => ({
 			optionValue: option.value,
 			...ctx,

@@ -17,32 +17,38 @@ const FEATURES = [
 	{
 		icon: Users,
 		title: "Alumni Network",
-		description: "Connect with graduates across industries and graduation years worldwide",
+		description:
+			"Connect with graduates across industries and graduation years worldwide",
 	},
 	{
 		icon: Trophy,
 		title: "Success Stories",
-		description: "Discover where fellow alumni are making an impact and find inspiration",
+		description:
+			"Discover where fellow alumni are making an impact and find inspiration",
 	},
 	{
 		icon: BookOpen,
 		title: "News & Insights",
-		description: "Stay updated with AKSOB news, research, and thought leadership",
+		description:
+			"Stay updated with AKSOB news, research, and thought leadership",
 	},
 	{
 		icon: Calendar,
 		title: "Events",
-		description: "Join talks, workshops, and networking events with the community",
+		description:
+			"Join talks, workshops, and networking events with the community",
 	},
 	{
 		icon: MessageCircle,
 		title: "Direct Messaging",
-		description: "Reach out to alumni and faculty for advice, collaboration, or mentorship",
+		description:
+			"Reach out to alumni and faculty for advice, collaboration, or mentorship",
 	},
 	{
 		icon: Globe,
 		title: "Galaxy Explorer",
-		description: "Browse the interactive map of alumni and visualize your connections",
+		description:
+			"Browse the interactive map of alumni and visualize your connections",
 	},
 ];
 
@@ -57,7 +63,8 @@ export const WelcomeStep: React.FC<WelcomeStepProps> = ({ onNext }) => {
 					animationDelay: "0.5s",
 				}}
 			>
-				Your Alumni<br />
+				Your Alumni
+				<br />
 				Journey Starts Here
 			</h1>
 
@@ -69,8 +76,9 @@ export const WelcomeStep: React.FC<WelcomeStepProps> = ({ onNext }) => {
 					animationDelay: "0.7s",
 				}}
 			>
-				The AKSOB Alumni Network brings together graduates, faculty, and students.
-				Share your story so others can discover you — and so you can discover them.
+				The AKSOB Alumni Network brings together graduates, faculty, and
+				students. Share your story so others can discover you — and so you can
+				discover them.
 			</p>
 
 			{/* Feature Grid */}
@@ -84,10 +92,7 @@ export const WelcomeStep: React.FC<WelcomeStepProps> = ({ onNext }) => {
 						className="flex flex-col items-center text-center"
 					>
 						<div className="w-10 h-10 rounded-full bg-(--aksob-primary)/5 flex items-center justify-center mb-3">
-							<feature.icon
-								size={18}
-								className="text-(--aksob-primary)"
-							/>
+							<feature.icon size={18} className="text-(--aksob-primary)" />
 						</div>
 						<h3
 							className="text-sm font-medium text-(--aksob-darkest) mb-1.5"

@@ -25,6 +25,8 @@ export const storyResponseSchema = t.Object({
 	title: t.String(),
 	description: t.String(),
 	content: t.String(),
+	coverImage: t.Union([t.String(), t.Null()]),
+	thumbnailImage: t.Union([t.String(), t.Null()]),
 	category: t.Enum(storyCategoryEnum),
 	storyDate: t.String(),
 	status: storyStatusEnum,

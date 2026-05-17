@@ -27,7 +27,10 @@ const EXPERIENCE_TYPES = [
 	{ value: "volunteer", label: "Volunteer" },
 ];
 
-export const ExperienceStep: React.FC<ExperienceStepProps> = ({ data, onChange }) => {
+export const ExperienceStep: React.FC<ExperienceStepProps> = ({
+	data,
+	onChange,
+}) => {
 	const [entries, setEntries] = useState<ExperienceEntry[]>(
 		data.length > 0
 			? data
@@ -50,7 +53,14 @@ export const ExperienceStep: React.FC<ExperienceStepProps> = ({ data, onChange }
 	const addEntry = () => {
 		setEntries((prev) => [
 			...prev,
-			{ type: "full-time", title: "", company: "", startDate: "", endDate: null, isCurrent: false },
+			{
+				type: "full-time",
+				title: "",
+				company: "",
+				startDate: "",
+				endDate: null,
+				isCurrent: false,
+			},
 		]);
 	};
 
@@ -76,7 +86,9 @@ export const ExperienceStep: React.FC<ExperienceStepProps> = ({ data, onChange }
 				>
 					Experience
 				</h2>
-				<p className="text-sm text-(--gray-500) mt-1 leading-relaxed">Where have you worked?</p>
+				<p className="text-sm text-(--gray-500) mt-1 leading-relaxed">
+					Where have you worked?
+				</p>
 			</div>
 
 			<div className="space-y-4">
@@ -131,7 +143,9 @@ export const ExperienceStep: React.FC<ExperienceStepProps> = ({ data, onChange }
 									type="date"
 									label="Start Date"
 									value={entry.startDate}
-									onChange={(e) => updateEntry(i, { startDate: e.target.value })}
+									onChange={(e) =>
+										updateEntry(i, { startDate: e.target.value })
+									}
 									fullWidth
 								/>
 								{!entry.isCurrent && (

@@ -1,9 +1,7 @@
 import { DataTableBadgeCell } from "@aksob/ui/components/data-table/cells/data-table-badge-cell";
 import { DataTableColumnHeader } from "@aksob/ui/components/data-table/data-table-column-header";
 import { DataTableRowActions } from "@aksob/ui/components/data-table/data-table-row-actions";
-import {
-	createRowNumberColumn,
-} from "@aksob/ui/components/data-table/utils/row-number-column-helper";
+import { createRowNumberColumn } from "@aksob/ui/components/data-table/utils/row-number-column-helper";
 import {
 	IconPencil,
 	IconToggleLeft,
@@ -38,9 +36,7 @@ export const programDataTableColumns = [
 				column={column}
 			/>
 		),
-		cell: ({ getValue }) => (
-			<div className="font-medium">{getValue()}</div>
-		),
+		cell: ({ getValue }) => <div className="font-medium">{getValue()}</div>,
 		enableSorting: true,
 	}),
 
@@ -135,9 +131,7 @@ export const programDataTableColumns = [
 								label: program.isActive
 									? m.programs_table_action_deactivate()
 									: m.programs_table_action_activate(),
-								icon: program.isActive
-									? IconToggleRight
-									: IconToggleLeft,
+								icon: program.isActive ? IconToggleRight : IconToggleLeft,
 								onClick: () => {
 									updateProgram({
 										id: program.id,

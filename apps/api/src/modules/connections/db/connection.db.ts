@@ -1,10 +1,5 @@
 import { sql } from "drizzle-orm";
-import {
-	index,
-	integer,
-	sqliteTable,
-	text,
-} from "drizzle-orm/sqlite-core";
+import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { CONNECTION_STATUSES } from "@/modules/connections/constant/connection-statuses.constant";
 import { CONNECTION_TYPES } from "@/modules/connections/constant/connection-types.constant";
 import { user } from "@/modules/users/db/user.db";

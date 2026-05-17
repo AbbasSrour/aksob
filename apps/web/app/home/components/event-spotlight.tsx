@@ -129,12 +129,13 @@ export function EventSpotlight() {
 							src={evt.image}
 							alt={evt.title}
 							className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-								idx === activeIndex ? "opacity-100 animate-ken-burns" : "opacity-0"
+								idx === activeIndex
+									? "opacity-100 animate-ken-burns"
+									: "opacity-0"
 							}`}
 						/>
 					))}
 					<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-
 				</div>
 
 				{/* Top-left: Counter + Status */}

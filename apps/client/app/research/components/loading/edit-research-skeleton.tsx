@@ -26,9 +26,7 @@ export function EditResearchSkeleton() {
 			<FormContent>
 				<FormSection layout="vertical">
 					<FormSectionHeader>
-						<FormSectionTitle>
-							Basic Information
-						</FormSectionTitle>
+						<FormSectionTitle>Basic Information</FormSectionTitle>
 					</FormSectionHeader>
 					<FormSectionContent cols={1} spacing="lg">
 						<FormRow cols={1}>
@@ -52,9 +50,7 @@ export function EditResearchSkeleton() {
 
 				<FormSection layout="vertical">
 					<FormSectionHeader>
-						<FormSectionTitle>
-							Institution Details
-						</FormSectionTitle>
+						<FormSectionTitle>Institution Details</FormSectionTitle>
 					</FormSectionHeader>
 					<FormSectionContent cols={1} spacing="lg">
 						<FormRow cols={1}>
@@ -80,8 +76,7 @@ export function EditResearchSkeleton() {
 					<FormSectionHeader>
 						<FormSectionTitle>Description</FormSectionTitle>
 						<FormSectionDescription>
-							Provide the full description of the research
-							program.
+							Provide the full description of the research program.
 						</FormSectionDescription>
 					</FormSectionHeader>
 					<FormSectionContent cols={1} spacing="lg">

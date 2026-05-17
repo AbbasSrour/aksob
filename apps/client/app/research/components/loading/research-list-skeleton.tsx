@@ -12,8 +12,8 @@ export function ResearchListSkeleton() {
 	return (
 		<Main>
 			<PageHeader
-					title="Research Programs"
-					description="Manage research programs and postings."
+				title="Research Programs"
+				description="Manage research programs and postings."
 			>
 				<ButtonSkeleton className="h-9 w-28" />
 			</PageHeader>

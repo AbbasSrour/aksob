@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 
 interface TagsStepProps {
 	data: { skills: string[]; goals: string[]; hobbies: string[] };
-	onChange: (data: { skills: string[]; goals: string[]; hobbies: string[] }) => void;
+	onChange: (data: {
+		skills: string[];
+		goals: string[];
+		hobbies: string[];
+	}) => void;
 }
 
 interface TagSectionProps {
@@ -14,7 +18,12 @@ interface TagSectionProps {
 	onChange: (v: string[]) => void;
 }
 
-const TagSection: React.FC<TagSectionProps> = ({ title, description, value, onChange }) => {
+const TagSection: React.FC<TagSectionProps> = ({
+	title,
+	description,
+	value,
+	onChange,
+}) => {
 	const [input, setInput] = useState("");
 	const [focused, setFocused] = useState(false);
 

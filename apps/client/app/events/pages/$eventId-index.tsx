@@ -27,7 +27,10 @@ import {
 	useCloseRegistration,
 	useUpdateAttendee,
 } from "@/app/events/hooks/api/events.queries";
-import type { EventItem, EventAttendee } from "@/app/events/hooks/api/events.functions";
+import type {
+	EventItem,
+	EventAttendee,
+} from "@/app/events/hooks/api/events.functions";
 
 // ---------------------------------------------------------------------------
 // Status badge
@@ -136,9 +139,7 @@ function getActions(
 export const Route = createFileRoute("/admin/events/$eventId")({
 	loader: async ({ context, params }) => {
 		await Promise.all([
-			context.queryClient.ensureQueryData(
-				eventQueries.single(params.eventId),
-			),
+			context.queryClient.ensureQueryData(eventQueries.single(params.eventId)),
 			context.queryClient.ensureQueryData(
 				eventAttendeeQueries.list({
 					eventId: params.eventId,
@@ -185,10 +186,7 @@ function EventDetailPage() {
 							Back to Events
 						</Button>
 					</Link>
-					<Link
-						to="/admin/events/$eventId/edit"
-						params={{ eventId }}
-					>
+					<Link to="/admin/events/$eventId/edit" params={{ eventId }}>
 						<Button variant="outline">Edit</Button>
 					</Link>
 				</div>
@@ -291,9 +289,7 @@ function OverviewTab({ event }: { event: EventItem }) {
 						<span className="text-sm font-medium text-muted-foreground">
 							Description
 						</span>
-						<p className="text-sm whitespace-pre-wrap">
-							{event.description}
-						</p>
+						<p className="text-sm whitespace-pre-wrap">{event.description}</p>
 					</div>
 
 					<div className="flex items-center gap-2 text-sm">
@@ -305,24 +301,17 @@ function OverviewTab({ event }: { event: EventItem }) {
 						</span>
 					</div>
 
-					{(event.eventType === "in_person" ||
-						event.eventType === "hybrid") &&
+					{(event.eventType === "in_person" || event.eventType === "hybrid") &&
 						event.location && (
 							<div className="flex items-center gap-2 text-sm">
-								<IconMapPin
-									size={16}
-									className="text-muted-foreground"
-								/>
+								<IconMapPin size={16} className="text-muted-foreground" />
 								<span>{event.location}</span>
 							</div>
 						)}
 
 					{event.owner && (
 						<div className="flex items-center gap-2 text-sm">
-							<IconUsers
-								size={16}
-								className="text-muted-foreground"
-							/>
+							<IconUsers size={16} className="text-muted-foreground" />
 							<span>Owned by {event.owner.name}</span>
 						</div>
 					)}
@@ -349,16 +338,11 @@ function OverviewTab({ event }: { event: EventItem }) {
 							{event.registrationDeadline && (
 								<InfoRow
 									label="Deadline"
-									value={formatDate(
-										event.registrationDeadline,
-									)}
+									value={formatDate(event.registrationDeadline)}
 								/>
 							)}
 							{event.capacity && (
-								<InfoRow
-									label="Capacity"
-									value={String(event.capacity)}
-								/>
+								<InfoRow label="Capacity" value={String(event.capacity)} />
 							)}
 						</>
 					)}
@@ -372,17 +356,10 @@ function OverviewTab({ event }: { event: EventItem }) {
 					/>
 					<InfoRow
 						label="Attendee List"
-						value={
-							event.attendeeListVisible
-								? "Public"
-								: "Private"
-						}
+						value={event.attendeeListVisible ? "Public" : "Private"}
 					/>
 					{event.meetingPlatform && (
-						<InfoRow
-							label="Platform"
-							value={event.meetingPlatform}
-						/>
+						<InfoRow label="Platform" value={event.meetingPlatform} />
 					)}
 					{event.meetingUrl && (
 						<div className="space-y-1">
@@ -454,18 +431,10 @@ function AttendeesTab({ eventId }: { eventId: string }) {
 				<table className="w-full text-sm">
 					<thead>
 						<tr className="border-b bg-muted/50">
-							<th className="px-4 py-3 text-left font-medium">
-								Name
-							</th>
-							<th className="px-4 py-3 text-left font-medium">
-								Status
-							</th>
-							<th className="px-4 py-3 text-left font-medium">
-								Checked In
-							</th>
-							<th className="px-4 py-3 text-right font-medium">
-								Actions
-							</th>
+							<th className="px-4 py-3 text-left font-medium">Name</th>
+							<th className="px-4 py-3 text-left font-medium">Status</th>
+							<th className="px-4 py-3 text-left font-medium">Checked In</th>
+							<th className="px-4 py-3 text-right font-medium">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -479,15 +448,9 @@ function AttendeesTab({ eventId }: { eventId: string }) {
 								</td>
 								<td className="px-4 py-3">
 									{a.checkedIn ? (
-										<IconCheck
-											size={16}
-											className="text-emerald-600"
-										/>
+										<IconCheck size={16} className="text-emerald-600" />
 									) : (
-										<IconX
-											size={16}
-											className="text-muted-foreground"
-										/>
+										<IconX size={16} className="text-muted-foreground" />
 									)}
 								</td>
 								<td className="px-4 py-3 text-right space-x-1">
@@ -496,24 +459,16 @@ function AttendeesTab({ eventId }: { eventId: string }) {
 											<Button
 												size="sm"
 												variant="outline"
-												onClick={() =>
-													handleApprove(a.id)
-												}
-												disabled={
-													updateAttendee.isPending
-												}
+												onClick={() => handleApprove(a.id)}
+												disabled={updateAttendee.isPending}
 											>
 												Approve
 											</Button>
 											<Button
 												size="sm"
 												variant="outline"
-												onClick={() =>
-													handleReject(a.id)
-												}
-												disabled={
-													updateAttendee.isPending
-												}
+												onClick={() => handleReject(a.id)}
+												disabled={updateAttendee.isPending}
 											>
 												Reject
 											</Button>
@@ -595,16 +550,10 @@ function SurveysTab({ surveys }: { surveys: EventItem["surveys"] }) {
 			<table className="w-full text-sm">
 				<thead>
 					<tr className="border-b bg-muted/50">
-						<th className="px-4 py-3 text-left font-medium">
-							Audience
-						</th>
+						<th className="px-4 py-3 text-left font-medium">Audience</th>
 						<th className="px-4 py-3 text-left font-medium">URL</th>
-						<th className="px-4 py-3 text-left font-medium">
-							Send At
-						</th>
-						<th className="px-4 py-3 text-left font-medium">
-							Sent
-						</th>
+						<th className="px-4 py-3 text-left font-medium">Send At</th>
+						<th className="px-4 py-3 text-left font-medium">Sent</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -625,19 +574,12 @@ function SurveysTab({ surveys }: { surveys: EventItem["surveys"] }) {
 									{s.url}
 								</a>
 							</td>
-							<td className="px-4 py-3">
-								{formatDate(s.sendAt)}
-							</td>
+							<td className="px-4 py-3">{formatDate(s.sendAt)}</td>
 							<td className="px-4 py-3">
 								{s.sentAt ? (
-									<IconCheck
-										size={16}
-										className="text-emerald-600"
-									/>
+									<IconCheck size={16} className="text-emerald-600" />
 								) : (
-									<span className="text-muted-foreground">
-										Pending
-									</span>
+									<span className="text-muted-foreground">Pending</span>
 								)}
 							</td>
 						</tr>

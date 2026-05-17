@@ -33,15 +33,11 @@ export function ProgramsDataTable() {
 	const navigate = Route.useNavigate();
 
 	const [rowSelection, setRowSelection] = useState({});
-	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-		{},
-	);
+	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
 	const { sorting, setSorting } = useSort();
 	const { searchValue } = useSearch();
-	const { columnFilters, setColumnFilters } = useFilters([
-		programActiveFilter,
-	]);
+	const { columnFilters, setColumnFilters } = useFilters([programActiveFilter]);
 	const { pagination, setPagination } = usePagination({}, [
 		searchValue,
 		columnFilters,

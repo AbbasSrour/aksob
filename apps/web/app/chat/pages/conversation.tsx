@@ -30,6 +30,9 @@ export default function ChatConversationPage() {
 		useState<ChatConversation | null>(null);
 	const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 	const [isSending, setIsSending] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
+	const [loadError, setLoadError] = useState<string | null>(null);
+	const hasLoadedMessages = useRef(false);
 
 	useEffect(() => {
 		if (!conversationId) {
@@ -59,7 +62,7 @@ export default function ChatConversationPage() {
 				if (!isMounted) {
 					return;
 				}
-				navigate("/chat");
+				setLoadError("Failed to load conversation.");
 			}
 		};
 
@@ -68,7 +71,7 @@ export default function ChatConversationPage() {
 		return () => {
 			isMounted = false;
 		};
-	}, [conversationId, navigate]);
+	}, [conversationId]);
 
 	useEffect(() => {
 		if (!conversationId || !currentUserId) {
@@ -84,22 +87,35 @@ export default function ChatConversationPage() {
 					return;
 				}
 
-				setMessages(
-					response.data.map((message) => ({
-						id: message.id,
-						senderId: message.senderId,
-						senderName: message.senderName,
-						content: message.content,
-						timestamp: formatMessageTime(message.createdAt),
-						isOwn: message.senderId === currentUserId,
-						status: message.senderId === currentUserId ? "sent" : "read",
-					})),
-				);
+				const mappedMessages = response.data.map((message) => ({
+					id: message.id,
+					senderId: message.senderId,
+					senderName: message.senderName,
+					content: message.content,
+					timestamp: formatMessageTime(message.createdAt),
+					isOwn: message.senderId === currentUserId,
+					status: message.senderId === currentUserId ? "sent" : "read",
+				}));
+
+				// Merge: keep locally-sent messages that may not yet be in the server response
+				setMessages((previousMessages) => {
+					const existingIds = new Set(mappedMessages.map((m) => m.id));
+					const localOnly = previousMessages.filter(
+						(m) => !existingIds.has(m.id),
+					);
+					return [...mappedMessages, ...localOnly];
+				});
+				hasLoadedMessages.current = true;
+				setIsLoading(false);
+				setLoadError(null);
 			} catch {
 				if (!isMounted) {
 					return;
 				}
-				navigate("/chat");
+				if (!hasLoadedMessages.current) {
+					setLoadError("Failed to load messages.");
+				}
+				setIsLoading(false);
 			}
 		};
 
@@ -110,8 +126,9 @@ export default function ChatConversationPage() {
 			isMounted = false;
 			window.clearInterval(interval);
 		};
-	}, [conversationId, currentUserId, navigate]);
+	}, [conversationId, currentUserId]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: scroll when messages change
 	useEffect(() => {
 		if (!scrollRef.current) {
 			return;
@@ -119,9 +136,9 @@ export default function ChatConversationPage() {
 		scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
 	}, [messages]);
 
-	const handleSendMessage = async (text: string) => {
+	const handleSendMessage = async (text: string): Promise<boolean> => {
 		if (!conversationId || isSending) {
-			return;
+			return false;
 		}
 
 		setIsSending(true);
@@ -139,6 +156,9 @@ export default function ChatConversationPage() {
 					status: "sent",
 				},
 			]);
+			return true;
+		} catch {
+			return false;
 		} finally {
 			setIsSending(false);
 		}
@@ -151,12 +171,34 @@ export default function ChatConversationPage() {
 		return activeConversation.otherUser.name;
 	}, [activeConversation]);
 
+	if (loadError && messages.length === 0) {
+		return (
+			<div className="flex h-full w-full flex-col items-center justify-center bg-(--off-white) text-center">
+				<p className="text-(--gray-500) mb-4">{loadError}</p>
+				<button
+					type="button"
+					onClick={() => navigate("/chat")}
+					className="px-5 py-2 rounded-full bg-[var(--aksob-primary)] text-white text-sm font-medium hover:bg-[var(--aksob-secondary)] transition-colors"
+				>
+					Back to Chats
+				</button>
+			</div>
+		);
+	}
+
+	if (isLoading) {
+		return (
+			<div className="flex h-full w-full flex-col items-center justify-center bg-(--off-white)">
+				<div className="w-8 h-8 border-2 border-(--aksob-primary) border-t-transparent rounded-full animate-spin" />
+			</div>
+		);
+	}
+
 	return (
-		<div className="flex h-full w-full flex-col bg-[#f8fafc] dark:bg-[#0a0a0a]">
+		<div className="flex h-full w-full flex-col bg-(--off-white)">
 			<ChatHeader
 				name={headerName}
 				avatarSrc={activeConversation?.otherUser.image ?? undefined}
-				email={activeConversation?.otherUser.email}
 				isOnline={false}
 				statusText={activeConversation?.otherUser.program ?? ""}
 				showBack={true}
@@ -168,7 +210,7 @@ export default function ChatConversationPage() {
 				ref={scrollRef}
 			>
 				{messages.length === 0 ? (
-					<div className="flex h-full items-center justify-center text-sm text-gray-400">
+					<div className="flex h-full items-center justify-center text-sm text-(--gray-400)">
 						No messages yet. Say hello!
 					</div>
 				) : (

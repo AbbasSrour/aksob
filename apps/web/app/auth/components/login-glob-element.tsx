@@ -7,7 +7,9 @@ export function LoginGlobElement({ className }: { className?: string }) {
 	const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
 
 	useEffect(() => {
-		if (!containerRef.current) return;
+		if (typeof window === "undefined" || !containerRef.current) return;
+
+		let isDisposed = false;
 
 		// --- Setup Scene ---
 		const scene = new THREE.Scene();
@@ -227,6 +229,8 @@ export function LoginGlobElement({ className }: { className?: string }) {
 		const clock = new THREE.Clock();
 
 		const animate = () => {
+			if (isDisposed) return;
+
 			const delta = clock.getDelta();
 			time += delta;
 
@@ -328,7 +332,6 @@ export function LoginGlobElement({ className }: { className?: string }) {
 			camera.lookAt(0, 0, 0);
 
 			renderer.render(scene, camera);
-			requestAnimationFrame(animate);
 		};
 
 		const handleResize = () => {
@@ -341,15 +344,21 @@ export function LoginGlobElement({ className }: { className?: string }) {
 		};
 
 		window.addEventListener("resize", handleResize);
-		animate();
+		renderer.setAnimationLoop(animate);
 
 		// Cleanup
 		return () => {
+			isDisposed = true;
+			renderer.setAnimationLoop(null);
 			window.removeEventListener("resize", handleResize);
-			if (rendererRef.current && containerRef.current) {
+			if (
+				rendererRef.current &&
+				containerRef.current?.contains(rendererRef.current.domElement)
+			) {
 				containerRef.current.removeChild(rendererRef.current.domElement);
 				rendererRef.current.dispose();
 			}
+			rendererRef.current = null;
 			pointsGeometry.dispose();
 			pointsMaterial.dispose();
 			globeGeometry.dispose();

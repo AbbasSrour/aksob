@@ -25,8 +25,8 @@ export const MessageBubble: React.FC<MessageProps> = ({
 	showAvatar = true,
 }) => {
 	const bubbleStyles = isOwn
-		? "bg-[var(--aksob-primary)] text-white rounded-3xl rounded-br-lg"
-		: "bg-gray-100 text-gray-900 rounded-3xl rounded-bl-lg";
+		? "bg-[var(--aksob-primary)] text-white rounded-2xl rounded-br-md"
+		: "bg-white text-(--aksob-darkest) shadow-sm rounded-2xl rounded-bl-md";
 
 	return (
 		<div
@@ -42,7 +42,7 @@ export const MessageBubble: React.FC<MessageProps> = ({
 
 			<div className="relative max-w-[75%] lg:max-w-[65%]">
 				{!isOwn && showAvatar && (
-					<span className="text-[11px] text-gray-400 ml-3 mb-1 block font-medium">
+					<span className="text-[11px] text-(--gray-400) ml-3 mb-1 block font-medium">
 						{senderName}
 					</span>
 				)}
@@ -54,14 +54,14 @@ export const MessageBubble: React.FC<MessageProps> = ({
 					<div className="flex items-center justify-end gap-1.5 mt-1 -mb-0.5">
 						<span
 							className={`text-[11px] ${
-								isOwn ? "text-white/60" : "text-gray-400"
+								isOwn ? "text-white/60" : "text-(--aksob-muted)/60"
 							}`}
 						>
 							{timestamp}
 						</span>
 						{isOwn && (
 							<span
-								className={`${status === "read" ? "text-emerald-300" : "text-white/50"}`}
+								className={`${status === "read" ? "text-[var(--success)]" : "text-white/50"}`}
 							>
 								{status === "sending" ? (
 									<div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin" />

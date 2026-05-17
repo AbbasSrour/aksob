@@ -7,7 +7,9 @@ export function LoginGalaxyBackground({ className }: { className?: string }) {
 	const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
 
 	useEffect(() => {
-		if (!containerRef.current) return;
+		if (typeof window === "undefined" || !containerRef.current) return;
+
+		let isDisposed = false;
 
 		// --- Setup Scene ---
 		const scene = new THREE.Scene();
@@ -111,6 +113,8 @@ export function LoginGalaxyBackground({ className }: { className?: string }) {
 		let time = 0;
 
 		const animate = () => {
+			if (isDisposed) return;
+
 			const delta = clock.getDelta();
 			time += delta;
 
@@ -124,7 +128,6 @@ export function LoginGalaxyBackground({ className }: { className?: string }) {
 
 			// No camera movement, keep it stable
 			renderer.render(scene, camera);
-			requestAnimationFrame(animate);
 		};
 
 		const handleResize = () => {
@@ -137,15 +140,21 @@ export function LoginGalaxyBackground({ className }: { className?: string }) {
 		};
 
 		window.addEventListener("resize", handleResize);
-		animate();
+		renderer.setAnimationLoop(animate);
 
 		// Cleanup
 		return () => {
+			isDisposed = true;
+			renderer.setAnimationLoop(null);
 			window.removeEventListener("resize", handleResize);
-			if (rendererRef.current && containerRef.current) {
+			if (
+				rendererRef.current &&
+				containerRef.current?.contains(rendererRef.current.domElement)
+			) {
 				containerRef.current.removeChild(rendererRef.current.domElement);
 				rendererRef.current.dispose();
 			}
+			rendererRef.current = null;
 			scene.clear();
 		};
 	}, []);

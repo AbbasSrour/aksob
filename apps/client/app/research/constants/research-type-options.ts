@@ -4,8 +4,14 @@ export const researchTypeOptions = [
 	{ value: "phd_position", label: m.research_type_phd_position() },
 	{ value: "postdoc", label: m.research_type_postdoc() },
 	{ value: "research_assistant", label: m.research_type_research_assistant() },
-	{ value: "visiting_researcher", label: m.research_type_visiting_researcher() },
-	{ value: "research_internship", label: m.research_type_research_internship() },
+	{
+		value: "visiting_researcher",
+		label: m.research_type_visiting_researcher(),
+	},
+	{
+		value: "research_internship",
+		label: m.research_type_research_internship(),
+	},
 	{ value: "collaboration", label: m.research_type_collaboration() },
 	{ value: "fellowship", label: m.research_type_fellowship() },
 	{ value: "other", label: m.research_type_other() },

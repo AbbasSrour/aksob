@@ -1,11 +1,13 @@
 import { isNull } from "drizzle-orm";
 import { db, schema } from "@/db";
-import { generateAndStoreEmbedding } from "@/modules/ai/ai-embedding";
-import { aiClient } from "@/modules/ai/ai-client";
+import { aiClient } from "@/lib/ai/client";
+import { generateAndStoreEmbedding } from "@/lib/ai/embedding";
 
 async function main() {
-	if (!aiClient.isConfigured) {
-		console.log("AI not configured (set AI_EMBEDDING_PROVIDER_URL and AI_EMBEDDING_PROVIDER_KEY)");
+	if (!aiClient.isEmbeddingConfigured) {
+		console.log(
+			"AI not configured (set AI_EMBEDDING_PROVIDER_URL and AI_EMBEDDING_PROVIDER_KEY)",
+		);
 		process.exit(0);
 	}
 
@@ -18,7 +20,9 @@ async function main() {
 
 	for (let i = 0; i < users.length; i++) {
 		const { userId } = users[i]!;
-		console.log(`[${i + 1}/${users.length}] Generating embedding for ${userId}...`);
+		console.log(
+			`[${i + 1}/${users.length}] Generating embedding for ${userId}...`,
+		);
 		await generateAndStoreEmbedding(userId);
 	}
 

@@ -139,7 +139,9 @@ function computeChanges(
 		const prev = previous.registrationDeadline;
 		if (
 			(deadline === null) !== (prev === null) ||
-			(deadline !== null && prev !== null && deadline.getTime() !== prev.getTime())
+			(deadline !== null &&
+				prev !== null &&
+				deadline.getTime() !== prev.getTime())
 		) {
 			changes.push(
 				deadline === null

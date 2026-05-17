@@ -14,9 +14,7 @@ export const createConnectionRequestBody = t.Object({
 });
 
 export const listConnectionsQuery = t.Object({
-	type: t.Optional(
-		t.String({ enum: CONNECTION_TYPES as unknown as string[] }),
-	),
+	type: t.Optional(t.String({ enum: CONNECTION_TYPES as unknown as string[] })),
 	status: t.Optional(
 		t.String({ enum: CONNECTION_STATUSES as unknown as string[] }),
 	),

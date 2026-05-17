@@ -10,7 +10,7 @@ import {
 import { authContext } from "@/plugins/auth";
 
 export const newsCategoriesModule = new Elysia({
-	prefix: "/api/news/categories",
+	prefix: "/news/categories",
 })
 	.use(authContext)
 	.get(

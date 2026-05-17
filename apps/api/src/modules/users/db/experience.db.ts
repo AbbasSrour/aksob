@@ -25,7 +25,5 @@ export const experience = sqliteTable(
 			.$onUpdate(() => new Date())
 			.notNull(),
 	},
-	(table) => [
-		index("experience_user_id_idx").on(table.userId),
-	],
+	(table) => [index("experience_user_id_idx").on(table.userId)],
 );

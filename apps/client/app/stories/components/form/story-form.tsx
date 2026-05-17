@@ -115,10 +115,7 @@ function readingTime(words: number): string {
 
 // -------------------------------------------------------------------> Component
 
-export function StoryForm({
-	defaultValues,
-	storyId,
-}: StoryFormProps) {
+export function StoryForm({ defaultValues, storyId }: StoryFormProps) {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { data: sessionData } = useSession();
@@ -306,8 +303,7 @@ export function StoryForm({
 				updateStory({ id: storyId, ...payload }, { onSuccess });
 			}
 		} catch (error) {
-			const message =
-				error instanceof Error ? error.message : "Unknown error";
+			const message = error instanceof Error ? error.message : "Unknown error";
 			console.error("Failed to save story:", message, error);
 			toast.error(`Failed to save story: ${message}`);
 		} finally {

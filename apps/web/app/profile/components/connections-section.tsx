@@ -61,7 +61,7 @@ const TYPE_LABELS: Record<string, string> = {
 	project: "Project",
 };
 
-type TabKey = "active" | "pending" | "completed";
+type TabKey = "all" | "active" | "pending" | "cancelled" | "completed";
 
 export function ConnectionsSection({ userId }: { userId: string }) {
 	const [tab, setTab] = useState<TabKey>("active");
@@ -70,9 +70,7 @@ export function ConnectionsSection({ userId }: { userId: string }) {
 	const { data, isLoading } = useQuery({
 		queryKey: ["connections", tab],
 		queryFn: () =>
-			listConnections(tab === "completed" ? undefined : tab).then(
-				(r) => r.data,
-			),
+			listConnections(tab === "all" ? undefined : tab).then((r) => r.data),
 	});
 
 	const handleAction = useCallback(
@@ -92,8 +90,10 @@ export function ConnectionsSection({ userId }: { userId: string }) {
 	const connections = data ?? [];
 
 	const tabs: { key: TabKey; label: string }[] = [
+		{ key: "all", label: "All" },
 		{ key: "active", label: "Active" },
 		{ key: "pending", label: "Pending" },
+		{ key: "cancelled", label: "Cancelled" },
 		{ key: "completed", label: "Completed" },
 	];
 
@@ -130,9 +130,11 @@ export function ConnectionsSection({ userId }: { userId: string }) {
 						<Link2 size={24} className="text-[var(--gray-400)]" />
 					</div>
 					<p className="text-sm text-[var(--gray-500)]">
-						No {tab} connections yet.
+						{tab === "all"
+							? "No connections yet."
+							: `No ${tab} connections yet.`}
 					</p>
-					{tab === "active" ? (
+					{tab === "active" || tab === "all" ? (
 						<p className="text-xs text-[var(--gray-400)] mt-1">
 							Browse the Galaxy to find and connect with alumni.
 						</p>
@@ -167,19 +169,25 @@ function ConnectionCard({
 	) => Promise<void>;
 }) {
 	const isRequester = connection.requesterId === userId;
-	const otherUserId = isRequester
+	const otherUser = isRequester ? connection.matchedUser : connection.requester;
+	const otherUserId = otherUser?.id ?? (isRequester
 		? connection.matchedUserId
-		: connection.requesterId;
+		: connection.requesterId);
 	const status = STATUS_CONFIG[connection.status];
 
 	return (
 		<div className="p-4 flex flex-col sm:flex-row sm:items-center gap-4 bg-white/60 backdrop-blur-sm rounded-xl border border-white/50">
 			<div className="flex items-center gap-3 flex-1 min-w-0">
-				<Avatar name="User" size="md" className="w-10 h-10 flex-shrink-0" />
+				<Avatar
+					name={otherUser?.name ?? "User"}
+					src={otherUser?.image ?? undefined}
+					size="md"
+					className="w-10 h-10 flex-shrink-0"
+				/>
 				<div className="min-w-0">
 					<div className="flex items-center gap-2 flex-wrap">
 						<h4 className="text-sm font-semibold text-gray-900 truncate">
-							User {otherUserId.slice(0, 8)}
+							{otherUser?.name ?? `User ${otherUserId.slice(0, 8)}`}
 						</h4>
 						<Badge
 							variant={status.variant}

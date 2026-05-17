@@ -18,7 +18,7 @@ import { USER_ERRORS } from "@/modules/users/constant/user-errors.constant";
 import { authContext } from "@/plugins/auth";
 import { paginate } from "@/utils/paginate";
 
-export const newsModule = new Elysia({ prefix: "/api/news" })
+export const newsModule = new Elysia({ prefix: "/news" })
 	.use(authContext)
 	.get(
 		"/",

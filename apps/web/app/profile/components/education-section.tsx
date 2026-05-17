@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { Edit2, Plus, Save } from "lucide-react";
-import { useCallback, useState } from "react";
+import { Plus, Save } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { apiFetch } from "~/app/lib/api";
 import { type EducationEntry, updateEducation } from "~/app/lib/users";
 import { EducationEntryRow } from "~/app/profile/components/education-entry";
@@ -9,12 +9,24 @@ import { Button } from "~/components/ui/button";
 interface Props {
 	entries: EducationEntry[];
 	onRefetch?: () => void;
+	isEditing?: boolean;
+	onDone?: () => void;
 }
 
-export function EducationSection({ entries, onRefetch }: Props) {
-	const [editing, setEditing] = useState(false);
+export function EducationSection({
+	entries,
+	onRefetch,
+	isEditing = false,
+	onDone,
+}: Props) {
 	const [draft, setDraft] = useState<EducationEntry[]>([]);
 	const [saving, setSaving] = useState(false);
+
+	useEffect(() => {
+		if (isEditing) {
+			setDraft(entries.map((e) => ({ ...e })));
+		}
+	}, [isEditing, entries]);
 
 	const { data: programsData, isLoading: programsLoading } = useQuery({
 		queryKey: ["programs"],
@@ -25,15 +37,10 @@ export function EducationSection({ entries, onRefetch }: Props) {
 	});
 	const programs = programsData?.data ?? [];
 
-	const handleEdit = useCallback(() => {
-		setDraft(entries.map((e) => ({ ...e })));
-		setEditing(true);
-	}, [entries]);
-
 	const handleCancel = useCallback(() => {
 		setDraft([]);
-		setEditing(false);
-	}, []);
+		onDone?.();
+	}, [onDone]);
 
 	const handleSave = useCallback(async () => {
 		setSaving(true);
@@ -45,12 +52,12 @@ export function EducationSection({ entries, onRefetch }: Props) {
 					isPrimary: e.isPrimary,
 				})),
 			});
-			setEditing(false);
 			onRefetch?.();
+			onDone?.();
 		} finally {
 			setSaving(false);
 		}
-	}, [draft, onRefetch]);
+	}, [draft, onRefetch, onDone]);
 
 	const handleAdd = useCallback(() => {
 		setDraft((prev) => [
@@ -97,45 +104,11 @@ export function EducationSection({ entries, onRefetch }: Props) {
 		[programs],
 	);
 
-	const displayEntries = editing ? draft : entries;
+	const displayEntries = isEditing ? draft : entries;
 
 	return (
 		<div className="p-5">
-			<div className="flex items-center justify-between mb-4">
-				<h3 className="text-sm font-semibold text-gray-900">Education</h3>
-				{!editing ? (
-					<Button
-						variant="secondary"
-						size="sm"
-						onClick={handleEdit}
-						leftIcon={<Edit2 size={14} />}
-					>
-						Edit
-					</Button>
-				) : (
-					<div className="flex gap-2">
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={handleCancel}
-							disabled={saving}
-						>
-							Cancel
-						</Button>
-						<Button
-							variant="primary"
-							size="sm"
-							onClick={handleSave}
-							leftIcon={<Save size={14} />}
-							isLoading={saving}
-						>
-							Save
-						</Button>
-					</div>
-				)}
-			</div>
-
-			{displayEntries.length === 0 && !editing ? (
+			{displayEntries.length === 0 && !isEditing ? (
 				<p className="text-sm text-gray-400 py-2">No education entries yet.</p>
 			) : (
 				<div className="divide-y divide-gray-100">
@@ -144,7 +117,7 @@ export function EducationSection({ entries, onRefetch }: Props) {
 							key={i}
 							entry={entry}
 							index={i}
-							editing={editing}
+							editing={isEditing}
 							programs={programs}
 							programsLoading={programsLoading}
 							onUpdate={handleUpdate}
@@ -155,17 +128,36 @@ export function EducationSection({ entries, onRefetch }: Props) {
 				</div>
 			)}
 
-			{editing ? (
-				<Button
-					variant="ghost"
-					size="sm"
-					className="mt-3"
-					onClick={handleAdd}
-					leftIcon={<Plus size={14} />}
-					disabled={saving}
-				>
-					Add education
-				</Button>
+			{isEditing ? (
+				<div className="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={handleAdd}
+						leftIcon={<Plus size={14} />}
+						disabled={saving}
+					>
+						Add education
+					</Button>
+					<div className="flex-1" />
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={handleCancel}
+						disabled={saving}
+					>
+						Cancel
+					</Button>
+					<Button
+						variant="primary"
+						size="sm"
+						onClick={handleSave}
+						leftIcon={<Save size={14} />}
+						isLoading={saving}
+					>
+						Save
+					</Button>
+				</div>
 			) : null}
 		</div>
 	);

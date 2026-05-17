@@ -12,8 +12,8 @@ export default function SeriesPage() {
 						Series
 					</h1>
 					<p className="mt-4 text-lg text-[var(--gray-500)] max-w-2xl mx-auto">
-						Explore curated series, collections, and special features from
-						the alumni community.
+						Explore curated series, collections, and special features from the
+						alumni community.
 					</p>
 				</div>
 

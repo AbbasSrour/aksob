@@ -1,8 +1,10 @@
 import { generateText } from "ai";
-import { aiClient } from "@/modules/ai/ai-client";
-import { buildProfileText } from "@/modules/ai/ai-profile";
-import { aiEnv } from "@/modules/ai/ai-env";
+
+import { aiClient } from "@/lib/ai/client";
+import { buildProfileText } from "@/lib/ai/profile";
 import { logger } from "@/utils/logger";
+
+const AI_MATCH_TIMEOUT_MS = 8000;
 
 interface RankedCandidate {
 	userId: string;
@@ -19,7 +21,7 @@ export async function llmSelectMatch(
 	connectionType: string,
 	candidates: RankedCandidate[],
 ): Promise<LlmMatchResult | null> {
-	if (!aiClient.isConfigured || candidates.length === 0) return null;
+	if (!aiClient.isLlmConfigured || candidates.length === 0) return null;
 
 	const model = aiClient.llmModel;
 	if (!model) return null;
@@ -54,7 +56,7 @@ Select the best candidate for this connection type. Consider:
 Return ONLY a JSON object with "matchedUserId" (the candidate ID) and "explanation" (1-2 sentences why).`;
 
 		const abort = new AbortController();
-		const timeout = setTimeout(() => abort.abort(), aiEnv.matchTimeoutMs);
+		const timeout = setTimeout(() => abort.abort(), AI_MATCH_TIMEOUT_MS);
 
 		const { text } = await generateText({
 			model,

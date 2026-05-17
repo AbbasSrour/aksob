@@ -30,12 +30,12 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
 			type="button"
 			onClick={onClick}
 			className={`
-				w-full text-left flex items-center p-3 gap-3 rounded-2xl cursor-pointer 
+				w-full text-left flex items-center p-3 gap-3 rounded-xl cursor-pointer
 				transition-all duration-200 group
 				${
 					isActive
-						? "bg-[var(--aksob-primary)] shadow-lg shadow-[var(--aksob-primary)]/20"
-						: "hover:bg-gray-50 active:bg-gray-100"
+						? "bg-[var(--aksob-primary)] shadow-md shadow-[var(--aksob-primary)]/20"
+						: "hover:bg-(--pale-mint)/40 active:bg-(--pale-mint)/60"
 				}
 			`}
 		>
@@ -51,12 +51,13 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
 			<div className="flex-1 min-w-0">
 				<div className="flex justify-between items-center mb-0.5">
 					<h4
-						className={`text-sm font-semibold truncate ${isActive ? "text-white" : "text-gray-900"}`}
+						className={`text-sm font-semibold truncate ${isActive ? "text-white" : "text-(--aksob-darkest)"}`}
+						style={{ fontFamily: "var(--font-display)" }}
 					>
 						{name}
 					</h4>
 					<span
-						className={`text-xs flex-shrink-0 ml-2 ${isActive ? "text-white/70" : "text-gray-400"}`}
+						className={`text-xs flex-shrink-0 ml-2 ${isActive ? "text-white/70" : "text-(--gray-400)"}`}
 					>
 						{time}
 					</span>
@@ -64,7 +65,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
 
 				<div className="flex justify-between items-center">
 					<p
-						className={`text-xs truncate pr-2 ${isActive ? "text-white/80" : unreadCount > 0 ? "text-gray-700 font-medium" : "text-gray-500"}`}
+						className={`text-xs truncate pr-2 ${isActive ? "text-white/80" : unreadCount > 0 ? "text-(--gray-600) font-medium" : "text-(--gray-500)"}`}
 					>
 						{lastMessage}
 					</p>
@@ -79,7 +80,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
 								strokeWidth="2"
 								strokeLinecap="round"
 								strokeLinejoin="round"
-								className="text-gray-300"
+								className="text-(--gray-300)"
 								role="img"
 								aria-label="Muted"
 							>

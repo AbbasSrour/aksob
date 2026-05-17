@@ -19,14 +19,11 @@ export const authContext = new Elysia({ name: "auth-context" }).macro({
 					});
 
 					if (!session) {
-						return status(
-							COMMON_ERRORS.NOT_AUTHENTICATED.httpStatus,
-							{
-								status: "error" as const,
-								code: COMMON_ERRORS.NOT_AUTHENTICATED.code,
-								error: COMMON_ERRORS.NOT_AUTHENTICATED.message,
-							},
-						);
+						return status(COMMON_ERRORS.NOT_AUTHENTICATED.httpStatus, {
+							status: "error" as const,
+							code: COMMON_ERRORS.NOT_AUTHENTICATED.code,
+							error: COMMON_ERRORS.NOT_AUTHENTICATED.message,
+						});
 					}
 
 					return {

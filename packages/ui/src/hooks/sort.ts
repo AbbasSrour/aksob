@@ -124,9 +124,7 @@ export const parseSortParamMulti = (
 	return values.length > 0 ? values : undefined;
 };
 
-export const toSortValueSingle = (
-	sorting: SortingState,
-): SortValue => {
+export const toSortValueSingle = (sorting: SortingState): SortValue => {
 	if (sorting.length === 0) return {} as SortValue;
 	return sortItemToValue(sorting[0]!);
 };

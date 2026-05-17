@@ -27,7 +27,14 @@ const CONNECTION_TYPE_LABELS: Record<string, string> = {
 
 const ELIGIBLE_TYPES: Record<string, string[]> = {
 	alumni: ["mentorship", "career_coaching", "research", "project"],
-	student: ["mentorship", "career_coaching", "study_partner", "buddy", "research", "project"],
+	student: [
+		"mentorship",
+		"career_coaching",
+		"study_partner",
+		"buddy",
+		"research",
+		"project",
+	],
 	faculty: ["mentorship", "career_coaching", "research", "project"],
 };
 
@@ -57,9 +64,7 @@ const Toggle: React.FC<{
 			onClick={() => onChange(!checked)}
 			className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors shrink-0 ${
 				disabled ? "cursor-not-allowed" : "cursor-pointer"
-			} ${
-				checked ? "bg-(--aksob-primary)" : "bg-(--gray-300)"
-			}`}
+			} ${checked ? "bg-(--aksob-primary)" : "bg-(--gray-300)"}`}
 		>
 			<span
 				className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -70,7 +75,11 @@ const Toggle: React.FC<{
 	</div>
 );
 
-export const SettingsStep: React.FC<SettingsStepProps> = ({ data, userType, onChange }) => {
+export const SettingsStep: React.FC<SettingsStepProps> = ({
+	data,
+	userType,
+	onChange,
+}) => {
 	const [state, setState] = useState(data);
 
 	useEffect(() => {
@@ -114,7 +123,13 @@ export const SettingsStep: React.FC<SettingsStepProps> = ({ data, userType, onCh
 							...s,
 							isVisibleInGalaxy: v,
 							// Turn off dependent settings when hidden
-							...(v ? {} : { emailVisible: false, phoneNumberVisible: false, connectionTypes: [] }),
+							...(v
+								? {}
+								: {
+										emailVisible: false,
+										phoneNumberVisible: false,
+										connectionTypes: [],
+									}),
 						}));
 					}}
 				/>
@@ -137,7 +152,9 @@ export const SettingsStep: React.FC<SettingsStepProps> = ({ data, userType, onCh
 			</div>
 
 			{eligibleList.length > 0 && (
-				<div className={`mt-10 ${!state.isVisibleInGalaxy ? "opacity-40 pointer-events-none" : ""}`}>
+				<div
+					className={`mt-10 ${!state.isVisibleInGalaxy ? "opacity-40 pointer-events-none" : ""}`}
+				>
 					<div className="mb-4">
 						<h3
 							className="text-sm font-medium text-(--aksob-darkest) tracking-wide"
@@ -154,7 +171,9 @@ export const SettingsStep: React.FC<SettingsStepProps> = ({ data, userType, onCh
 							<div
 								key={ct}
 								className={`flex items-center gap-3 p-3 rounded-lg border border-(--gray-200) transition-all ${
-									state.isVisibleInGalaxy ? "hover:border-(--aksob-primary)/30" : ""
+									state.isVisibleInGalaxy
+										? "hover:border-(--aksob-primary)/30"
+										: ""
 								}`}
 							>
 								<Checkbox

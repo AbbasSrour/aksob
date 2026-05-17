@@ -49,7 +49,9 @@ function ResetPasswordPage() {
 						Back to login
 					</Link>
 					<div>
-						<CardTitle className="mb-1.5 text-2xl">Create a new password</CardTitle>
+						<CardTitle className="mb-1.5 text-2xl">
+							Create a new password
+						</CardTitle>
 						<CardDescription className="text-base">
 							Choose a new password for your AKSOB dashboard account.
 						</CardDescription>

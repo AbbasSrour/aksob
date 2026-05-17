@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router";
 
 export function Hero() {
 	return (
@@ -101,15 +102,15 @@ export function Hero() {
 									animationDelay: "0.8s",
 								}}
 							>
-								The AKSOB Alumni Network — a constellation of graduates, mentors,
-								and industry leaders connected across the world.
+								The AKSOB Alumni Network — a constellation of graduates,
+								mentors, and industry leaders connected across the world.
 							</p>
 						</div>
 
 						<div className="relative z-10 flex items-center gap-6 mt-16 lg:pl-3">
-							<button
-								type="button"
-								className="group flex items-center gap-3 px-6 py-3 bg-(--aksob-primary) text-white text-xs tracking-[0.15em] uppercase font-medium rounded-full hover:bg-(--aksob-secondary) transition-colors cursor-pointer animate-editorial-slide-up"
+							<Link
+								to="/galaxy"
+								className="group inline-flex items-center gap-3 px-6 py-3 bg-(--aksob-primary) text-white text-xs tracking-[0.15em] uppercase font-medium rounded-full hover:bg-(--aksob-secondary) transition-colors cursor-pointer animate-editorial-slide-up"
 								style={{ animationDelay: "1.0s" }}
 							>
 								Explore
@@ -117,7 +118,7 @@ export function Hero() {
 									size={14}
 									className="group-hover:translate-x-1 transition-transform"
 								/>
-							</button>
+							</Link>
 
 							<span
 								className="text-(--gray-400) text-[10px] tracking-[0.2em] uppercase animate-editorial-fade"

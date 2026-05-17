@@ -58,30 +58,40 @@ export default function ChatLayout() {
 	}, [conversations, query]);
 
 	return (
-		<div className="flex h-full w-full overflow-hidden bg-white">
+		<div className="flex h-full w-full overflow-hidden bg-(--off-white)">
 			<div
 				className={`w-full shrink-0 lg:w-85 ${isConversationActive ? "hidden lg:block" : "block"}`}
 			>
 				<ConversationList onSearch={setQuery}>
-					{filteredConversations.map((conversation) => (
-						<ConversationItem
-							key={conversation.id}
-							id={conversation.id}
-							name={conversation.otherUser.name}
-							avatarSrc={conversation.otherUser.image ?? undefined}
-							lastMessage={
-								conversation.lastMessage?.content ?? "No messages yet"
-							}
-							time={formatMessageTime(conversation.lastMessage?.createdAt)}
-							isActive={location.pathname === `/chat/${conversation.id}`}
-							onClick={() => navigate(`/chat/${conversation.id}`)}
-						/>
-					))}
+					{filteredConversations.length === 0 ? (
+						<div className="px-4 py-10 text-center">
+							<p className="text-sm text-(--gray-500)">
+								{query.trim()
+									? "No conversations match your search."
+									: "No conversations yet."}
+							</p>
+						</div>
+					) : (
+						filteredConversations.map((conversation) => (
+							<ConversationItem
+								key={conversation.id}
+								id={conversation.id}
+								name={conversation.otherUser.name}
+								avatarSrc={conversation.otherUser.image ?? undefined}
+								lastMessage={
+									conversation.lastMessage?.content ?? "No messages yet"
+								}
+								time={formatMessageTime(conversation.lastMessage?.createdAt)}
+								isActive={location.pathname === `/chat/${conversation.id}`}
+								onClick={() => navigate(`/chat/${conversation.id}`)}
+							/>
+						))
+					)}
 				</ConversationList>
 			</div>
 
 			<div
-				className={`relative flex h-full min-w-0 flex-1 flex-col bg-white ${
+				className={`relative flex h-full min-w-0 flex-1 flex-col bg-(--off-white) lg:border-l lg:border-(--gray-200) ${
 					isConversationActive ? "flex" : "hidden lg:flex"
 				}`}
 			>

@@ -70,7 +70,9 @@ export const getProgramFn = async (
 
 export const getProgramServerFn = createIsomorphicFn()
 	.client((params: GetProgramParams) => getProgramFn(params))
-	.server((params: GetProgramParams) => getProgramFn(params, getRequestHeaders()));
+	.server((params: GetProgramParams) =>
+		getProgramFn(params, getRequestHeaders()),
+	);
 
 // ---------------------------------------> Create Program <----------------------------------------------------------//
 

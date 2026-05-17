@@ -2,9 +2,10 @@ import { and, desc, eq, inArray, or, sql } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 import { db, schema } from "@/db";
 import { CONNECTION_TYPES } from "@/modules/connections/constant/connection-types.constant";
+import { CONNECTION_TYPE_ELIGIBILITY } from "@/modules/connections/constant/connection-eligibility.constant";
 import { auth } from "@/lib/auth";
 import { authContext } from "@/plugins/auth";
-import { generateAndStoreEmbedding } from "@/modules/ai/ai-embedding";
+import { generateAndStoreEmbedding } from "@/lib/ai/embedding";
 import type { UserType } from "@/modules/users/constant/user-types";
 
 const usersIdParamSchema = t.Object({
@@ -16,11 +17,7 @@ const usersOpenApiDetail = {
 };
 
 const normalizeUserType = (type: string): UserType => {
-	if (
-		type === "alumni" ||
-		type === "faculty" ||
-		type === "student"
-	) {
+	if (type === "alumni" || type === "faculty" || type === "student") {
 		return type;
 	}
 	return "student";
@@ -36,6 +33,11 @@ export const usersModule = new Elysia({ prefix: "/users" })
 				set.status = 401;
 				return { status: "error", error: "Not authenticated" };
 			}
+
+			await db
+				.insert(schema.userSettings)
+				.values({ userId: session.user.id! })
+				.onConflictDoNothing();
 
 			const [currentUser] = await db
 				.select({
@@ -85,12 +87,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 			const connectionPrefs = await db
 				.select({ type: schema.userConnectionPreference.type })
 				.from(schema.userConnectionPreference)
-				.where(
-					eq(
-						schema.userConnectionPreference.userId,
-						session.user.id!,
-					),
-				);
+				.where(eq(schema.userConnectionPreference.userId, session.user.id!));
 
 			// Fetch all experience entries for this user
 			const experienceRows = await db
@@ -119,9 +116,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 				skills: tagRows
 					.filter((t) => t.category === "skill")
 					.map((t) => t.value),
-				goals: tagRows
-					.filter((t) => t.category === "goal")
-					.map((t) => t.value),
+				goals: tagRows.filter((t) => t.category === "goal").map((t) => t.value),
 				hobbies: tagRows
 					.filter((t) => t.category === "hobby")
 					.map((t) => t.value),
@@ -190,6 +185,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 				id: schema.user.id,
 				name: schema.user.name,
 				email: schema.user.email,
+				emailVisible: schema.userSettings.emailVisible,
 				type: schema.user.type,
 				bio: schema.user.bio,
 				image: schema.user.image,
@@ -200,7 +196,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 			let users: Array<typeof baseSelect & { id: string }>;
 
 			if (connectionType) {
-				const ct = connectionType as typeof CONNECTION_TYPES[number];
+				const ct = connectionType as (typeof CONNECTION_TYPES)[number];
 				users = await db
 					.select(baseSelect)
 					.from(schema.user)
@@ -217,10 +213,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 						eq(schema.user.id, schema.facultyProfile.userId),
 					)
 					.where(
-						and(
-							eq(schema.userConnectionPreference.type, ct),
-							...whereClauses,
-						),
+						and(eq(schema.userConnectionPreference.type, ct), ...whereClauses),
 					)
 					.orderBy(desc(schema.user.createdAt));
 			} else {
@@ -258,11 +251,17 @@ export const usersModule = new Elysia({ prefix: "/users" })
 					: [];
 
 			// Group education entries by user
-			const educationByUser = new Map<string, Array<{ name: string; graduationYear: number | null }>>();
+			const educationByUser = new Map<
+				string,
+				Array<{ name: string; graduationYear: number | null }>
+			>();
 			for (const row of educationRows) {
 				if (!row.programName) continue;
 				const list = educationByUser.get(row.userId) ?? [];
-				list.push({ name: row.programName, graduationYear: row.graduationYear ?? null });
+				list.push({
+					name: row.programName,
+					graduationYear: row.graduationYear ?? null,
+				});
 				educationByUser.set(row.userId, list);
 			}
 
@@ -271,7 +270,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 				data: users.map((user) => ({
 					id: user.id,
 					name: user.name,
-					email: user.email,
+					email: user.emailVisible === true ? user.email : null,
 					type: normalizeUserType(user.type),
 					majors: educationByUser.get(user.id) ?? [],
 					bio: user.bio,
@@ -294,6 +293,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 					id: schema.user.id,
 					name: schema.user.name,
 					email: schema.user.email,
+					emailVisible: schema.userSettings.emailVisible,
 					type: schema.user.type,
 					bio: schema.user.bio,
 					image: schema.user.image,
@@ -303,6 +303,10 @@ export const usersModule = new Elysia({ prefix: "/users" })
 					facultyTitle: schema.facultyProfile.title,
 				})
 				.from(schema.user)
+				.leftJoin(
+					schema.userSettings,
+					eq(schema.user.id, schema.userSettings.userId),
+				)
 				.leftJoin(
 					schema.userEducation,
 					and(
@@ -330,7 +334,8 @@ export const usersModule = new Elysia({ prefix: "/users" })
 				data: {
 					id: currentUser.id,
 					name: currentUser.name,
-					email: currentUser.email,
+					email:
+						currentUser.emailVisible === true ? currentUser.email : null,
 					type: normalizeUserType(currentUser.type),
 					major: currentUser.programName ?? null,
 					graduationYear: currentUser.graduationYear ?? null,
@@ -358,8 +363,16 @@ export const usersModule = new Elysia({ prefix: "/users" })
 				.where(eq(schema.userEducation.userId, userId));
 
 			if (body.entries.length > 0) {
+				// Deduplicate by programId (keep first occurrence)
+				const seen = new Set<string>();
+				const deduped = body.entries.filter((entry) => {
+					if (seen.has(entry.programId)) return false;
+					seen.add(entry.programId);
+					return true;
+				});
+
 				await db.insert(schema.userEducation).values(
-					body.entries.map((entry) => ({
+					deduped.map((entry) => ({
 						id: crypto.randomUUID(),
 						userId,
 						programId: entry.programId,
@@ -445,20 +458,38 @@ export const usersModule = new Elysia({ prefix: "/users" })
 		async ({ body, user }) => {
 			const userId = user!.id;
 
-			await db
-				.delete(schema.userTag)
-				.where(eq(schema.userTag.userId, userId));
+			await db.delete(schema.userTag).where(eq(schema.userTag.userId, userId));
 
-			const tags: Array<{ id: string; userId: string; category: string; value: string }> = [];
+			const tags: Array<{
+				id: string;
+				userId: string;
+				category: string;
+				value: string;
+			}> = [];
 
 			for (const skill of body.skills) {
-				tags.push({ id: crypto.randomUUID(), userId, category: "skill", value: skill });
+				tags.push({
+					id: crypto.randomUUID(),
+					userId,
+					category: "skill",
+					value: skill,
+				});
 			}
 			for (const goal of body.goals) {
-				tags.push({ id: crypto.randomUUID(), userId, category: "goal", value: goal });
+				tags.push({
+					id: crypto.randomUUID(),
+					userId,
+					category: "goal",
+					value: goal,
+				});
 			}
 			for (const hobby of body.hobbies) {
-				tags.push({ id: crypto.randomUUID(), userId, category: "hobby", value: hobby });
+				tags.push({
+					id: crypto.randomUUID(),
+					userId,
+					category: "hobby",
+					value: hobby,
+				});
 			}
 
 			if (tags.length > 0) {
@@ -488,9 +519,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 		async ({ body, user }) => {
 			const userId = user!.id;
 
-			await db
-				.delete(schema.links)
-				.where(eq(schema.links.userId, userId));
+			await db.delete(schema.links).where(eq(schema.links.userId, userId));
 
 			if (body.entries.length > 0) {
 				await db.insert(schema.links).values(
@@ -519,6 +548,130 @@ export const usersModule = new Elysia({ prefix: "/users" })
 						url: t.String(),
 					}),
 				),
+			}),
+		},
+	)
+	.put(
+		"/me/settings",
+		async ({ body, user, set }) => {
+			const userId = user!.id;
+			const userType = normalizeUserType(user!.type ?? "student");
+
+			// ── Visibility gate ──────────────────────────
+			const exposureFlags = [body.emailVisible, body.phoneNumberVisible].some(
+				(f) => f === true,
+			);
+			const hasConnectionTypes =
+				body.connectionTypes !== undefined && body.connectionTypes.length > 0;
+
+			if (
+				body.isVisibleInGalaxy === false &&
+				(exposureFlags || hasConnectionTypes)
+			) {
+				set.status = 400;
+				return {
+					status: "error",
+					code: "VISIBILITY_GATE",
+					message:
+						"Cannot set exposure flags or connection preferences while isVisibleInGalaxy is off",
+				};
+			}
+
+			// ── Update settings ─────────────────────────
+			if (
+				body.isVisibleInGalaxy !== undefined ||
+				body.emailVisible !== undefined ||
+				body.phoneNumberVisible !== undefined
+			) {
+				const sets: Record<string, unknown> = {};
+
+				if (body.isVisibleInGalaxy !== undefined) {
+					sets.isVisibleInGalaxy = body.isVisibleInGalaxy;
+				}
+				if (body.emailVisible !== undefined) {
+					sets.emailVisible = body.emailVisible;
+				}
+				if (body.phoneNumberVisible !== undefined) {
+					sets.phoneNumberVisible = body.phoneNumberVisible;
+				}
+
+				await db
+					.insert(schema.userSettings)
+					.values({ userId, ...sets })
+					.onConflictDoUpdate({
+						target: schema.userSettings.userId,
+						set: sets,
+					});
+			}
+
+			// ── Visibility off → clear exposure + prefs ─
+			if (body.isVisibleInGalaxy === false) {
+				await db
+					.update(schema.userSettings)
+					.set({
+						emailVisible: false,
+						phoneNumberVisible: false,
+					})
+					.where(eq(schema.userSettings.userId, userId));
+
+				await db
+					.delete(schema.userConnectionPreference)
+					.where(eq(schema.userConnectionPreference.userId, userId));
+			}
+
+			// ── Update connection preferences ───────────
+			if (body.connectionTypes !== undefined) {
+				const eligibleTypes = CONNECTION_TYPE_ELIGIBILITY[userType];
+
+				for (const ct of body.connectionTypes) {
+					const validCt = CONNECTION_TYPES as readonly string[];
+					if (!validCt.includes(ct)) {
+						set.status = 400;
+						return {
+							status: "error",
+							code: "INVALID_CONNECTION_TYPE",
+							message: `Invalid connection type: ${ct}`,
+						};
+					}
+					if (
+						!eligibleTypes.includes(
+							ct as (typeof CONNECTION_TYPES)[number],
+						)
+					) {
+						set.status = 400;
+						return {
+							status: "error",
+							code: "CONNECTION_TYPE_NOT_ELIGIBLE",
+							message: `Not eligible for connection type: ${ct}`,
+						};
+					}
+				}
+
+				await db
+					.delete(schema.userConnectionPreference)
+					.where(eq(schema.userConnectionPreference.userId, userId));
+
+				if (body.connectionTypes.length > 0) {
+					await db.insert(schema.userConnectionPreference).values(
+						body.connectionTypes.map((ct) => ({
+							userId,
+							type: ct as (typeof CONNECTION_TYPES)[number],
+						})),
+					);
+				}
+			}
+
+			void generateAndStoreEmbedding(userId);
+
+			return { status: "ok" };
+		},
+		{
+			auth: true,
+			body: t.Object({
+				isVisibleInGalaxy: t.Optional(t.Boolean()),
+				emailVisible: t.Optional(t.Boolean()),
+				phoneNumberVisible: t.Optional(t.Boolean()),
+				connectionTypes: t.Optional(t.Array(t.String())),
 			}),
 		},
 	);

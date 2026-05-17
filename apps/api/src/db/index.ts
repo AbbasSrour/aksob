@@ -9,6 +9,7 @@ import * as conversationParticipantSchema from "@/modules/chat/db/conversation-p
 import * as messageSchema from "@/modules/chat/db/message.db";
 import * as connectionSchema from "@/modules/connections/db/connection.db";
 import * as connectionPreferenceSchema from "@/modules/connections/db/user-connection-preference.db";
+import * as connectionRequestLogSchema from "@/modules/connections/db/connection-request-log.db";
 import * as eventSchema from "@/modules/events/db/event.db";
 import * as programSchema from "@/modules/programs/db/program.db";
 import * as userEducationSchema from "@/modules/users/db/user-education.db";
@@ -43,6 +44,7 @@ const schema = {
 	...messageSchema,
 	...connectionSchema,
 	...connectionPreferenceSchema,
+	...connectionRequestLogSchema,
 	...eventSchema,
 	...storySchema,
 	...programSchema,

@@ -34,7 +34,7 @@ export interface LinkEntry {
 export interface ApiUser {
 	id: string;
 	name: string;
-	email: string;
+	email: string | null;
 	type: UserType;
 	majors: EducationEntry[];
 	bio: string | null;
@@ -119,12 +119,28 @@ export async function updateLinks(params: UpdateLinksParams) {
 	);
 }
 
+export interface UpdateSettingsParams {
+	isVisibleInGalaxy?: boolean;
+	emailVisible?: boolean;
+	phoneNumberVisible?: boolean;
+	connectionTypes?: string[];
+}
+
+export async function updateSettings(params: UpdateSettingsParams) {
+	return apiFetch<{ status: string }>("/api/users/me/settings", {
+		method: "PUT",
+		body: JSON.stringify(params),
+	});
+}
+
 // ── Connections ─────────────────────────────────
 
 export interface ConnectionItem {
 	id: string;
 	requesterId: string;
 	matchedUserId: string;
+	requester: { id: string; name: string; image: string | null; type: string } | null;
+	matchedUser: { id: string; name: string; image: string | null; type: string } | null;
 	type: string;
 	status: "pending" | "active" | "declined" | "cancelled" | "completed";
 	matchExplanation: string | null;

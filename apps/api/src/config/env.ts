@@ -59,6 +59,19 @@ const EnvSchema = TypeCompiler.Compile(
 
 		// Media uploads (UploadThing API token)
 		UPLOADTHING_TOKEN: t.Optional(t.String()),
+
+		// AI Providers (optional — AI matching is opt-in)
+		AI_EMBEDDING_PROVIDER_URL: t.Optional(t.String()),
+		AI_EMBEDDING_PROVIDER_KEY: t.Optional(t.String()),
+		AI_EMBEDDING_MODEL: t.String({
+			default: "gemini-embedding-001",
+		}),
+
+		AI_LLM_PROVIDER_URL: t.Optional(t.String()),
+		AI_LLM_PROVIDER_KEY: t.Optional(t.String()),
+		AI_LLM_MODEL: t.String({
+			default: "minimax-m2.5-free",
+		}),
 	}),
 );
 

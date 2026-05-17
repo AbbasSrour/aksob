@@ -24,9 +24,6 @@ const baseMemberFormSchema = z.object({
 	email: z.email(),
 	phoneNumber: z.string().optional(),
 	userType: z.string().min(1, { message: "User type is required" }),
-	program: z.string().min(1, { message: "Program is required" }),
-	company: z.string().optional(),
-	title: z.string().optional(),
 	password: z.string().optional(),
 	passwordConfirmation: z.string().optional(),
 });

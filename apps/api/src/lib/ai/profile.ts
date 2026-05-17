@@ -38,9 +38,15 @@ export async function buildProfileText(userId: string): Promise<string> {
 		.from(schema.userTag)
 		.where(eq(schema.userTag.userId, userId));
 
-	const skills = tagRows.filter((t) => t.category === "skill").map((t) => t.value);
-	const goals = tagRows.filter((t) => t.category === "goal").map((t) => t.value);
-	const hobbies = tagRows.filter((t) => t.category === "hobby").map((t) => t.value);
+	const skills = tagRows
+		.filter((t) => t.category === "skill")
+		.map((t) => t.value);
+	const goals = tagRows
+		.filter((t) => t.category === "goal")
+		.map((t) => t.value);
+	const hobbies = tagRows
+		.filter((t) => t.category === "hobby")
+		.map((t) => t.value);
 
 	const parts: string[] = [];
 	parts.push(`User type: ${user.type}`);

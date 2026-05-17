@@ -4,9 +4,9 @@
  * @template T The source type containing objects to spread
  */
 export type SpreadType<T> = {
-  [K in keyof T as T[K] extends object ? never : K]: T[K];
+	[K in keyof T as T[K] extends object ? never : K]: T[K];
 } & UnionToIntersection<
-  { [P in keyof T]: T[P] extends object ? T[P] : never }[keyof T]
+	{ [P in keyof T]: T[P] extends object ? T[P] : never }[keyof T]
 >;
 
 /**
@@ -14,7 +14,7 @@ export type SpreadType<T> = {
  */
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
-  k: infer I,
+	k: infer I,
 ) => void
-  ? I
-  : never;
+	? I
+	: never;

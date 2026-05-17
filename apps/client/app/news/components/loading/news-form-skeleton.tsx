@@ -32,12 +32,9 @@ export function NewsFormSkeleton() {
 						<div className="space-y-4">
 							<div className="h-3 w-20 rounded bg-muted" />
 							<div className="space-y-2">
-							{Array.from({ length: 4 }).map((_, i) => (
+								{Array.from({ length: 4 }).map((_, i) => (
 									// biome-ignore lint/suspicious/noArrayIndexKey: skeleton placeholder
-									<div
-										key={i}
-										className="h-10 rounded-lg bg-muted"
-									/>
+									<div key={i} className="h-10 rounded-lg bg-muted" />
 								))}
 							</div>
 						</div>

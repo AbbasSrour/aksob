@@ -4,6 +4,9 @@ export const mutationKeyFactory = {
 	auth: {
 		entity: ["auth"] as const,
 		signUp: () =>
-			[...mutationKeyFactory.auth.entity, ...mutationKeyFactory.create()] as const,
+			[
+				...mutationKeyFactory.auth.entity,
+				...mutationKeyFactory.create(),
+			] as const,
 	},
 } as const;

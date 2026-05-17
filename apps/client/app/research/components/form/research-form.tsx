@@ -58,10 +58,8 @@ export function ResearchForm({
 }: ResearchFormProps) {
 	const navigate = useNavigate();
 	const isEditing = Boolean(researchId);
-	const { mutate: createResearch, isPending: isCreating } =
-		useCreateResearch();
-	const { mutate: updateResearch, isPending: isUpdating } =
-		useUpdateResearch();
+	const { mutate: createResearch, isPending: isCreating } = useCreateResearch();
+	const { mutate: updateResearch, isPending: isUpdating } = useUpdateResearch();
 	const isPending = isCreating || isUpdating;
 
 	const defaultValues = existingResearch
@@ -80,8 +78,7 @@ export function ResearchForm({
 				fieldOfStudy: existingResearch.fieldOfStudy ?? "",
 				experienceRequired: existingResearch.experienceRequired ?? "",
 				skillsRequired: existingResearch.skillsRequired ?? "",
-				additionalRequirements:
-					existingResearch.additionalRequirements ?? "",
+				additionalRequirements: existingResearch.additionalRequirements ?? "",
 			}
 		: researchFormDefaultValues;
 
@@ -130,9 +127,7 @@ export function ResearchForm({
 									name="title"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>
-												{m.research_form_title_label()}
-											</FormLabel>
+											<FormLabel>{m.research_form_title_label()}</FormLabel>
 											<FormControl>
 												<Input
 													placeholder={m.research_form_title_placeholder()}
@@ -151,9 +146,7 @@ export function ResearchForm({
 									name="researchType"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>
-												{m.research_form_type_label()}
-											</FormLabel>
+											<FormLabel>{m.research_form_type_label()}</FormLabel>
 											<Select
 												onValueChange={field.onChange}
 												defaultValue={field.value}
@@ -166,16 +159,11 @@ export function ResearchForm({
 													</SelectTrigger>
 												</FormControl>
 												<SelectContent>
-													{researchTypeOptions.map(
-														(option) => (
-															<SelectItem
-																key={option.value}
-																value={option.value}
-															>
-																{option.label}
-															</SelectItem>
-														),
-													)}
+													{researchTypeOptions.map((option) => (
+														<SelectItem key={option.value} value={option.value}>
+															{option.label}
+														</SelectItem>
+													))}
 												</SelectContent>
 											</Select>
 											<FormMessage />
@@ -203,16 +191,11 @@ export function ResearchForm({
 													</SelectTrigger>
 												</FormControl>
 												<SelectContent>
-													{educationLevelOptions.map(
-														(option) => (
-															<SelectItem
-																key={option.value}
-																value={option.value}
-															>
-																{option.label}
-															</SelectItem>
-														),
-													)}
+													{educationLevelOptions.map((option) => (
+														<SelectItem key={option.value} value={option.value}>
+															{option.label}
+														</SelectItem>
+													))}
 												</SelectContent>
 											</Select>
 											<FormMessage />
@@ -239,9 +222,7 @@ export function ResearchForm({
 										<FormItem>
 											<FormLabel>
 												{m.research_form_institution_label()}
-												<span className="text-destructive">
-													*
-												</span>
+												<span className="text-destructive">*</span>
 											</FormLabel>
 											<FormControl>
 												<Input
@@ -301,9 +282,7 @@ export function ResearchForm({
 									name="location"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>
-												{m.research_form_location_label()}
-											</FormLabel>
+											<FormLabel>{m.research_form_location_label()}</FormLabel>
 											<FormControl>
 												<Input
 													placeholder={m.research_form_location_placeholder()}
@@ -336,10 +315,7 @@ export function ResearchForm({
 												{m.research_form_start_date_label()}
 											</FormLabel>
 											<FormControl>
-												<Input
-													type="date"
-													{...field}
-												/>
+												<Input type="date" {...field} />
 											</FormControl>
 											<FormMessage />
 										</FormItem>
@@ -351,14 +327,9 @@ export function ResearchForm({
 									name="deadline"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>
-												{m.research_form_deadline_label()}
-											</FormLabel>
+											<FormLabel>{m.research_form_deadline_label()}</FormLabel>
 											<FormControl>
-												<Input
-													type="date"
-													{...field}
-												/>
+												<Input type="date" {...field} />
 											</FormControl>
 											<FormMessage />
 										</FormItem>
@@ -372,9 +343,7 @@ export function ResearchForm({
 									name="duration"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>
-												{m.research_form_duration_label()}
-											</FormLabel>
+											<FormLabel>{m.research_form_duration_label()}</FormLabel>
 											<FormControl>
 												<Input
 													placeholder={m.research_form_duration_placeholder()}
@@ -391,9 +360,7 @@ export function ResearchForm({
 									name="funding"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>
-												{m.research_form_funding_label()}
-											</FormLabel>
+											<FormLabel>{m.research_form_funding_label()}</FormLabel>
 											<Select
 												onValueChange={field.onChange}
 												defaultValue={field.value}
@@ -406,16 +373,11 @@ export function ResearchForm({
 													</SelectTrigger>
 												</FormControl>
 												<SelectContent>
-													{fundingOptions.map(
-														(option) => (
-															<SelectItem
-																key={option.value}
-																value={option.value}
-															>
-																{option.label}
-															</SelectItem>
-														),
-													)}
+													{fundingOptions.map((option) => (
+														<SelectItem key={option.value} value={option.value}>
+															{option.label}
+														</SelectItem>
+													))}
 												</SelectContent>
 											</Select>
 											<FormMessage />
@@ -465,9 +427,7 @@ export function ResearchForm({
 									name="skillsRequired"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>
-												{m.research_form_skills_label()}
-											</FormLabel>
+											<FormLabel>{m.research_form_skills_label()}</FormLabel>
 											<FormControl>
 												<Textarea
 													rows={3}
@@ -524,9 +484,7 @@ export function ResearchForm({
 										<FormItem>
 											<FormLabel>
 												{m.research_form_description_label()}
-												<span className="text-destructive">
-													*
-												</span>
+												<span className="text-destructive">*</span>
 											</FormLabel>
 											<FormControl>
 												<TipTapEditor

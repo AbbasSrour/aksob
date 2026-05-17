@@ -12,5 +12,7 @@ export const PROGRAMS_ERRORS = {
 } as const;
 
 export type ProgramsErrorKey = keyof typeof PROGRAMS_ERRORS;
-export type ProgramsErrorDefinition = (typeof PROGRAMS_ERRORS)[ProgramsErrorKey];
-export type ProgramsErrorCode = (typeof PROGRAMS_ERRORS)[ProgramsErrorKey]["code"];
+export type ProgramsErrorDefinition =
+	(typeof PROGRAMS_ERRORS)[ProgramsErrorKey];
+export type ProgramsErrorCode =
+	(typeof PROGRAMS_ERRORS)[ProgramsErrorKey]["code"];

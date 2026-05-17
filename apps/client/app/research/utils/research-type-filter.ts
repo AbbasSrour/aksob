@@ -17,9 +17,7 @@ export const researchTypeFilter = createFilterDefinition({
 	searchParam: "researchType",
 	multi: false,
 	getValue: (research: Research) => research.researchType,
-	toConditions: (
-		columnFilters: ColumnFiltersState,
-	): ResearchTypeConditions => {
+	toConditions: (columnFilters: ColumnFiltersState): ResearchTypeConditions => {
 		const filter = columnFilters.find((f) => f.id === "researchType")
 			?.value as string[];
 		const researchType = Array.isArray(filter) ? filter[0] : filter;

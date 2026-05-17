@@ -46,7 +46,8 @@ const statusVisuals: Record<
 function toDateInputValue(value: string | number | Date | null): string {
 	if (!value) return "";
 	if (value instanceof Date) return value.toISOString().slice(0, 10);
-	if (typeof value === "number") return new Date(value).toISOString().slice(0, 10);
+	if (typeof value === "number")
+		return new Date(value).toISOString().slice(0, 10);
 	return value.slice(0, 10);
 }
 

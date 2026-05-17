@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
 	/* 1.1 Color Palette */
@@ -555,6 +556,112 @@ body {
 	animation: diagonalLineDrawTopLeft 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* ─── Profile: Compass Pattern & Animations ─── */
+
+/* Horizontal compass lines draw in */
+@keyframes compassLine {
+	0% {
+		transform: scaleX(0);
+		opacity: 0;
+	}
+	15% {
+		opacity: 1;
+	}
+	100% {
+		transform: scaleX(1);
+		opacity: 1;
+	}
+}
+
+.animate-compass-line {
+	transform-origin: left;
+	animation: compassLine 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Vertical compass lines draw in */
+@keyframes compassVLine {
+	0% {
+		transform: scaleY(0);
+		opacity: 0;
+	}
+	15% {
+		opacity: 1;
+	}
+	100% {
+		transform: scaleY(1);
+		opacity: 1;
+	}
+}
+
+.animate-compass-vline {
+	transform-origin: top;
+	animation: compassVLine 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Compass ring spin */
+@keyframes compassSpin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.animate-compass-spin {
+	animation: compassSpin 90s linear infinite;
+}
+
+.animate-compass-spin-slow {
+	animation: compassSpin 150s linear infinite;
+}
+
+/* Profile fade in */
+@keyframes profileFade {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.animate-profile-fade {
+	animation: profileFade 0.8s ease-out both;
+}
+
+/* Profile slide up */
+@keyframes profileSlideUp {
+	0% {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.animate-profile-slide-up {
+	animation: profileSlideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Profile slide right */
+@keyframes profileSlideRight {
+	0% {
+		opacity: 0;
+		transform: translateX(-20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.animate-profile-slide-right {
+	animation: profileSlideRight 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 /* Number Input — remove spinners */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
@@ -572,4 +679,38 @@ input[type="number"] {
 }
 .scrollbar-hide::-webkit-scrollbar {
 	display: none;
+}
+
+/* ─── Prose (Tiptap Editor Content) ───────────────────────────────── */
+
+.prose-aksob {
+	--tw-prose-body: var(--gray-600);
+	--tw-prose-headings: var(--aksob-darkest);
+	--tw-prose-lead: var(--gray-500);
+	--tw-prose-links: var(--aksob-primary);
+	--tw-prose-bold: var(--aksob-darkest);
+	--tw-prose-counters: var(--gray-500);
+	--tw-prose-bullets: var(--gray-400);
+	--tw-prose-hr: var(--gray-200);
+	--tw-prose-quotes: var(--aksob-darkest);
+	--tw-prose-quote-borders: var(--aksob-primary);
+	--tw-prose-captions: var(--gray-400);
+	--tw-prose-code: var(--aksob-darkest);
+	--tw-prose-pre-code: var(--gray-100);
+	--tw-prose-pre-bg: var(--aksob-darkest);
+	--tw-prose-th-borders: var(--gray-200);
+	--tw-prose-td-borders: var(--gray-200);
+}
+
+.prose-aksob .is-editor-empty:first-child::before {
+	content: attr(data-placeholder);
+	float: left;
+	color: var(--gray-400);
+	pointer-events: none;
+	height: 0;
+}
+
+.prose-aksob img.ProseMirror-selectednode {
+	outline: 2px solid var(--aksob-primary);
+	outline-offset: 2px;
 }

@@ -117,10 +117,7 @@ function EditResearchPage() {
 					</Link>
 				</div>
 			</PageHeader>
-			<ResearchForm
-				researchId={researchId}
-				existingResearch={data}
-			/>
+			<ResearchForm researchId={researchId} existingResearch={data} />
 		</Main>
 	);
 }

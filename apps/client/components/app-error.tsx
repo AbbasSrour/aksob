@@ -1,27 +1,27 @@
-import { ErrorComponent } from '@aksob/ui/components/error/error';
-import { useRouter } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { ErrorComponent } from "@aksob/ui/components/error/error";
+import { useRouter } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 type AppErrorProps = {
-  error: Error;
-  reset: () => void;
+	error: Error;
+	reset: () => void;
 };
 
 export function AppError({ error, reset }: AppErrorProps) {
-  const router = useRouter();
+	const router = useRouter();
 
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
+	useEffect(() => {
+		console.error(error);
+	}, [error]);
 
-  return (
-    <div className="min-h-screen">
-      <ErrorComponent
-        error={error}
-        reset={reset}
-        back={() => router.history.back()}
-        home={() => router.navigate({ to: '/' })}
-      />
-    </div>
-  );
+	return (
+		<div className="min-h-screen">
+			<ErrorComponent
+				error={error}
+				reset={reset}
+				back={() => router.history.back()}
+				home={() => router.navigate({ to: "/" })}
+			/>
+		</div>
+	);
 }

@@ -39,12 +39,7 @@ const resolveErrorMessage = (
 		error = error || (c.error as string);
 	}
 
-	return (
-		(code && errorMessages?.[code]) ||
-		error ||
-		message ||
-		code
-	);
+	return (code && errorMessages?.[code]) || error || message || code;
 };
 
 const queryCache = new QueryCache({
@@ -63,12 +58,9 @@ const mutationCache = new MutationCache({
 			mutation.options.mutationKey &&
 			mutation.meta.showToast !== false
 		) {
-			toast.loading(
-				(mutation.meta.loadingMessage as string) || "Loading...",
-				{
-					id: mutation.options.mutationKey.join("-"),
-				},
-			);
+			toast.loading((mutation.meta.loadingMessage as string) || "Loading...", {
+				id: mutation.options.mutationKey.join("-"),
+			});
 		}
 	},
 	onSuccess: (_, __, ___, mutation) => {
@@ -77,12 +69,9 @@ const mutationCache = new MutationCache({
 			mutation.options.mutationKey &&
 			mutation.meta.showToast !== false
 		) {
-			toast.success(
-				(mutation.meta.successMessage as string) || "Done!",
-				{
-					id: mutation.options.mutationKey.join("-"),
-				},
-			);
+			toast.success((mutation.meta.successMessage as string) || "Done!", {
+				id: mutation.options.mutationKey.join("-"),
+			});
 		}
 	},
 	onError: (err, _variables, _context, mutation) => {

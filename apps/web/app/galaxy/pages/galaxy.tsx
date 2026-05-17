@@ -3,14 +3,14 @@ import { useNavigate } from "react-router";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { createOrGetDm } from "~/app/chat/lib/chat";
+import { useSession } from "~/app/lib/auth";
 import {
-	findConnectionMatch,
-	sendConnectionRequest,
 	type Connection,
 	type ConnectionType,
+	findConnectionMatch,
+	sendConnectionRequest,
 } from "~/app/lib/connections";
 import { listUsers } from "~/app/lib/users";
-import { useSession } from "~/app/lib/auth";
 import "./galaxy.css";
 import {
 	type Alumnus,
@@ -45,6 +45,9 @@ export default function Galaxy() {
 	const [galaxyData, setGalaxyData] = useState<ProgramCluster[]>([]);
 	const [isLoadingUsers, setIsLoadingUsers] = useState(true);
 	const [isStartingConversation, setIsStartingConversation] = useState(false);
+	const [conversationError, setConversationError] = useState<string | null>(
+		null,
+	);
 	const [viewMode, setViewMode] = useState<"overview" | "cluster">("overview");
 	const [selectedStar, setSelectedStar] = useState<{
 		x: number;
@@ -64,13 +67,19 @@ export default function Galaxy() {
 
 	// Connection finder state
 	const [showConnectionSheet, setShowConnectionSheet] = useState(false);
-	const [connectionStep, setConnectionStep] = useState<"agent" | "type" | "form">("type");
-	const [connectionType, setConnectionType] = useState<ConnectionType | null>(null);
+	const [connectionStep, setConnectionStep] = useState<
+		"agent" | "type" | "form"
+	>("type");
+	const [connectionType, setConnectionType] = useState<ConnectionType | null>(
+		null,
+	);
 	const [connectionDescription, setConnectionDescription] = useState("");
 	const [matches, setMatches] = useState<Alumnus[]>([]);
 	const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
 	const [showMatchCard, setShowMatchCard] = useState(false);
-	const [createdConnection, setCreatedConnection] = useState<Connection | null>(null);
+	const [createdConnection, setCreatedConnection] = useState<Connection | null>(
+		null,
+	);
 	const [isSendingRequest, setIsSendingRequest] = useState(false);
 	const [connectionError, setConnectionError] = useState<string | null>(null);
 
@@ -154,12 +163,26 @@ export default function Galaxy() {
 		}
 
 		setIsStartingConversation(true);
+		setConversationError(null);
 		try {
 			const response = await createOrGetDm(selectedStar.data.id);
 			navigate(`/chat/${response.data.conversationId}`);
-		} catch {
-			const redirectTo = encodeURIComponent(`/galaxy`);
-			navigate(`/auth/login?redirectTo=${redirectTo}`);
+		} catch (error) {
+			if (
+				error instanceof Error &&
+				"status" in error &&
+				(error as Error & { status: number }).status === 401
+			) {
+				const redirectTo = encodeURIComponent(`/galaxy`);
+				navigate(`/auth/login?redirectTo=${redirectTo}`);
+				return;
+			}
+
+			setConversationError(
+				error instanceof Error
+					? error.message
+					: "Could not start this conversation right now.",
+			);
 		} finally {
 			setIsStartingConversation(false);
 		}
@@ -173,7 +196,24 @@ export default function Galaxy() {
 		return star.company.trim() || "Not specified";
 	};
 
-	// Connection types from API
+	const userType = (session?.user?.type as string) ?? "student";
+
+	// Connection type eligibility (must match backend CONNECTION_TYPE_ELIGIBILITY)
+	const ELIGIBLE_CONNECTION_TYPES: Record<string, ConnectionType[]> = {
+		alumni: ["mentorship", "career_coaching", "research", "project"],
+		student: [
+			"mentorship",
+			"career_coaching",
+			"study_partner",
+			"buddy",
+			"research",
+			"project",
+		],
+		faculty: ["mentorship", "career_coaching", "research", "project"],
+	};
+	const eligibleTypes = ELIGIBLE_CONNECTION_TYPES[userType] ?? [];
+
+	// Connection types from API (filtered by user eligibility)
 	const CONNECTION_TYPE_OPTIONS: Array<{
 		value: ConnectionType;
 		label: string;
@@ -185,7 +225,7 @@ export default function Galaxy() {
 		{ value: "buddy", label: "Buddy", icon: "🤝" },
 		{ value: "research", label: "Research", icon: "🔬" },
 		{ value: "project", label: "Project", icon: "🚀" },
-	];
+	].filter((opt) => eligibleTypes.includes(opt.value));
 
 	// Fly camera to a match position
 	const flyToMatch = (match: Alumnus) => {
@@ -703,8 +743,10 @@ export default function Galaxy() {
 				const theta = Math.random() * Math.PI * 2;
 				// Bias toward equator so particles come from sides, not poles
 				const phi = Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.6;
-				introStartPositions[i * 3] = introRadius * Math.sin(phi) * Math.cos(theta);
-				introStartPositions[i * 3 + 1] = introRadius * Math.sin(phi) * Math.sin(theta);
+				introStartPositions[i * 3] =
+					introRadius * Math.sin(phi) * Math.cos(theta);
+				introStartPositions[i * 3 + 1] =
+					introRadius * Math.sin(phi) * Math.sin(theta);
 				introStartPositions[i * 3 + 2] = introRadius * Math.cos(phi);
 			}
 
@@ -806,6 +848,51 @@ export default function Galaxy() {
 			mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 		};
 
+		const getNearestVisibleStarHit = (event: MouseEvent) => {
+			const maxDistance = 18;
+			let nearest: {
+				clusterIndex: number;
+				particleIndex: number;
+				x: number;
+				y: number;
+				distance: number;
+			} | null = null;
+
+			for (const mesh of clusterMeshesRef.current) {
+				if (!mesh.visible) continue;
+
+				const clusterIndex = mesh.userData.clusterIndex as number | undefined;
+				if (clusterIndex === undefined) continue;
+
+				const positions = mesh.geometry.attributes.position
+					.array as Float32Array;
+				for (let i = 0; i < positions.length; i += 3) {
+					tempV.set(positions[i], positions[i + 1], positions[i + 2]);
+					tempV.project(camera);
+					if (tempV.z < -1 || tempV.z > 1) continue;
+
+					const x = (tempV.x * 0.5 + 0.5) * window.innerWidth;
+					const y = (-(tempV.y * 0.5) + 0.5) * window.innerHeight;
+					const distance = Math.hypot(event.clientX - x, event.clientY - y);
+
+					if (
+						distance <= maxDistance &&
+						(!nearest || distance < nearest.distance)
+					) {
+						nearest = {
+							clusterIndex,
+							particleIndex: i / 3,
+							x,
+							y,
+							distance,
+						};
+					}
+				}
+			}
+
+			return nearest;
+		};
+
 		const enterCluster = (index: number) => {
 			setViewMode("cluster");
 			viewModeRef.current = "cluster";
@@ -836,7 +923,10 @@ export default function Galaxy() {
 			controls.autoRotate = false;
 		};
 
-		const highlightStarInCluster = (clusterIndex: number, particleIndex: number) => {
+		const highlightStarInCluster = (
+			clusterIndex: number,
+			particleIndex: number,
+		) => {
 			const mesh = clusterMeshesRef.current[clusterIndex];
 			if (!mesh) return;
 
@@ -850,7 +940,9 @@ export default function Galaxy() {
 			if (selectedMatchMarkerRef.current) {
 				selectedMatchMarkerRef.current.position.copy(targetPos);
 				selectedMatchMarkerRef.current.visible = true;
-				(selectedMatchMarkerRef.current.material as THREE.SpriteMaterial).opacity = 1;
+				(
+					selectedMatchMarkerRef.current.material as THREE.SpriteMaterial
+				).opacity = 1;
 			}
 		};
 
@@ -947,8 +1039,11 @@ export default function Galaxy() {
 				controls.target.lerp(overviewTarget, 0.02);
 			}
 
-			// Intro camera pull-back
-			if (Math.abs(camera.position.z - introCameraZ.current) > 0.5) {
+			// Intro/overview camera pull-back. Do not fight cluster focus transitions.
+			if (
+				viewModeRef.current === "overview" &&
+				Math.abs(camera.position.z - introCameraZ.current) > 0.5
+			) {
 				camera.position.z += (introCameraZ.current - camera.position.z) * 0.03;
 			}
 
@@ -961,9 +1056,12 @@ export default function Galaxy() {
 			if (introProgressRef.current !== lastIntroProgressRef.current) {
 				const t = introProgressRef.current;
 				clusterMeshesRef.current.forEach((points) => {
-					const positions = points.geometry.attributes.position.array as Float32Array;
-					const initial = points.geometry.attributes.initialPosition.array as Float32Array;
-					const introStart = points.geometry.attributes.introStartPosition?.array as Float32Array | undefined;
+					const positions = points.geometry.attributes.position
+						.array as Float32Array;
+					const initial = points.geometry.attributes.initialPosition
+						.array as Float32Array;
+					const introStart = points.geometry.attributes.introStartPosition
+						?.array as Float32Array | undefined;
 					if (!introStart) return;
 
 					for (let i = 0; i < positions.length; i++) {
@@ -971,7 +1069,9 @@ export default function Galaxy() {
 					}
 					points.geometry.attributes.position.needsUpdate = true;
 
-					const linesMesh = points.userData.linesMesh as THREE.LineSegments | undefined;
+					const linesMesh = points.userData.linesMesh as
+						| THREE.LineSegments
+						| undefined;
 					const linesMaterial = linesMesh?.material as
 						| THREE.LineBasicMaterial
 						| undefined;
@@ -1102,7 +1202,9 @@ export default function Galaxy() {
 			// to make room for the sidebar on the RIGHT.
 			// setViewOffset(fullW, fullH, x, y, w, h)
 			// Positive x shifts the finding window to the right, which makes the image shift LEFT.
-			const targetOffset = sidebarOpenRef.current ? window.innerWidth * 0.15 : 0;
+			const targetOffset = sidebarOpenRef.current
+				? window.innerWidth * 0.15
+				: 0;
 
 			// Smoothly interpolate offset
 			if (Math.abs(currentViewOffset.current - targetOffset) > 0.5) {
@@ -1145,13 +1247,18 @@ export default function Galaxy() {
 					(m) => m.visible,
 				);
 				const intersects = raycaster.intersectObjects(visibleClusters);
+				const nearestStarHit =
+					intersects.length === 0 ? getNearestVisibleStarHit(_event) : null;
 
 				document.body.style.cursor =
-					intersects.length > 0 ? "pointer" : "default";
+					intersects.length > 0 || nearestStarHit ? "pointer" : "default";
 
-				if (intersects.length > 0) {
-					const instanceId = intersects[0].index;
-					const clusterIdx = intersects[0].object.userData.clusterIndex;
+				if (intersects.length > 0 || nearestStarHit) {
+					const instanceId =
+						nearestStarHit?.particleIndex ?? intersects[0].index;
+					const clusterIdx =
+						nearestStarHit?.clusterIndex ??
+						intersects[0].object.userData.clusterIndex;
 
 					if (
 						instanceId !== undefined &&
@@ -1164,10 +1271,14 @@ export default function Galaxy() {
 						const starData = alumniDataGrid[clusterIdx][instanceId]; // Access data
 
 						// Calculate screen pos for tooltip
-						const p = intersects[0].point.clone();
-						p.project(camera);
-						const startX = (p.x * 0.5 + 0.5) * window.innerWidth;
-						const startY = (-(p.y * 0.5) + 0.5) * window.innerHeight;
+						const startX = nearestStarHit
+							? nearestStarHit.x
+							: (intersects[0].point.clone().project(camera).x * 0.5 + 0.5) *
+								window.innerWidth;
+						const startY = nearestStarHit
+							? nearestStarHit.y
+							: (-(intersects[0].point.clone().project(camera).y * 0.5) + 0.5) *
+								window.innerHeight;
 
 						setHoveredStar({ x: startX, y: startY, data: starData });
 					}
@@ -1182,11 +1293,11 @@ export default function Galaxy() {
 		// Click Handler (Interaction)
 		const onClick = (_event: MouseEvent) => {
 			if (introPhaseRef.current !== "done") return;
-			if (isTransitioning.current) return;
 			updateMousePosition(_event);
 			raycaster.setFromCamera(mouse, camera);
 
 			if (viewModeRef.current === "overview") {
+				if (isTransitioning.current) return;
 				const intersects = raycaster.intersectObjects(clusterHitMeshes);
 				if (intersects.length > 0) {
 					enterCluster(intersects[0].object.userData.clusterIndex);
@@ -1197,10 +1308,15 @@ export default function Galaxy() {
 					(m) => m.visible,
 				);
 				const intersects = raycaster.intersectObjects(visibleClusters);
+				const nearestStarHit =
+					intersects.length === 0 ? getNearestVisibleStarHit(_event) : null;
 
-				if (intersects.length > 0) {
-					const instanceId = intersects[0].index;
-					const clusterIdx = intersects[0].object.userData.clusterIndex;
+				if (intersects.length > 0 || nearestStarHit) {
+					const instanceId =
+						nearestStarHit?.particleIndex ?? intersects[0].index;
+					const clusterIdx =
+						nearestStarHit?.clusterIndex ??
+						intersects[0].object.userData.clusterIndex;
 
 					if (instanceId !== undefined && clusterIdx !== undefined) {
 						const starData = alumniDataGrid[clusterIdx][instanceId]; // Access data
@@ -1273,20 +1389,19 @@ export default function Galaxy() {
 							{[
 								"ohh embarrassing 😳",
 								"maybe there is something for that already 🤭",
-							].map(
-								(line, i) =>
-									i < visibleEasterLines ? (
-											<div
-												key={`easter-${i}`}
-												className="galaxy-easter-line visible"
-												style={{
-													animationDelay: `${i * 0.12}s`,
-												}}
-											>
-												{line}
-											</div>
-										) : null,
-								)}
+							].map((line, i) =>
+								i < visibleEasterLines ? (
+									<div
+										key={`easter-${i}`}
+										className="galaxy-easter-line visible"
+										style={{
+											animationDelay: `${i * 0.12}s`,
+										}}
+									>
+										{line}
+									</div>
+								) : null,
+							)}
 						</div>
 					</div>
 				</div>
@@ -1296,15 +1411,15 @@ export default function Galaxy() {
 			{viewMode === "overview" && !showConnectionSheet && !showMatchCard && (
 				<button
 					className={`galaxy-action-btn${introPhase === "done" ? " expanded" : ""}`}
-						onClick={(e) => {
-							e.stopPropagation();
-							if (introPhase !== "done") {
-								introSkippedRef.current = true;
-								setVisibleEasterLines(0);
-								setIntroPhase("fading");
-								introCameraZ.current = 520;
-								setTimeout(() => setIntroPhase("done"), 900);
-					} else {
+					onClick={(e) => {
+						e.stopPropagation();
+						if (introPhase !== "done") {
+							introSkippedRef.current = true;
+							setVisibleEasterLines(0);
+							setIntroPhase("fading");
+							introCameraZ.current = 520;
+							setTimeout(() => setIntroPhase("done"), 900);
+						} else {
 							if (!session) {
 								const redirectTo = encodeURIComponent("/galaxy");
 								navigate(`/auth/login?redirectTo=${redirectTo}`);
@@ -1314,11 +1429,11 @@ export default function Galaxy() {
 							setConnectionStep("type");
 							setConnectionType(null);
 							setConnectionDescription("");
-						setConnectionError(null);
-						setCreatedConnection(null);
-						setIsSendingRequest(false);
-						setAgentTools([]);
-					}
+							setConnectionError(null);
+							setCreatedConnection(null);
+							setIsSendingRequest(false);
+							setAgentTools([]);
+						}
 					}}
 					type="button"
 				>
@@ -1338,85 +1453,98 @@ export default function Galaxy() {
 						onClick={() => setShowConnectionSheet(false)}
 						type="button"
 					/>
-					<div
-						className="galaxy-sheet"
-					>
-					{connectionStep === "agent" && (
-						<div className="galaxy-agent">
-							<div className="galaxy-agent-header">
-								<div className="galaxy-agent-dot" />
-								<span className="galaxy-agent-name">AKSOB Agent</span>
-								{agentThinking && <span className="galaxy-agent-thinking">thinking</span>}
-							</div>
-							<div className="galaxy-agent-tools">
-								{agentTools.map((tool, i) => (
-									<div
-										key={i}
-										className={`galaxy-agent-tool${tool.status === "done" ? " done" : ""}${tool.status === "error" ? " error" : ""}`}
-									>
-										<span className="galaxy-agent-tool-icon">
-											{tool.status === "done" ? "✓" : tool.status === "error" ? "!" : "◌"}
-										</span>
-										<span className="galaxy-agent-tool-name">{tool.name}</span>
-										{tool.status === "thinking" && (
-											<span className="galaxy-agent-tool-dots">
-												<span />
-												<span />
-												<span />
+					<div className="galaxy-sheet">
+						{connectionStep === "agent" && (
+							<div className="galaxy-agent">
+								<div className="galaxy-agent-header">
+									<div className="galaxy-agent-dot" />
+									<span className="galaxy-agent-name">AKSOB Agent</span>
+									{agentThinking && (
+										<span className="galaxy-agent-thinking">thinking</span>
+									)}
+								</div>
+								<div className="galaxy-agent-tools">
+									{agentTools.map((tool, i) => (
+										<div
+											key={i}
+											className={`galaxy-agent-tool${tool.status === "done" ? " done" : ""}${tool.status === "error" ? " error" : ""}`}
+										>
+											<span className="galaxy-agent-tool-icon">
+												{tool.status === "done"
+													? "✓"
+													: tool.status === "error"
+														? "!"
+														: "◌"}
 											</span>
-										)}
-									</div>
-								))}
+											<span className="galaxy-agent-tool-name">
+												{tool.name}
+											</span>
+											{tool.status === "thinking" && (
+												<span className="galaxy-agent-tool-dots">
+													<span />
+													<span />
+													<span />
+												</span>
+											)}
+										</div>
+									))}
+								</div>
+								{connectionError && (
+									<>
+										<p className="galaxy-sheet-error">{connectionError}</p>
+										<button
+											className="galaxy-sheet-btn secondary"
+											onClick={() => setConnectionStep("form")}
+											type="button"
+										>
+											Back
+										</button>
+									</>
+								)}
 							</div>
-							{connectionError && (
-								<>
-									<p className="galaxy-sheet-error">{connectionError}</p>
-									<button
-										className="galaxy-sheet-btn secondary"
-										onClick={() => setConnectionStep("form")}
-										type="button"
-									>
-										Back
-									</button>
-								</>
-							)}
-						</div>
-					)}
+						)}
 
-					{connectionStep === "type" && (
-						<>
-							<h2 className="galaxy-sheet-title">What are you looking for?</h2>
-							<div className="galaxy-type-grid">
-								{CONNECTION_TYPE_OPTIONS.map((type) => (
-									<button
-										key={type.value}
-										className={`galaxy-type-card${connectionType === type.value ? " selected" : ""}`}
-										onClick={() => setConnectionType(type.value)}
-										type="button"
-									>
-										<span className="galaxy-type-icon">{type.icon}</span>
-										<span className="galaxy-type-label">{type.label}</span>
-									</button>
-								))}
-							</div>
-							<button
-								className="galaxy-sheet-btn full"
-								disabled={!connectionType}
-								onClick={() => setConnectionStep("form")}
-								type="button"
-							>
-								Continue
-							</button>
-						</>
-					)}
+						{connectionStep === "type" && (
+							<>
+								<h2 className="galaxy-sheet-title">
+									What are you looking for?
+								</h2>
+								<div className="galaxy-type-grid">
+									{CONNECTION_TYPE_OPTIONS.map((type) => (
+										<button
+											key={type.value}
+											className={`galaxy-type-card${connectionType === type.value ? " selected" : ""}`}
+											onClick={() => setConnectionType(type.value)}
+											type="button"
+										>
+											<span className="galaxy-type-icon">{type.icon}</span>
+											<span className="galaxy-type-label">{type.label}</span>
+										</button>
+									))}
+								</div>
+								<button
+									className="galaxy-sheet-btn full"
+									disabled={!connectionType}
+									onClick={() => setConnectionStep("form")}
+									type="button"
+								>
+									Continue
+								</button>
+							</>
+						)}
 
 						{connectionStep === "form" && (
 							<>
 								<h2 className="galaxy-sheet-title">
-									{CONNECTION_TYPE_OPTIONS.find((t) => t.value === connectionType)?.label}
+									{
+										CONNECTION_TYPE_OPTIONS.find(
+											(t) => t.value === connectionType,
+										)?.label
+									}
 								</h2>
 								<p className="galaxy-sheet-subtitle">
-									Tell us what you are looking for and we will find the best match
+									Tell us what you are looking for and we will find the best
+									match
 								</p>
 								<textarea
 									className="galaxy-sheet-input"
@@ -1443,8 +1571,6 @@ export default function Galaxy() {
 								</div>
 							</>
 						)}
-
-
 					</div>
 				</div>
 			)}
@@ -1469,7 +1595,8 @@ export default function Galaxy() {
 							{matches[currentMatchIndex].name}
 						</h3>
 						<p className="galaxy-match-meta">
-							{matches[currentMatchIndex].program} • {matches[currentMatchIndex].graduationYear}
+							{matches[currentMatchIndex].program} •{" "}
+							{matches[currentMatchIndex].graduationYear}
 						</p>
 						<p className="galaxy-match-bio">
 							{matches[currentMatchIndex].bio || "No bio available"}
@@ -1480,7 +1607,8 @@ export default function Galaxy() {
 						{connectionError && (
 							<p className="galaxy-sheet-error">{connectionError}</p>
 						)}
-						{createdConnection?.matchedUserId === matches[currentMatchIndex].id ? (
+						{createdConnection?.matchedUserId ===
+						matches[currentMatchIndex].id ? (
 							<div className="galaxy-match-action sent">
 								Request sent • {createdConnection.status}
 							</div>
@@ -1603,6 +1731,7 @@ export default function Galaxy() {
 							className="sidebar-close"
 							onClick={() => {
 								setSelectedStar(null);
+								setConversationError(null);
 								sidebarOpenRef.current = false;
 							}}
 						>
@@ -1615,10 +1744,10 @@ export default function Galaxy() {
 							</div>
 							<div>
 								<h2>{selectedStar.data.name}</h2>
-							<p className="sidebar-subtitle">
-								{selectedStar.data.program} '
-								{selectedStar.data.year.toString().slice(-2)}
-							</p>
+								<p className="sidebar-subtitle">
+									{selectedStar.data.program} '
+									{selectedStar.data.year.toString().slice(-2)}
+								</p>
 							</div>
 						</div>
 
@@ -1637,6 +1766,10 @@ export default function Galaxy() {
 								<h3>Location</h3>
 								<p>Beirut, Lebanon</p>
 							</div>
+
+							{conversationError && (
+								<p className="galaxy-sheet-error">{conversationError}</p>
+							)}
 
 							<button
 								type="button"

@@ -146,9 +146,14 @@ export function ProgramForm({ programId, defaultValues }: ProgramFormProps) {
 										<FormItem>
 											<FormLabel>{m.programs_form_level_label()}</FormLabel>
 											<FormControl>
-												<Select value={field.value} onValueChange={field.onChange}>
+												<Select
+													value={field.value}
+													onValueChange={field.onChange}
+												>
 													<SelectTrigger className="w-full">
-														<SelectValue placeholder={m.programs_form_level_placeholder()} />
+														<SelectValue
+															placeholder={m.programs_form_level_placeholder()}
+														/>
 													</SelectTrigger>
 													<SelectContent>
 														{programLevels.map((level) => (
@@ -208,12 +213,7 @@ export function ProgramForm({ programId, defaultValues }: ProgramFormProps) {
 										<FormItem>
 											<FormLabel>{m.programs_form_duration_label()}</FormLabel>
 											<FormControl>
-												<Input
-													type="number"
-													min={0}
-													step={0.5}
-													{...field}
-												/>
+												<Input type="number" min={0} step={0.5} {...field} />
 											</FormControl>
 											<FormMessage />
 										</FormItem>

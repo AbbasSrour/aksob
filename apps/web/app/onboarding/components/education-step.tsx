@@ -23,7 +23,9 @@ export const EducationStep: React.FC<EducationStepProps> = ({
 }) => {
 	const { data: programs } = useQuery(programsQueries.active);
 	const [entries, setEntries] = useState<EducationEntry[]>(
-		data.length > 0 ? data : [{ programId: "", graduationYear: null, isPrimary: true }],
+		data.length > 0
+			? data
+			: [{ programId: "", graduationYear: null, isPrimary: true }],
 	);
 
 	useEffect(() => {
@@ -59,6 +61,13 @@ export const EducationStep: React.FC<EducationStepProps> = ({
 			return next;
 		});
 	};
+
+	// Program IDs already selected in other entries (excluding empty)
+	const selectedProgramIds = new Set(
+		entries
+			.map((entry, i) => entry.programId)
+			.filter((id) => id !== ""),
+	);
 
 	return (
 		<div className="relative">
@@ -131,11 +140,20 @@ export const EducationStep: React.FC<EducationStepProps> = ({
 									style={{ fontFamily: "var(--font-display)" }}
 								>
 									<option value="">Select a program</option>
-									{programs?.map((p) => (
-										<option key={p.id} value={p.id}>
-											{p.name}
-										</option>
-									))}
+									{programs?.map((p) => {
+										const isSelectedElsewhere =
+											selectedProgramIds.has(p.id) &&
+											p.id !== entry.programId;
+										return (
+											<option
+												key={p.id}
+												value={p.id}
+												disabled={isSelectedElsewhere}
+											>
+												{p.name}
+											</option>
+										);
+									})}
 								</select>
 							</div>
 

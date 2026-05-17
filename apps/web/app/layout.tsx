@@ -20,7 +20,9 @@ export default function AppLayout() {
 		location.pathname.startsWith("/chat") || location.pathname === "/profile";
 	const isPublicRoute = isHome || isGalaxy || isOnboarding;
 
-	const onboarding = (session?.user as Record<string, unknown>)?.onboarding as string | undefined;
+	const onboarding = (session?.user as Record<string, unknown>)?.onboarding as
+		| string
+		| undefined;
 	const showNudge =
 		session?.user &&
 		onboarding !== "complete" &&
@@ -44,7 +46,14 @@ export default function AppLayout() {
 		) {
 			navigate("/onboarding");
 		}
-	}, [isPending, isProtectedRoute, isPublicRoute, location.pathname, navigate, session?.user]);
+	}, [
+		isPending,
+		isProtectedRoute,
+		isPublicRoute,
+		location.pathname,
+		navigate,
+		session?.user,
+	]);
 
 	const handleLogout = async () => {
 		await signOut({
@@ -58,6 +67,7 @@ export default function AppLayout() {
 
 	const user = session?.user
 		? {
+				id: session.user.id,
 				name: session.user.name || session.user.email || "User",
 				avatar: session.user.image || undefined,
 			}
@@ -77,7 +87,9 @@ export default function AppLayout() {
 				<Navbar user={user} onLogout={handleLogout} />
 				{showNudge && (
 					<div className="bg-[var(--aksob-primary)] text-white px-4 py-2.5 flex items-center justify-center gap-3 text-sm">
-						<span>Complete your profile to get better AI-powered connections.</span>
+						<span>
+							Complete your profile to get better AI-powered connections.
+						</span>
 						<Link
 							to="/onboarding"
 							className="font-semibold underline underline-offset-2 hover:opacity-90 transition-opacity"
@@ -90,10 +102,10 @@ export default function AppLayout() {
 					className={`w-full ${
 						isHome || isGalaxy
 							? ""
-							: isChat
-								? "pt-20 h-[calc(100vh-5rem)]"
+							: 									isChat
+								? "pt-20 h-screen overflow-hidden"
 								: "pt-20 min-h-screen"
-						}`}
+					}`}
 				>
 					<Outlet />
 				</div>

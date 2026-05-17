@@ -12,7 +12,7 @@ import { USER_ERRORS } from "@/modules/users/constant/user-errors.constant";
 import { authContext } from "@/plugins/auth";
 import { paginate } from "@/utils/paginate";
 
-export const opportunitiesModule = new Elysia({ prefix: "/api/opportunities" })
+export const opportunitiesModule = new Elysia({ prefix: "/opportunities" })
 	.use(authContext)
 	// List opportunities — public; visibility depends on auth status and role
 	.get(
@@ -58,7 +58,8 @@ export const opportunitiesModule = new Elysia({ prefix: "/api/opportunities" })
 			// Anonymous: only approved, optionally filtered by authorId
 			if (!user) {
 				conditions.push(eq(schema.opportunity.status, "approved"));
-				if (authorId) conditions.push(eq(schema.opportunity.authorId, authorId));
+				if (authorId)
+					conditions.push(eq(schema.opportunity.authorId, authorId));
 			}
 			// Admin: everything, optionally filtered
 			else if (user.role === "admin") {
@@ -482,6 +483,7 @@ export const opportunitiesModule = new Elysia({ prefix: "/api/opportunities" })
 			return { status: "ok", data: toOpportunityDto(updated!) };
 		},
 		{
+			auth: true,
 			role: "admin",
 			detail: {
 				tags: ["Opportunities"],
@@ -543,6 +545,7 @@ export const opportunitiesModule = new Elysia({ prefix: "/api/opportunities" })
 			return { status: "ok", data: toOpportunityDto(updated!) };
 		},
 		{
+			auth: true,
 			role: "admin",
 			body: rejectOpportunityBody,
 			detail: {

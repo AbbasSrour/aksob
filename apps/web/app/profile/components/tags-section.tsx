@@ -1,11 +1,13 @@
-import { Edit2, Save, X } from "lucide-react";
-import { useCallback, useState } from "react";
+import { Save, X } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { type TagsData, updateTags } from "~/app/lib/users";
 import { Button } from "~/components/ui/button";
 
 interface Props {
 	tags: TagsData;
 	onRefetch: () => void;
+	isEditing?: boolean;
+	onDone?: () => void;
 }
 
 function ChipInput({
@@ -72,8 +74,12 @@ function ChipInput({
 	);
 }
 
-export function TagsSection({ tags, onRefetch }: Props) {
-	const [editing, setEditing] = useState(false);
+export function TagsSection({
+	tags,
+	onRefetch,
+	isEditing = false,
+	onDone,
+}: Props) {
 	const [draft, setDraft] = useState<TagsData>({
 		skills: [],
 		goals: [],
@@ -81,28 +87,30 @@ export function TagsSection({ tags, onRefetch }: Props) {
 	});
 	const [saving, setSaving] = useState(false);
 
-	const handleEdit = useCallback(() => {
-		setDraft({
-			skills: [...tags.skills],
-			goals: [...tags.goals],
-			hobbies: [...tags.hobbies],
-		});
-		setEditing(true);
-	}, [tags]);
+	useEffect(() => {
+		if (isEditing) {
+			setDraft({
+				skills: [...tags.skills],
+				goals: [...tags.goals],
+				hobbies: [...tags.hobbies],
+			});
+		}
+	}, [isEditing, tags]);
+
 	const handleCancel = useCallback(() => {
 		setDraft({ skills: [], goals: [], hobbies: [] });
-		setEditing(false);
-	}, []);
+		onDone?.();
+	}, [onDone]);
 	const handleSave = useCallback(async () => {
 		setSaving(true);
 		try {
 			await updateTags(draft);
-			setEditing(false);
 			onRefetch();
+			onDone?.();
 		} finally {
 			setSaving(false);
 		}
-	}, [draft, onRefetch]);
+	}, [draft, onRefetch, onDone]);
 
 	const renderChips = (items: string[]) =>
 		items.length === 0 ? (
@@ -122,42 +130,7 @@ export function TagsSection({ tags, onRefetch }: Props) {
 
 	return (
 		<div className="p-5">
-			<div className="flex items-center justify-between mb-4">
-				<h3 className="text-sm font-semibold text-gray-900">
-					Skills & Interests
-				</h3>
-				{!editing ? (
-					<Button
-						variant="secondary"
-						size="sm"
-						onClick={handleEdit}
-						leftIcon={<Edit2 size={14} />}
-					>
-						Edit
-					</Button>
-				) : (
-					<div className="flex gap-2">
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={handleCancel}
-							disabled={saving}
-						>
-							Cancel
-						</Button>
-						<Button
-							variant="primary"
-							size="sm"
-							onClick={handleSave}
-							leftIcon={<Save size={14} />}
-							isLoading={saving}
-						>
-							Save
-						</Button>
-					</div>
-				)}
-			</div>
-			{editing ? (
+			{isEditing ? (
 				<div className="space-y-4">
 					<ChipInput
 						label="Skills"
@@ -177,6 +150,26 @@ export function TagsSection({ tags, onRefetch }: Props) {
 						onChange={(v) => setDraft((p) => ({ ...p, hobbies: v }))}
 						disabled={saving}
 					/>
+					<div className="flex items-center gap-3 pt-2">
+						<div className="flex-1" />
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={handleCancel}
+							disabled={saving}
+						>
+							Cancel
+						</Button>
+						<Button
+							variant="primary"
+							size="sm"
+							onClick={handleSave}
+							leftIcon={<Save size={14} />}
+							isLoading={saving}
+						>
+							Save
+						</Button>
+					</div>
 				</div>
 			) : (
 				<div className="space-y-4">

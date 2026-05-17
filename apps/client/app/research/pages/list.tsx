@@ -33,9 +33,7 @@ export const Route = createFileRoute("/admin/research/")({
 				: [],
 		);
 		const statusConditions = researchStatusFilter.toConditions(
-			deps.status
-				? [researchStatusFilter.toColumnFilter([deps.status])]
-				: [],
+			deps.status ? [researchStatusFilter.toColumnFilter([deps.status])] : [],
 		);
 
 		const baseListQuery = researchQueries.list({

@@ -3,9 +3,7 @@ import {
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
-import type {
-	Program,
-} from "@/app/programs/hooks/api/programs.functions";
+import type { Program } from "@/app/programs/hooks/api/programs.functions";
 import {
 	createProgramServerFn,
 	getProgramServerFn,

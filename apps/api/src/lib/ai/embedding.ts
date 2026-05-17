@@ -1,10 +1,12 @@
 import { embed } from "ai";
 import { and, eq, inArray, isNotNull, ne } from "drizzle-orm";
+
 import { db, schema } from "@/db";
-import { aiClient } from "@/modules/ai/ai-client";
-import { buildProfileText } from "@/modules/ai/ai-profile";
-import { aiEnv } from "@/modules/ai/ai-env";
+import { aiClient } from "@/lib/ai/client";
+import { buildProfileText } from "@/lib/ai/profile";
 import { logger } from "@/utils/logger";
+
+const AI_MATCH_TIMEOUT_MS = 8000;
 
 export function cosineSimilarity(a: number[], b: number[]): number {
 	let dot = 0;
@@ -19,7 +21,7 @@ export function cosineSimilarity(a: number[], b: number[]): number {
 }
 
 export async function generateAndStoreEmbedding(userId: string): Promise<void> {
-	if (!aiClient.isConfigured) {
+	if (!aiClient.isEmbeddingConfigured) {
 		logger.info("AI not configured, skipping embedding generation", { userId });
 		return;
 	}
@@ -32,7 +34,7 @@ export async function generateAndStoreEmbedding(userId: string): Promise<void> {
 		if (!profileText.trim()) return;
 
 		const abort = new AbortController();
-		const timeout = setTimeout(() => abort.abort(), aiEnv.matchTimeoutMs);
+		const timeout = setTimeout(() => abort.abort(), AI_MATCH_TIMEOUT_MS);
 
 		const { embedding } = await embed({
 			model,
@@ -62,7 +64,7 @@ export async function findTopCandidates(
 	candidateIds: string[],
 	topK: number,
 ): Promise<Array<{ userId: string; similarity: number }>> {
-	if (!aiClient.isConfigured) return [];
+	if (!aiClient.isEmbeddingConfigured) return [];
 
 	const [requesterSettings] = await db
 		.select({ embedding: schema.userSettings.embedding })
