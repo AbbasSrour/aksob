@@ -176,5 +176,13 @@ export const mutationKeyFactory = {
 				...mutationKeyFactory.events.entity,
 				...mutationKeyFactory.delete(),
 			] as const,
+		submit: () => [...mutationKeyFactory.events.entity, "submit"] as const,
+		approve: () => [...mutationKeyFactory.events.entity, "approve"] as const,
+		reject: () => [...mutationKeyFactory.events.entity, "reject"] as const,
+		cancel: () => [...mutationKeyFactory.events.entity, "cancel"] as const,
+		closeRegistration: () =>
+			[...mutationKeyFactory.events.entity, "closeRegistration"] as const,
+		updateAttendee: () =>
+			[...mutationKeyFactory.events.entity, "updateAttendee"] as const,
 	},
 } as const;

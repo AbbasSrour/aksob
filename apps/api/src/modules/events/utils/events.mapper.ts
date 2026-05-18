@@ -49,6 +49,7 @@ export const toPublicEventDto = (event: EventWithMembers) => {
 					image: owner.image,
 				}
 			: null,
+		viewerRegistration: null,
 		createdAt: event.createdAt.toISOString(),
 		updatedAt: event.updatedAt.toISOString(),
 	};

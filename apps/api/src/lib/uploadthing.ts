@@ -160,6 +160,31 @@ export const mediaRouter = {
 				uploadedBy: metadata.userId,
 			};
 		}),
+	eventCoverImage: f({
+		image: {
+			maxFileSize: "8MB",
+			maxFileCount: 1,
+		},
+	})
+		.middleware(async ({ req }) => {
+			const session = await auth.api.getSession({
+				headers: req.headers,
+			});
+			const user = session?.user;
+
+			if (!user) {
+				throw new UploadThingError("Unauthorized");
+			}
+
+			return {
+				userId: user.id,
+			};
+		})
+		.onUploadComplete(async ({ file }) => {
+			return {
+				mediaUrl: file.ufsUrl,
+			};
+		}),
 } satisfies FileRouter;
 
 export type MediaRouter = typeof mediaRouter;

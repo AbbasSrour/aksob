@@ -5,21 +5,30 @@ export async function apiFetch<T>(
 	init?: RequestInit,
 ): Promise<T> {
 	const response = await fetch(`${API_BASE_URL}${path}`, {
+		...init,
 		credentials: "include",
 		headers: {
 			"Content-Type": "application/json",
 			...(init?.headers ?? {}),
 		},
-		...init,
 	});
 
 	if (!response.ok) {
-		const message = await response.text();
-		const err = new Error(
-			message || `Request failed with status ${response.status}`,
-		) as Error & { status: number };
+		const text = await response.text();
+		let message = text || `Request failed with status ${response.status}`;
+		try {
+			const body = JSON.parse(text) as { error?: string; message?: string };
+			message = body.error ?? body.message ?? message;
+		} catch {
+			// Keep the original response text when it is not JSON.
+		}
+		const err = new Error(message) as Error & { status: number };
 		err.status = response.status;
 		throw err;
+	}
+
+	if (response.status === 204) {
+		return undefined as T;
 	}
 
 	return response.json() as Promise<T>;

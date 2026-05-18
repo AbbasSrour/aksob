@@ -14,15 +14,18 @@ import { eventQueries } from "@/app/events/hooks/api/events.queries";
 // Helpers
 // ---------------------------------------------------------------------------
 
-function toDateInputValue(iso: string): string {
-	if (!iso) return "";
-	return iso.slice(0, 10);
+function toDateInputValue(iso: string | null | undefined): string {
+	if (!iso || typeof iso !== "string") return "";
+	// Handle full ISO datetime strings like "2024-03-15T14:00:00.000Z"
+	const d = new Date(iso);
+	if (isNaN(d.getTime())) return "";
+	return d.toISOString().slice(0, 10);
 }
 
 /** Single-day events stored as startDate + 1 day in DB; multi-day events have larger gap. */
 function isMultiDay(startDate: string, endDate: string): boolean {
-	const s = new Date(`${startDate}T00:00:00`);
-	const e = new Date(`${endDate}T00:00:00`);
+	const s = new Date(startDate);
+	const e = new Date(endDate);
 	const diffDays = (e.getTime() - s.getTime()) / (1000 * 60 * 60 * 24);
 	return diffDays > 1;
 }
@@ -52,6 +55,11 @@ function eventToFormValues(event: EventItem): EventFormSchema {
 		checkInEnabled: event.checkInEnabled,
 		remindersEnabled: event.remindersEnabled,
 		attendeeListVisible: event.attendeeListVisible,
+		surveys: (event.surveys ?? []).map((s) => ({
+			audience: s.audience as EventFormSchema["surveys"][number]["audience"],
+			url: s.url,
+			sendAt: toDateInputValue(s.sendAt),
+		})),
 	};
 }
 

@@ -1,7 +1,16 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Calendar, Clock, Loader2, MapPin, Plus, Users, X } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import {
+	Calendar,
+	Clock,
+	Edit2,
+	Loader2,
+	MapPin,
+	Plus,
+	Users,
+} from "lucide-react";
 import { useState } from "react";
-import { createEvent, type EventItem, listMyEvents } from "~/app/lib/users";
+import { Link } from "react-router";
+import { type EventItem, listMyEvents } from "~/app/lib/users";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 
@@ -21,26 +30,14 @@ const STATUS_COLORS: Record<
 	rejected: { label: "Rejected", variant: "error" },
 };
 
-const EVENT_TYPES = ["in_person", "online", "hybrid"];
-
 type TabKey = "upcoming" | "past";
 
-export function EventsSection() {
+export function EventsSection({ userId }: { userId: string }) {
 	const [tab, setTab] = useState<TabKey>("upcoming");
-	const [showCreate, setShowCreate] = useState(false);
-	const queryClient = useQueryClient();
 
 	const { data, isLoading } = useQuery({
-		queryKey: ["my-events", tab],
-		queryFn: () => listMyEvents(tab).then((r) => r.data),
-	});
-
-	const createMutation = useMutation({
-		mutationFn: createEvent,
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["my-events"] });
-			setShowCreate(false);
-		},
+		queryKey: ["my-events", userId, tab],
+		queryFn: () => listMyEvents(tab, userId).then((r) => r.data),
 	});
 
 	const events = data ?? [];
@@ -49,29 +46,12 @@ export function EventsSection() {
 		<div className="space-y-4">
 			{/* Create button */}
 			<div className="flex justify-end">
-				<Button
-					variant="primary"
-					size="sm"
-					onClick={() => setShowCreate(true)}
-					leftIcon={<Plus size={14} />}
-				>
-					Create Event
-				</Button>
+				<Link to="/events/new">
+					<Button variant="primary" size="sm" leftIcon={<Plus size={14} />}>
+						Create Event
+					</Button>
+				</Link>
 			</div>
-
-			{/* Create form */}
-			{showCreate && (
-				<CreateEventForm
-					onSubmit={(params) => createMutation.mutate(params)}
-					onCancel={() => setShowCreate(false)}
-					isLoading={createMutation.isPending}
-					error={
-						createMutation.error
-							? (createMutation.error as Error).message
-							: null
-					}
-				/>
-			)}
 
 			{/* Tabs */}
 			<div className="flex gap-1 p-1 bg-[var(--gray-100)] rounded-lg w-fit">
@@ -132,155 +112,6 @@ export function EventsSection() {
 	);
 }
 
-function CreateEventForm({
-	onSubmit,
-	onCancel,
-	isLoading,
-	error,
-}: {
-	onSubmit: (params: {
-		title: string;
-		description: string;
-		eventType: string;
-		startDate: string;
-		endDate: string;
-		location?: string;
-	}) => void;
-	onCancel: () => void;
-	isLoading: boolean;
-	error: string | null;
-}) {
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
-	const [eventType, setEventType] = useState(EVENT_TYPES[0]);
-	const [startDate, setStartDate] = useState("");
-	const [endDate, setEndDate] = useState("");
-	const [location, setLocation] = useState("");
-
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		if (!title.trim() || !description.trim() || !startDate || !endDate) return;
-		onSubmit({
-			title: title.trim(),
-			description: description.trim(),
-			eventType,
-			startDate,
-			endDate,
-			...(location.trim() ? { location: location.trim() } : {}),
-		});
-	};
-
-	const inputClass =
-		"w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 focus:ring-2 focus:ring-[var(--aksob-primary)]/20 focus:border-[var(--aksob-primary)] transition";
-	const textareaClass =
-		"w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-[var(--aksob-primary)]/20 focus:border-[var(--aksob-primary)] transition resize-none";
-
-	return (
-		<div className="p-5 bg-white/60 backdrop-blur-sm rounded-xl border border-white/50">
-			<div className="flex items-center justify-between mb-4">
-				<h3 className="text-sm font-semibold text-gray-900">Create Event</h3>
-				<button
-					type="button"
-					onClick={onCancel}
-					className="text-gray-400 hover:text-gray-600"
-				>
-					<X size={16} />
-				</button>
-			</div>
-			<form onSubmit={handleSubmit} className="space-y-3">
-				<input
-					className={inputClass}
-					placeholder="Event title"
-					value={title}
-					onChange={(e) => setTitle(e.target.value)}
-					required
-				/>
-				<textarea
-					className={textareaClass}
-					rows={3}
-					placeholder="Description"
-					value={description}
-					onChange={(e) => setDescription(e.target.value)}
-					required
-				/>
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-					<select
-						className={inputClass}
-						value={eventType}
-						onChange={(e) => setEventType(e.target.value)}
-					>
-						{EVENT_TYPES.map((t) => (
-							<option key={t} value={t}>
-								{t.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
-							</option>
-						))}
-					</select>
-					<input
-						className={inputClass}
-						placeholder="Location (optional)"
-						value={location}
-						onChange={(e) => setLocation(e.target.value)}
-					/>
-				</div>
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-					<div>
-						<label
-							htmlFor="event-start"
-							className="text-xs text-[var(--gray-500)] mb-1 block"
-						>
-							Start Date
-						</label>
-						<input
-							id="event-start"
-							className={inputClass}
-							type="datetime-local"
-							value={startDate}
-							onChange={(e) => setStartDate(e.target.value)}
-							required
-						/>
-					</div>
-					<div>
-						<label
-							htmlFor="event-end"
-							className="text-xs text-[var(--gray-500)] mb-1 block"
-						>
-							End Date
-						</label>
-						<input
-							id="event-end"
-							className={inputClass}
-							type="datetime-local"
-							value={endDate}
-							onChange={(e) => setEndDate(e.target.value)}
-							required
-						/>
-					</div>
-				</div>
-				{error ? <p className="text-xs text-red-600">{error}</p> : null}
-				<div className="flex gap-2 justify-end">
-					<Button
-						variant="ghost"
-						size="sm"
-						type="button"
-						onClick={onCancel}
-						disabled={isLoading}
-					>
-						Cancel
-					</Button>
-					<Button
-						variant="primary"
-						size="sm"
-						type="submit"
-						isLoading={isLoading}
-					>
-						Create Event
-					</Button>
-				</div>
-			</form>
-		</div>
-	);
-}
-
 function EventCard({ event }: { event: EventItem }) {
 	const status = STATUS_COLORS[event.status] ?? {
 		label: event.status,
@@ -289,7 +120,7 @@ function EventCard({ event }: { event: EventItem }) {
 	const startDate = new Date(event.startDate);
 
 	return (
-		<div className="overflow-hidden flex flex-col sm:flex-row bg-white/60 backdrop-blur-sm rounded-xl border border-white/50">
+		<div className="overflow-hidden flex flex-col sm:flex-row bg-white/60 backdrop-blur-sm rounded-xl border border-white/50 hover:border-[var(--aksob-primary)]/30 transition-colors">
 			{/* Cover Image */}
 			<div className="sm:w-48 h-32 sm:h-auto bg-[var(--gray-100)] flex-shrink-0 relative overflow-hidden">
 				{event.coverImage ? (
@@ -309,15 +140,26 @@ function EventCard({ event }: { event: EventItem }) {
 			<div className="p-4 flex-1 min-w-0 flex flex-col justify-between">
 				<div>
 					<div className="flex items-start justify-between gap-2">
-						<h4 className="text-sm font-semibold text-gray-900 line-clamp-1">
-							{event.title}
-						</h4>
-						<Badge
-							variant={status.variant}
-							className="text-[10px] px-1.5 py-0.5 flex-shrink-0"
-						>
-							{status.label}
-						</Badge>
+						<Link to={`/events/${event.id}`} className="min-w-0">
+							<h4 className="text-sm font-semibold text-gray-900 line-clamp-1 hover:text-[var(--aksob-primary)] transition-colors">
+								{event.title}
+							</h4>
+						</Link>
+						<div className="flex items-center gap-2 flex-shrink-0">
+							<Link
+								to={`/events/${event.id}/edit`}
+								className="p-1 text-[var(--gray-400)] hover:text-[var(--aksob-primary)] transition-colors"
+								onClick={(e) => e.stopPropagation()}
+							>
+								<Edit2 size={12} />
+							</Link>
+							<Badge
+								variant={status.variant}
+								className="text-[10px] px-1.5 py-0.5"
+							>
+								{status.label}
+							</Badge>
+						</div>
 					</div>
 					<p className="text-xs text-[var(--gray-500)] mt-1 line-clamp-2">
 						{event.description}

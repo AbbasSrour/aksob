@@ -2,11 +2,20 @@ import { z } from "zod";
 
 export const eventTypeValues = ["in_person", "online", "hybrid"] as const;
 export const registrationModeValues = ["open", "approval"] as const;
+export const surveyAudienceValues = ["attendees", "organizers", "all"] as const;
 
 const urlField = z
 	.string()
 	.url({ message: "Must be a valid URL" })
 	.or(z.literal(""));
+
+export const surveySchema = z.object({
+	audience: z.enum(surveyAudienceValues),
+	url: z.string().url({ message: "Must be a valid URL" }),
+	sendAt: z.string().min(1, { message: "Send date is required" }),
+});
+
+export type SurveySchema = z.infer<typeof surveySchema>;
 
 export const eventFormSchema = z
 	.object({
@@ -32,6 +41,7 @@ export const eventFormSchema = z
 		checkInEnabled: z.boolean().default(false),
 		remindersEnabled: z.boolean().default(true),
 		attendeeListVisible: z.boolean().default(false),
+		surveys: z.array(surveySchema).default([]),
 	})
 	.superRefine((data, ctx) => {
 		// Location required for in-person and hybrid events
@@ -107,4 +117,5 @@ export const eventFormDefaultValues: EventFormSchema = {
 	checkInEnabled: false,
 	remindersEnabled: true,
 	attendeeListVisible: false,
+	surveys: [],
 };

@@ -12,6 +12,21 @@ const eventOwnerSchema = t.Object({
 	image: t.Union([t.String(), t.Null()]),
 });
 
+const viewerRegistrationSchema = t.Union([
+	t.Object({
+		role: t.Union([
+			t.Literal("owner"),
+			t.Literal("organizer"),
+			t.Literal("attendee"),
+		]),
+		attendeeStatus: t.Union([
+			t.Enum(eventAttendeeStatusEnum),
+			t.Null(),
+		]),
+	}),
+	t.Null(),
+]);
+
 export const eventSchema = t.Object({
 	id: t.String(),
 	title: t.String(),
@@ -30,6 +45,7 @@ export const eventSchema = t.Object({
 	remindersEnabled: t.Boolean(),
 	attendeeListVisible: t.Boolean(),
 	owner: t.Union([eventOwnerSchema, t.Null()]),
+	viewerRegistration: viewerRegistrationSchema,
 	createdAt: t.String(),
 	updatedAt: t.String(),
 });
@@ -67,6 +83,7 @@ export const adminEventSchema = t.Object({
 	remindersEnabled: t.Boolean(),
 	attendeeListVisible: t.Boolean(),
 	owner: t.Union([eventOwnerSchema, t.Null()]),
+	viewerRegistration: viewerRegistrationSchema,
 	surveys: t.Array(eventSurveySchema),
 	createdAt: t.String(),
 	updatedAt: t.String(),

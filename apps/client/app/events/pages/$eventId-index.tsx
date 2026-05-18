@@ -138,16 +138,9 @@ function getActions(
 
 export const Route = createFileRoute("/admin/events/$eventId")({
 	loader: async ({ context, params }) => {
-		await Promise.all([
-			context.queryClient.ensureQueryData(eventQueries.single(params.eventId)),
-			context.queryClient.ensureQueryData(
-				eventAttendeeQueries.list({
-					eventId: params.eventId,
-					page: 1,
-					limit: 20,
-				}),
-			),
-		]);
+		await context.queryClient.ensureQueryData(
+			eventQueries.single(params.eventId),
+		);
 	},
 	head: () => ({
 		meta: [
@@ -250,8 +243,10 @@ function ActionBar({ event }: { event: EventItem }) {
 // ---------------------------------------------------------------------------
 
 function EventTabs({ event }: { event: EventItem }) {
+	const [activeTab, setActiveTab] = useState("overview");
+
 	return (
-		<Tabs defaultValue="overview" className="w-full">
+		<Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
 			<TabsList>
 				<TabsTrigger value="overview">Overview</TabsTrigger>
 				<TabsTrigger value="attendees">Attendees</TabsTrigger>
@@ -263,7 +258,7 @@ function EventTabs({ event }: { event: EventItem }) {
 			</TabsContent>
 
 			<TabsContent value="attendees" className="pt-4">
-				<AttendeesTab eventId={event.id} />
+				{activeTab === "attendees" ? <AttendeesTab eventId={event.id} /> : null}
 			</TabsContent>
 
 			<TabsContent value="surveys" className="pt-4">
@@ -439,8 +434,8 @@ function AttendeesTab({ eventId }: { eventId: string }) {
 					</thead>
 					<tbody>
 						{attendees.map((a) => (
-							<tr key={a.id} className="border-b last:border-0">
-								<td className="px-4 py-3 font-medium">{a.name}</td>
+							<tr key={a.memberId} className="border-b last:border-0">
+								<td className="px-4 py-3 font-medium">{a.user.name}</td>
 								<td className="px-4 py-3">
 									<Badge variant="outline" className="text-xs">
 										{a.status}
@@ -459,7 +454,7 @@ function AttendeesTab({ eventId }: { eventId: string }) {
 											<Button
 												size="sm"
 												variant="outline"
-												onClick={() => handleApprove(a.id)}
+												onClick={() => handleApprove(a.memberId)}
 												disabled={updateAttendee.isPending}
 											>
 												Approve
@@ -467,7 +462,7 @@ function AttendeesTab({ eventId }: { eventId: string }) {
 											<Button
 												size="sm"
 												variant="outline"
-												onClick={() => handleReject(a.id)}
+												onClick={() => handleReject(a.memberId)}
 												disabled={updateAttendee.isPending}
 											>
 												Reject

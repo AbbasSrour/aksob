@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { LogOut, Menu, MessageSquare, Search, UserPlus, X } from "lucide-react";
+import { LogOut, Menu, MessageSquare, UserPlus, X } from "lucide-react";
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { listConnections } from "~/app/lib/users";
+import { NavbarSearch } from "~/components/layout/navbar-search";
 import { Avatar } from "~/components/ui/avatar";
 
 interface NavbarProps {
@@ -46,22 +47,6 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [scrolled, setScrolled] = useState(false);
-	const [searchOpen, setSearchOpen] = useState(false);
-	const searchInputRef = useRef<HTMLInputElement>(null);
-	const searchContainerRef = useRef<HTMLDivElement>(null);
-
-	useEffect(() => {
-		function handleClickOutside(event: MouseEvent) {
-			if (
-				searchContainerRef.current &&
-				!searchContainerRef.current.contains(event.target as Node)
-			) {
-				setSearchOpen(false);
-			}
-		}
-		document.addEventListener("mousedown", handleClickOutside);
-		return () => document.removeEventListener("mousedown", handleClickOutside);
-	}, []);
 
 	useEffect(() => {
 		function onScroll() {
@@ -74,7 +59,6 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 
 	useEffect(() => {
 		setMobileMenuOpen(false);
-		setSearchOpen(false);
 	}, [location.pathname]);
 
 	const isActive = (path: string) => {
@@ -160,61 +144,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 					className={`hidden lg:flex items-center gap-0 pl-2 pr-1 py-1 ${pillBase} ${pillFill}`}
 				>
 					{/* Search */}
-					<div
-						ref={searchContainerRef}
-						onClick={() => {
-							if (!searchOpen) {
-								setSearchOpen(true);
-							}
-						}}
-						className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 cursor-pointer pointer-events-auto ${
-							searchOpen ? "" : navText
-						}`}
-					>
-						<Search
-							size={18}
-							strokeWidth={1.5}
-							className={`shrink-0 transition-colors duration-200 ${
-								searchOpen
-									? isDark
-										? "text-white/50"
-										: "text-[var(--gray-400)]"
-									: ""
-							}`}
-						/>
-						<span
-							className="overflow-hidden whitespace-nowrap text-[14px] font-medium transition-all duration-300"
-							style={{
-								fontFamily: "var(--font-display)",
-								maxWidth: searchOpen ? 0 : "80px",
-								opacity: searchOpen ? 0 : 1,
-								marginLeft: searchOpen ? 0 : undefined,
-							}}
-						>
-							Search
-						</span>
-						<input
-							ref={searchInputRef}
-							type="text"
-							placeholder="Search..."
-							className={`bg-transparent border-none outline-none caret-(--aksob-primary) text-[14px] font-medium transition-all duration-300 ${
-								isDark
-									? "text-white placeholder:text-white/30"
-									: "text-[var(--gray-700)] placeholder:text-[var(--gray-400)]"
-							}`}
-							style={{
-								fontFamily: "var(--font-display)",
-								maxWidth: searchOpen ? "200px" : 0,
-								opacity: searchOpen ? 1 : 0,
-								padding: 0,
-							}}
-							onKeyDown={(e) => {
-								if (e.key === "Escape") {
-									setSearchOpen(false);
-								}
-							}}
-						/>
-					</div>
+					<NavbarSearch isDark={isDark} navText={navText} />
 
 					{isAuthenticated ? (
 						<>

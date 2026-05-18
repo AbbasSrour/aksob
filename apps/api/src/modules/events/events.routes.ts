@@ -262,7 +262,19 @@ export const eventsModule = new Elysia({ prefix: "/events" })
 				conditions.push(lt(schema.event.endDate, now));
 			}
 
-			if (!user || user.role !== "admin") {
+			const isOwnEventList = Boolean(userId && user?.id === userId);
+
+			if (user?.role === "admin") {
+				if (status) {
+					conditions.push(eq(schema.event.status, status));
+				}
+			} else if (isOwnEventList) {
+				// Non-admin viewing their own events - show all statuses
+				if (status) {
+					conditions.push(eq(schema.event.status, status));
+				}
+			} else {
+				// Public/non-authenticated - only visible statuses
 				conditions.push(
 					or(
 						eq(schema.event.status, "approved"),
@@ -270,8 +282,6 @@ export const eventsModule = new Elysia({ prefix: "/events" })
 						eq(schema.event.status, "completed"),
 					)!,
 				);
-			} else if (status) {
-				conditions.push(eq(schema.event.status, status));
 			}
 
 			if (search) {
@@ -282,7 +292,12 @@ export const eventsModule = new Elysia({ prefix: "/events" })
 				const memberEventIds = db
 					.select({ eventId: schema.eventMember.eventId })
 					.from(schema.eventMember)
-					.where(eq(schema.eventMember.userId, userId));
+					.where(
+						and(
+							eq(schema.eventMember.userId, userId),
+							inArray(schema.eventMember.role, ["owner", "organizer"]),
+						),
+					);
 				conditions.push(inArray(schema.event.id, memberEventIds));
 			}
 
@@ -371,8 +386,28 @@ export const eventsModule = new Elysia({ prefix: "/events" })
 					m.attendees?.[0]?.status === "approved",
 			);
 
+			const viewerMember = user
+				? event.members.find((m) => m.userId === user.id)
+				: null;
+			const viewerRegistration = viewerMember
+				? {
+						role: viewerMember.role,
+						attendeeStatus:
+							viewerMember.role === "attendee"
+								? (viewerMember.attendees?.[0]?.status ?? null)
+								: null,
+					}
+				: null;
+
+			const baseDto = isPrivileged || isApprovedAttendee
+				? toAdminEventDto(event)
+				: toPublicEventDto(event);
+
 			if (isPrivileged || isApprovedAttendee) {
-				return { status: "ok" as const, data: toAdminEventDto(event) };
+				return {
+					status: "ok" as const,
+					data: { ...baseDto, viewerRegistration },
+				};
 			}
 
 			const visibleStatuses = ["approved", "in_progress", "completed"] as const;
@@ -381,7 +416,10 @@ export const eventsModule = new Elysia({ prefix: "/events" })
 					event.status as (typeof visibleStatuses)[number],
 				)
 			) {
-				return { status: "ok" as const, data: toPublicEventDto(event) };
+				return {
+					status: "ok" as const,
+					data: { ...baseDto, viewerRegistration },
+				};
 			}
 
 			set.status = EVENT_ERRORS.EVENT_NOT_FOUND.httpStatus;
@@ -877,7 +915,7 @@ export const eventsModule = new Elysia({ prefix: "/events" })
 				});
 			}
 
-			if (event.status !== "draft") {
+			if (event.status !== "draft" && event.status !== "rejected") {
 				return status(EVENT_ERRORS.NOT_DRAFT.httpStatus, {
 					status: "error" as const,
 					code: EVENT_ERRORS.NOT_DRAFT.code,
@@ -887,7 +925,11 @@ export const eventsModule = new Elysia({ prefix: "/events" })
 
 			await db
 				.update(schema.event)
-				.set({ status: "pending_review", updatedAt: new Date() })
+				.set({
+					status: "pending_review",
+					rejectionReason: null,
+					updatedAt: new Date(),
+				})
 				.where(eq(schema.event.id, params.id));
 
 			const updated = await db.query.event.findFirst({
@@ -1226,8 +1268,92 @@ export const eventsModule = new Elysia({ prefix: "/events" })
 					"Sets registrationClosed to true.",
 			},
 		},
-	)
-	// ──────────────── Register as attendee ────────────────
+ 	)
+ 	// ──────────────── Reopen registration ────────────────
+ 	.post(
+ 		"/:id/reopen-registration",
+ 		async ({ params, user, status }) => {
+ 			const event = await db.query.event.findFirst({
+ 				where: eq(schema.event.id, params.id),
+ 				with: {
+ 					members: {
+ 						columns: { userId: true, role: true },
+ 					},
+ 				},
+ 			});
+
+ 			if (!event) {
+ 				return status(EVENT_ERRORS.EVENT_NOT_FOUND.httpStatus, {
+ 					status: "error" as const,
+ 					code: EVENT_ERRORS.EVENT_NOT_FOUND.code,
+ 					error: EVENT_ERRORS.EVENT_NOT_FOUND.message,
+ 				});
+ 			}
+
+ 			const isOrganizer = event.members.some(
+ 				(m) =>
+ 					m.userId === user.id &&
+ 					(m.role === "owner" || m.role === "organizer"),
+ 			);
+ 			if (!isOrganizer && user.role !== "admin") {
+ 				return status(EVENT_ERRORS.NOT_ORGANIZER.httpStatus, {
+ 					status: "error" as const,
+ 					code: EVENT_ERRORS.NOT_ORGANIZER.code,
+ 					error: EVENT_ERRORS.NOT_ORGANIZER.message,
+ 				});
+ 			}
+
+ 			if (!event.registrationClosed) {
+ 				return status(400, {
+ 					status: "error" as const,
+ 					code: "REGISTRATION_NOT_CLOSED",
+ 					error: "Registration is not closed.",
+ 				});
+ 			}
+
+ 			const now = new Date();
+
+ 			await db
+ 				.update(schema.event)
+ 				.set({
+ 					registrationClosed: false,
+ 					registrationClosedAt: null,
+ 					updatedAt: now,
+ 				})
+ 				.where(eq(schema.event.id, params.id));
+
+ 			const updated = await db.query.event.findFirst({
+ 				where: eq(schema.event.id, params.id),
+ 				with: {
+ 					members: {
+ 						with: {
+ 							user: { columns: { id: true, name: true, image: true } as const },
+ 						},
+ 					},
+ 					surveys: true,
+ 				},
+ 			});
+
+ 			return { status: "ok" as const, data: toAdminEventDto(updated!) };
+ 		},
+ 		{
+ 			auth: true,
+ 			response: {
+ 				200: adminEventResponseSchema,
+ 				400: eventErrorResponseSchema,
+ 				403: eventErrorResponseSchema,
+ 				404: eventErrorResponseSchema,
+ 			},
+ 			detail: {
+ 				tags: ["Events"],
+ 				summary: "Reopen event registration",
+ 				description:
+ 					"Owner or admin reopens registration for a closed event. " +
+ 					"Sets registrationClosed to false and clears registrationClosedAt.",
+ 			},
+ 		},
+ 	)
+ 	// ──────────────── Register as attendee ────────────────
 	.post(
 		"/:id/register",
 		async ({ params, user, body, status }) => {

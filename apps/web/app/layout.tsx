@@ -16,8 +16,13 @@ export default function AppLayout() {
 	const isGalaxy = location.pathname === "/galaxy";
 	const isChat = location.pathname.startsWith("/chat");
 	const isOnboarding = location.pathname === "/onboarding";
+	const isEventManagementRoute =
+		location.pathname === "/events/new" ||
+		/^\/events\/[^/]+\/edit$/.test(location.pathname);
 	const isProtectedRoute =
-		location.pathname.startsWith("/chat") || location.pathname === "/profile";
+		location.pathname.startsWith("/chat") ||
+		location.pathname === "/profile" ||
+		isEventManagementRoute;
 	const isPublicRoute = isHome || isGalaxy || isOnboarding;
 
 	const onboarding = (session?.user as Record<string, unknown>)?.onboarding as

@@ -28,7 +28,7 @@ import {
 import { Textarea } from "@aksob/ui/core/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import {
 	type EventFormSchema,
 	eventFormDefaultValues,
@@ -92,12 +92,23 @@ export function EventForm({ eventId, defaultValues }: EventFormProps) {
 		defaultValues: { ...eventFormDefaultValues, ...defaultValues },
 	});
 
+	const { fields, append, remove } = useFieldArray({
+		control: form.control,
+		name: "surveys",
+	});
+
 	const eventType = form.watch("eventType");
 	const requiresRegistration = form.watch("requiresRegistration");
 	const multiDay = form.watch("multiDay");
 
 	const onSubmit = (values: EventFormSchema) => {
 		const endDate = values.multiDay ? values.endDate : addDay(values.startDate);
+
+		const surveys = values.surveys.map((s) => ({
+			audience: s.audience,
+			url: s.url,
+			sendAt: s.sendAt,
+		}));
 
 		if (isEditing && eventId) {
 			updateEvent(
@@ -120,6 +131,7 @@ export function EventForm({ eventId, defaultValues }: EventFormProps) {
 					remindersEnabled: values.remindersEnabled,
 					attendeeListVisible: values.attendeeListVisible,
 					notifyAttendees: false,
+					surveys,
 				},
 				{
 					onSuccess: () => navigate({ to: "/admin/events" }),
@@ -144,6 +156,7 @@ export function EventForm({ eventId, defaultValues }: EventFormProps) {
 					checkInEnabled: values.checkInEnabled,
 					remindersEnabled: values.remindersEnabled,
 					attendeeListVisible: values.attendeeListVisible,
+					surveys,
 				},
 				{
 					onSuccess: () => navigate({ to: "/admin/events" }),
@@ -539,6 +552,108 @@ export function EventForm({ eventId, defaultValues }: EventFormProps) {
 									)}
 								/>
 							</FormRow>
+						</FormSectionContent>
+					</FormSection>
+
+					{/* Surveys */}
+					<FormSection layout="vertical">
+						<FormSectionHeader>
+							<FormSectionTitle>Surveys</FormSectionTitle>
+							<FormSectionDescription>
+								Add post-event surveys to collect feedback.
+							</FormSectionDescription>
+						</FormSectionHeader>
+
+						<FormSectionContent cols={1} spacing="lg">
+							{fields.map((field, index) => (
+								<div key={field.id} className="space-y-4 rounded-lg border p-4">
+									<div className="flex items-center justify-between">
+										<FormLabel>Survey {index + 1}</FormLabel>
+										<Button
+											type="button"
+											variant="ghost"
+											size="sm"
+											onClick={() => remove(index)}
+										>
+											Remove
+										</Button>
+									</div>
+
+									<FormRow cols={3}>
+										<FormField
+											control={form.control}
+											name={`surveys.${index}.audience`}
+											render={({ field }) => (
+												<FormItem>
+													<FormLabel>Audience</FormLabel>
+													<FormControl>
+														<Select
+															value={field.value}
+															onValueChange={field.onChange}
+														>
+															<SelectTrigger>
+																<SelectValue placeholder="Select audience" />
+															</SelectTrigger>
+															<SelectContent>
+																<SelectItem value="attendees">
+																	Attendees
+																</SelectItem>
+																<SelectItem value="organizers">
+																	Organizers
+																</SelectItem>
+																<SelectItem value="all">All</SelectItem>
+															</SelectContent>
+														</Select>
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name={`surveys.${index}.sendAt`}
+											render={({ field }) => (
+												<FormItem>
+													<FormLabel>Send Date</FormLabel>
+													<FormControl>
+														<Input type="date" {...field} />
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name={`surveys.${index}.url`}
+											render={({ field }) => (
+												<FormItem>
+													<FormLabel>Survey URL</FormLabel>
+													<FormControl>
+														<Input placeholder="https://..." {...field} />
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+									</FormRow>
+								</div>
+							))}
+
+							<Button
+								type="button"
+								variant="outline"
+								onClick={() =>
+									append({
+										audience: "attendees",
+										url: "",
+										sendAt: "",
+									})
+								}
+							>
+								Add Survey
+							</Button>
 						</FormSectionContent>
 					</FormSection>
 				</FormContent>

@@ -178,6 +178,7 @@ export interface CreateEventParams {
 	checkInEnabled?: boolean;
 	remindersEnabled?: boolean;
 	attendeeListVisible?: boolean;
+	surveys?: { audience: string; url: string; sendAt: string }[];
 }
 
 export const createEventFn = async (
@@ -222,6 +223,7 @@ export interface UpdateEventParams {
 	remindersEnabled?: boolean;
 	attendeeListVisible?: boolean;
 	notifyAttendees?: boolean;
+	surveys?: { audience: string; url: string; sendAt: string }[];
 }
 
 export const updateEventFn = async (
@@ -346,13 +348,18 @@ export const closeRegistrationServerFn = createIsomorphicFn()
 // ---------------------------------------------------------------------------
 
 export interface EventAttendee {
-	id: string;
+	memberId: string;
 	userId: string;
-	name: string;
-	image: string | null;
+	user: {
+		id: string;
+		name: string;
+		image: string | null;
+	};
 	status: string;
+	showInAttendeeList: boolean;
 	checkedIn: boolean;
-	ticketToken: string | null;
+	checkedInAt: string | null;
+	createdAt: string;
 }
 
 export interface ListAttendeesResponse {

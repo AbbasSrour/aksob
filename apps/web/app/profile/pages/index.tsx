@@ -698,21 +698,21 @@ export default function Profile() {
 
 				{activeTab === "connections" && (
 					<div className="animate-profile-slide-up">
-						<SectionHeader label="My Connections" number="01" />
+						<SectionHeader label="My Connections" />
 						<ConnectionsSection userId={user.id} />
 					</div>
 				)}
 
 				{activeTab === "events" && (
 					<div className="animate-profile-slide-up">
-						<SectionHeader label="My Events" number="01" />
-						<EventsSection />
+						<SectionHeader label="My Events" />
+						<EventsSection userId={user.id} />
 					</div>
 				)}
 
 				{activeTab === "stories" && (
 					<div className="animate-profile-slide-up">
-						<SectionHeader label="My Stories" number="01" />
+						<SectionHeader label="My Stories" />
 						<StoriesSection userId={user.id} />
 					</div>
 				)}

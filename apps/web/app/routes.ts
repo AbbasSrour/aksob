@@ -26,11 +26,18 @@ export default [
 
 		route("galaxy", "galaxy/pages/galaxy.tsx"),
 		route("events", "events/pages/events.tsx"),
+		route("events/new", "events/pages/event-create.tsx"),
+		route("events/:id/edit", "events/pages/event-edit.tsx"),
+		route("events/:id", "events/pages/event-detail.tsx"),
 		route("news", "news/pages/news.tsx"),
 		route("news/:id", "news/pages/news-detail.tsx"),
 		route("stories", "stories/pages/stories.tsx"),
-		route("stories/new", "stories/pages/story-editor.tsx", { id: "stories-new" }),
-		route("stories/:id/edit", "stories/pages/story-editor.tsx", { id: "stories-edit" }),
+		route("stories/new", "stories/pages/story-editor.tsx", {
+			id: "stories-new",
+		}),
+		route("stories/:id/edit", "stories/pages/story-editor.tsx", {
+			id: "stories-edit",
+		}),
 		route("stories/:id", "stories/pages/story-detail.tsx"),
 		route("series", "series/pages/series.tsx"),
 		route("profile", "profile/pages/index.tsx"),
