@@ -84,6 +84,39 @@ if (!EnvSchema.Check(Bun.env)) {
 
 const parsedEnv = EnvSchema.Encode(Bun.env);
 
+const validateDatabaseConfig = () => {
+	const databaseUrl = parsedEnv.DATABASE_URL;
+	const protocol = databaseUrl.includes(":")
+		? databaseUrl.slice(0, databaseUrl.indexOf(":"))
+		: "";
+
+	if (!["file", "libsql", "http", "https"].includes(protocol)) {
+		console.error(
+			`Invalid DATABASE_URL protocol "${protocol}". Expected file:, libsql:, http:, or https:.`,
+		);
+		process.exit(1);
+	}
+
+	if (protocol === "libsql" || protocol === "http" || protocol === "https") {
+		if (!parsedEnv.TURSO_AUTH_TOKEN) {
+			console.error(
+				"TURSO_AUTH_TOKEN is required when DATABASE_URL points to a remote libSQL/Turso database.",
+			);
+			process.exit(1);
+		}
+
+		const url = new URL(databaseUrl);
+		if (url.hostname.endsWith("turso.tech")) {
+			console.error(
+				"DATABASE_URL must be the Turso database URL, not the Turso dashboard URL. Use a libsql://<database>-<org>.turso.io URL.",
+			);
+			process.exit(1);
+		}
+	}
+};
+
+validateDatabaseConfig();
+
 export const env = {
 	...parsedEnv,
 	trustedOrigins: [
