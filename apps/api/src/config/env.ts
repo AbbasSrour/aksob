@@ -92,5 +92,10 @@ export const env = {
 	]
 		.map((origin) => origin.trim())
 		.filter((origin): origin is string => Boolean(origin))
-		.map((origin) => new URL(origin).origin),
+		.map((origin) => {
+			const normalized = origin.startsWith("http://") || origin.startsWith("https://")
+				? origin
+				: `https://${origin}`;
+			return new URL(normalized).origin;
+		}),
 };
