@@ -1,6 +1,6 @@
 import { hashPassword } from "better-auth/crypto";
 import { Elysia, t } from "elysia";
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import { db, schema } from "@/db";
 import { CONNECTION_TYPE_ELIGIBILITY } from "@/modules/connections/constant/connection-eligibility.constant";
 import type { ConnectionType } from "@/modules/connections/constant/connection-types.constant";
