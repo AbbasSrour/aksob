@@ -9,6 +9,7 @@ import {
 	MicroscopeIcon,
 	NewspaperIcon,
 	SparklesIcon,
+	UploadIcon,
 	UsersIcon,
 } from "lucide-react";
 import { m } from "@/paraglide/messages";
@@ -19,6 +20,11 @@ export const navigationConfig = {
 			title: m.nav_dashboard(),
 			url: "/admin/dashboard",
 			icon: LayoutDashboardIcon,
+		},
+		{
+			title: "Import",
+			url: "/admin/import",
+			icon: UploadIcon,
 		},
 		{
 			title: m.nav_coordinators(),

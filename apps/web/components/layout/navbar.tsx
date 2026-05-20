@@ -22,7 +22,7 @@ const NAV_LINKS = [
 	{ label: "Events", path: "/events" },
 	{ label: "News", path: "/news" },
 	{ label: "Stories", path: "/stories" },
-	{ label: "Series", path: "/series" },
+	// { label: "Series", path: "/series" }, // TODO: re-enable when implemented
 ] as const;
 
 export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {

@@ -14,6 +14,7 @@ import { Route as authLayoutRouteImport } from './app/auth/layout'
 import { Route as adminDotrouteRouteImport } from './app/admin.route'
 import { Route as indexRouteImport } from './app/index'
 import { Route as profilePagesIndexRouteImport } from './app/profile/pages/index'
+import { Route as importPagesIndexRouteImport } from './app/import/pages/index'
 import { Route as authPagesResetPasswordRouteImport } from './app/auth/pages/reset-password'
 import { Route as authPagesLoginRouteImport } from './app/auth/pages/login'
 import { Route as authPagesForgotPasswordRouteImport } from './app/auth/pages/forgot-password'
@@ -35,6 +36,7 @@ import { Route as ApiOpportunitiesSplatRouteImport } from './app/api/opportuniti
 import { Route as ApiNewsSplatRouteImport } from './app/api/news/$'
 import { Route as ApiEventsSplatRouteImport } from './app/api/events/$'
 import { Route as ApiAuthSplatRouteImport } from './app/api/auth/$'
+import { Route as ApiAdminImportExcelRouteImport } from './app/api/admin/import-excel'
 import { Route as usersPagesCreateRouteImport } from './app/users/pages/create'
 import { Route as storiesPagesCreateRouteImport } from './app/stories/pages/create'
 import { Route as researchPagesCreateRouteImport } from './app/research/pages/create'
@@ -85,6 +87,11 @@ const indexRoute = indexRouteImport.update({
 const profilePagesIndexRoute = profilePagesIndexRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => adminDotrouteRoute,
+} as any)
+const importPagesIndexRoute = importPagesIndexRouteImport.update({
+  id: '/import',
+  path: '/import',
   getParentRoute: () => adminDotrouteRoute,
 } as any)
 const authPagesResetPasswordRoute = authPagesResetPasswordRouteImport.update({
@@ -191,6 +198,11 @@ const ApiEventsSplatRoute = ApiEventsSplatRouteImport.update({
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminImportExcelRoute = ApiAdminImportExcelRouteImport.update({
+  id: '/api/admin/import-excel',
+  path: '/api/admin/import-excel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const usersPagesCreateRoute = usersPagesCreateRouteImport.update({
@@ -346,6 +358,7 @@ export interface FileRoutesByFullPath {
   '/auth/forgot-password': typeof authPagesForgotPasswordRoute
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
+  '/admin/import': typeof importPagesIndexRoute
   '/admin/profile': typeof profilePagesIndexRoute
   '/admin/events/': typeof eventsPagesListRoute
   '/admin/members/': typeof membersPagesListRoute
@@ -364,6 +377,7 @@ export interface FileRoutesByFullPath {
   '/admin/research/create': typeof researchPagesCreateRoute
   '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
+  '/api/admin/import-excel': typeof ApiAdminImportExcelRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/events/$': typeof ApiEventsSplatRoute
   '/api/news/$': typeof ApiNewsSplatRoute
@@ -392,6 +406,7 @@ export interface FileRoutesByTo {
   '/auth/forgot-password': typeof authPagesForgotPasswordRoute
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
+  '/admin/import': typeof importPagesIndexRoute
   '/admin/profile': typeof profilePagesIndexRoute
   '/admin/events': typeof eventsPagesListRoute
   '/admin/members': typeof membersPagesListRoute
@@ -410,6 +425,7 @@ export interface FileRoutesByTo {
   '/admin/research/create': typeof researchPagesCreateRoute
   '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
+  '/api/admin/import-excel': typeof ApiAdminImportExcelRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/events/$': typeof ApiEventsSplatRoute
   '/api/news/$': typeof ApiNewsSplatRoute
@@ -447,6 +463,7 @@ export interface FileRoutesById {
   '/auth/forgot-password': typeof authPagesForgotPasswordRoute
   '/auth/login': typeof authPagesLoginRoute
   '/auth/reset-password': typeof authPagesResetPasswordRoute
+  '/admin/import': typeof importPagesIndexRoute
   '/admin/profile': typeof profilePagesIndexRoute
   '/admin/events/': typeof eventsPagesListRoute
   '/admin/members/': typeof membersPagesListRoute
@@ -465,6 +482,7 @@ export interface FileRoutesById {
   '/admin/research/create': typeof researchPagesCreateRoute
   '/admin/stories/create': typeof storiesPagesCreateRoute
   '/admin/users/create': typeof usersPagesCreateRoute
+  '/api/admin/import-excel': typeof ApiAdminImportExcelRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/events/$': typeof ApiEventsSplatRoute
   '/api/news/$': typeof ApiNewsSplatRoute
@@ -503,6 +521,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
+    | '/admin/import'
     | '/admin/profile'
     | '/admin/events/'
     | '/admin/members/'
@@ -521,6 +540,7 @@ export interface FileRouteTypes {
     | '/admin/research/create'
     | '/admin/stories/create'
     | '/admin/users/create'
+    | '/api/admin/import-excel'
     | '/api/auth/$'
     | '/api/events/$'
     | '/api/news/$'
@@ -549,6 +569,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
+    | '/admin/import'
     | '/admin/profile'
     | '/admin/events'
     | '/admin/members'
@@ -567,6 +588,7 @@ export interface FileRouteTypes {
     | '/admin/research/create'
     | '/admin/stories/create'
     | '/admin/users/create'
+    | '/api/admin/import-excel'
     | '/api/auth/$'
     | '/api/events/$'
     | '/api/news/$'
@@ -603,6 +625,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
+    | '/admin/import'
     | '/admin/profile'
     | '/admin/events/'
     | '/admin/members/'
@@ -621,6 +644,7 @@ export interface FileRouteTypes {
     | '/admin/research/create'
     | '/admin/stories/create'
     | '/admin/users/create'
+    | '/api/admin/import-excel'
     | '/api/auth/$'
     | '/api/events/$'
     | '/api/news/$'
@@ -646,6 +670,7 @@ export interface RootRouteChildren {
   authLayoutRoute: typeof authLayoutRouteWithChildren
   maintenanceRoute: typeof maintenanceRoute
   ApiMediaRoute: typeof ApiMediaRoute
+  ApiAdminImportExcelRoute: typeof ApiAdminImportExcelRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiEventsSplatRoute: typeof ApiEventsSplatRoute
   ApiNewsSplatRoute: typeof ApiNewsSplatRoute
@@ -692,6 +717,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/admin/profile'
       preLoaderRoute: typeof profilePagesIndexRouteImport
+      parentRoute: typeof adminDotrouteRoute
+    }
+    '/admin/import': {
+      id: '/admin/import'
+      path: '/import'
+      fullPath: '/admin/import'
+      preLoaderRoute: typeof importPagesIndexRouteImport
       parentRoute: typeof adminDotrouteRoute
     }
     '/auth/reset-password': {
@@ -839,6 +871,13 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/import-excel': {
+      id: '/api/admin/import-excel'
+      path: '/api/admin/import-excel'
+      fullPath: '/api/admin/import-excel'
+      preLoaderRoute: typeof ApiAdminImportExcelRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/users/create': {
@@ -1165,6 +1204,7 @@ interface adminDotrouteRouteChildren {
   researchLayoutRoute: typeof researchLayoutRouteWithChildren
   storiesLayoutRoute: typeof storiesLayoutRouteWithChildren
   usersLayoutRoute: typeof usersLayoutRouteWithChildren
+  importPagesIndexRoute: typeof importPagesIndexRoute
   profilePagesIndexRoute: typeof profilePagesIndexRoute
 }
 
@@ -1178,6 +1218,7 @@ const adminDotrouteRouteChildren: adminDotrouteRouteChildren = {
   researchLayoutRoute: researchLayoutRouteWithChildren,
   storiesLayoutRoute: storiesLayoutRouteWithChildren,
   usersLayoutRoute: usersLayoutRouteWithChildren,
+  importPagesIndexRoute: importPagesIndexRoute,
   profilePagesIndexRoute: profilePagesIndexRoute,
 }
 
@@ -1207,6 +1248,7 @@ const rootRouteChildren: RootRouteChildren = {
   authLayoutRoute: authLayoutRouteWithChildren,
   maintenanceRoute: maintenanceRoute,
   ApiMediaRoute: ApiMediaRoute,
+  ApiAdminImportExcelRoute: ApiAdminImportExcelRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiEventsSplatRoute: ApiEventsSplatRoute,
   ApiNewsSplatRoute: ApiNewsSplatRoute,

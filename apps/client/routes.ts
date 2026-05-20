@@ -19,6 +19,7 @@ export const routes = rootRoute("__root.tsx", [
 	// Admin Routes
 	route("admin", "admin.route.tsx", [
 		route("/dashboard", "dashboard/pages/admin-dashboard.tsx"),
+		route("/import", "import/pages/index.tsx"),
 		route("/profile", "profile/pages/index.tsx"),
 
 		route("/users", "users/layout.tsx", [

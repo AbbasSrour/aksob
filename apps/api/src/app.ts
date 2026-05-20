@@ -9,6 +9,7 @@ import { requestLogger } from "@/middleware/http-logger";
 import { chatModule } from "@/modules/chat/chat.routes";
 import { connectionsModule } from "@/modules/connections/connections.routes";
 import { eventsModule } from "@/modules/events/events.routes";
+import { adminModule } from "@/modules/admin/admin.routes";
 import { healthModule } from "@/modules/health/health.routes";
 import { programsModule } from "@/modules/programs/programs.routes";
 import { newsModule } from "@/modules/news/news.routes";
@@ -24,6 +25,7 @@ import { uploadthingPlugin } from "@/plugins/uploadthing";
 import { logger } from "@/utils/logger";
 
 const apiRoutes = new Elysia({ prefix: "/api" })
+	.use(adminModule)
 	.use(statsModule)
 	.use(healthModule)
 	.use(programsModule)
