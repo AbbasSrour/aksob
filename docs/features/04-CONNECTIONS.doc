@@ -1,0 +1,291 @@
+<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.5;color:#1a1a1a;max-width:7in;margin:0 auto;padding:24px}h1{font-size:20pt;color:#076951;border-bottom:2px solid #076951;padding-bottom:6px;margin-top:0}h2{font-size:15pt;color:#076951;margin-top:24px}h3{font-size:12pt;color:#365951;margin-top:18px}table{border-collapse:collapse;width:100%;margin:10px 0}th,td{border:1px solid #999;padding:5px 8px;text-align:left;font-size:10pt}th{background:#076951;color:white;font-weight:bold}td{vertical-align:top}code{font-family:Consolas,monospace;font-size:9pt;background:#f0f0f0;padding:1px 4px}pre{background:#1a1a2e;color:#e0e0e0;padding:10px;font-size:9pt}a{color:#076951}blockquote{border-left:3px solid #076951;padding:4px 12px;color:#555;margin:10px 0;background:#f9f9f9}strong{color:#192c27}hr{border:none;border-top:1px solid #ddd;margin:16px 0}ul,ol{padding-left:20px}li{margin:2px 0}</style></head><body><h1>Connections</h1>
+<h2>What Is This Feature?</h2>
+<p>Connections is the platform&#39;s AI-powered matching system. It helps community members find each other for mentorship, career coaching, study partnerships, research collaboration, and more. You tell the system what kind of connection you&#39;re looking for, and it uses AI to match you with the most compatible people. You can then send a connection request, chat, and manage your professional relationships — all from one place.</p>
+<hr>
+<h2>Connection Types</h2>
+<p>There are six types of connections. Which ones you can use depends on your user type.</p>
+<table>
+<thead>
+<tr>
+<th>Connection Type</th>
+<th>What It&#39;s For</th>
+<th>Students</th>
+<th>Alumni</th>
+<th>Faculty</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Mentorship</strong></td>
+<td>Find a mentor or become one</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Career Coaching</strong></td>
+<td>Get career advice or coach others</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Study Partner</strong></td>
+<td>Find someone to study with</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Buddy</strong></td>
+<td>Make friends in the community</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Research</strong></td>
+<td>Collaborate on research projects</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Project</strong></td>
+<td>Work on projects together</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Why the restrictions?</strong> Study Partner and Buddy are student-focused. Faculty and Alumni can still use the other four types — Mentorship, Career Coaching, Research, and Project.</p>
+</blockquote>
+<hr>
+<h2>How It Works</h2>
+<h3>The Connection Lifecycle</h3>
+<pre><code>[You find a match using AI]
+       |
+       v
+[You send a connection request] ──&gt; PENDING ──────────────┐
+                                       |                    |
+                           ┌───────────┴───────────┐        |
+                           v                       v        |
+                        ACTIVE                  DECLINED    |
+                           |                       |        |
+                           | (either person        |        |
+                           |  clicks Complete)      |        |
+                           v                       |        |
+                       COMPLETED                   |        |
+                                                   |        |
+                      [You cancel before           |        |
+                       they respond] ──────────────┘        |
+                           |                                |
+                           v                                |
+                       CANCELLED ◄──────────────────────────┘
+</code></pre>
+<h3>Status Meanings</h3>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>What It Means</th>
+<th>Next Step</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Pending</strong></td>
+<td>You sent a request. Waiting for the other person to respond.</td>
+<td>They can Accept or Decline. You can Cancel.</td>
+</tr>
+<tr>
+<td><strong>Active</strong></td>
+<td>Both people accepted. The connection is live.</td>
+<td>Either person can Complete it. Either can Cancel it.</td>
+</tr>
+<tr>
+<td><strong>Declined</strong></td>
+<td>The other person declined your request.</td>
+<td>No further action. You can send a new request to someone else.</td>
+</tr>
+<tr>
+<td><strong>Cancelled</strong></td>
+<td>The request was cancelled (by you, or mutually during active).</td>
+<td>No further action.</td>
+</tr>
+<tr>
+<td><strong>Completed</strong></td>
+<td>The connection has concluded.</td>
+<td>No further action.</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Prerequisites for Being Matched</h3>
+<p>Before you can use Connections, three things must be set up on your profile:</p>
+<ol>
+<li><strong>Your profile must be complete</strong> — You need to finish onboarding (education, skills, experience all help the AI make better matches)</li>
+<li><strong>You must be visible in the Galaxy</strong> — Toggle &quot;Visible in Galaxy&quot; ON in your Profile → Privacy settings</li>
+<li><strong>You must choose which connection types you&#39;re open to</strong> — In your Profile → Privacy settings, check the boxes for the connection types you want to receive requests for</li>
+</ol>
+<blockquote>
+<p><strong>If these aren&#39;t set</strong>: You won&#39;t appear as a match for other people, and the system won&#39;t suggest matches for you.</p>
+</blockquote>
+<hr>
+<h3>How AI Matching Works</h3>
+<p>The matching system runs in two phases when you click &quot;Find Connections&quot;:</p>
+<p><strong>Before matching starts</strong>, the system builds a profile summary from your education, skills, goals, hobbies, experience, and bio. This summary is converted into a mathematical &quot;embedding&quot; — a set of numbers that represents who you are and what you&#39;re looking for. Every user with a complete profile has one of these embeddings.</p>
+<p><strong>Phase 1 — Similarity Check</strong>:<br>The system compares your embedding against every eligible candidate&#39;s embedding using cosine similarity — a mathematical measure of how similar two profiles are. Think of it as: &quot;How close are this person&#39;s skills, goals, and background to mine?&quot; Candidates are ranked by similarity score and the top 5 move to the next phase.</p>
+<p><strong>Phase 2 — AI Selection</strong>:<br>The top 5 candidates, along with their profiles and similarity scores, are sent to an AI language model. The AI is asked: &quot;Given what the requester is looking for, which of these 5 is the best match and why?&quot; The AI picks the best match and writes a short explanation.</p>
+<p><strong>Results</strong>: You see the AI&#39;s top pick, with the explanation of why they were matched with you. You can browse other candidates too.</p>
+<p><strong>Fallback</strong>: If the AI or embedding system isn&#39;t available, the system falls back to a simpler similarity-only ranking. You&#39;ll still get matches — they just won&#39;t come with a personalized explanation.</p>
+<hr>
+<h3>Rate Limiting</h3>
+<ul>
+<li><strong>Maximum 50 connection requests per day</strong> — This is across all connection types combined</li>
+<li>The counter resets each day at midnight</li>
+<li>This prevents spam and encourages thoughtful requests</li>
+</ul>
+<hr>
+<h3>Duplicate Prevention</h3>
+<p>You cannot send a connection request to someone if:</p>
+<ul>
+<li>You already have an active, pending, or completed connection with them (any type)</li>
+<li>They already sent you a request that&#39;s still pending</li>
+</ul>
+<hr>
+<h2>How To — Step by Step</h2>
+<hr>
+<h3>For All Users — Public Website</h3>
+<hr>
+<h4>1. Set Up Your Profile for Connections</h4>
+<p>Before using connections, configure your preferences:</p>
+<ol>
+<li>Go to your <strong>Profile</strong></li>
+<li>Click the <strong>About</strong> tab</li>
+<li>Scroll to the <strong>Privacy</strong> section</li>
+<li>Make sure <strong>&quot;Visible in Galaxy&quot;</strong> is toggled ON</li>
+<li>Under <strong>&quot;Open to connections,&quot;</strong> check the types you want:<ul>
+<li>Students: all six types available</li>
+<li>Alumni / Faculty: Mentorship, Career Coaching, Research, Project</li>
+</ul>
+</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+</ol>
+<blockquote>
+<p><strong>Without this step</strong>: You won&#39;t show up in other people&#39;s match results, and you won&#39;t be able to find matches either.</p>
+</blockquote>
+<hr>
+<h4>2. Find a Connection Match (from the Galaxy)</h4>
+<p>This is the AI-powered matching flow, accessed from the 3D Galaxy visualization.</p>
+<ol>
+<li>Go to the <strong>Galaxy</strong> page</li>
+<li>Wait for the intro animation to finish (or skip it)</li>
+<li>Click the <strong>&quot;Find Connections&quot;</strong> button (bottom of the screen)</li>
+<li><strong>Step 1 — Choose type</strong>: A panel slides up showing the connection types available to you. Click the one you want (e.g., &quot;Mentorship&quot;).</li>
+<li><strong>Step 2 — Describe what you want</strong>: Write a brief description of what you&#39;re looking for. For example: &quot;I&#39;m looking for a mentor in data science who can guide me on career paths.&quot; This helps the AI understand your goals.</li>
+<li><strong>Step 3 — AI finds matches</strong>: The system processes your request. You&#39;ll see a &quot;Finding connection options&quot; status while the AI works.</li>
+<li><strong>Results</strong>: Match cards appear at the bottom of the screen. Each card shows:<ul>
+<li>The person&#39;s name, program, and graduation year</li>
+<li>Their bio</li>
+<li>Navigation arrows to browse between matches</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>If no matches are found</strong>: The system may not have enough candidates who match your criteria and connection type. Try a different connection type or make sure your own profile is complete.</p>
+</blockquote>
+<hr>
+<h4>3. Send a Connection Request</h4>
+<ol>
+<li>After finding matches, browse through them using the left/right arrows</li>
+<li>When you find someone you&#39;d like to connect with, click <strong>&quot;Send Request&quot;</strong></li>
+<li>The request is sent with your message (the description you wrote in Step 2)</li>
+<li>The card changes to <strong>&quot;Request Sent&quot;</strong> — you can continue browsing other matches</li>
+<li>The request now appears in your <strong>Profile → Connections tab</strong> with status &quot;Pending&quot;</li>
+</ol>
+<blockquote>
+<p><strong>The person you requested doesn&#39;t get a notification.</strong> They need to check their Profile → Connections tab to see incoming requests.</p>
+</blockquote>
+<hr>
+<h4>4. Accept or Decline an Incoming Request</h4>
+<p>When someone sends you a connection request:</p>
+<ol>
+<li>Go to your <strong>Profile</strong></li>
+<li>Click the <strong>Connections</strong> tab</li>
+<li>You&#39;ll see tabs: All, Active, <strong>Pending</strong>, Cancelled, Completed</li>
+<li>Click <strong>Pending</strong> to see incoming requests</li>
+<li>Each request card shows:<ul>
+<li>Who sent it (name, avatar)</li>
+<li>Connection type (e.g., &quot;Mentorship&quot;)</li>
+<li>Date sent</li>
+<li>Their message (if any)</li>
+</ul>
+</li>
+<li>Click <strong>&quot;Accept&quot;</strong> to connect — the status changes to Active</li>
+<li>Click <strong>&quot;Decline&quot;</strong> to reject — the status changes to Declined</li>
+</ol>
+<blockquote>
+<p><strong>Accepting creates an active connection</strong>: Once accepted, both people can start a chat conversation from the connection, and either person can mark it as complete later.</p>
+</blockquote>
+<hr>
+<h4>5. Cancel a Request You Sent</h4>
+<p>If you change your mind before the other person responds:</p>
+<ol>
+<li>Go to <strong>Profile → Connections tab</strong></li>
+<li>Find the request under <strong>Pending</strong> (it will show as sent by you)</li>
+<li>Click <strong>&quot;Cancel&quot;</strong></li>
+<li>The status changes to Cancelled</li>
+</ol>
+<hr>
+<h4>6. Complete an Active Connection</h4>
+<p>When a connection has served its purpose (e.g., the mentorship period ended, the project is done):</p>
+<ol>
+<li>Go to <strong>Profile → Connections tab</strong></li>
+<li>Find the connection under <strong>Active</strong></li>
+<li>Click <strong>&quot;Complete&quot;</strong></li>
+<li>The status changes to Completed</li>
+</ol>
+<blockquote>
+<p><strong>Either person can complete a connection</strong>. Both people will see it as completed. You can still view completed connections in your history.</p>
+</blockquote>
+<hr>
+<h4>7. View and Manage All Your Connections</h4>
+<ol>
+<li>Go to your <strong>Profile → Connections tab</strong></li>
+<li>Use the tabs to filter:<ul>
+<li><strong>All</strong> — Every connection regardless of status</li>
+<li><strong>Active</strong> — Currently active connections</li>
+<li><strong>Pending</strong> — Requests waiting for response (incoming and outgoing)</li>
+<li><strong>Cancelled</strong> — Requests you or the other person cancelled</li>
+<li><strong>Completed</strong> — Finished connections</li>
+</ul>
+</li>
+<li>Each card shows the other person&#39;s name, connection type, status, and date</li>
+</ol>
+<hr>
+<h2>Common Questions</h2>
+<p><strong>Q: How does the AI actually find matches for me?</strong></p>
+<p>→ It compares your profile (education, skills, goals, hobbies, experience) against other users who are open to the same connection type. It ranks them by compatibility and returns the best matches with an explanation.</p>
+<p><strong>Q: Why can&#39;t I see certain connection types?</strong></p>
+<p>→ Your available connection types depend on whether you&#39;re a Student, Alumni, or Faculty. Students have all six types. Alumni and Faculty have four (they don&#39;t have Study Partner and Buddy — those are student-focused).</p>
+<p><strong>Q: I&#39;m not showing up in other people&#39;s match results. Why?</strong></p>
+<p>→ Check three things in your Profile → Privacy settings:</p>
+<ol>
+<li>Is &quot;Visible in Galaxy&quot; ON?</li>
+<li>Did you check the connection types you&#39;re open to?</li>
+<li>Is your profile complete (onboarding done)?</li>
+</ol>
+<p><strong>Q: How many requests can I send per day?</strong></p>
+<p>→ 50 per day across all connection types. The limit resets daily.</p>
+<p><strong>Q: Can I send a request to the same person twice?</strong></p>
+<p>→ Not if you already have any connection with them (pending, active, completed, declined, or cancelled of any type). The system prevents duplicates.</p>
+<p><strong>Q: What happens after someone accepts my request?</strong></p>
+<p>→ The connection becomes Active. You can now chat with them (via the Chat feature). Either person can later mark the connection as Completed.</p>
+<p><strong>Q: Does the other person get notified when I send a request?</strong></p>
+<p>→ Not directly. They need to check their Profile → Connections tab to see incoming requests. There&#39;s a small indicator dot on the bell icon in the navigation bar hinting at pending activity, but no email or push notification.</p>
+<p><strong>Q: Can I change my connection type preferences later?</strong></p>
+<p>→ Yes. Go to Profile → Privacy settings, check/uncheck connection types, and save. Changes take effect immediately.</p>
+<p><strong>Q: What&#39;s the difference between Connections and Chat?</strong></p>
+<p>→ Connections is about <strong>finding and forming relationships</strong> — the matching and request flow. Chat is about <strong>communicating</strong> once you&#39;re connected. You can chat with anyone you have an active connection with.</p>
+<p><strong>Q: Can I search for a specific person instead of using AI matching?</strong></p>
+<p>→ Not currently. The AI matching system suggests candidates based on compatibility. If you know exactly who you want to connect with, you can browse the Galaxy, click their star, and start a chat directly — but that creates a DM conversation, not a formal connection.</p>
+</body></html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.5;color:#1a1a1a;max-width:7in;margin:0 auto;padding:24px}h1{font-size:20pt;color:#076951;border-bottom:2px solid #076951;padding-bottom:6px;margin-top:0}h2{font-size:15pt;color:#076951;margin-top:24px}h3{font-size:12pt;color:#365951;margin-top:18px}table{border-collapse:collapse;width:100%;margin:10px 0}th,td{border:1px solid #999;padding:5px 8px;text-align:left;font-size:10pt}th{background:#076951;color:white;font-weight:bold}td{vertical-align:top}code{font-family:Consolas,monospace;font-size:9pt;background:#f0f0f0;padding:1px 4px}pre{background:#1a1a2e;color:#e0e0e0;padding:10px;font-size:9pt}a{color:#076951}blockquote{border-left:3px solid #076951;padding:4px 12px;color:#555;margin:10px 0;background:#f9f9f9}strong{color:#192c27}hr{border:none;border-top:1px solid #ddd;margin:16px 0}ul,ol{padding-left:20px}li{margin:2px 0}</style></head><body><h1>AKSOB Platform — Feature Documentation</h1>
+<p>This directory contains documentation for every feature in the AKSOB platform. Each doc is written for <strong>non-technical users</strong> — it explains what the feature does, who can do what, how it works, and provides step-by-step walkthroughs.</p>
+<h2>Feature Docs</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Feature</th>
+<th>What It Is</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>01</td>
+<td><strong><a href="./01-EVENTS.md">Events</a></strong></td>
+<td>Create &amp; manage gatherings — registration, waitlists, QR check-in</td>
+</tr>
+<tr>
+<td>02</td>
+<td><strong><a href="./02-STORIES.md">Stories</a></strong></td>
+<td>Share personal achievements &amp; career stories</td>
+</tr>
+<tr>
+<td>03</td>
+<td><strong><a href="./03-NEWS.md">News</a></strong></td>
+<td>Official announcements &amp; articles (admin only)</td>
+</tr>
+<tr>
+<td>04</td>
+<td><strong><a href="./04-CONNECTIONS.md">Connections</a></strong></td>
+<td>AI-powered matching — mentorship, career coaching &amp; more</td>
+</tr>
+<tr>
+<td>05</td>
+<td><strong><a href="./05-CHAT.md">Messaging</a></strong></td>
+<td>1-on-1 direct messages</td>
+</tr>
+<tr>
+<td>06</td>
+<td><strong><a href="./06-AUTH.md">Authentication</a></strong></td>
+<td>Sign up, login, password reset, email verification</td>
+</tr>
+<tr>
+<td>07</td>
+<td><strong><a href="./07-ONBOARDING.md">Onboarding</a></strong></td>
+<td>6-step profile setup wizard for new users</td>
+</tr>
+<tr>
+<td>08</td>
+<td><strong><a href="./08-PROFILE.md">Profile &amp; Visibility</a></strong></td>
+<td>Edit your info, education, experience, skills, and privacy</td>
+</tr>
+</tbody></table>
+<h2>Key Concepts Across Features</h2>
+<h3>Dual Creation Paths</h3>
+<p>Many features behave differently depending on <strong>who</strong> creates the content:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Regular User Creates</th>
+<th>Admin Creates</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Events</strong></td>
+<td>Starts as <strong>Draft</strong> — must submit for review</td>
+<td>Starts as <strong>Approved</strong> — goes live immediately</td>
+</tr>
+<tr>
+<td><strong>Stories</strong></td>
+<td>Starts as <strong>Pending</strong> — must be approved</td>
+<td>Starts as <strong>Approved</strong> — published immediately</td>
+</tr>
+<tr>
+<td><strong>News</strong></td>
+<td>Cannot create (admin only)</td>
+<td>Starts as <strong>Draft</strong> — must publish separately</td>
+</tr>
+</tbody></table>
+<h3>Where to Find Things</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Regular Users (Public Website)</th>
+<th>Admins (Admin Dashboard)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Register / Login</td>
+<td>Top-right <strong>Login</strong> or <strong>Join</strong> button</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>Complete onboarding</td>
+<td>Auto-redirected after registration</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>Edit profile / privacy</td>
+<td><strong>Profile → About tab</strong> → edit any section</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>Create an event</td>
+<td><strong>Profile → Events tab</strong> → Create Event</td>
+<td><strong>Events</strong> in sidebar → Create Event</td>
+</tr>
+<tr>
+<td>Write a story</td>
+<td><strong>Profile → Stories tab</strong> → Create Story</td>
+<td><strong>Stories</strong> in sidebar → Create Story</td>
+</tr>
+<tr>
+<td>Write news</td>
+<td>Not available</td>
+<td><strong>News</strong> in sidebar → Create Article</td>
+</tr>
+<tr>
+<td>Manage your events/stories</td>
+<td><strong>Profile</strong> → Events/Stories tabs</td>
+<td>Respective sections in sidebar</td>
+</tr>
+<tr>
+<td>Find connections</td>
+<td><strong>Galaxy</strong> → Find Connections button</td>
+<td>Not available</td>
+</tr>
+<tr>
+<td>Manage connections</td>
+<td><strong>Profile → Connections tab</strong></td>
+<td>Not available</td>
+</tr>
+<tr>
+<td>Chat</td>
+<td><strong>Navbar Chat icon</strong>, or Galaxy → Start Conversation</td>
+<td>Same as regular users</td>
+</tr>
+<tr>
+<td>Approve/reject content</td>
+<td>Not available</td>
+<td><strong>Events/Stories</strong> in sidebar → filter by pending → approve/reject</td>
+</tr>
+</tbody></table>
+<h3>Editing Behavior: Status Reset</h3>
+<p>When a <strong>regular user</strong> edits content that was already approved, the content <strong>resets</strong> and needs re-approval:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>User Edits Draft</th>
+<th>User Edits Rejected</th>
+<th>User Edits Approved</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Events</strong></td>
+<td>Stays draft</td>
+<td>Resets to draft</td>
+<td>Resets to draft (disappears from public)</td>
+</tr>
+<tr>
+<td><strong>Stories</strong></td>
+<td>N/A (no draft)</td>
+<td>Resets to pending</td>
+<td>Resets to pending (disappears from public)</td>
+</tr>
+<tr>
+<td><strong>News</strong></td>
+<td>N/A (admin only)</td>
+<td>N/A</td>
+<td>Stays published (no reset)</td>
+</tr>
+</tbody></table>
+<p>When an <strong>admin</strong> edits, the status is <strong>preserved</strong> across all features.</p>
+<h3>Feature Relationships</h3>
+<pre><code>Registration ──&gt; Onboarding (profile setup) ──&gt; Galaxy (explore)
+
+Galaxy ──────────────&gt; Chat (Start Conversation)
+    │
+    └────────────────&gt; Connections (Find Connections)
+                            │
+                            └────────&gt; Chat (once connected)
+
+Profile ────────────&gt; Events (create/edit/manage)
+    │
+    ├────────────────&gt; Stories (create/edit)
+    │
+    ├────────────────&gt; Connections (manage requests)
+    │
+    └────────────────&gt; Privacy (visibility, email, phone, connection types)
+
+Admin Dashboard ────&gt; Approve/reject Events &amp; Stories
+    │
+    ├────────────────&gt; Create/manage News
+    │
+    └────────────────&gt; Manage users, programs, categories
+</code></pre>
+<ul>
+<li><strong>Chat and Connections are independent</strong>: You can chat without a connection, and have a connection without chatting.</li>
+<li><strong>Events and Stories are independent</strong>: Separate creation flows, statuses, and review processes.</li>
+<li><strong>News is isolated</strong>: Only admins touch it.</li>
+<li><strong>Onboarding feeds into everything</strong>: Your education, skills, and visibility settings power the Galaxy, Connections, and your public profile.</li>
+</ul>
+</body></html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.5;color:#1a1a1a;max-width:7in;margin:0 auto;padding:24px}h1{font-size:20pt;color:#076951;border-bottom:2px solid #076951;padding-bottom:6px;margin-top:0}h2{font-size:15pt;color:#076951;margin-top:24px}h3{font-size:12pt;color:#365951;margin-top:18px}table{border-collapse:collapse;width:100%;margin:10px 0}th,td{border:1px solid #999;padding:5px 8px;text-align:left;font-size:10pt}th{background:#076951;color:white;font-weight:bold}td{vertical-align:top}code{font-family:Consolas,monospace;font-size:9pt;background:#f0f0f0;padding:1px 4px}pre{background:#1a1a2e;color:#e0e0e0;padding:10px;font-size:9pt}a{color:#076951}blockquote{border-left:3px solid #076951;padding:4px 12px;color:#555;margin:10px 0;background:#f9f9f9}strong{color:#192c27}hr{border:none;border-top:1px solid #ddd;margin:16px 0}ul,ol{padding-left:20px}li{margin:2px 0}</style></head><body><h1>News</h1>
+<h2>What Is This Feature?</h2>
+<p>News is the platform&#39;s announcement and article system. Admins write and publish news articles — campus updates, alumni spotlights, event recaps, program announcements, and more. Articles appear on the public News page and can be organized by categories. Unlike Stories (which any user can write), only admins create and manage news.</p>
+<hr>
+<h2>Who Can Do What?</h2>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Public</th>
+<th>Student / Alumni / Faculty</th>
+<th>Admin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Browse the News page</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Read any published article</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Create an article</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Edit an article</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Publish an article</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Unpublish an article</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Delete an article</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Create / delete categories</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>How It Works</h2>
+<h3>The Article Lifecycle</h3>
+<pre><code>[Admin Creates Article]
+       |
+       v
+     DRAFT ────────────────────┐
+       |                        |
+       | (admin clicks Publish)  |
+       v                        |
+   PUBLISHED                    |
+       |                        |
+       | (admin clicks Unpublish)|
+       v                        |
+     DRAFT ─────────────────────┘
+</code></pre>
+<ul>
+<li><strong>Draft</strong>: Only visible to admins in the dashboard. Hidden from the public.</li>
+<li><strong>Published</strong>: Visible to everyone on the News page. No login required.</li>
+<li><strong>Unpublish</strong>: Returns a published article to draft. It disappears from the public page.</li>
+</ul>
+<blockquote>
+<p><strong>There is no user submission or approval flow.</strong> Only admins create news. No review process — the admin decides when to publish.</p>
+</blockquote>
+<h3>Editing Rules</h3>
+<table>
+<thead>
+<tr>
+<th>Who Edits</th>
+<th>What Happens to Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Admin</strong> editing a draft</td>
+<td>Stays draft</td>
+</tr>
+<tr>
+<td><strong>Admin</strong> editing a published article</td>
+<td>Stays published (no reset)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Unlike Events and Stories</strong>, editing does NOT reset the status. If you edit a published article and save, it stays published. The changes go live immediately.</p>
+</blockquote>
+<h3>Visibility Rules</h3>
+<table>
+<thead>
+<tr>
+<th>Article Status</th>
+<th>Public (no login)</th>
+<th>Any Logged-in User</th>
+<th>Admin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Draft</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Published</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<h3>Categories</h3>
+<ul>
+<li>Categories are managed separately by admins</li>
+<li>An article can be assigned to one category (or none)</li>
+<li>Deleting a category does NOT delete its articles — they become uncategorized</li>
+<li>Category names must be unique</li>
+<li>Common categories: Campus News, Alumni Spotlight, Events, Announcements, Research</li>
+</ul>
+<h3>Image Handling</h3>
+<ul>
+<li>Articles support a cover image and thumbnail image</li>
+<li>Images can also be inserted into the article body via the rich text editor</li>
+<li>When you replace an image or delete an article, old images are automatically cleaned up</li>
+<li>Maximum image size: 4 MB per upload</li>
+</ul>
+<hr>
+<h2>How To — Step by Step</h2>
+<p>All news management is done from the <strong>Admin Dashboard</strong>.</p>
+<hr>
+<h3>For Admins — Admin Dashboard</h3>
+<hr>
+<h4>1. Create a News Article</h4>
+<ol>
+<li>Log in to the Admin Dashboard</li>
+<li>Click <strong>News</strong> in the sidebar</li>
+<li>Click <strong>&quot;Create Article&quot;</strong></li>
+<li>Fill out the form:<ul>
+<li><strong>Title</strong>: The article headline</li>
+<li><strong>Excerpt</strong>: A short summary (1-2 sentences) shown in article cards</li>
+<li><strong>Content</strong>: The full article body using the rich text editor</li>
+<li><strong>Cover Image</strong>: Optional hero image</li>
+<li><strong>Thumbnail</strong>: Optional preview image for listings</li>
+<li><strong>Category</strong>: Assign to an existing category</li>
+<li><strong>Author</strong>: Usually yourself. Can be changed to another admin.</li>
+</ul>
+</li>
+<li>Click <strong>&quot;Create&quot;</strong></li>
+<li>The article is created with <strong>Draft</strong> status — visible only to you and other admins</li>
+</ol>
+<hr>
+<h4>2. Publish an Article</h4>
+<ol>
+<li>In the Admin Dashboard, open the article (from the News list)</li>
+<li>Review the content — make sure everything is correct</li>
+<li>Click <strong>&quot;Publish&quot;</strong></li>
+<li>The article status changes to <strong>Published</strong></li>
+<li>It&#39;s now visible to everyone on the public News page</li>
+</ol>
+<hr>
+<h4>3. Unpublish an Article</h4>
+<ol>
+<li>Open the published article in the Admin Dashboard</li>
+<li>Click <strong>&quot;Unpublish&quot;</strong></li>
+<li>The article returns to <strong>Draft</strong> status</li>
+<li>It disappears from the public News page</li>
+<li>You can edit and republish it later</li>
+</ol>
+<blockquote>
+<p><strong>When to unpublish</strong>: If you need to fix an error, update outdated information, or temporarily remove an article. Unlike editing (which changes go live immediately), unpublishing lets you work on it privately.</p>
+</blockquote>
+<hr>
+<h4>4. Edit an Article</h4>
+<ol>
+<li>In the Admin Dashboard, find the article and open it</li>
+<li>Click <strong>&quot;Edit&quot;</strong></li>
+<li>Make your changes (title, content, images, category, etc.)</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+<li>If the article was published, changes go live immediately — no need to republish</li>
+</ol>
+<hr>
+<h4>5. Delete an Article</h4>
+<ol>
+<li>In the Admin Dashboard, open the article</li>
+<li>Click <strong>&quot;Delete&quot;</strong></li>
+<li>Confirm the deletion</li>
+<li>The article and all its images are permanently removed</li>
+</ol>
+<hr>
+<h4>6. Manage Categories</h4>
+<ol>
+<li>In the Admin Dashboard, go to <strong>News</strong></li>
+<li>Find the categories section (in the news list or create/edit form)</li>
+<li><strong>Create a category</strong>: Enter a name and click &quot;Create.&quot; Names must be unique.</li>
+<li><strong>Delete a category</strong>: Click delete next to the category name. Articles in that category become uncategorized (they are NOT deleted).</li>
+</ol>
+<hr>
+<h3>For Everyone — Public Website</h3>
+<hr>
+<h4>7. Browse and Read News</h4>
+<ol>
+<li>Go to the public website</li>
+<li>Click <strong>News</strong> in the top navigation bar</li>
+<li>Browse the grid of published articles — each shows the cover image, title, excerpt, author, and read time</li>
+<li>Click an article to read the full content</li>
+<li>Use the <strong>search</strong> bar on the News page to find articles by keyword</li>
+</ol>
+<blockquote>
+<p><strong>Search searches across</strong>: article titles, excerpts, and content. It only shows published articles.</p>
+</blockquote>
+<hr>
+<h2>Common Questions</h2>
+<p><strong>Q: Can regular users write news articles?</strong></p>
+<p>→ No. News is admin-only. If a user wants to share their story, they should use the <strong>Stories</strong> feature instead — any logged-in user can submit a story for admin approval.</p>
+<p><strong>Q: What&#39;s the difference between News and Stories?</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>News</th>
+<th>Stories</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Who creates?</strong></td>
+<td>Admins only</td>
+<td>Any logged-in user</td>
+</tr>
+<tr>
+<td><strong>What is it?</strong></td>
+<td>Official announcements, campus news, updates</td>
+<td>Personal achievements, career stories</td>
+</tr>
+<tr>
+<td><strong>Review needed?</strong></td>
+<td>No review — admin publishes directly</td>
+<td>Yes — admin approves/rejects</td>
+</tr>
+<tr>
+<td><strong>Where does it appear?</strong></td>
+<td>News page, search</td>
+<td>Stories page, Home page (featured)</td>
+</tr>
+</tbody></table>
+<p><strong>Q: Can I schedule a news article to publish later?</strong></p>
+<p>→ Not currently. Articles are either Draft or Published. If you want to prepare an article in advance, save it as Draft and publish it manually when you&#39;re ready.</p>
+<p><strong>Q: I edited a published article and saved. Did it go back to draft?</strong></p>
+<p>→ No. Unlike Events and Stories, editing a published News article does NOT reset its status. The changes go live immediately. If you want to work on an article privately, unpublish it first, edit, then republish.</p>
+<p><strong>Q: What happens if I delete a category that has articles in it?</strong></p>
+<p>→ The articles are NOT deleted. They simply become uncategorized (no category assigned). You can reassign them to a different category later.</p>
+<p><strong>Q: How is read time calculated?</strong></p>
+<p>→ The system estimates reading time based on the article&#39;s content length.</p>
+<p><strong>Q: Can articles have multiple authors?</strong></p>
+<p>→ No. Each article has one author. You can change the author when creating or editing.</p>
+<p><strong>Q: Do published articles show up in search?</strong></p>
+<p>→ Yes. The search bar on the News page searches across titles, excerpts, and content of published articles.</p>
+</body></html>

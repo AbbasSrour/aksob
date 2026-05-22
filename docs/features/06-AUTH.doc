@@ -1,0 +1,171 @@
+<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.5;color:#1a1a1a;max-width:7in;margin:0 auto;padding:24px}h1{font-size:20pt;color:#076951;border-bottom:2px solid #076951;padding-bottom:6px;margin-top:0}h2{font-size:15pt;color:#076951;margin-top:24px}h3{font-size:12pt;color:#365951;margin-top:18px}table{border-collapse:collapse;width:100%;margin:10px 0}th,td{border:1px solid #999;padding:5px 8px;text-align:left;font-size:10pt}th{background:#076951;color:white;font-weight:bold}td{vertical-align:top}code{font-family:Consolas,monospace;font-size:9pt;background:#f0f0f0;padding:1px 4px}pre{background:#1a1a2e;color:#e0e0e0;padding:10px;font-size:9pt}a{color:#076951}blockquote{border-left:3px solid #076951;padding:4px 12px;color:#555;margin:10px 0;background:#f9f9f9}strong{color:#192c27}hr{border:none;border-top:1px solid #ddd;margin:16px 0}ul,ol{padding-left:20px}li{margin:2px 0}</style></head><body><h1>Authentication (Sign Up &amp; Login)</h1>
+<h2>What Is This Feature?</h2>
+<p>Authentication is how users create accounts and sign in. It handles registration, login, password resets, and email verification. Once signed up, every new user goes through onboarding before they can access the full platform.</p>
+<hr>
+<h2>Who Can Do What?</h2>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Anyone</th>
+<th>Logged In</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Register a new account</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Log in</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Request a password reset</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Reset password (with token)</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Verify email (with token)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Log out</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>How It Works</h2>
+<h3>Registration</h3>
+<ol>
+<li>User fills out: <strong>name</strong>, <strong>email</strong>, <strong>password</strong>, and selects a <strong>user type</strong> (Student, Alumni, or Faculty)</li>
+<li>Account is created immediately — no email confirmation required to start using the platform</li>
+<li>User is taken directly to <strong>onboarding</strong></li>
+<li>Email verification is optional — the user can verify later from their profile</li>
+</ol>
+<blockquote>
+<p><strong>Default admin account</strong>: The system automatically creates <code>admin@aksob.lau.edu.lb</code> on first startup. The password is set by the system administrator. This admin account has full platform access.</p>
+</blockquote>
+<h3>Login</h3>
+<ul>
+<li>Email + password authentication</li>
+<li>&quot;Keep me signed in&quot; checkbox — extends the session duration</li>
+<li>Sessions last <strong>7 days</strong> by default</li>
+<li>On login, user is redirected to the <strong>Galaxy</strong> page (or the page they were trying to access before logging in)</li>
+</ul>
+<h3>Password Reset</h3>
+<ol>
+<li>User clicks &quot;Forgot password&quot; on the login page</li>
+<li>Enters their email address</li>
+<li>A reset link is sent to their email</li>
+<li>User clicks the link, enters a new password</li>
+<li>Redirected to login to sign in with the new password</li>
+</ol>
+<h3>Email Verification</h3>
+<ul>
+<li>Optional — users can use the platform without verifying their email</li>
+<li>Verification link is sent to the user&#39;s email</li>
+<li>After clicking the link, the email is marked as verified</li>
+<li>Users can request a new verification email from their profile</li>
+</ul>
+<h3>User Types</h3>
+<p>The user type is set <strong>once at registration</strong> and determines what features are available:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Who Should Choose It</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Student</strong></td>
+<td>Currently enrolled at LAU</td>
+</tr>
+<tr>
+<td><strong>Alumni</strong></td>
+<td>Graduated from LAU</td>
+</tr>
+<tr>
+<td><strong>Faculty</strong></td>
+<td>Teaching or working at LAU</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>The user type affects which connection types you can use and which profile fields you see. It cannot be changed after registration.</p>
+</blockquote>
+<hr>
+<h2>How To — Step by Step</h2>
+<hr>
+<h4>1. Register a New Account</h4>
+<ol>
+<li>Go to the public website</li>
+<li>Click <strong>&quot;Join&quot;</strong> (top-right) or go to <code>/auth/register</code></li>
+<li>Fill in:<ul>
+<li><strong>Name</strong>: Your full name</li>
+<li><strong>Email</strong>: A valid email address</li>
+<li><strong>Password</strong>: At least 8 characters (a strength indicator shows how strong it is)</li>
+<li><strong>User Type</strong>: Select Student, Alumni, or Faculty</li>
+</ul>
+</li>
+<li>Click <strong>&quot;Create Account&quot;</strong></li>
+<li>You&#39;re taken to the <strong>onboarding wizard</strong> to complete your profile</li>
+</ol>
+<hr>
+<h4>2. Log In</h4>
+<ol>
+<li>Go to the public website</li>
+<li>Click <strong>&quot;Login&quot;</strong> (top-right) or go to <code>/auth/login</code></li>
+<li>Enter your email and password</li>
+<li>Optionally check <strong>&quot;Keep me signed in&quot;</strong></li>
+<li>Click <strong>&quot;Sign In&quot;</strong></li>
+<li>You&#39;re taken to the Galaxy page</li>
+</ol>
+<hr>
+<h4>3. Reset Your Password</h4>
+<ol>
+<li>From the login page, click <strong>&quot;Forgot password?&quot;</strong></li>
+<li>Enter your email address</li>
+<li>Click <strong>&quot;Send Reset Link&quot;</strong></li>
+<li>Check your inbox for the password reset email</li>
+<li>Click the link in the email (takes you to <code>/auth/reset-password?token=...</code>)</li>
+<li>Enter a new password and confirm it</li>
+<li>Click <strong>&quot;Reset Password&quot;</strong></li>
+<li>Go back to the login page and sign in with your new password</li>
+</ol>
+<hr>
+<h4>4. Verify Your Email</h4>
+<ol>
+<li>Check your inbox for the verification email (sent after registration)</li>
+<li>Click the verification link</li>
+<li>You&#39;ll see a confirmation that your email is verified</li>
+<li>If the link expired, go to your profile and click &quot;Resend verification email&quot;</li>
+</ol>
+<hr>
+<h4>5. Log Out</h4>
+<ol>
+<li>Click your <strong>avatar</strong> (top-right)</li>
+<li>Click <strong>&quot;Log Out&quot;</strong></li>
+</ol>
+<hr>
+<h2>Common Questions</h2>
+<p><strong>Q: Do I need to verify my email to use the platform?</strong></p>
+<p>→ No. Email verification is optional. You can use all features without it. It&#39;s recommended for account recovery.</p>
+<p><strong>Q: Can I change my user type after registration?</strong></p>
+<p>→ No. Student, Alumni, and Faculty types are fixed at registration. If you selected the wrong one, contact an admin.</p>
+<p><strong>Q: What happens if I forget my password?</strong></p>
+<p>→ Use the &quot;Forgot password&quot; link on the login page. You&#39;ll receive a reset email. If you don&#39;t see it, check your spam folder.</p>
+<p><strong>Q: Is there a limit on login attempts?</strong></p>
+<p>→ No. But the session expires after 7 days and you&#39;ll need to log in again.</p>
+<p><strong>Q: Can I use Google or social login?</strong></p>
+<p>→ Not yet. Only email and password authentication is supported.</p>
+<p><strong>Q: What&#39;s the default admin account?</strong></p>
+<p>→ <code>admin@aksob.lau.edu.lb</code> is created automatically on first startup. The password is set in the system configuration — ask the system administrator.</p>
+</body></html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.5;color:#1a1a1a;max-width:7in;margin:0 auto;padding:24px}h1{font-size:20pt;color:#076951;border-bottom:2px solid #076951;padding-bottom:6px;margin-top:0}h2{font-size:15pt;color:#076951;margin-top:24px}h3{font-size:12pt;color:#365951;margin-top:18px}table{border-collapse:collapse;width:100%;margin:10px 0}th,td{border:1px solid #999;padding:5px 8px;text-align:left;font-size:10pt}th{background:#076951;color:white;font-weight:bold}td{vertical-align:top}code{font-family:Consolas,monospace;font-size:9pt;background:#f0f0f0;padding:1px 4px}pre{background:#1a1a2e;color:#e0e0e0;padding:10px;font-size:9pt}a{color:#076951}blockquote{border-left:3px solid #076951;padding:4px 12px;color:#555;margin:10px 0;background:#f9f9f9}strong{color:#192c27}hr{border:none;border-top:1px solid #ddd;margin:16px 0}ul,ol{padding-left:20px}li{margin:2px 0}</style></head><body><h1>User Profiles &amp; Visibility</h1>
+<h2>What Is This Feature?</h2>
+<p>Your profile is your identity on the platform. It stores your education, work experience, skills, goals, social links, and privacy preferences. It&#39;s also where you manage your connections, events, and stories — everything you create on the platform lives under your profile.</p>
+<hr>
+<h2>Who Can Do What?</h2>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Anyone</th>
+<th>Logged In (own profile)</th>
+<th>Logged In (others)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>View basic profile info</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>View full profile details</td>
+<td>✅ (if visible)</td>
+<td>✅</td>
+<td>✅ (if visible)</td>
+</tr>
+<tr>
+<td>Edit profile sections</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Change privacy settings</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Upload avatar</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Profile Sections</h2>
+<p>Your profile has <strong>4 tabs</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Tab</th>
+<th>What&#39;s There</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>About</strong></td>
+<td>Your info, education, experience, skills, links, and privacy settings — all editable</td>
+</tr>
+<tr>
+<td><strong>Connections</strong></td>
+<td>All your connections, filterable by status</td>
+</tr>
+<tr>
+<td><strong>Events</strong></td>
+<td>Events you created, with Upcoming/Past tabs and a Create button</td>
+</tr>
+<tr>
+<td><strong>Stories</strong></td>
+<td>Stories you wrote, with status badges and a Create button</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>About Tab — Editable Sections</h3>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>What You Set</th>
+<th>How It&#39;s Used</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Header</strong></td>
+<td>Name, bio, avatar, phone number</td>
+<td>Displayed everywhere — Galaxy, events, chat, stories</td>
+</tr>
+<tr>
+<td><strong>Education</strong></td>
+<td>Academic programs, graduation year, primary program</td>
+<td>Galaxy clustering, connection matching</td>
+</tr>
+<tr>
+<td><strong>Experience</strong></td>
+<td>Work positions, titles, companies, dates</td>
+<td>Connection matching, profile display</td>
+</tr>
+<tr>
+<td><strong>Skills &amp; Goals</strong></td>
+<td>Tags for skills, goals, and hobbies</td>
+<td>Core data for AI connection matching</td>
+</tr>
+<tr>
+<td><strong>Links</strong></td>
+<td>Social profiles (LinkedIn, GitHub, Twitter, Website, Other)</td>
+<td>Displayed on your profile</td>
+</tr>
+<tr>
+<td><strong>Privacy</strong></td>
+<td>Galaxy visibility, email/phone visibility, connection type preferences</td>
+<td>Controls who can find and contact you</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>How Visibility Works</h2>
+<p>This is the most important section of your profile. Your visibility settings control how you appear to others.</p>
+<h3>The Visibility Gate</h3>
+<p><strong>&quot;Visible in Galaxy&quot;</strong> is the master toggle:</p>
+<table>
+<thead>
+<tr>
+<th>Visible in Galaxy</th>
+<th>What Happens</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ON</strong></td>
+<td>You appear in the Galaxy visualization, in search results, and in connection matching. You can set email/phone visibility and connection preferences.</td>
+</tr>
+<tr>
+<td><strong>OFF</strong></td>
+<td>You&#39;re hidden from the Galaxy, search, and match results. All your exposure settings (email, phone, connection types) are automatically cleared.</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>The gate rule</strong>: You cannot show your email, phone number, or open yourself to connections while invisible. If you turn visibility OFF, everything else turns OFF automatically.</p>
+</blockquote>
+<h3>Email &amp; Phone Visibility</h3>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>OFF</th>
+<th>ON</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Email visible</strong></td>
+<td>Email hidden from other users</td>
+<td>Email shown on your profile</td>
+</tr>
+<tr>
+<td><strong>Phone visible</strong></td>
+<td>Phone hidden from other users</td>
+<td>Phone shown on your profile</td>
+</tr>
+</tbody></table>
+<h3>Connection Type Preferences</h3>
+<p>You choose which connection types you&#39;re open to receiving requests for. Your available options depend on your user type:</p>
+<table>
+<thead>
+<tr>
+<th>Available To</th>
+<th>Connection Types</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Students</strong></td>
+<td>Mentorship, Career Coaching, Study Partner, Buddy, Research, Project</td>
+</tr>
+<tr>
+<td><strong>Alumni &amp; Faculty</strong></td>
+<td>Mentorship, Career Coaching, Research, Project</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>You must check at least one connection type for the system to suggest you as a match to others.</p>
+</blockquote>
+<hr>
+<h2>How To — Step by Step</h2>
+<hr>
+<h4>1. View Your Profile</h4>
+<ol>
+<li>Click your <strong>avatar</strong> (top-right) and select <strong>&quot;Profile&quot;</strong> from the dropdown</li>
+<li>You land on the <strong>About</strong> tab showing your current info</li>
+</ol>
+<hr>
+<h4>2. Edit Your Basic Info (Name, Bio, Avatar)</h4>
+<ol>
+<li>On the About tab, find the header section at the top</li>
+<li>Click your <strong>avatar</strong> to upload a new photo (or change it)</li>
+<li>Click the <strong>edit icon</strong> next to your name to change your name or bio</li>
+<li>Click <strong>&quot;Save&quot;</strong> to apply changes</li>
+</ol>
+<hr>
+<h4>3. Add or Edit Education</h4>
+<ol>
+<li>On the About tab, scroll to the <strong>Education</strong> section</li>
+<li>Click <strong>&quot;Edit&quot;</strong></li>
+<li>Select a program from the dropdown, add a graduation year</li>
+<li>Mark one program as <strong>&quot;Primary&quot;</strong> — this is the one shown in the Galaxy</li>
+<li>Add more programs or remove existing ones</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+</ol>
+<hr>
+<h4>4. Add or Edit Work Experience</h4>
+<ol>
+<li>On the About tab, scroll to the <strong>Experience</strong> section</li>
+<li>Click <strong>&quot;Edit&quot;</strong></li>
+<li>Add a position: title, company, type</li>
+<li>Set start and end dates. Toggle <strong>&quot;Currently working here&quot;</strong> if applicable.</li>
+<li>Add multiple positions — they&#39;re listed chronologically</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+</ol>
+<hr>
+<h4>5. Manage Skills, Goals &amp; Hobbies</h4>
+<ol>
+<li>On the About tab, scroll to the <strong>Skills &amp; Interests</strong> section</li>
+<li>Click <strong>&quot;Edit&quot;</strong></li>
+<li>You&#39;ll see three fields: Skills, Goals, Hobbies</li>
+<li>Type a tag and press <strong>Enter</strong> to add it</li>
+<li>Click the <strong>X</strong> on a tag to remove it</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+</ol>
+<blockquote>
+<p><strong>Be specific</strong>: Instead of &quot;tech,&quot; use &quot;Machine Learning,&quot; &quot;React,&quot; or &quot;Data Analysis.&quot; Specific tags lead to better connection matches.</p>
+</blockquote>
+<hr>
+<h4>6. Add Social Links</h4>
+<ol>
+<li>On the About tab, scroll to the <strong>Links</strong> section</li>
+<li>Click <strong>&quot;Edit&quot;</strong></li>
+<li>Choose a platform from the dropdown: LinkedIn, GitHub, Twitter, Website, or Other</li>
+<li>Enter the full URL</li>
+<li>Add multiple links</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+</ol>
+<hr>
+<h4>7. Configure Privacy Settings</h4>
+<ol>
+<li>On the About tab, scroll to the <strong>Privacy</strong> section</li>
+<li>Click <strong>&quot;Edit&quot;</strong></li>
+<li><strong>Visible in Galaxy</strong>: Toggle ON to appear in the Galaxy and match results</li>
+<li><strong>Email visible</strong>: Toggle ON to show your email on your profile</li>
+<li><strong>Phone visible</strong>: Toggle ON to show your phone on your profile</li>
+<li><strong>Open to connections</strong>: Check the boxes for the connection types you want to receive requests for</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+</ol>
+<blockquote>
+<p><strong>If you turn &quot;Visible in Galaxy&quot; OFF</strong>: All other toggles (email, phone, connections) are automatically turned OFF and cleared.</p>
+</blockquote>
+<hr>
+<h2>Common Questions</h2>
+<p><strong>Q: Can other users see my email?</strong></p>
+<p>→ Only if you toggle &quot;Email visible&quot; ON in your Privacy settings. By default, it&#39;s hidden.</p>
+<p><strong>Q: What does &quot;Visible in Galaxy&quot; actually do?</strong></p>
+<p>→ When ON, you appear as a star in the 3D Galaxy visualization and in connection match results. When OFF, you&#39;re completely hidden from other users in those places — but you can still use the platform, create events, write stories, and chat.</p>
+<p><strong>Q: If I turn off Galaxy visibility, can I still use connections?</strong></p>
+<p>→ You won&#39;t appear in other people&#39;s match results, and you can&#39;t find matches yourself. The system needs you to be visible to make matching work.</p>
+<p><strong>Q: Can I see who viewed my profile?</strong></p>
+<p>→ No. Profile views are not tracked.</p>
+<p><strong>Q: How do I change my user type (Student / Alumni / Faculty)?</strong></p>
+<p>→ You can&#39;t. The user type is set at registration. Contact an admin if you need it changed.</p>
+<p><strong>Q: Can I change my primary program later?</strong></p>
+<p>→ Yes. Edit your Education section, select a different program as Primary, and save.</p>
+<p><strong>Q: Do my skills and tags affect connection matching?</strong></p>
+<p>→ Yes — they&#39;re the primary data the AI uses to find compatible connections. The more specific and accurate your tags, the better your match results.</p>
+</body></html>

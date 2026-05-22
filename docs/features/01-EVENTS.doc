@@ -1,0 +1,612 @@
+<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.5;color:#1a1a1a;max-width:7in;margin:0 auto;padding:24px}h1{font-size:20pt;color:#076951;border-bottom:2px solid #076951;padding-bottom:6px;margin-top:0}h2{font-size:15pt;color:#076951;margin-top:24px}h3{font-size:12pt;color:#365951;margin-top:18px}table{border-collapse:collapse;width:100%;margin:10px 0}th,td{border:1px solid #999;padding:5px 8px;text-align:left;font-size:10pt}th{background:#076951;color:white;font-weight:bold}td{vertical-align:top}code{font-family:Consolas,monospace;font-size:9pt;background:#f0f0f0;padding:1px 4px}pre{background:#1a1a2e;color:#e0e0e0;padding:10px;font-size:9pt}a{color:#076951}blockquote{border-left:3px solid #076951;padding:4px 12px;color:#555;margin:10px 0;background:#f9f9f9}strong{color:#192c27}hr{border:none;border-top:1px solid #ddd;margin:16px 0}ul,ol{padding-left:20px}li{margin:2px 0}</style></head><body><h1>Events</h1>
+<h2>What Is This Feature?</h2>
+<p>Events lets community members create and manage gatherings — workshops, conferences, meetups, and more. Attendees can register, get email reminders, and check in with QR tickets. Admins review events before they go live.</p>
+<h2>Who Can Do What?</h2>
+<h3>Base Abilities (by user type)</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Public</th>
+<th>Logged In</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Browse events</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>View approved event details</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Create a new event</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Register for events</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Cancel your registration</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<h3>Extra Powers on Events You&#39;re Involved With</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Owner</th>
+<th>Organizer</th>
+<th>Admin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Edit the event</td>
+<td>✅ (draft/rejected only)</td>
+<td>✅ (any status)</td>
+<td>✅ (any event)</td>
+</tr>
+<tr>
+<td>Delete the event</td>
+<td>✅ (draft only)</td>
+<td>❌</td>
+<td>✅ (any event)</td>
+</tr>
+<tr>
+<td>Submit for review</td>
+<td>✅</td>
+<td>✅</td>
+<td>Auto-approved</td>
+</tr>
+<tr>
+<td>Cancel the event</td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Close / reopen registration</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Add / remove organizers</td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>View attendee list</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Approve / reject attendees</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Check-in attendees</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Approve / reject event</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<p><strong>Owner vs. Organizer</strong>: The person who creates the event is the Owner. Organizers are people the owner adds to help run things. Organizers can do almost everything — except delete, cancel, or add more organizers.</p>
+<p><strong>Admin</strong>: Can do anything on any event. Creates auto-approved (no review needed). Edits preserve the current status.</p>
+<hr>
+<h2>How It Works</h2>
+<h3>The Lifecycle</h3>
+<pre><code>User creates → DRAFT ──(submit)──&gt; PENDING REVIEW ──&gt; APPROVED or REJECTED
+                                                           |
+                              REJECTED ──(edit)──&gt; back to PENDING REVIEW
+                                                           |
+                              APPROVED ──(start date)──&gt; IN PROGRESS ──(end date)──&gt; COMPLETED
+                                                           |
+                              (owner or admin cancels) ──&gt; CANCELLED
+</code></pre>
+<pre><code>Admin creates → APPROVED (skips draft and review)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+<th>Public?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Draft</strong></td>
+<td>Still editing, not submitted</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Pending Review</strong></td>
+<td>Waiting for admin approval</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Approved</strong></td>
+<td>Live, registration open</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Rejected</strong></td>
+<td>Admin declined with a reason. Edit to resubmit.</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>In Progress</strong></td>
+<td>Event is happening</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Completed</strong></td>
+<td>Event ended</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Cancelled</strong></td>
+<td>Cancelled before end</td>
+<td>Yes (marked cancelled)</td>
+</tr>
+</tbody></table>
+<h3>Two Creation Paths</h3>
+<p>The same form behaves differently depending on who fills it:</p>
+<table>
+<thead>
+<tr>
+<th>Who</th>
+<th>Initial Status</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Admin</strong></td>
+<td>Approved (live immediately)</td>
+<td>Admins are trusted</td>
+</tr>
+<tr>
+<td><strong>Regular user</strong></td>
+<td>Draft (must submit + get approved)</td>
+<td>Events need oversight</td>
+</tr>
+</tbody></table>
+<h3>Editing Rules</h3>
+<table>
+<thead>
+<tr>
+<th>Who Edits</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Owner</strong> editing a draft</td>
+<td>Stays draft</td>
+</tr>
+<tr>
+<td><strong>Owner</strong> editing a rejected event</td>
+<td>Resets to draft, clears rejection reason</td>
+</tr>
+<tr>
+<td><strong>Owner</strong> editing an approved event</td>
+<td><strong>Resets to draft — disappears from public until re-approved</strong></td>
+</tr>
+<tr>
+<td><strong>Admin</strong> editing any event</td>
+<td>Status is preserved, stays live</td>
+</tr>
+</tbody></table>
+<h3>Registration</h3>
+<p><strong>Open mode</strong>: Instant confirmation. Ticket token generated.<br><strong>Approval mode</strong>: Goes to &quot;Pending&quot; — organizer must approve or reject.</p>
+<p><strong>Capacity</strong>: If full, new registrants go on <strong>waitlist</strong>. When someone cancels, the first waitlisted person is auto-promoted.</p>
+<p><strong>Cannot register if</strong>: You&#39;re the owner/organizer, already registered, past the deadline, or registration is closed.</p>
+<h3>Registration Statuses</h3>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Pending</strong></td>
+<td>Awaiting organizer approval (approval mode)</td>
+</tr>
+<tr>
+<td><strong>Approved</strong></td>
+<td>Confirmed, has ticket token</td>
+</tr>
+<tr>
+<td><strong>Rejected</strong></td>
+<td>Organizer declined</td>
+</tr>
+<tr>
+<td><strong>Cancelled</strong></td>
+<td>User cancelled their registration</td>
+</tr>
+<tr>
+<td><strong>Waitlisted</strong></td>
+<td>Event full, queued for a spot</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>How To — Step by Step</h2>
+<blockquote>
+<p><strong>Where to do each action</strong>: The platform has two apps. The <strong>Public Website</strong> is where regular users browse, create, and register. The <strong>Admin Dashboard</strong> is where admins review, approve, and manage everything.</p>
+</blockquote>
+<hr>
+<h3>For Regular Users — Public Website</h3>
+<p>These steps are done on the public-facing website (the one with the galaxy).</p>
+<hr>
+<h4>1. Create an Event</h4>
+<ol>
+<li>Log in to the public website</li>
+<li>Click your <strong>avatar</strong> (top-right) and go to <strong>Profile</strong>, or click your name in the navigation</li>
+<li>Click the <strong>Events</strong> tab on your profile</li>
+<li>Click the <strong>&quot;Create Event&quot;</strong> button (top-right of the Events section)</li>
+<li>Fill out the form:<ul>
+<li><strong>Basic Info</strong>: Title, description, and an optional cover image</li>
+<li><strong>Type &amp; Location</strong>: Choose In-Person, Online, or Hybrid. Fill location and/or meeting URL as needed.</li>
+<li><strong>Date &amp; Time</strong>: Start date, end date, and registration deadline</li>
+<li><strong>Registration Settings</strong>: Enable registration, choose Open or Approval mode, set capacity, decide if check-in is needed</li>
+</ul>
+</li>
+<li>Click <strong>&quot;Create Event&quot;</strong></li>
+<li>You&#39;re taken to the event page. The event is in <strong>Draft</strong> status — visible only to you.</li>
+</ol>
+<blockquote>
+<p><strong>Fields to pay attention to</strong>:</p>
+<ul>
+<li>If you choose In-Person, you <strong>must</strong> provide a location.</li>
+<li>If you choose Online or Hybrid, you <strong>must</strong> provide a meeting URL.</li>
+<li>The registration deadline must be <strong>before</strong> the event start date.</li>
+<li>The start date must be <strong>before</strong> the end date.</li>
+<li>Leave capacity blank for unlimited attendees.</li>
+</ul>
+</blockquote>
+<hr>
+<h4>2. Submit Your Event for Review</h4>
+<ol>
+<li>Go to your event page (click it from <strong>Profile → Events tab</strong> or from the direct URL)</li>
+<li>Verify all details are correct — you can still edit at this point</li>
+<li>Click the <strong>&quot;Submit for Review&quot;</strong> button</li>
+<li>The status badge changes from <strong>Draft</strong> to <strong>Pending Review</strong></li>
+<li>An admin will now see it in their review queue</li>
+</ol>
+<blockquote>
+<p><strong>What happens next</strong>: You wait. There&#39;s no notification when an admin reviews it — check back on your event page or Profile → Events to see the updated status.</p>
+</blockquote>
+<hr>
+<h4>3. Register for an Event</h4>
+<ol>
+<li>Browse the <strong>Events</strong> page to find approved events</li>
+<li>Click an event card to see its details</li>
+<li>Review the date, time, location, and description</li>
+<li>Click the <strong>&quot;Register&quot;</strong> button</li>
+<li>Depending on the event&#39;s registration mode:<ul>
+<li><strong>Open mode</strong>: You&#39;re instantly confirmed. A ticket token and confirmation appear on screen. You also get a confirmation email (if emails are configured).</li>
+<li><strong>Approval mode</strong>: You see &quot;Pending — waiting for organizer approval.&quot; You&#39;ll be notified when the organizer acts on your registration.</li>
+</ul>
+</li>
+<li>If the event is full, you&#39;ll be placed on the <strong>waitlist</strong> instead.</li>
+</ol>
+<blockquote>
+<p><strong>You cannot register if</strong>: You&#39;re the event owner, you&#39;re an organizer on this event, you&#39;re already registered, the registration deadline has passed, or registration was manually closed.</p>
+</blockquote>
+<hr>
+<h4>4. Cancel Your Registration</h4>
+<ol>
+<li>Go to the event page where you&#39;re registered</li>
+<li>Find the registration panel — it shows your current status</li>
+<li>Click <strong>&quot;Cancel Registration&quot;</strong></li>
+<li>Confirm the cancellation</li>
+<li>Your spot is freed. If there&#39;s a waitlist, the first waitlisted person is automatically promoted.</li>
+</ol>
+<hr>
+<h4>5. Edit Your Event</h4>
+<ol>
+<li>Go to your event page (find it under <strong>Profile → Events tab</strong>)</li>
+<li>Click the <strong>&quot;Edit&quot;</strong> button</li>
+<li>Make your changes</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+<li>The event behavior depends on its current status:<ul>
+<li>Was <strong>Draft</strong> → stays Draft</li>
+<li>Was <strong>Rejected</strong> → resets to Draft (rejection reason is cleared, you&#39;ll need to resubmit)</li>
+<li>Was <strong>Approved</strong> → resets to Draft (disappears from public, needs re-approval)</li>
+<li>Was <strong>In Progress or Completed</strong> → you can no longer edit</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>&quot;Notify attendees of changes&quot; checkbox</strong>: When editing an already-published event, you&#39;ll see a checkbox asking if you want to email all registrants about the changes. Check it if the changes matter to them.</p>
+</blockquote>
+<h4>6. Delete Your Event</h4>
+<ol>
+<li>Go to your event page — must be in <strong>Draft</strong> status</li>
+<li>Click <strong>&quot;Delete&quot;</strong></li>
+<li>Confirm the deletion</li>
+<li>You can only delete your own events when they&#39;re in Draft. Once submitted or approved, only an admin can delete.</li>
+</ol>
+<hr>
+<h3>For Event Owners &amp; Organizers — Public Website</h3>
+<p>These additional actions are available on events you own or help organize. Access them from the event page.</p>
+<hr>
+<h4>7. Add a Co-Organizer</h4>
+<ol>
+<li>Go to your event page (you must be the <strong>Owner</strong> — organizers cannot add other organizers)</li>
+<li>Find the <strong>Organizers</strong> section</li>
+<li>Click <strong>&quot;Add Organizer&quot;</strong></li>
+<li>Search for the person by name</li>
+<li>Select them from the results</li>
+<li>They instantly gain organizer powers on this event (can edit, manage attendees, check-in)</li>
+</ol>
+<blockquote>
+<p><strong>Removing an organizer</strong>: Click the remove icon next to their name. Only the Owner or an Admin can remove organizers.</p>
+</blockquote>
+<hr>
+<h4>8. Approve or Reject Attendees (Approval Mode Only)</h4>
+<p><em>This only applies when the event uses Approval registration mode.</em></p>
+<ol>
+<li>Go to your event page</li>
+<li>Click the <strong>Attendees</strong> tab</li>
+<li>You&#39;ll see a list grouped by status: Pending, Approved, Waitlisted, Rejected, Cancelled</li>
+<li>For each pending attendee, click <strong>&quot;Approve&quot;</strong> or <strong>&quot;Reject&quot;</strong></li>
+<li>Approved attendees get a confirmation email with their ticket. Rejected attendees get a rejection notice.</li>
+</ol>
+<blockquote>
+<p><strong>Bulk tip</strong>: You can approve or reject multiple pending attendees one by one. There&#39;s currently no &quot;approve all&quot; button.</p>
+</blockquote>
+<hr>
+<h4>9. Check In Attendees</h4>
+<p><em>Only available if &quot;Check-in&quot; was enabled when the event was created.</em></p>
+<ol>
+<li>Go to your event page</li>
+<li>Find the <strong>Check-in</strong> section</li>
+<li>Ask the attendee for their <strong>ticket token</strong> (they can find it on their event page under &quot;My Registration&quot; or in their confirmation email)</li>
+<li>Enter the token and click <strong>&quot;Check In&quot;</strong></li>
+<li>The attendee is marked as checked in with the current time</li>
+</ol>
+<blockquote>
+<p><strong>Important</strong>: A ticket token can only be checked in once. Attempting to reuse a token will show an error.</p>
+</blockquote>
+<hr>
+<h4>10. Close or Reopen Registration</h4>
+<ol>
+<li>Go to your event page</li>
+<li>Click <strong>&quot;Close Registration&quot;</strong> to stop new sign-ups</li>
+<li>Click <strong>&quot;Reopen Registration&quot;</strong> to allow sign-ups again</li>
+<li>This is separate from the registration deadline — it&#39;s a manual override you can use at any time.</li>
+</ol>
+<blockquote>
+<p><strong>When to use</strong>: Close registration early if you&#39;ve reached capacity informally. Reopen if you decide to accept more people.</p>
+</blockquote>
+<hr>
+<h4>11. Cancel Your Event</h4>
+<ol>
+<li>Go to your event page</li>
+<li>Click <strong>&quot;Cancel Event&quot;</strong></li>
+<li>Confirm the cancellation</li>
+<li>The event status changes to <strong>Cancelled</strong></li>
+<li>All approved and pending registrants receive a cancellation email</li>
+<li>The event remains visible but clearly marked as cancelled</li>
+</ol>
+<blockquote>
+<p><strong>Who can cancel</strong>: Only the Owner or an Admin. Organizers cannot cancel the event. Once cancelled, the event cannot be reactivated.</p>
+</blockquote>
+<hr>
+<h3>For Admins — Admin Dashboard</h3>
+<p>These steps are done on the <strong>Admin Dashboard</strong> (a separate application from the public website).</p>
+<hr>
+<h4>12. Create an Event (Auto-Approved)</h4>
+<ol>
+<li>Log in to the Admin Dashboard</li>
+<li>Click <strong>Events</strong> in the sidebar</li>
+<li>Click <strong>&quot;Create Event&quot;</strong></li>
+<li>Fill out the same form as on the public website</li>
+<li>Click <strong>&quot;Create&quot;</strong></li>
+<li>The event is created with <strong>Approved</strong> status — it&#39;s immediately public and open for registration. No review needed.</li>
+</ol>
+<blockquote>
+<p><strong>Why auto-approved?</strong> The system trusts admins. If you want an event to go through review (e.g., you&#39;re testing), create it from the public website using a non-admin account instead.</p>
+</blockquote>
+<hr>
+<h4>13. Approve or Reject a Submitted Event</h4>
+<ol>
+<li>In the Admin Dashboard, click <strong>Events</strong> in the sidebar</li>
+<li>Use the status filter to show <strong>&quot;Pending Review&quot;</strong> events</li>
+<li>Click the event to open its detail page</li>
+<li>Review the event details: title, description, dates, location, registration settings</li>
+<li>Click <strong>&quot;Approve&quot;</strong> to publish the event — it goes live immediately</li>
+<li>Or click <strong>&quot;Reject&quot;</strong> — you must provide a reason. The creator will see this reason on their event page and can edit and resubmit.</li>
+</ol>
+<blockquote>
+<p><strong>The creator does not get a notification</strong> when you approve or reject. They need to check their event page or Profile → Events tab to see the updated status.</p>
+</blockquote>
+<hr>
+<h4>14. View and Manage Attendees</h4>
+<ol>
+<li>In the Admin Dashboard, open the event detail page</li>
+<li>Click the <strong>Attendees</strong> tab</li>
+<li>You&#39;ll see all registrations grouped by status: Pending, Approved, Waitlisted, Rejected, Cancelled</li>
+<li>For approval-mode events, approve or reject pending registrations</li>
+<li>You can also remove any attendee from the list</li>
+</ol>
+<hr>
+<h4>15. Edit Any Event</h4>
+<ol>
+<li>In the Admin Dashboard, open the event</li>
+<li>Click <strong>&quot;Edit&quot;</strong></li>
+<li>Make your changes</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+<li><strong>The event&#39;s status is preserved</strong> — unlike regular users, admin edits do NOT reset the event to draft. If it was approved, it stays approved.</li>
+</ol>
+<hr>
+<h4>16. Cancel Any Event</h4>
+<ol>
+<li>In the Admin Dashboard, open the event</li>
+<li>Click <strong>&quot;Cancel Event&quot;</strong></li>
+<li>All registrants receive a cancellation email</li>
+<li>The event is marked as cancelled</li>
+</ol>
+<hr>
+<h4>17. Delete Any Event</h4>
+<ol>
+<li>In the Admin Dashboard, open the event</li>
+<li>Click <strong>&quot;Delete&quot;</strong></li>
+<li>Confirm the deletion</li>
+<li>The event is permanently removed — all registrations, organizers, reminders, and surveys for this event are also deleted.</li>
+</ol>
+<blockquote>
+<p><strong>Admin can delete any event</strong> regardless of status. Regular users can only delete their own events when they&#39;re in Draft status.</p>
+</blockquote>
+<hr>
+<h2>Emails Sent by Events</h2>
+<table>
+<thead>
+<tr>
+<th>Trigger</th>
+<th>Who Receives</th>
+<th>What It Contains</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Registration — open mode</td>
+<td>The registrant</td>
+<td>Confirmation, ticket token, QR code, event details</td>
+</tr>
+<tr>
+<td>Registration — approval mode</td>
+<td>The registrant</td>
+<td>&quot;Pending — organizer will review&quot; notice</td>
+</tr>
+<tr>
+<td>Registration approved</td>
+<td>The registrant</td>
+<td>Approval notice, ticket token, QR code, meeting link, event details</td>
+</tr>
+<tr>
+<td>Registration rejected</td>
+<td>The registrant</td>
+<td>Rejection notice (no reason shared)</td>
+</tr>
+<tr>
+<td>Waitlist promotion</td>
+<td>The registrant</td>
+<td>&quot;A spot opened up — you&#39;re now registered!&quot; with ticket and event details</td>
+</tr>
+<tr>
+<td>Event cancelled</td>
+<td>All approved + pending registrants</td>
+<td>Cancellation notice with reason (if provided by admin/owner)</td>
+</tr>
+<tr>
+<td>Event details updated</td>
+<td>All approved registrants</td>
+<td>Updated event info (only if owner checked &quot;Notify attendees&quot; when saving)</td>
+</tr>
+<tr>
+<td>Reminder (24 hours before)</td>
+<td>All approved registrants</td>
+<td>Reminder with event title, date, location/URL</td>
+</tr>
+<tr>
+<td>Reminder (1 hour before)</td>
+<td>All approved registrants</td>
+<td>Final reminder</td>
+</tr>
+<tr>
+<td>Post-event survey</td>
+<td>By audience group (alumni/students/organizers)</td>
+<td>Link to feedback survey, scheduled by organizer</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Note</strong>: Emails require the <code>RESEND_API_KEY</code> to be configured. If not set, emails are silently skipped and all other functionality works normally.</p>
+</blockquote>
+<hr>
+<h2>Automatic Timelines</h2>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>When</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Registration closes</td>
+<td>At the registration deadline</td>
+<td>&quot;Register&quot; button disabled. Existing registrations stay.</td>
+</tr>
+<tr>
+<td>Event starts</td>
+<td>At start date</td>
+<td>Status auto-changes: Approved → In Progress</td>
+</tr>
+<tr>
+<td>Event ends</td>
+<td>At end date</td>
+<td>Status auto-changes: In Progress → Completed</td>
+</tr>
+<tr>
+<td>24h reminder</td>
+<td>24 hours before start</td>
+<td>Email to all approved registrants</td>
+</tr>
+<tr>
+<td>1h reminder</td>
+<td>1 hour before start</td>
+<td>Email to all approved registrants</td>
+</tr>
+<tr>
+<td>Survey sent</td>
+<td>At scheduled time</td>
+<td>Email to the specified audience group</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Common Questions</h2>
+<p><strong>Q: I&#39;m a student and I created an event. Why isn&#39;t it showing on the public events page?</strong></p>
+<p>→ It&#39;s in &quot;Draft&quot; status. Click &quot;Submit for Review&quot; on the event page. An admin will review it, and once approved, it will appear publicly.</p>
+<p><strong>Q: How long does approval take?</strong></p>
+<p>→ There&#39;s no automated delay — it depends on when an admin reviews the queue. Admins see all pending events in their dashboard.</p>
+<p><strong>Q: My event was rejected. What do I do?</strong></p>
+<p>→ You&#39;ll see the rejection reason on your event page. Click &quot;Edit&quot; to fix the issue, then resubmit. The event goes back to &quot;Pending Review&quot; automatically when you save.</p>
+<p><strong>Q: I edited my approved event and now it&#39;s gone from the public page. What happened?</strong></p>
+<p>→ When a regular user edits an approved event, it resets to &quot;Draft&quot; and needs re-approval. This is by design — to make sure changes are reviewed. The event will reappear after admin re-approves.</p>
+<p><strong>Q: As an admin, can I create an event that goes live immediately?</strong></p>
+<p>→ Yes. Any event created by an admin starts as &quot;Approved&quot; — no review needed. This is so admins can publish directly.</p>
+<p><strong>Q: What&#39;s the difference between Open and Approval registration?</strong></p>
+<p>→ <strong>Open</strong>: Anyone who clicks &quot;Register&quot; is instantly confirmed. <strong>Approval</strong>: Registration is &quot;pending&quot; until an organizer manually approves it. Use approval mode if you need to screen attendees (e.g., limited seats, prerequisites).</p>
+<p><strong>Q: What happens when the event is full?</strong></p>
+<p>→ New registrants go on a waitlist. If someone cancels, the first waitlisted person is automatically promoted and gets an email. The waitlist works in order (first come, first served).</p>
+<p><strong>Q: Can I see who else is attending?</strong></p>
+<p>→ Only if the event creator enabled &quot;Show attendee list.&quot; Organizers and admins can always see the full list.</p>
+<p><strong>Q: How does check-in work?</strong></p>
+<p>→ Each confirmed registration gets a unique ticket token (shown on their event page and in their confirmation email). Organizers enter this token on the check-in screen. It marks the attendee as &quot;checked in&quot; with a timestamp.</p>
+<p><strong>Q: Can I add someone to help me manage the event?</strong></p>
+<p>→ Yes. On your event page, use &quot;Add Organizer&quot; to search for users and add them as co-organizers. They can manage attendees, check people in, and edit the event — but they cannot delete it or add other organizers (only the owner can).</p>
+<p><strong>Q: Can I close registration early?</strong></p>
+<p>→ Yes. Click &quot;Close Registration&quot; on your event page. You can also &quot;Reopen Registration&quot; later if needed.</p>
+<p><strong>Q: Do emails actually get sent?</strong></p>
+<p>→ Yes, if the system has an email provider configured (Resend). Registration confirmations include a QR code ticket. If emails aren&#39;t configured, nothing is sent but the platform still works normally.</p>
+<p><strong>Q: What happens to reminders if I reschedule my event?</strong></p>
+<p>→ When you save changes to an event&#39;s date/time, the reminder emails are recalculated automatically for the new date.</p>
+</body></html>

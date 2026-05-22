@@ -1,0 +1,260 @@
+<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.5;color:#1a1a1a;max-width:7in;margin:0 auto;padding:24px}h1{font-size:20pt;color:#076951;border-bottom:2px solid #076951;padding-bottom:6px;margin-top:0}h2{font-size:15pt;color:#076951;margin-top:24px}h3{font-size:12pt;color:#365951;margin-top:18px}table{border-collapse:collapse;width:100%;margin:10px 0}th,td{border:1px solid #999;padding:5px 8px;text-align:left;font-size:10pt}th{background:#076951;color:white;font-weight:bold}td{vertical-align:top}code{font-family:Consolas,monospace;font-size:9pt;background:#f0f0f0;padding:1px 4px}pre{background:#1a1a2e;color:#e0e0e0;padding:10px;font-size:9pt}a{color:#076951}blockquote{border-left:3px solid #076951;padding:4px 12px;color:#555;margin:10px 0;background:#f9f9f9}strong{color:#192c27}hr{border:none;border-top:1px solid #ddd;margin:16px 0}ul,ol{padding-left:20px}li{margin:2px 0}</style></head><body><h1>Messaging (Chat)</h1>
+<h2>What Is This Feature?</h2>
+<p>Messaging lets community members have direct, one-on-one conversations. It&#39;s the communication layer of the platform — once you&#39;ve found someone through the Galaxy or connected via Connections, you can message them directly. The chat is simple, private, and designed for quick conversations.</p>
+<hr>
+<h2>Who Can Do What?</h2>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Public</th>
+<th>Student</th>
+<th>Alumni</th>
+<th>Faculty</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>View your conversations</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Start a conversation with someone</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Send messages</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Receive messages</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Search conversations</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>There is no admin role for chat.</strong> Admins cannot read other users&#39; private messages. Chat is private between the two participants.</p>
+</blockquote>
+<hr>
+<h2>How It Works</h2>
+<h3>Starting a Conversation</h3>
+<p>There are three ways to start a conversation:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Where</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>From the Galaxy</strong></td>
+<td>Galaxy page</td>
+<td>Click a star in the 3D visualization, open the sidebar, click &quot;Start Conversation&quot;</td>
+</tr>
+<tr>
+<td><strong>From the Chat page</strong></td>
+<td>Chat page</td>
+<td>If you already have a conversation with someone, it appears in your list. Currently, you cannot search for and start a chat with any user from the Chat page — only from the Galaxy.</td>
+</tr>
+<tr>
+<td><strong>From a Connection</strong></td>
+<td>After connecting</td>
+<td>Once you have an active connection, you can message that person</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Important</strong>: Starting a conversation from the Galaxy does NOT create a formal &quot;Connection.&quot; It simply opens a chat. Connections (mentorship, career coaching, etc.) are a separate feature with a formal request/accept flow.</p>
+</blockquote>
+<h3>How Conversations Work</h3>
+<ul>
+<li><strong>One conversation per pair of users</strong>: If you message someone, then message them again later, it&#39;s still the same conversation thread — not a new one</li>
+<li><strong>Both people see the same conversation</strong>: If you start a chat with someone, it appears in both people&#39;s conversation lists</li>
+<li><strong>No group chats</strong>: All conversations are strictly 1-on-1</li>
+<li><strong>No deleting conversations</strong>: Once started, a conversation stays in both people&#39;s lists</li>
+<li><strong>Messages are permanent</strong>: You cannot delete or edit sent messages</li>
+</ul>
+<h3>Message Status</h3>
+<table>
+<thead>
+<tr>
+<th>Icon</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Single check</strong> ✓</td>
+<td>Message was sent successfully</td>
+</tr>
+<tr>
+<td><strong>Double check</strong> ✓✓</td>
+<td>The other person has seen the message (they opened the conversation)</td>
+</tr>
+</tbody></table>
+<h3>Auto-Refresh</h3>
+<ul>
+<li><strong>Conversation list</strong>: Refreshes every 5 seconds to show new conversations</li>
+<li><strong>Messages</strong>: When you&#39;re in a conversation, new messages appear every 3 seconds</li>
+<li><strong>No manual refresh needed</strong>: You don&#39;t need to reload the page to see new messages</li>
+</ul>
+<hr>
+<h2>How To — Step by Step</h2>
+<p>All chat actions are done on the <strong>Public Website</strong>.</p>
+<hr>
+<h3>For All Users — Public Website</h3>
+<hr>
+<h4>1. Access the Chat Page</h4>
+<ol>
+<li>Log in to the public website</li>
+<li>Click the <strong>Chat icon</strong> (speech bubble) in the top navigation bar</li>
+<li>You&#39;re taken to the Chat page with a split layout:<ul>
+<li><strong>Left sidebar</strong> (340px): Your conversation list</li>
+<li><strong>Right area</strong>: The current conversation (or an empty state if none selected)</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>Mobile</strong>: On small screens, you see either the conversation list or the messages — not both at once. Tap a conversation to see messages, tap the back arrow to return to the list.</p>
+</blockquote>
+<hr>
+<h4>2. Start a Conversation from the Galaxy</h4>
+<p>This is the primary way to start a new conversation.</p>
+<ol>
+<li>Go to the <strong>Galaxy</strong> page</li>
+<li>Navigate the 3D visualization — click a cluster to zoom in, then click a star (person)</li>
+<li>A sidebar opens on the right showing the person&#39;s:<ul>
+<li>Name and avatar</li>
+<li>Academic program</li>
+<li>Position/company (if set)</li>
+<li>Location</li>
+<li>Bio</li>
+</ul>
+</li>
+<li>Click the <strong>&quot;Start Conversation&quot;</strong> button at the bottom of the sidebar</li>
+<li>The button changes to <strong>&quot;Starting...&quot;</strong> while the conversation is created</li>
+<li>You&#39;re taken to the Chat page with the new conversation open</li>
+<li>Type your first message and press Enter to send</li>
+</ol>
+<blockquote>
+<p><strong>If the conversation already exists</strong>: If you&#39;ve messaged this person before, the existing conversation opens instead of creating a duplicate.</p>
+</blockquote>
+<hr>
+<h4>3. Send a Message</h4>
+<ol>
+<li>Open a conversation from the left sidebar</li>
+<li>The message area shows:<ul>
+<li><strong>Header</strong>: The other person&#39;s name, avatar, and program</li>
+<li><strong>Message list</strong>: Previous messages, with yours on the right (green bubbles) and theirs on the left (white bubbles)</li>
+<li><strong>Input area</strong>: Text field at the bottom</li>
+</ul>
+</li>
+<li>Type your message in the text input</li>
+<li>Press <strong>Enter</strong> to send. (Use <strong>Shift + Enter</strong> for a new line within your message.)</li>
+<li>Your message appears immediately with a single check ✓</li>
+<li>When the other person opens the conversation, it changes to double check ✓✓</li>
+</ol>
+<blockquote>
+<p><strong>Message limit</strong>: 4,000 characters per message. The input won&#39;t let you type more.</p>
+</blockquote>
+<hr>
+<h4>4. Read and Reply to Messages</h4>
+<ol>
+<li>New conversations with unread messages appear at the top of your conversation list</li>
+<li>Each conversation in the list shows:<ul>
+<li>The other person&#39;s avatar and name</li>
+<li>The last message preview</li>
+<li>How long ago it was sent</li>
+</ul>
+</li>
+<li>Click a conversation to open it</li>
+<li>Messages are displayed in chronological order — newest at the bottom</li>
+<li>The view auto-scrolls to show the newest message</li>
+</ol>
+<hr>
+<h4>5. Search Your Conversations</h4>
+<ol>
+<li>On the Chat page, use the <strong>search bar</strong> at the top of the conversation list</li>
+<li>Type part of the other person&#39;s name</li>
+<li>The conversation list filters to show matching conversations only</li>
+<li>Clear the search to see all conversations again</li>
+</ol>
+<hr>
+<h4>6. Navigate Between Conversations</h4>
+<ol>
+<li>Click any conversation in the left sidebar to switch to it</li>
+<li>The previous conversation stays open in the background — you can switch back anytime</li>
+<li>All your conversations are preserved</li>
+</ol>
+<hr>
+<h2>Common Questions</h2>
+<p><strong>Q: Can I chat with anyone on the platform?</strong></p>
+<p>→ Yes. Any logged-in user can message any other logged-in user. You don&#39;t need a formal &quot;Connection&quot; to chat — you can start a conversation directly from the Galaxy by clicking on someone&#39;s star.</p>
+<p><strong>Q: What&#39;s the difference between Chat and Connections?</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Chat</th>
+<th>Connections</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Purpose</strong></td>
+<td>Private messaging</td>
+<td>Formal relationships (mentorship, career coaching, etc.)</td>
+</tr>
+<tr>
+<td><strong>How to start</strong></td>
+<td>Click a star in Galaxy → &quot;Start Conversation&quot;</td>
+<td>Use &quot;Find Connections&quot; AI matching → Send request → They accept</td>
+</tr>
+<tr>
+<td><strong>Structure</strong></td>
+<td>Simple message thread</td>
+<td>Has a type, status, lifecycle (pending → active → completed)</td>
+</tr>
+<tr>
+<td><strong>Visibility</strong></td>
+<td>Only the two participants</td>
+<td>Managed on your Profile → Connections tab</td>
+</tr>
+</tbody></table>
+<p>You can chat with someone without a formal connection, and you can have a connection without chatting. They&#39;re independent features that work well together.</p>
+<p><strong>Q: Can I delete a conversation or a message I sent?</strong></p>
+<p>→ No. Conversations and messages are permanent. Once sent, a message cannot be edited or deleted.</p>
+<p><strong>Q: Can I have group chats?</strong></p>
+<p>→ No. Currently only 1-on-1 conversations are supported.</p>
+<p><strong>Q: Can I send images or files?</strong></p>
+<p>→ Not yet. The attachment button is visible but disabled. Image/file sharing is planned for a future update.</p>
+<p><strong>Q: How do I know if someone read my message?</strong></p>
+<p>→ Look for the check marks next to your message:</p>
+<ul>
+<li>✓ (single check) = Sent — the message was delivered but the person hasn&#39;t opened the conversation yet</li>
+<li>✓✓ (double check) = Read — the person has opened the conversation and seen your message</li>
+</ul>
+<p><strong>Q: Does the other person get notified when I message them?</strong></p>
+<p>→ Not by email or push notification. They&#39;ll see the new message when they open the Chat page — the conversation appears at the top of their list with a preview of your message.</p>
+<p><strong>Q: Can admins read my private messages?</strong></p>
+<p>→ No. Chat conversations are private between the two participants. Admins do not have access to other users&#39; messages.</p>
+<p><strong>Q: Can I block someone from messaging me?</strong></p>
+<p>→ Not currently. If someone is bothering you, contact an admin who can ban the user from the platform.</p>
+<p><strong>Q: How many messages are kept in a conversation?</strong></p>
+<p>→ All messages are kept permanently. When you open a conversation, the most recent 100 messages are loaded. As you scroll up, more messages may appear.</p>
+</body></html>

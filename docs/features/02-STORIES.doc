@@ -1,0 +1,412 @@
+<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.5;color:#1a1a1a;max-width:7in;margin:0 auto;padding:24px}h1{font-size:20pt;color:#076951;border-bottom:2px solid #076951;padding-bottom:6px;margin-top:0}h2{font-size:15pt;color:#076951;margin-top:24px}h3{font-size:12pt;color:#365951;margin-top:18px}table{border-collapse:collapse;width:100%;margin:10px 0}th,td{border:1px solid #999;padding:5px 8px;text-align:left;font-size:10pt}th{background:#076951;color:white;font-weight:bold}td{vertical-align:top}code{font-family:Consolas,monospace;font-size:9pt;background:#f0f0f0;padding:1px 4px}pre{background:#1a1a2e;color:#e0e0e0;padding:10px;font-size:9pt}a{color:#076951}blockquote{border-left:3px solid #076951;padding:4px 12px;color:#555;margin:10px 0;background:#f9f9f9}strong{color:#192c27}hr{border:none;border-top:1px solid #ddd;margin:16px 0}ul,ol{padding-left:20px}li{margin:2px 0}</style></head><body><h1>Stories</h1>
+<h2>What Is This Feature?</h2>
+<p>Stories lets community members share their achievements — career milestones, entrepreneurial ventures, industry awards, social impact work, and more. Each story is a rich-text article with images, published after admin review. Stories appear on the public Stories page and on the home page as featured success stories, inspiring the community.</p>
+<hr>
+<h2>Who Can Do What?</h2>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Public</th>
+<th>Logged In</th>
+<th>Author (own story)</th>
+<th>Admin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Browse stories</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>View approved stories</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Write a new story</td>
+<td>❌</td>
+<td>✅</td>
+<td>—</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Edit a story</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅ (resets to pending)</td>
+<td>✅ (status preserved)</td>
+</tr>
+<tr>
+<td>Delete a story</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅ (any)</td>
+</tr>
+<tr>
+<td>View story in any status</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>See rejection feedback</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Approve / reject</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Assign a different author</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<p><strong>Author</strong>: The person who wrote the story. Admins can create stories and assign any user as the author — the story appears in that user&#39;s profile as if they wrote it.</p>
+<p><strong>Admin</strong>: Can do anything on any story. Creates auto-approved (no review needed). Edits preserve the current status.</p>
+<hr>
+<h2>Story Categories</h2>
+<p>Each story is categorized into one of nine types:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Career Advancement</strong></td>
+<td>Promotion, new role, career change</td>
+</tr>
+<tr>
+<td><strong>Entrepreneurship</strong></td>
+<td>Started a company, launched a product</td>
+</tr>
+<tr>
+<td><strong>Industry Recognition</strong></td>
+<td>Awards, honors, certifications</td>
+</tr>
+<tr>
+<td><strong>Social Impact</strong></td>
+<td>Community service, volunteering, NGO work</td>
+</tr>
+<tr>
+<td><strong>Academic Achievement</strong></td>
+<td>Research publication, degree completion, fellowships</td>
+</tr>
+<tr>
+<td><strong>Innovation</strong></td>
+<td>Patents, inventions, technical breakthroughs</td>
+</tr>
+<tr>
+<td><strong>Leadership</strong></td>
+<td>Board positions, organization leadership, mentoring programs</td>
+</tr>
+<tr>
+<td><strong>Community Service</strong></td>
+<td>LAU-specific community involvement</td>
+</tr>
+<tr>
+<td><strong>Other</strong></td>
+<td>Anything that doesn&#39;t fit the above</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>How It Works</h2>
+<h3>The Story Lifecycle</h3>
+<pre><code>[User Creates Story]
+       |
+       v
+    PENDING ────────────────┐
+       |                     |
+   ┌───┴───┐                 |
+   v       v                 |
+APPROVED  REJECTED           |
+   |      (author sees       |
+   |       review notes)     |
+   |          |              |
+   |    (user edits) ────────┘
+   |    (resets to pending)
+   v
+PUBLIC (visible on stories page and home page)
+</code></pre>
+<pre><code>[Admin Creates Story]
+       |
+       v
+    APPROVED (skips pending — goes live immediately)
+</code></pre>
+<pre><code>[Admin Creates Story for Another User]
+       |
+       v
+    APPROVED (appears in that user&#39;s profile as their story)
+</code></pre>
+<blockquote>
+<p><strong>Unlike Events, Stories has no &quot;Draft&quot; status.</strong> When a user creates a story, it goes straight to <strong>Pending</strong> (awaiting review). There&#39;s no separate &quot;submit&quot; step — creating IS submitting.</p>
+</blockquote>
+<h3>Status Meanings</h3>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>What It Means</th>
+<th>Visible Publicly?</th>
+<th>Visible to Author?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Pending</strong></td>
+<td>Submitted for admin review. Waiting.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Approved</strong></td>
+<td>Published and visible to everyone.</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Rejected</strong></td>
+<td>Admin declined with notes. Author can edit and it goes back to Pending.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3>The Two Creation Paths</h3>
+<table>
+<thead>
+<tr>
+<th>Who Creates</th>
+<th>Initial Status</th>
+<th>Review Needed?</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Admin</strong></td>
+<td>Approved</td>
+<td>No — auto-approved</td>
+<td>Admins are trusted to publish directly</td>
+</tr>
+<tr>
+<td><strong>Regular User</strong> (student, alumni, faculty)</td>
+<td>Pending</td>
+<td>Yes — admin must approve</td>
+<td>Stories need admin oversight before going public</td>
+</tr>
+</tbody></table>
+<h3>Editing Rules</h3>
+<table>
+<thead>
+<tr>
+<th>Who Edits</th>
+<th>What Happens to Status</th>
+<th>What Happens to Review Data</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Author</strong> editing a rejected story</td>
+<td>Resets to <strong>Pending</strong> — needs re-approval</td>
+<td>Previous review notes are preserved (author can still see them)</td>
+</tr>
+<tr>
+<td><strong>Author</strong> editing an approved story</td>
+<td>Resets to <strong>Pending</strong> — needs re-approval</td>
+<td>Story disappears from public until re-approved</td>
+</tr>
+<tr>
+<td><strong>Admin</strong> editing any story</td>
+<td><strong>Status is preserved</strong></td>
+<td>Review data is preserved</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Important</strong>: If you edit your approved story, it goes back to Pending and disappears from the public page. This prevents changes from going live without admin review.</p>
+</blockquote>
+<h3>Visibility Rules</h3>
+<p>Who can see a story depends on its status and who is looking:</p>
+<table>
+<thead>
+<tr>
+<th>Story Status</th>
+<th>Public (no login)</th>
+<th>Any Logged-in User</th>
+<th>The Author</th>
+<th>Admin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Pending</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Approved</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Rejected</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>The Stories page</strong> (<code>/stories</code>) only shows approved stories.<br><strong>The Home page</strong> success stories section only shows approved stories.<br><strong>Your Profile → Stories tab</strong> shows all your stories in every status.</p>
+</blockquote>
+<h3>Image Handling</h3>
+<ul>
+<li>Stories support a <strong>cover image</strong> (hero) and a <strong>thumbnail image</strong> (small preview)</li>
+<li>Images are uploaded directly in the story editor</li>
+<li>The rich text editor also supports inserting images into the story body</li>
+<li>When you replace an image or delete a story, old images are automatically cleaned up</li>
+<li>Each image upload has a size limit (8 MB per image)</li>
+</ul>
+<hr>
+<h2>How To — Step by Step</h2>
+<hr>
+<h3>For Regular Users — Public Website</h3>
+<hr>
+<h4>1. Write a Story</h4>
+<ol>
+<li>Log in to the public website</li>
+<li>Click your <strong>avatar</strong> (top-right) and go to <strong>Profile</strong></li>
+<li>Click the <strong>Stories</strong> tab</li>
+<li>Click the <strong>&quot;Create Story&quot;</strong> button (top-right)</li>
+<li>The story editor opens with three areas:<ul>
+<li><strong>Main editor</strong> (left): Cover image upload, title, description, and the rich text editor where you write your story</li>
+<li><strong>Sidebar</strong> (right): Choose a category, set the story date, upload a thumbnail</li>
+</ul>
+</li>
+<li>Write your story using the formatting toolbar: bold, italic, headings, lists, quotes, links, and images</li>
+<li>Click <strong>&quot;Create Story&quot;</strong> at the bottom</li>
+<li>Your story is created with <strong>Pending</strong> status — it goes directly to the admin review queue</li>
+</ol>
+<blockquote>
+<p><strong>No separate &quot;Submit&quot; step</strong>: Unlike events, creating a story automatically submits it for review. You cannot save as draft — it goes straight to pending.</p>
+</blockquote>
+<hr>
+<h4>2. Edit Your Story</h4>
+<ol>
+<li>Go to <strong>Profile → Stories tab</strong></li>
+<li>Find your story — you&#39;ll see a status badge (Pending / Approved / Rejected)</li>
+<li>Click the <strong>edit icon</strong> (pencil) on the story card, or open the story and click Edit</li>
+<li>Make your changes in the editor</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+<li>The story status resets to <strong>Pending</strong> (even if it was previously approved)</li>
+<li>An admin must re-approve it before it&#39;s public again</li>
+</ol>
+<hr>
+<h4>3. Delete Your Story</h4>
+<ol>
+<li>Go to <strong>Profile → Stories tab</strong></li>
+<li>Open the story you want to delete</li>
+<li>Click the <strong>&quot;Delete&quot;</strong> button at the bottom of the editor</li>
+<li>Confirm the deletion</li>
+<li>The story and all its images are permanently removed</li>
+</ol>
+<hr>
+<h4>4. See Admin Feedback on a Rejected Story</h4>
+<ol>
+<li>Go to <strong>Profile → Stories tab</strong></li>
+<li>Find the story with a <strong>&quot;Rejected&quot;</strong> badge</li>
+<li>Click the story to open it</li>
+<li>The rejection feedback is displayed — the admin&#39;s review notes explaining why it was rejected</li>
+<li>Click <strong>&quot;Edit&quot;</strong> to make changes and resubmit — the story goes back to Pending automatically</li>
+</ol>
+<hr>
+<h3>For Admins — Admin Dashboard</h3>
+<hr>
+<h4>5. Create a Story (Auto-Approved)</h4>
+<ol>
+<li>Log in to the Admin Dashboard</li>
+<li>Click <strong>Stories</strong> in the sidebar</li>
+<li>Click <strong>&quot;Create Story&quot;</strong></li>
+<li>Fill out the story form. You can also:<ul>
+<li><strong>Assign an author</strong>: Select any user as the author — the story will appear in their profile</li>
+<li><strong>Leave yourself as author</strong>: If you don&#39;t select someone else, you&#39;re the author</li>
+</ul>
+</li>
+<li>Click <strong>&quot;Create&quot;</strong></li>
+<li>The story is created with <strong>Approved</strong> status — immediately public</li>
+</ol>
+<blockquote>
+<p><strong>Creating for another user</strong>: Use the author dropdown to select someone else. This is useful when admins want to publish a story on behalf of an alumnus who doesn&#39;t use the platform, or to migrate content.</p>
+</blockquote>
+<hr>
+<h4>6. Approve or Reject a Submitted Story</h4>
+<ol>
+<li>In the Admin Dashboard, click <strong>Stories</strong> in the sidebar</li>
+<li>Use the status filter to show <strong>&quot;Pending&quot;</strong> stories</li>
+<li>Click a story to open its detail/edit page</li>
+<li>Read the story content, check the category and date</li>
+<li>Click <strong>&quot;Approve&quot;</strong> — the story is published immediately, visible on the Stories page and home page</li>
+<li>Or click <strong>&quot;Reject&quot;</strong> — you must provide review notes. The author sees these notes and can edit + resubmit.</li>
+</ol>
+<blockquote>
+<p><strong>The author does not get a notification.</strong> They need to check their Profile → Stories tab to see the updated status and feedback.</p>
+</blockquote>
+<hr>
+<h4>7. Edit Any Story</h4>
+<ol>
+<li>In the Admin Dashboard, find the story and open it</li>
+<li>Click <strong>&quot;Edit&quot;</strong></li>
+<li>Make changes (content, category, date, images, author)</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+<li><strong>The story&#39;s status is preserved</strong> — admin edits do NOT reset it to pending. If it was approved, it stays approved.</li>
+</ol>
+<hr>
+<h4>8. Delete Any Story</h4>
+<ol>
+<li>In the Admin Dashboard, open the story</li>
+<li>Click <strong>&quot;Delete&quot;</strong></li>
+<li>Confirm the deletion</li>
+<li>The story and all its images are permanently removed</li>
+</ol>
+<blockquote>
+<p><strong>Admin can delete any story</strong> regardless of status or author. Regular users can only delete their own stories.</p>
+</blockquote>
+<hr>
+<h2>Common Questions</h2>
+<p><strong>Q: I wrote a story. Why isn&#39;t it showing on the public Stories page?</strong></p>
+<p>→ It&#39;s in &quot;Pending&quot; status. An admin needs to approve it first. Check your Profile → Stories tab to see the current status.</p>
+<p><strong>Q: How is this different from Events? In Events I have to &quot;Submit for Review&quot; separately.</strong></p>
+<p>→ Correct. Stories go straight to Pending when you create them — there&#39;s no separate &quot;submit&quot; button. Events have a &quot;Draft&quot; phase where you can save your work before submitting. Stories don&#39;t have drafts — creating IS submitting.</p>
+<p><strong>Q: My story was rejected. What do I do?</strong></p>
+<p>→ Open the story from your Profile → Stories tab. You&#39;ll see the admin&#39;s review notes explaining why. Click &quot;Edit,&quot; make the changes, and save — it automatically goes back to Pending for re-review.</p>
+<p><strong>Q: I edited my approved story and now it&#39;s gone from the public page. What happened?</strong></p>
+<p>→ When an author edits a story, it resets to &quot;Pending&quot; and needs re-approval. This is by design — changes need admin review before going public again.</p>
+<p><strong>Q: As an admin, can I publish a story for someone else?</strong></p>
+<p>→ Yes. When creating a story from the Admin Dashboard, use the author dropdown to select any user. The story appears in their profile as if they wrote it, and it starts as Approved (auto-published).</p>
+<p><strong>Q: What&#39;s the difference between the cover image and the thumbnail?</strong></p>
+<p>→ The <strong>cover image</strong> is the large hero image at the top of the story. The <strong>thumbnail</strong> is a smaller version used in story cards on the Stories page, home page, and profile. If you don&#39;t upload a separate thumbnail, the system may use the cover image instead.</p>
+<p><strong>Q: Can I include images inside my story (not just as cover)?</strong></p>
+<p>→ Yes. The rich text editor has an image button that lets you insert images directly into the story body, between paragraphs.</p>
+<p><strong>Q: What happens to images when I delete or replace them?</strong></p>
+<p>→ Old images are automatically removed from storage. You don&#39;t need to clean them up manually.</p>
+<p><strong>Q: How many stories can I write?</strong></p>
+<p>→ No limit. Write as many as you want. Each one goes through the same review process.</p>
+<p><strong>Q: Can I change the category after publishing?</strong></p>
+<p>→ Yes, but editing the story resets it to Pending and it needs re-approval.</p>
+</body></html>

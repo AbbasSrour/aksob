@@ -1,0 +1,209 @@
+{
+  "main": {
+    "id": "fc4bf11a7f209005",
+    "type": "split",
+    "children": [
+      {
+        "id": "337715756d7fdf59",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "39ff43101c16d93c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "features/04-CONNECTIONS.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "04-CONNECTIONS"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "e5fa3d153c428c4a",
+    "type": "split",
+    "children": [
+      {
+        "id": "87216c353a3a4a2a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "eba4f4dc8360ba36",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "cb51fab1324083b8",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "54a4bbebbb9caa49",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "0f5ae3332cf57451",
+    "type": "split",
+    "children": [
+      {
+        "id": "85a01670632545cd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "bc364a1721a0d562",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "features/01-EVENTS.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for 01-EVENTS"
+            }
+          },
+          {
+            "id": "5647809962ff3056",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "features/01-EVENTS.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from 01-EVENTS"
+            }
+          },
+          {
+            "id": "7d6c48559eb0b745",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "02f9c3467f40c910",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "da251aad378c5566",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "features/01-EVENTS.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of 01-EVENTS"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "39ff43101c16d93c",
+  "lastOpenFiles": [
+    "features/AKSOB-Feature-Docs.md",
+    "features/AKSOB-Feature-Docs.doc",
+    "features/08-PROFILE.doc",
+    "features/07-ONBOARDING.doc",
+    "features/06-AUTH.doc",
+    "features/README.doc",
+    "features/05-CHAT.doc",
+    "features/04-CONNECTIONS.doc",
+    "features/03-NEWS.doc",
+    "features/02-STORIES.doc",
+    "features/01-EVENTS.doc",
+    "features/08-PROFILE.md",
+    "features/07-ONBOARDING.md",
+    "features/06-AUTH.md",
+    "features/README.md",
+    "features/03-NEWS.md",
+    "features/02-STORIES.md",
+    "features/01-EVENTS.md",
+    "features/05-CHAT.md",
+    "features/04-CONNECTIONS.md"
+  ]
+}

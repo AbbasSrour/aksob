@@ -1,0 +1,114 @@
+<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.5;color:#1a1a1a;max-width:7in;margin:0 auto;padding:24px}h1{font-size:20pt;color:#076951;border-bottom:2px solid #076951;padding-bottom:6px;margin-top:0}h2{font-size:15pt;color:#076951;margin-top:24px}h3{font-size:12pt;color:#365951;margin-top:18px}table{border-collapse:collapse;width:100%;margin:10px 0}th,td{border:1px solid #999;padding:5px 8px;text-align:left;font-size:10pt}th{background:#076951;color:white;font-weight:bold}td{vertical-align:top}code{font-family:Consolas,monospace;font-size:9pt;background:#f0f0f0;padding:1px 4px}pre{background:#1a1a2e;color:#e0e0e0;padding:10px;font-size:9pt}a{color:#076951}blockquote{border-left:3px solid #076951;padding:4px 12px;color:#555;margin:10px 0;background:#f9f9f9}strong{color:#192c27}hr{border:none;border-top:1px solid #ddd;margin:16px 0}ul,ol{padding-left:20px}li{margin:2px 0}</style></head><body><h1>Onboarding</h1>
+<h2>What Is This Feature?</h2>
+<p>Onboarding is the profile setup wizard every new user goes through after registration. It&#39;s a 6-step walkthrough that collects your education, work experience, skills, goals, and visibility preferences. Completing onboarding unlocks the full platform and enables AI-powered connection matching.</p>
+<hr>
+<h2>Who Sees Onboarding?</h2>
+<ul>
+<li><strong>New users</strong>: Taken to onboarding immediately after registration</li>
+<li><strong>Returning users who skipped it</strong>: Redirected to onboarding when they try to access most pages (except the home page and Galaxy)</li>
+<li><strong>Completed users</strong>: Never see onboarding again</li>
+<li><strong>Users who took &gt;7 days</strong>: A gentle reminder banner appears at the top of the page</li>
+</ul>
+<hr>
+<h2>How It Works</h2>
+<h3>The 6 Steps</h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What You Do</th>
+<th>Why It Matters</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>0. Welcome</strong></td>
+<td>See feature highlights. Click &quot;Build Your Profile.&quot;</td>
+<td>Sets expectations</td>
+</tr>
+<tr>
+<td><strong>1. Education</strong></td>
+<td>Add your academic programs and graduation year. Mark one as primary.</td>
+<td>Used for Galaxy clustering and connection matching</td>
+</tr>
+<tr>
+<td><strong>2. Experience</strong></td>
+<td>Add work positions: title, company, dates. Mark current positions.</td>
+<td>Helps the AI find relevant connections</td>
+</tr>
+<tr>
+<td><strong>3. Skills &amp; Goals</strong></td>
+<td>Add tags for your skills, goals, and hobbies/interests.</td>
+<td>Core data the AI uses to find matches</td>
+</tr>
+<tr>
+<td><strong>4. Visibility</strong></td>
+<td>Choose: visible in Galaxy? Show email? Show phone? Which connection types are you open to?</td>
+<td>Controls who can find you and how</td>
+</tr>
+<tr>
+<td><strong>5. Done</strong></td>
+<td>Confirmation screen with &quot;Find My First Connection&quot; button.</td>
+<td>Takes you to the Galaxy to start connecting</td>
+</tr>
+</tbody></table>
+<h3>Skip Behavior</h3>
+<ul>
+<li>You can skip onboarding at any step (each page has a skip link)</li>
+<li>Skipping takes you to the Galaxy page</li>
+<li>Your profile data (whatever you filled so far) is saved</li>
+<li>You&#39;ll be prompted to complete onboarding later when you try to access most pages</li>
+</ul>
+<h3>The Nudge Banner</h3>
+<p>If you haven&#39;t completed onboarding after 7 days:</p>
+<ul>
+<li>A banner appears at the top of every page</li>
+<li>It says: &quot;Complete your profile to get better AI-powered connections&quot;</li>
+<li>Clicking it takes you back to onboarding</li>
+<li>The banner disappears once you complete onboarding</li>
+</ul>
+<h3>What Happens When You Complete</h3>
+<ol>
+<li>Your onboarding status is set to <strong>complete</strong></li>
+<li>The system generates an <strong>AI profile embedding</strong> — a mathematical representation of your skills, goals, education, and experience</li>
+<li>This embedding is what powers the connection matching system</li>
+<li>You&#39;re now fully visible (if you chose to be) and can use all features</li>
+</ol>
+<hr>
+<h2>How To — Step by Step</h2>
+<hr>
+<h4>1. Go Through Onboarding (New User)</h4>
+<p>After registering, you&#39;re automatically taken to onboarding. If you skipped it and want to return:</p>
+<ol>
+<li>Go to any non-public page (e.g., try to access Profile or Events)</li>
+<li>You&#39;ll be redirected to <code>/onboarding</code></li>
+<li>Follow the wizard steps:<ul>
+<li><strong>Step 0</strong>: Read the highlights, click <strong>&quot;Build Your Profile&quot;</strong></li>
+<li><strong>Step 1</strong>: Search for your academic program in the dropdown, select it, add graduation year. Click <strong>&quot;Next&quot;</strong></li>
+<li><strong>Step 2</strong>: Add work experiences — title, company, dates. Toggle &quot;currently working here&quot; if applicable. You can add multiple. Click <strong>&quot;Next&quot;</strong></li>
+<li><strong>Step 3</strong>: Type a skill and press Enter to add it. Do the same for goals and hobbies. Click <strong>&quot;Next&quot;</strong></li>
+<li><strong>Step 4</strong>: Toggle &quot;Visible in Galaxy&quot; ON. Choose which connection types you&#39;re open to. Set email/phone visibility. Click <strong>&quot;Next&quot;</strong></li>
+<li><strong>Step 5</strong>: Review your info. Click <strong>&quot;Find My First Connection&quot;</strong> to go to the Galaxy, or click <strong>&quot;Done&quot;</strong> to go to your profile</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h4>2. Skip Onboarding</h4>
+<ol>
+<li>At any step, click the <strong>&quot;Skip&quot;</strong> link</li>
+<li>You&#39;re taken to the Galaxy page</li>
+<li>Your partial data is saved</li>
+<li>You can return later — you&#39;ll be redirected automatically when you try to access protected pages</li>
+</ol>
+<hr>
+<h2>Common Questions</h2>
+<p><strong>Q: Can I change my answers later?</strong></p>
+<p>→ Yes. Everything you set during onboarding can be updated from your <strong>Profile → About tab</strong> at any time.</p>
+<p><strong>Q: What happens if I skip onboarding entirely?</strong></p>
+<p>→ You can still browse the Galaxy and read public content. But you won&#39;t appear in other people&#39;s match results, and you&#39;ll be redirected to onboarding when you try to access most features.</p>
+<p><strong>Q: Why do I need to complete onboarding for connections?</strong></p>
+<p>→ The AI matching system needs your education, skills, and goals to find compatible people. Without this data, the system can&#39;t make meaningful matches.</p>
+<p><strong>Q: Can I redo onboarding?</strong></p>
+<p>→ Once completed, you can&#39;t restart onboarding. But you can edit all the same information from your <strong>Profile</strong>.</p>
+<p><strong>Q: I set &quot;Visible in Galaxy&quot; to OFF during onboarding. Can people still find me?</strong></p>
+<p>→ No. You won&#39;t appear in the Galaxy visualization or in connection match results. You can change this anytime in Profile → Privacy settings.</p>
+</body></html>
