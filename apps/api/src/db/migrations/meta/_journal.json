@@ -1,20 +1,27 @@
 {
-  "version": "7",
-  "dialect": "sqlite",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "6",
-      "when": 1778934501662,
-      "tag": "0000_wooden_night_thrasher",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1779031445545,
-      "tag": "0001_chunky_sharon_ventura",
-      "breakpoints": true
-    }
-  ]
+	"version": "7",
+	"dialect": "sqlite",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "6",
+			"when": 1778934501662,
+			"tag": "0000_wooden_night_thrasher",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "6",
+			"when": 1779031445545,
+			"tag": "0001_chunky_sharon_ventura",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "6",
+			"when": 1779481050449,
+			"tag": "0002_elite_apocalypse",
+			"breakpoints": true
+		}
+	]
 }

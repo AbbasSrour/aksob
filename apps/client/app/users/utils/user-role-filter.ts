@@ -1,8 +1,8 @@
-import type { ColumnFiltersState } from "@tanstack/react-table";
 import {
 	createFilterDefinition,
 	type FacetContext,
 } from "@aksob/ui/components/data-table/utils/facets";
+import type { ColumnFiltersState } from "@tanstack/react-table";
 import { userRoleTypes } from "@/app/users/constants/user-role-types";
 import type { AdminUser } from "@/app/users/hooks/api/users.functions.ts";
 import type { ListUsersParams } from "@/app/users/hooks/api/users.queries";

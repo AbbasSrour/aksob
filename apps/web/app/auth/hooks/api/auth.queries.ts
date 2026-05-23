@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { authClient } from "~/app/lib/auth";
 import { mutationKeyFactory } from "~/app/constants/mutation-key-factory";
+import { authClient } from "~/app/lib/auth";
 
 export interface SignUpInput {
 	name: string;

@@ -12,10 +12,7 @@ import {
 import { useState } from "react";
 import { Link } from "react-router";
 
-import {
-	STORY_CATEGORY_LABELS,
-	type StoryCategory,
-} from "~/app/lib/stories";
+import { STORY_CATEGORY_LABELS, type StoryCategory } from "~/app/lib/stories";
 import { listMyStories, type StoryItem } from "~/app/lib/users";
 import { Avatar } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
@@ -170,11 +167,7 @@ function StoryCard({ story }: { story: StoryItem }) {
 								onClick={() => setExpanded(!expanded)}
 								className="flex items-center gap-1 text-xs text-[var(--error)] hover:underline"
 							>
-								{expanded ? (
-									<ChevronUp size={12} />
-								) : (
-									<ChevronDown size={12} />
-								)}
+								{expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
 								Review feedback
 							</button>
 							{expanded && (

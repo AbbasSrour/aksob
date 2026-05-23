@@ -13,16 +13,16 @@ import {
 } from "@tabler/icons-react";
 import { useNavigate } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
-import { researchTypeOptions } from "@/app/research/constants/research-type-options";
 import { researchStatusOptions } from "@/app/research/constants/research-status-options";
+import { researchTypeOptions } from "@/app/research/constants/research-type-options";
 import type { Research } from "@/app/research/hooks/api/research.functions";
 import {
 	useApproveResearch,
 	useDeleteResearch,
 	useRejectResearch,
 } from "@/app/research/hooks/api/research.queries";
-import { researchTypeFilter } from "@/app/research/utils/research-type-filter";
 import { researchStatusFilter } from "@/app/research/utils/research-status-filter";
+import { researchTypeFilter } from "@/app/research/utils/research-type-filter";
 import { m } from "@/paraglide/messages";
 
 const columnHelper = createColumnHelper<Research>();

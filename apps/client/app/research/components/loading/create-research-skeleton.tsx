@@ -6,12 +6,12 @@ import { FormFooterSkeleton } from "@aksob/ui/components/skeleton/form-footer-sk
 import { InputSkeleton } from "@aksob/ui/components/skeleton/input-skeleton";
 import {
 	FormContent,
+	FormRow,
 	FormSection,
 	FormSectionContent,
+	FormSectionDescription,
 	FormSectionHeader,
 	FormSectionTitle,
-	FormSectionDescription,
-	FormRow,
 } from "@aksob/ui/core/form";
 
 export function CreateResearchSkeleton() {

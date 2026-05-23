@@ -12,9 +12,10 @@ export async function proxyApiRequest(request: Request) {
 	const response = await fetch(backendUrl, {
 		method: request.method,
 		headers,
-		body: request.method === "GET" || request.method === "HEAD"
-			? undefined
-			: await request.arrayBuffer(),
+		body:
+			request.method === "GET" || request.method === "HEAD"
+				? undefined
+				: await request.arrayBuffer(),
 	});
 
 	const responseHeaders = new Headers(response.headers);

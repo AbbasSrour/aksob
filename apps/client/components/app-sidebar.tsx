@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { NavMain } from "@aksob/ui/components/navigation/nav-main";
 import { NavRecents } from "@aksob/ui/components/navigation/nav-recents";
 import { NavSecondary } from "@aksob/ui/components/navigation/nav-secondary";
@@ -11,6 +9,7 @@ import {
 	SidebarFooter,
 	SidebarHeader,
 } from "@aksob/ui/core/sidebar";
+import type * as React from "react";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	return (

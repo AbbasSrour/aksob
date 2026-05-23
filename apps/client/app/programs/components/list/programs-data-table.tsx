@@ -26,8 +26,8 @@ import { useState } from "react";
 import { programDataTableColumns } from "@/app/programs/components/list/programs-data-table-columns";
 import type { Program } from "@/app/programs/hooks/api/programs.functions";
 import { programQueries } from "@/app/programs/hooks/api/programs.queries";
-import { programActiveFilter } from "@/app/programs/utils/program-active-filter";
 import { Route } from "@/app/programs/pages/list";
+import { programActiveFilter } from "@/app/programs/utils/program-active-filter";
 
 export function ProgramsDataTable() {
 	const navigate = Route.useNavigate();

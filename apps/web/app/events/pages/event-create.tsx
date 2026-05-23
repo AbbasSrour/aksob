@@ -2,8 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { type CreateEventParams, createEvent } from "~/app/lib/users";
 import { EventCoverUpload } from "~/components/events/event-cover-upload";
-import { createEvent, type CreateEventParams } from "~/app/lib/users";
 import { Button } from "~/components/ui/button";
 
 const EVENT_TYPES = [

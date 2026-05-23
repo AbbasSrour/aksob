@@ -1,4 +1,4 @@
-import { Badge, badgeVariants } from "@aksob/ui/core/badge";
+import { Badge, type badgeVariants } from "@aksob/ui/core/badge";
 import { cn } from "@aksob/ui/lib/utils";
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentType, ReactNode } from "react";

@@ -1,8 +1,8 @@
-import type { ColumnFiltersState } from "@tanstack/react-table";
 import {
-	type FacetContext,
 	createFilterDefinition,
+	type FacetContext,
 } from "@aksob/ui/components/data-table/utils/facets";
+import type { ColumnFiltersState } from "@tanstack/react-table";
 import { programActiveTypes } from "@/app/programs/constants/program-active-types";
 import type { Program } from "@/app/programs/hooks/api/programs.functions";
 import { m } from "@/paraglide/messages";

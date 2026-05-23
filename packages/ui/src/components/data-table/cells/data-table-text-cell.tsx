@@ -10,7 +10,7 @@ import {
 	TooltipTrigger,
 } from "@aksob/ui/core/tooltip";
 import { cn } from "@aksob/ui/lib/utils";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 interface Props {
 	children: ReactNode;

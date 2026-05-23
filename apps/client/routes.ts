@@ -70,6 +70,12 @@ export const routes = rootRoute("__root.tsx", [
 			route("/$eventId", "events/pages/$eventId-index.tsx"),
 			route("/$eventId/edit", "events/pages/eventId-edit.tsx"),
 		]),
+
+		route("/donors", "donors/layout.tsx", [
+			index("donors/pages/list.tsx"),
+			route("/create", "donors/pages/create.tsx"),
+			route("/$donorId/edit", "donors/pages/edit.tsx"),
+		]),
 	]),
 
 	// API routes

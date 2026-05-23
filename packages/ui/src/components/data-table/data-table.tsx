@@ -1,5 +1,3 @@
-import { type Row, type RowData, flexRender } from "@tanstack/react-table";
-import { useVirtualizer } from "@tanstack/react-virtual";
 import { useDataTableContext } from "@aksob/ui/components/data-table/data-table-provider";
 import {
 	Table,
@@ -10,6 +8,8 @@ import {
 	TableRow,
 } from "@aksob/ui/core/table";
 import { cn } from "@aksob/ui/lib/utils";
+import { flexRender, type Row, type RowData } from "@tanstack/react-table";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import {
 	type MouseEvent,
 	useCallback,

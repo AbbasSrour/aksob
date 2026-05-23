@@ -106,9 +106,7 @@ export default function StoriesPage() {
 						<div className="w-16 h-16 bg-[var(--gray-100)] rounded-full flex items-center justify-center mx-auto mb-4">
 							<Calendar size={24} className="text-[var(--gray-400)]" />
 						</div>
-						<p className="text-sm text-[var(--gray-500)]">
-							No stories yet.
-						</p>
+						<p className="text-sm text-[var(--gray-500)]">No stories yet.</p>
 					</div>
 				) : (
 					<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -147,7 +145,8 @@ function StoryCard({
 		? story.content
 				.replace(/<[^>]*>/g, " ")
 				.replace(/\s+/g, " ")
-				.trim().split(" ").length
+				.trim()
+				.split(" ").length
 		: 0;
 	const readTime = Math.max(1, Math.ceil(wordCount / 200));
 

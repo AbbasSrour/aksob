@@ -6,15 +6,16 @@ import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 import { env } from "@/config/env";
 import { requestLogger } from "@/middleware/http-logger";
+import { adminModule } from "@/modules/admin/admin.routes";
 import { chatModule } from "@/modules/chat/chat.routes";
 import { connectionsModule } from "@/modules/connections/connections.routes";
+import { donorsModule } from "@/modules/donors/donors.routes";
 import { eventsModule } from "@/modules/events/events.routes";
-import { adminModule } from "@/modules/admin/admin.routes";
 import { healthModule } from "@/modules/health/health.routes";
-import { programsModule } from "@/modules/programs/programs.routes";
 import { newsModule } from "@/modules/news/news.routes";
 import { newsCategoriesModule } from "@/modules/news/news-categories.routes";
 import { opportunitiesModule } from "@/modules/opportunities/opportunities.routes";
+import { programsModule } from "@/modules/programs/programs.routes";
 import { researchModule } from "@/modules/research/research.routes";
 import { statsModule } from "@/modules/stats/stats.routes";
 import { storiesModule } from "@/modules/stories/stories.routes";
@@ -35,6 +36,7 @@ const apiRoutes = new Elysia({ prefix: "/api" })
 	.use(opportunitiesModule)
 	.use(researchModule)
 	.use(storiesModule)
+	.use(donorsModule)
 	.use(chatModule)
 	.use(connectionsModule)
 	.use(usersModule);

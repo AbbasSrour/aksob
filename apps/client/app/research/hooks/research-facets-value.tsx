@@ -1,8 +1,8 @@
 import { buildFacetCountsMap } from "@aksob/ui/components/data-table/utils/facets";
 import { useSearch } from "@aksob/ui/hooks/search";
 import { useQueries } from "@tanstack/react-query";
-import { getFacetedUniqueValues } from "@tanstack/react-table";
 import type { ColumnFiltersState, Table } from "@tanstack/react-table";
+import { getFacetedUniqueValues } from "@tanstack/react-table";
 import { useCallback, useMemo } from "react";
 import type { Research } from "@/app/research/hooks/api/research.functions";
 import { researchQueries } from "@/app/research/hooks/api/research.queries";

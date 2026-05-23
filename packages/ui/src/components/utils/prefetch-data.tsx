@@ -1,10 +1,10 @@
 import {
-	HydrationBoundary,
-	UseInfiniteQueryOptions,
-	UseQueryOptions,
 	dehydrate,
+	HydrationBoundary,
+	type UseInfiniteQueryOptions,
+	type UseQueryOptions,
 } from "@tanstack/react-query";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { getQueryClient } from "../../lib/query-client-factory";
 
 interface PrefetchDataProps {

@@ -125,20 +125,18 @@ export default function NewsPage() {
 							className={`text-(--aksob-primary) ${isVisible ? "animate-editorial-reveal" : "opacity-0"}`}
 							style={isVisible ? { animationDelay: "0.35s" } : undefined}
 						>
-						in Our Community{" "}
-					</span>
-				</h1>
+							in Our Community{" "}
+						</span>
+					</h1>
 
-				<p
-					className={`mt-5 text-base md:text-lg text-[var(--gray-400)] max-w-xl mx-auto leading-relaxed ${isVisible ? "animate-editorial-fade" : "opacity-0"}`}
-					style={
-						isVisible ? { animationDelay: "0.5s" } : undefined
-					}
-				>
-					The latest news, achievements, and announcements from the
-					Adnan Kassar School of Business alumni network.
-				</p>
-			</div>
+					<p
+						className={`mt-5 text-base md:text-lg text-[var(--gray-400)] max-w-xl mx-auto leading-relaxed ${isVisible ? "animate-editorial-fade" : "opacity-0"}`}
+						style={isVisible ? { animationDelay: "0.5s" } : undefined}
+					>
+						The latest news, achievements, and announcements from the Adnan
+						Kassar School of Business alumni network.
+					</p>
+				</div>
 
 				<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 					{isPending &&

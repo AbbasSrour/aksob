@@ -1,10 +1,9 @@
-import { and, eq } from "drizzle-orm";
-import { sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db, schema } from "@/db";
-import { auth } from "@/lib/auth";
-import { AKSOB_PROGRAMS } from "@/modules/users/constant/aksob-programs";
-import { CONNECTION_TYPE_ELIGIBILITY } from "@/modules/connections/constant/connection-eligibility.constant";
 import { generateAndStoreEmbedding } from "@/lib/ai/embedding";
+import { auth } from "@/lib/auth";
+import { CONNECTION_TYPE_ELIGIBILITY } from "@/modules/connections/constant/connection-eligibility.constant";
+import { AKSOB_PROGRAMS } from "@/modules/users/constant/aksob-programs";
 import { logger } from "@/utils/logger";
 
 const DEMO_PASSWORD = "AksobDemo123!";

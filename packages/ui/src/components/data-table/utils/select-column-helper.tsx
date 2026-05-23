@@ -1,6 +1,6 @@
-import { type RowData, createColumnHelper } from "@tanstack/react-table";
 import { Checkbox } from "@aksob/ui/core/checkbox";
 import { cn } from "@aksob/ui/lib/utils";
+import { createColumnHelper, type RowData } from "@tanstack/react-table";
 
 interface SelectColumnOptions {
 	className?: string;

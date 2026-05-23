@@ -1,6 +1,6 @@
 import { t } from "elysia";
-import { CONNECTION_TYPES } from "@/modules/connections/constant/connection-types.constant";
 import { CONNECTION_STATUSES } from "@/modules/connections/constant/connection-statuses.constant";
+import { CONNECTION_TYPES } from "@/modules/connections/constant/connection-types.constant";
 
 export const matchConnectionBody = t.Object({
 	type: t.String({ enum: CONNECTION_TYPES as unknown as string[] }),

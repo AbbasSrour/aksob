@@ -1,6 +1,6 @@
-import { sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core";
-import { user } from "@/modules/users/db/user.db";
+import { primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { CONNECTION_TYPES } from "@/modules/connections/constant/connection-types.constant";
+import { user } from "@/modules/users/db/user.db";
 
 export const userConnectionPreference = sqliteTable(
 	"user_connection_preference",

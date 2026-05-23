@@ -1,10 +1,3 @@
-import {
-	ChevronLeftIcon,
-	ChevronRightIcon,
-	DoubleArrowLeftIcon,
-	DoubleArrowRightIcon,
-} from "@radix-ui/react-icons";
-import type { Table } from "@tanstack/react-table";
 import { useDataTableContext } from "@aksob/ui/components/data-table/data-table-provider";
 import { Button } from "@aksob/ui/core/button";
 import {
@@ -14,6 +7,13 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@aksob/ui/core/select";
+import {
+	ChevronLeftIcon,
+	ChevronRightIcon,
+	DoubleArrowLeftIcon,
+	DoubleArrowRightIcon,
+} from "@radix-ui/react-icons";
+import type { Table } from "@tanstack/react-table";
 
 export function DataTablePagination() {
 	const table = useDataTableContext();

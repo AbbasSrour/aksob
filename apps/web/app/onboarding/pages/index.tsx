@@ -101,7 +101,7 @@ export default function OnboardingPage() {
 		if (idx >= 0 && idx > step) {
 			setStep(idx + 1);
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isPending, session?.user]);
 
 	// Pre-populate refs with saved data from the API

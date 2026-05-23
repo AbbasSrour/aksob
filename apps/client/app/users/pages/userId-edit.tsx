@@ -6,8 +6,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { UserForm } from "@/app/users/components/form/user-form.tsx";
 import { EditUserSkeleton } from "@/app/users/components/loading/edit-user-skeleton.tsx";
 import { userQueries } from "@/app/users/hooks/api/users.queries.ts";
-import { m } from "@/paraglide/messages";
 import { userToFormValues } from "@/app/users/utils/user-form-transformer.ts";
+import { m } from "@/paraglide/messages";
 
 export const Route = createFileRoute("/admin/users/$userId/edit")({
 	pendingComponent: EditUserSkeleton,

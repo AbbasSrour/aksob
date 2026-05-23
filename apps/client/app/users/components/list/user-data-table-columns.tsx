@@ -8,7 +8,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@aksob/ui/core/avatar";
 import { IconMail, IconTrash, IconUser } from "@tabler/icons-react";
 import { useNavigate } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
-import { m } from "@/paraglide/messages";
 import { userRoleTypes } from "@/app/users/constants/user-role-types.ts";
 import { userStatusType } from "@/app/users/constants/user-status-type.ts";
 import type { AdminUser } from "@/app/users/hooks/api/users.functions.ts";
@@ -18,6 +17,7 @@ import {
 } from "@/app/users/hooks/api/users.queries.ts";
 import { userRoleFilter } from "@/app/users/utils/user-role-filter";
 import { userStatusFilter } from "@/app/users/utils/user-status-filter";
+import { m } from "@/paraglide/messages";
 
 const columnHelper = createColumnHelper<AdminUser>();
 

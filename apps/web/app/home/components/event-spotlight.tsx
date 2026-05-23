@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
-import { listLatestEvents, type EventItem } from "~/app/lib/users";
+import { type EventItem, listLatestEvents } from "~/app/lib/users";
 
 const AUTO_ADVANCE_MS = 5000;
 
@@ -135,9 +135,7 @@ export function EventSpotlight() {
 
 	function handlePrev() {
 		if (events.length === 0) return;
-		goToSlide(
-			(activeIndex - 1 + events.length) % events.length,
-		);
+		goToSlide((activeIndex - 1 + events.length) % events.length);
 	}
 
 	function handleNext() {
@@ -155,7 +153,10 @@ export function EventSpotlight() {
 		>
 			{isPending ? (
 				<div className="relative w-full aspect-[16/11] min-h-[600px] max-h-[90vh] overflow-hidden rounded-2xl bg-[var(--gray-100)] flex items-center justify-center">
-					<Loader2 size={40} className="animate-spin text-[var(--aksob-primary)]" />
+					<Loader2
+						size={40}
+						className="animate-spin text-[var(--aksob-primary)]"
+					/>
 				</div>
 			) : events.length === 0 ? (
 				<div className="relative w-full aspect-[16/11] min-h-[600px] max-h-[90vh] overflow-hidden rounded-2xl bg-[var(--gray-100)] flex items-center justify-center">

@@ -170,9 +170,9 @@ function ConnectionCard({
 }) {
 	const isRequester = connection.requesterId === userId;
 	const otherUser = isRequester ? connection.matchedUser : connection.requester;
-	const otherUserId = otherUser?.id ?? (isRequester
-		? connection.matchedUserId
-		: connection.requesterId);
+	const otherUserId =
+		otherUser?.id ??
+		(isRequester ? connection.matchedUserId : connection.requesterId);
 	const status = STATUS_CONFIG[connection.status];
 
 	return (

@@ -41,7 +41,10 @@ const EVENT_TYPE_LABELS: Record<string, string> = {
 	hybrid: "Hybrid",
 };
 
-const ATTENDEE_STATUS_COLORS: Record<string, "default" | "primary" | "success" | "warning" | "error"> = {
+const ATTENDEE_STATUS_COLORS: Record<
+	string,
+	"default" | "primary" | "success" | "warning" | "error"
+> = {
 	approved: "success",
 	pending: "warning",
 	waitlisted: "default",
@@ -161,7 +164,9 @@ export default function EventDetailPage() {
 
 	const pendingAttendees = attendees.filter((a) => a.status === "pending");
 	const approvedAttendees = attendees.filter((a) => a.status === "approved");
-	const waitlistedAttendees = attendees.filter((a) => a.status === "waitlisted");
+	const waitlistedAttendees = attendees.filter(
+		(a) => a.status === "waitlisted",
+	);
 
 	return (
 		<main className="min-h-screen bg-(--off-white) pt-20">
@@ -358,7 +363,10 @@ export default function EventDetailPage() {
 							</div>
 						) : attendees.length === 0 ? (
 							<div className="text-center py-12 rounded-2xl border border-[var(--gray-200)] bg-white">
-								<Users size={32} className="mx-auto text-[var(--gray-300)] mb-3" />
+								<Users
+									size={32}
+									className="mx-auto text-[var(--gray-300)] mb-3"
+								/>
 								<p className="text-sm text-[var(--gray-500)]">
 									No registrations yet.
 								</p>
@@ -443,7 +451,7 @@ export default function EventDetailPage() {
 							</Link>
 						</div>
 					) : event.viewerRegistration?.role === "owner" ||
-					  event.viewerRegistration?.role === "organizer" ? (
+						event.viewerRegistration?.role === "organizer" ? (
 						<p className="text-sm text-[var(--gray-600)]">
 							You are an{" "}
 							{event.viewerRegistration.role === "owner"
@@ -457,10 +465,7 @@ export default function EventDetailPage() {
 								<span className="text-sm text-[var(--gray-600)]">
 									Registration status:{" "}
 									<span className="font-medium capitalize">
-										{event.viewerRegistration.attendeeStatus?.replace(
-											"_",
-											" ",
-										)}
+										{event.viewerRegistration.attendeeStatus?.replace("_", " ")}
 									</span>
 								</span>
 							</div>
@@ -475,9 +480,7 @@ export default function EventDetailPage() {
 								</Button>
 							)}
 							{mutationError && (
-								<p className="text-sm text-red-600">
-									{mutationError.message}
-								</p>
+								<p className="text-sm text-red-600">{mutationError.message}</p>
 							)}
 						</div>
 					) : (
@@ -497,9 +500,7 @@ export default function EventDetailPage() {
 								Register
 							</Button>
 							{mutationError && (
-								<p className="text-sm text-red-600">
-									{mutationError.message}
-								</p>
+								<p className="text-sm text-red-600">{mutationError.message}</p>
 							)}
 						</div>
 					)}

@@ -1,14 +1,14 @@
-import {
-	sqliteTable,
-	AnySQLiteColumn,
-	index,
-	foreignKey,
-	text,
-	integer,
-	uniqueIndex,
-	real,
-} from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
+import {
+	AnySQLiteColumn,
+	foreignKey,
+	index,
+	integer,
+	real,
+	sqliteTable,
+	text,
+	uniqueIndex,
+} from "drizzle-orm/sqlite-core";
 
 export const account = sqliteTable(
 	"account",

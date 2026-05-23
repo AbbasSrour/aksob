@@ -1,7 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import { BookOpen, Plus, Trash2 } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { programsQueries } from "~/app/auth/hooks/api/programs.queries";
 
 export interface EducationEntry {
@@ -64,9 +64,7 @@ export const EducationStep: React.FC<EducationStepProps> = ({
 
 	// Program IDs already selected in other entries (excluding empty)
 	const selectedProgramIds = new Set(
-		entries
-			.map((entry, i) => entry.programId)
-			.filter((id) => id !== ""),
+		entries.map((entry, i) => entry.programId).filter((id) => id !== ""),
 	);
 
 	return (
@@ -142,8 +140,7 @@ export const EducationStep: React.FC<EducationStepProps> = ({
 									<option value="">Select a program</option>
 									{programs?.map((p) => {
 										const isSelectedElsewhere =
-											selectedProgramIds.has(p.id) &&
-											p.id !== entry.programId;
+											selectedProgramIds.has(p.id) && p.id !== entry.programId;
 										return (
 											<option
 												key={p.id}

@@ -103,7 +103,10 @@ export function News() {
 	}, []);
 
 	return (
-		<section ref={sectionRef} className="relative z-10 pt-12 pb-24 md:pt-16 md:pb-32">
+		<section
+			ref={sectionRef}
+			className="relative z-10 pt-12 pb-24 md:pt-16 md:pb-32"
+		>
 			<div className="mx-auto max-w-7xl">
 				<div className="mb-14 text-center md:mb-20">
 					<span

@@ -25,15 +25,24 @@ export default function AuthLayout() {
 					</main>
 
 					<footer className="flex flex-wrap items-center justify-center gap-3 text-center text-xs text-(--gray-500)">
-						<Link to="#" className="hover:text-(--aksob-primary) hover:underline">
+						<Link
+							to="#"
+							className="hover:text-(--aksob-primary) hover:underline"
+						>
 							Help
 						</Link>
 						<span>•</span>
-						<Link to="#" className="hover:text-(--aksob-primary) hover:underline">
+						<Link
+							to="#"
+							className="hover:text-(--aksob-primary) hover:underline"
+						>
 							Privacy
 						</Link>
 						<span>•</span>
-						<Link to="#" className="hover:text-(--aksob-primary) hover:underline">
+						<Link
+							to="#"
+							className="hover:text-(--aksob-primary) hover:underline"
+						>
 							Terms
 						</Link>
 						<span className="hidden sm:inline">•</span>

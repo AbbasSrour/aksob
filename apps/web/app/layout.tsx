@@ -107,7 +107,7 @@ export default function AppLayout() {
 					className={`w-full ${
 						isHome || isGalaxy
 							? ""
-							: 									isChat
+							: isChat
 								? "pt-20 h-screen overflow-hidden"
 								: "pt-20 min-h-screen"
 					}`}

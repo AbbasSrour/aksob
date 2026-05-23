@@ -27,8 +27,8 @@ import { researchDataTableColumns } from "@/app/research/components/list/researc
 import type { Research } from "@/app/research/hooks/api/research.functions";
 import { researchQueries } from "@/app/research/hooks/api/research.queries";
 import { useResearchFacetsValue } from "@/app/research/hooks/research-facets-value";
-import { researchTypeFilter } from "@/app/research/utils/research-type-filter";
 import { researchStatusFilter } from "@/app/research/utils/research-status-filter";
+import { researchTypeFilter } from "@/app/research/utils/research-type-filter";
 import { m } from "@/paraglide/messages";
 
 export function ResearchDataTable() {

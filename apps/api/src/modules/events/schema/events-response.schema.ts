@@ -19,10 +19,7 @@ const viewerRegistrationSchema = t.Union([
 			t.Literal("organizer"),
 			t.Literal("attendee"),
 		]),
-		attendeeStatus: t.Union([
-			t.Enum(eventAttendeeStatusEnum),
-			t.Null(),
-		]),
+		attendeeStatus: t.Union([t.Enum(eventAttendeeStatusEnum), t.Null()]),
 	}),
 	t.Null(),
 ]);

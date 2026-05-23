@@ -399,9 +399,10 @@ export const eventsModule = new Elysia({ prefix: "/events" })
 					}
 				: null;
 
-			const baseDto = isPrivileged || isApprovedAttendee
-				? toAdminEventDto(event)
-				: toPublicEventDto(event);
+			const baseDto =
+				isPrivileged || isApprovedAttendee
+					? toAdminEventDto(event)
+					: toPublicEventDto(event);
 
 			if (isPrivileged || isApprovedAttendee) {
 				return {
@@ -1268,92 +1269,92 @@ export const eventsModule = new Elysia({ prefix: "/events" })
 					"Sets registrationClosed to true.",
 			},
 		},
- 	)
- 	// ──────────────── Reopen registration ────────────────
- 	.post(
- 		"/:id/reopen-registration",
- 		async ({ params, user, status }) => {
- 			const event = await db.query.event.findFirst({
- 				where: eq(schema.event.id, params.id),
- 				with: {
- 					members: {
- 						columns: { userId: true, role: true },
- 					},
- 				},
- 			});
+	)
+	// ──────────────── Reopen registration ────────────────
+	.post(
+		"/:id/reopen-registration",
+		async ({ params, user, status }) => {
+			const event = await db.query.event.findFirst({
+				where: eq(schema.event.id, params.id),
+				with: {
+					members: {
+						columns: { userId: true, role: true },
+					},
+				},
+			});
 
- 			if (!event) {
- 				return status(EVENT_ERRORS.EVENT_NOT_FOUND.httpStatus, {
- 					status: "error" as const,
- 					code: EVENT_ERRORS.EVENT_NOT_FOUND.code,
- 					error: EVENT_ERRORS.EVENT_NOT_FOUND.message,
- 				});
- 			}
+			if (!event) {
+				return status(EVENT_ERRORS.EVENT_NOT_FOUND.httpStatus, {
+					status: "error" as const,
+					code: EVENT_ERRORS.EVENT_NOT_FOUND.code,
+					error: EVENT_ERRORS.EVENT_NOT_FOUND.message,
+				});
+			}
 
- 			const isOrganizer = event.members.some(
- 				(m) =>
- 					m.userId === user.id &&
- 					(m.role === "owner" || m.role === "organizer"),
- 			);
- 			if (!isOrganizer && user.role !== "admin") {
- 				return status(EVENT_ERRORS.NOT_ORGANIZER.httpStatus, {
- 					status: "error" as const,
- 					code: EVENT_ERRORS.NOT_ORGANIZER.code,
- 					error: EVENT_ERRORS.NOT_ORGANIZER.message,
- 				});
- 			}
+			const isOrganizer = event.members.some(
+				(m) =>
+					m.userId === user.id &&
+					(m.role === "owner" || m.role === "organizer"),
+			);
+			if (!isOrganizer && user.role !== "admin") {
+				return status(EVENT_ERRORS.NOT_ORGANIZER.httpStatus, {
+					status: "error" as const,
+					code: EVENT_ERRORS.NOT_ORGANIZER.code,
+					error: EVENT_ERRORS.NOT_ORGANIZER.message,
+				});
+			}
 
- 			if (!event.registrationClosed) {
- 				return status(400, {
- 					status: "error" as const,
- 					code: "REGISTRATION_NOT_CLOSED",
- 					error: "Registration is not closed.",
- 				});
- 			}
+			if (!event.registrationClosed) {
+				return status(400, {
+					status: "error" as const,
+					code: "REGISTRATION_NOT_CLOSED",
+					error: "Registration is not closed.",
+				});
+			}
 
- 			const now = new Date();
+			const now = new Date();
 
- 			await db
- 				.update(schema.event)
- 				.set({
- 					registrationClosed: false,
- 					registrationClosedAt: null,
- 					updatedAt: now,
- 				})
- 				.where(eq(schema.event.id, params.id));
+			await db
+				.update(schema.event)
+				.set({
+					registrationClosed: false,
+					registrationClosedAt: null,
+					updatedAt: now,
+				})
+				.where(eq(schema.event.id, params.id));
 
- 			const updated = await db.query.event.findFirst({
- 				where: eq(schema.event.id, params.id),
- 				with: {
- 					members: {
- 						with: {
- 							user: { columns: { id: true, name: true, image: true } as const },
- 						},
- 					},
- 					surveys: true,
- 				},
- 			});
+			const updated = await db.query.event.findFirst({
+				where: eq(schema.event.id, params.id),
+				with: {
+					members: {
+						with: {
+							user: { columns: { id: true, name: true, image: true } as const },
+						},
+					},
+					surveys: true,
+				},
+			});
 
- 			return { status: "ok" as const, data: toAdminEventDto(updated!) };
- 		},
- 		{
- 			auth: true,
- 			response: {
- 				200: adminEventResponseSchema,
- 				400: eventErrorResponseSchema,
- 				403: eventErrorResponseSchema,
- 				404: eventErrorResponseSchema,
- 			},
- 			detail: {
- 				tags: ["Events"],
- 				summary: "Reopen event registration",
- 				description:
- 					"Owner or admin reopens registration for a closed event. " +
- 					"Sets registrationClosed to false and clears registrationClosedAt.",
- 			},
- 		},
- 	)
- 	// ──────────────── Register as attendee ────────────────
+			return { status: "ok" as const, data: toAdminEventDto(updated!) };
+		},
+		{
+			auth: true,
+			response: {
+				200: adminEventResponseSchema,
+				400: eventErrorResponseSchema,
+				403: eventErrorResponseSchema,
+				404: eventErrorResponseSchema,
+			},
+			detail: {
+				tags: ["Events"],
+				summary: "Reopen event registration",
+				description:
+					"Owner or admin reopens registration for a closed event. " +
+					"Sets registrationClosed to false and clears registrationClosedAt.",
+			},
+		},
+	)
+	// ──────────────── Register as attendee ────────────────
 	.post(
 		"/:id/register",
 		async ({ params, user, body, status }) => {

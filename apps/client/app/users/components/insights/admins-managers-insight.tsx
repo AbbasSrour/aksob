@@ -2,8 +2,8 @@ import { InsightCard } from "@aksob/ui/components/cards/insight-card";
 import { useSearch } from "@aksob/ui/hooks/search";
 import { IconShield } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
-import { m } from "@/paraglide/messages";
 import { userQueries } from "@/app/users/hooks/api/users.queries.ts";
+import { m } from "@/paraglide/messages";
 
 interface AdminsManagersInsightProps {
 	gradientClassName?: string;

@@ -1,5 +1,5 @@
-import { type RowData, createColumnHelper } from "@tanstack/react-table";
 import { cn } from "@aksob/ui/lib/utils";
+import { createColumnHelper, type RowData } from "@tanstack/react-table";
 
 interface RowNumberColumnOptions {
 	className?: string;

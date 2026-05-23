@@ -1,12 +1,9 @@
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@aksob/ui/core/card";
-import { Button } from "@aksob/ui/core/button";
-import { Badge } from "@aksob/ui/core/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@aksob/ui/core/tabs";
 import { Main } from "@aksob/ui/components/layout/main";
 import { PageHeader } from "@aksob/ui/components/layout/page-header";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Badge } from "@aksob/ui/core/badge";
+import { Button } from "@aksob/ui/core/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@aksob/ui/core/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@aksob/ui/core/tabs";
 import {
 	IconArrowLeft,
 	IconCalendar,
@@ -15,22 +12,25 @@ import {
 	IconUsers,
 	IconX,
 } from "@tabler/icons-react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { eventStatusOptions } from "@/app/events/constants/event-status-options";
 import { eventTypeOptions } from "@/app/events/constants/event-type-options";
+import type {
+	EventAttendee,
+	EventItem,
+} from "@/app/events/hooks/api/events.functions";
 import {
-	eventQueries,
 	eventAttendeeQueries,
-	useSubmitEvent,
+	eventQueries,
 	useApproveEvent,
-	useRejectEvent,
 	useCancelEvent,
 	useCloseRegistration,
+	useRejectEvent,
+	useSubmitEvent,
 	useUpdateAttendee,
 } from "@/app/events/hooks/api/events.queries";
-import type {
-	EventItem,
-	EventAttendee,
-} from "@/app/events/hooks/api/events.functions";
 
 // ---------------------------------------------------------------------------
 // Status badge

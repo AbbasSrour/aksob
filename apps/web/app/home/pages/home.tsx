@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { ChooseUs } from "~/app/home/components/choose-us";
 import { Contact } from "~/app/home/components/contact";
 import { EventSpotlight } from "~/app/home/components/event-spotlight";
-import { SuccessStories } from "~/app/home/components/success-stories";
 import { Glance } from "~/app/home/components/glance";
 import { Hero } from "~/app/home/components/hero";
 import { News } from "~/app/home/components/news";
 import { Programs } from "~/app/home/components/programs";
+import { SuccessStories } from "~/app/home/components/success-stories";
+import { WallOfGiving } from "~/app/home/components/wall-of-giving";
 
 const LINE_DELAYS = ["0ms", "150ms", "300ms", "450ms", "600ms"];
 const SCROLL_LINE_DELAY_MS = 180;
@@ -129,6 +130,7 @@ export default function HomePage() {
 			<EventSpotlight />
 			<div className="py-16 md:py-24" />
 			<News />
+			<WallOfGiving />
 			<Programs />
 			<ChooseUs />
 			<Contact />

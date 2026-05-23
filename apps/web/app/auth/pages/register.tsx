@@ -111,8 +111,6 @@ export default function Register() {
 								<UserTypeSelector value={userType} onChange={setUserType} />
 								<input type="hidden" name="userType" value={userType} />
 							</div>
-
-	
 						</div>
 					</div>
 

@@ -1,8 +1,8 @@
 import { Plus, Trash2 } from "lucide-react";
-import { Checkbox } from "~/components/ui/checkbox";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 
 export interface ExperienceEntry {

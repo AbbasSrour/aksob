@@ -7,8 +7,8 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@aksob/ui/core/breadcrumb";
-import { HomeIcon } from "lucide-react";
 import { Link, useLocation } from "@tanstack/react-router";
+import { HomeIcon } from "lucide-react";
 import { Fragment } from "react";
 
 export const PageBreadcrumbs = () => {

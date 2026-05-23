@@ -1,9 +1,21 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@aksob/ui/core/button";
+import {
+	Form,
+	FormContent,
+	FormControl,
+	FormField,
+	FormFooter,
+	FormItem,
+	FormLabel,
+	FormMessage,
+	FormRow,
+	FormSection,
+	FormSectionContent,
+	FormSectionDescription,
+	FormSectionHeader,
+	FormSectionTitle,
+} from "@aksob/ui/core/form";
 import { Input } from "@aksob/ui/core/input";
-import { Textarea } from "@aksob/ui/core/textarea";
 import {
 	Select,
 	SelectContent,
@@ -11,29 +23,15 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@aksob/ui/core/select";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@aksob/ui/core/form";
-import {
-	FormContent,
-	FormSection,
-	FormSectionContent,
-	FormSectionDescription,
-	FormSectionHeader,
-	FormSectionTitle,
-	FormRow,
-	FormFooter,
-} from "@aksob/ui/core/form";
-import {
-	programFormSchema,
-	type ProgramFormSchema,
-} from "@/app/programs/components/form/program-form-schema";
+import { Textarea } from "@aksob/ui/core/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
 import { programFormDefaultValues } from "@/app/programs/components/form/program-form-default-values";
+import {
+	type ProgramFormSchema,
+	programFormSchema,
+} from "@/app/programs/components/form/program-form-schema";
 import {
 	useCreateProgram,
 	useUpdateProgram,

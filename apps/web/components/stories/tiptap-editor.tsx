@@ -30,7 +30,13 @@ import {
 } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
+import {
+	forwardRef,
+	useCallback,
+	useEffect,
+	useImperativeHandle,
+	useState,
+} from "react";
 
 import { cn } from "~/app/lib/utils";
 

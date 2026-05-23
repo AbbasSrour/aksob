@@ -1,6 +1,6 @@
 import { cn } from "@aksob/ui/lib/utils";
-import { type VariantProps, cva } from "class-variance-authority";
-import { FC } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import type { FC } from "react";
 
 const currencyCellVariants = cva(
 	"inline-flex items-center justify-center font-medium tabular-nums transition-colors duration-200",

@@ -2,12 +2,12 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
-import { EventCoverUpload } from "~/components/events/event-cover-upload";
 import {
 	getEventDetail,
 	type UpdateEventParams,
 	updateEvent,
 } from "~/app/lib/users";
+import { EventCoverUpload } from "~/components/events/event-cover-upload";
 import { Button } from "~/components/ui/button";
 
 const EVENT_TYPES = [

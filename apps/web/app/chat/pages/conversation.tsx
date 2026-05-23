@@ -78,6 +78,12 @@ export default function ChatConversationPage() {
 			return;
 		}
 
+		// Reset state when switching conversations
+		setMessages([]);
+		setIsLoading(true);
+		setLoadError(null);
+		hasLoadedMessages.current = false;
+
 		let isMounted = true;
 
 		const loadMessages = async () => {

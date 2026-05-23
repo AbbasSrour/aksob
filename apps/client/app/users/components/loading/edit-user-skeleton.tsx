@@ -1,20 +1,20 @@
+import { Main } from "@aksob/ui/components/layout/main";
+import { PageHeader } from "@aksob/ui/components/layout/page-header";
 import { ButtonSkeleton } from "@aksob/ui/components/skeleton/button-skeleton";
 import { ComboboxSkeleton } from "@aksob/ui/components/skeleton/combobox-skeleton";
 import { FormFieldSkeleton } from "@aksob/ui/components/skeleton/form-field-skeleton";
 import { FormFooterSkeleton } from "@aksob/ui/components/skeleton/form-footer-skeleton";
 import { InputSkeleton } from "@aksob/ui/components/skeleton/input-skeleton";
-import { Skeleton } from "@aksob/ui/core/skeleton";
-import { Main } from "@aksob/ui/components/layout/main";
-import { PageHeader } from "@aksob/ui/components/layout/page-header";
 import {
 	FormContent,
+	FormRow,
 	FormSection,
 	FormSectionContent,
 	FormSectionDescription,
 	FormSectionHeader,
 	FormSectionTitle,
-	FormRow,
 } from "@aksob/ui/core/form";
+import { Skeleton } from "@aksob/ui/core/skeleton";
 
 export function EditUserSkeleton() {
 	return (

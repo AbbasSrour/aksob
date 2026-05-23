@@ -1,6 +1,3 @@
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { TablerIcon } from "@tabler/icons-react";
-import type { Row } from "@tanstack/react-table";
 import { Button } from "@aksob/ui/core/button";
 import {
 	DropdownMenu,
@@ -11,7 +8,10 @@ import {
 	DropdownMenuTrigger,
 } from "@aksob/ui/core/dropdown-menu";
 import { cn } from "@aksob/ui/lib/utils";
-import { LucideIcon } from "lucide-react";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import type { TablerIcon } from "@tabler/icons-react";
+import type { Row } from "@tanstack/react-table";
+import type { LucideIcon } from "lucide-react";
 import { Fragment } from "react";
 
 // TODO make the permission typed

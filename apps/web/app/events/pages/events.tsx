@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
-import { listPublicEvents, type EventItem } from "~/app/lib/users";
+import { type EventItem, listPublicEvents } from "~/app/lib/users";
 import { Avatar } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
 
@@ -136,9 +136,7 @@ export default function EventsPage() {
 						<div className="w-16 h-16 bg-[var(--gray-100)] rounded-full flex items-center justify-center mx-auto mb-4">
 							<Calendar size={24} className="text-[var(--gray-400)]" />
 						</div>
-						<p className="text-sm text-[var(--gray-500)]">
-							No events yet.
-						</p>
+						<p className="text-sm text-[var(--gray-500)]">No events yet.</p>
 					</div>
 				) : (
 					<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

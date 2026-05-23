@@ -1,5 +1,5 @@
 import type { RowData, Table } from "@tanstack/react-table";
-import { type ReactNode, createContext, useContext } from "react";
+import { createContext, type ReactNode, useContext } from "react";
 
 export type DataTableContext<T extends RowData> = Table<T>;
 

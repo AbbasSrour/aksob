@@ -159,6 +159,25 @@ export const mutationKeyFactory = {
 		reject: () => [...mutationKeyFactory.research.entity, "reject"] as const,
 	},
 
+	donors: {
+		entity: ["donors"] as const,
+		create: () =>
+			[
+				...mutationKeyFactory.donors.entity,
+				...mutationKeyFactory.create(),
+			] as const,
+		update: () =>
+			[
+				...mutationKeyFactory.donors.entity,
+				...mutationKeyFactory.update(),
+			] as const,
+		delete: () =>
+			[
+				...mutationKeyFactory.donors.entity,
+				...mutationKeyFactory.delete(),
+			] as const,
+	},
+
 	events: {
 		entity: ["events"] as const,
 		create: () =>

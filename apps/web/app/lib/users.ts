@@ -218,7 +218,13 @@ export interface EventItem {
 	owner: { id: string; name: string; image: string | null } | null;
 	viewerRegistration: {
 		role: "owner" | "organizer" | "attendee";
-		attendeeStatus: "approved" | "pending" | "waitlisted" | "cancelled" | "rejected" | null;
+		attendeeStatus:
+			| "approved"
+			| "pending"
+			| "waitlisted"
+			| "cancelled"
+			| "rejected"
+			| null;
 	} | null;
 	createdAt: string;
 	updatedAt: string;

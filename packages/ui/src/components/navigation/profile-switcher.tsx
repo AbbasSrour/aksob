@@ -1,6 +1,3 @@
-import { ChevronsUpDown, Plus } from "lucide-react";
-import * as React from "react";
-
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -10,6 +7,8 @@ import {
 	DropdownMenuShortcut,
 	DropdownMenuTrigger,
 } from "@aksob/ui/core/dropdown-menu";
+import { ChevronsUpDown, Plus } from "lucide-react";
+import * as React from "react";
 import {
 	SidebarMenu,
 	SidebarMenuButton,

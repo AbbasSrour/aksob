@@ -1,13 +1,12 @@
 import { CheckIcon, ChevronsUpDown } from "lucide-react";
-import * as RPNInput from "react-phone-number-input";
-import flags from "react-phone-number-input/flags";
-
 import {
 	type ComponentProps,
 	type ComponentRef,
 	type ForwardRefExoticComponent,
 	forwardRef,
 } from "react";
+import * as RPNInput from "react-phone-number-input";
+import flags from "react-phone-number-input/flags";
 import { Button } from "../../core/button";
 import {
 	Command,

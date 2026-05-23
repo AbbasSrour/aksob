@@ -3,7 +3,10 @@ import {
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
-import type { EventItem } from "@/app/events/hooks/api/events.functions";
+import type {
+	EventItem,
+	ListAttendeesParams,
+} from "@/app/events/hooks/api/events.functions";
 import {
 	approveEventServerFn,
 	cancelEventServerFn,
@@ -18,7 +21,6 @@ import {
 	updateAttendeeServerFn,
 	updateEventServerFn,
 } from "@/app/events/hooks/api/events.functions";
-import type { ListAttendeesParams } from "@/app/events/hooks/api/events.functions";
 import { mutationKeyFactory } from "@/constants/mutation-key-factory";
 
 export interface ListEventsQueryParams {

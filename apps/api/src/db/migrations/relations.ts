@@ -1,22 +1,22 @@
 import { relations } from "drizzle-orm/relations";
 import {
-	user,
 	account,
-	session,
-	conversationParticipant,
 	conversation,
-	message,
-	story,
-	opportunity,
-	research,
-	newsCategory,
-	news,
-	eventMember,
-	eventAttendee,
+	conversationParticipant,
 	event,
+	eventAttendee,
+	eventMember,
 	eventOrganizer,
 	eventReminder,
 	eventSurvey,
+	message,
+	news,
+	newsCategory,
+	opportunity,
+	research,
+	session,
+	story,
+	user,
 } from "./schema";
 
 export const accountRelations = relations(account, ({ one }) => ({

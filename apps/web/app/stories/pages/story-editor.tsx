@@ -378,7 +378,10 @@ export default function StoryEditorPage() {
 					</p>
 				</div>
 
-				<form onSubmit={handleSubmit} className={isSubmitting ? "pointer-events-none opacity-60" : ""}>
+				<form
+					onSubmit={handleSubmit}
+					className={isSubmitting ? "pointer-events-none opacity-60" : ""}
+				>
 					<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 						{/* ─── Main Column ─── */}
 						<div className="lg:col-span-2 space-y-6">

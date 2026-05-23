@@ -1,5 +1,5 @@
-import * as React from "react";
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
+import type * as React from "react";
 
 function Collapsible({
 	...props

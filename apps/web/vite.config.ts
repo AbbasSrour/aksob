@@ -8,6 +8,9 @@ export default defineConfig({
 	server: {
 		host: "web.aksob.localhost",
 	},
+	resolve: {
+		dedupe: ["react", "react-dom"],
+	},
 	optimizeDeps: {
 		include: ["lucide-react"],
 	},

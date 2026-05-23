@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { useNavigation } from "@aksob/ui/context/navigation";
 import {
 	SidebarGroup,
@@ -8,6 +6,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@aksob/ui/core/sidebar";
+import type * as React from "react";
 
 export function NavSecondary({
 	...props

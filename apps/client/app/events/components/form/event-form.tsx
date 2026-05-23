@@ -28,7 +28,7 @@ import {
 import { Textarea } from "@aksob/ui/core/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import {
 	type EventFormSchema,
 	eventFormDefaultValues,

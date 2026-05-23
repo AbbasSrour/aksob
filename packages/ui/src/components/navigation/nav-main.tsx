@@ -1,5 +1,3 @@
-import { ChevronRight } from "lucide-react";
-
 import { useNavigation } from "@aksob/ui/context/navigation";
 import {
 	Collapsible,
@@ -17,6 +15,7 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 } from "@aksob/ui/core/sidebar";
+import { ChevronRight } from "lucide-react";
 
 export function NavMain() {
 	const { main } = useNavigation();

@@ -1,10 +1,10 @@
 import {
 	DefaultOptions,
+	isServer,
 	MutationCache,
 	QueryCache,
 	QueryClient,
-	QueryClientConfig,
-	isServer,
+	type QueryClientConfig,
 } from "@tanstack/react-query";
 import { cache } from "react";
 
@@ -44,7 +44,7 @@ export function makeQueryClient(config?: QueryClientConfig) {
 	});
 }
 
-let browserQueryClient: QueryClient | undefined = undefined;
+let browserQueryClient: QueryClient | undefined;
 
 /**
  * Gets or creates a QueryClient instance.

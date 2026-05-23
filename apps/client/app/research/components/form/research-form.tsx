@@ -1,9 +1,21 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@aksob/ui/core/button";
+import {
+	Form,
+	FormContent,
+	FormControl,
+	FormField,
+	FormFooter,
+	FormItem,
+	FormLabel,
+	FormMessage,
+	FormRow,
+	FormSection,
+	FormSectionContent,
+	FormSectionDescription,
+	FormSectionHeader,
+	FormSectionTitle,
+} from "@aksob/ui/core/form";
 import { Input } from "@aksob/ui/core/input";
-import { Textarea } from "@aksob/ui/core/textarea";
 import {
 	Select,
 	SelectContent,
@@ -11,30 +23,15 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@aksob/ui/core/select";
+import { Textarea } from "@aksob/ui/core/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
 import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@aksob/ui/core/form";
-import {
-	FormContent,
-	FormSection,
-	FormSectionContent,
-	FormSectionDescription,
-	FormSectionHeader,
-	FormSectionTitle,
-	FormRow,
-	FormFooter,
-} from "@aksob/ui/core/form";
-import {
-	researchFormSchema,
 	type ResearchFormSchema,
 	researchFormDefaultValues,
+	researchFormSchema,
 } from "@/app/research/components/form/research-form-schema";
-import { TipTapEditor } from "@/app/stories/components/form/tip-tap-editor";
 import {
 	educationLevelOptions,
 	fundingOptions,
@@ -45,6 +42,7 @@ import {
 	useCreateResearch,
 	useUpdateResearch,
 } from "@/app/research/hooks/api/research.queries";
+import { TipTapEditor } from "@/app/stories/components/form/tip-tap-editor";
 import { m } from "@/paraglide/messages";
 
 interface ResearchFormProps {

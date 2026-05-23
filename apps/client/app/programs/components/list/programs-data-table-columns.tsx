@@ -7,13 +7,13 @@ import {
 	IconToggleLeft,
 	IconToggleRight,
 } from "@tabler/icons-react";
-import { createColumnHelper } from "@tanstack/react-table";
 import { useNavigate } from "@tanstack/react-router";
-import { m } from "@/paraglide/messages";
+import { createColumnHelper } from "@tanstack/react-table";
 import { programActiveTypes } from "@/app/programs/constants/program-active-types";
 import type { Program } from "@/app/programs/hooks/api/programs.functions";
 import { useUpdateProgram } from "@/app/programs/hooks/api/programs.queries";
 import { programActiveFilter } from "@/app/programs/utils/program-active-filter";
+import { m } from "@/paraglide/messages";
 
 const columnHelper = createColumnHelper<Program>();
 

@@ -9,12 +9,12 @@ import { admin, phoneNumber } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 import { env } from "@/config/env";
 import { db, schema } from "@/db";
+import { generateAndStoreEmbedding } from "@/lib/ai/embedding";
 import { sendEmail } from "@/lib/email";
 import { AUTH_ERRORS } from "@/modules/auth/auth.errors";
 import { CONNECTION_TYPE_ELIGIBILITY } from "@/modules/connections/constant/connection-eligibility.constant";
 import { CONNECTION_TYPES } from "@/modules/connections/constant/connection-types.constant";
 import type { UserType } from "@/modules/users/constant/user-types";
-import { generateAndStoreEmbedding } from "@/lib/ai/embedding";
 import { logger } from "@/utils/logger";
 
 const isSecureAuth = env.BETTER_AUTH_URL.startsWith("https://");

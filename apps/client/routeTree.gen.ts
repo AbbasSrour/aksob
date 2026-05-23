@@ -27,6 +27,7 @@ import { Route as opportunitiesLayoutRouteImport } from './app/opportunities/lay
 import { Route as newsLayoutRouteImport } from './app/news/layout'
 import { Route as membersLayoutRouteImport } from './app/members/layout'
 import { Route as eventsLayoutRouteImport } from './app/events/layout'
+import { Route as donorsLayoutRouteImport } from './app/donors/layout'
 import { Route as dashboardPagesAdminDashboardRouteImport } from './app/dashboard/pages/admin-dashboard'
 import { Route as ApiStoriesSplatRouteImport } from './app/api/stories/$'
 import { Route as ApiStatsSplatRouteImport } from './app/api/stats/$'
@@ -35,6 +36,7 @@ import { Route as ApiProgramsSplatRouteImport } from './app/api/programs/$'
 import { Route as ApiOpportunitiesSplatRouteImport } from './app/api/opportunities/$'
 import { Route as ApiNewsSplatRouteImport } from './app/api/news/$'
 import { Route as ApiEventsSplatRouteImport } from './app/api/events/$'
+import { Route as ApiDonorsSplatRouteImport } from './app/api/donors/$'
 import { Route as ApiAuthSplatRouteImport } from './app/api/auth/$'
 import { Route as ApiAdminImportExcelRouteImport } from './app/api/admin/import-excel'
 import { Route as usersPagesCreateRouteImport } from './app/users/pages/create'
@@ -46,6 +48,7 @@ import { Route as newsPagesCreateRouteImport } from './app/news/pages/create'
 import { Route as membersPagesCreateRouteImport } from './app/members/pages/create'
 import { Route as eventsPagesCreateRouteImport } from './app/events/pages/create'
 import { Route as eventsPagesEventIdIndexRouteImport } from './app/events/pages/$eventId-index'
+import { Route as donorsPagesCreateRouteImport } from './app/donors/pages/create'
 import { Route as usersPagesListRouteImport } from './app/users/pages/list'
 import { Route as storiesPagesListRouteImport } from './app/stories/pages/list'
 import { Route as researchPagesListRouteImport } from './app/research/pages/list'
@@ -54,6 +57,7 @@ import { Route as opportunitiesPagesListRouteImport } from './app/opportunities/
 import { Route as newsPagesListRouteImport } from './app/news/pages/list'
 import { Route as membersPagesListRouteImport } from './app/members/pages/list'
 import { Route as eventsPagesListRouteImport } from './app/events/pages/list'
+import { Route as donorsPagesListRouteImport } from './app/donors/pages/list'
 import { Route as ApiAuthAdminSplatRouteImport } from './app/api/auth/admin/$'
 import { Route as usersPagesUserIdEditRouteImport } from './app/users/pages/userId-edit'
 import { Route as storiesPagesEditRouteImport } from './app/stories/pages/edit'
@@ -63,6 +67,7 @@ import { Route as opportunitiesPagesEditRouteImport } from './app/opportunities/
 import { Route as newsPagesEditRouteImport } from './app/news/pages/edit'
 import { Route as membersPagesMemberIdEditRouteImport } from './app/members/pages/memberId-edit'
 import { Route as eventsPagesEventIdEditRouteImport } from './app/events/pages/eventId-edit'
+import { Route as donorsPagesEditRouteImport } from './app/donors/pages/edit'
 
 const maintenanceRoute = maintenanceRouteImport.update({
   id: '/maintenance',
@@ -154,6 +159,11 @@ const eventsLayoutRoute = eventsLayoutRouteImport.update({
   path: '/events',
   getParentRoute: () => adminDotrouteRoute,
 } as any)
+const donorsLayoutRoute = donorsLayoutRouteImport.update({
+  id: '/donors',
+  path: '/donors',
+  getParentRoute: () => adminDotrouteRoute,
+} as any)
 const dashboardPagesAdminDashboardRoute =
   dashboardPagesAdminDashboardRouteImport.update({
     id: '/dashboard',
@@ -193,6 +203,11 @@ const ApiNewsSplatRoute = ApiNewsSplatRouteImport.update({
 const ApiEventsSplatRoute = ApiEventsSplatRouteImport.update({
   id: '/api/events/$',
   path: '/api/events/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDonorsSplatRoute = ApiDonorsSplatRouteImport.update({
+  id: '/api/donors/$',
+  path: '/api/donors/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -251,6 +266,11 @@ const eventsPagesEventIdIndexRoute = eventsPagesEventIdIndexRouteImport.update({
   path: '/$eventId',
   getParentRoute: () => eventsLayoutRoute,
 } as any)
+const donorsPagesCreateRoute = donorsPagesCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => donorsLayoutRoute,
+} as any)
 const usersPagesListRoute = usersPagesListRouteImport.update({
   id: '/',
   path: '/',
@@ -290,6 +310,11 @@ const eventsPagesListRoute = eventsPagesListRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => eventsLayoutRoute,
+} as any)
+const donorsPagesListRoute = donorsPagesListRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => donorsLayoutRoute,
 } as any)
 const ApiAuthAdminSplatRoute = ApiAuthAdminSplatRouteImport.update({
   id: '/api/auth/admin/$',
@@ -339,6 +364,11 @@ const eventsPagesEventIdEditRoute = eventsPagesEventIdEditRouteImport.update({
   path: '/$eventId/edit',
   getParentRoute: () => eventsLayoutRoute,
 } as any)
+const donorsPagesEditRoute = donorsPagesEditRouteImport.update({
+  id: '/$donorId/edit',
+  path: '/$donorId/edit',
+  getParentRoute: () => donorsLayoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof indexRoute
@@ -346,6 +376,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof authLayoutRouteWithChildren
   '/maintenance': typeof maintenanceRoute
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
+  '/admin/donors': typeof donorsLayoutRouteWithChildren
   '/admin/events': typeof eventsLayoutRouteWithChildren
   '/admin/members': typeof membersLayoutRouteWithChildren
   '/admin/news': typeof newsLayoutRouteWithChildren
@@ -360,6 +391,7 @@ export interface FileRoutesByFullPath {
   '/auth/reset-password': typeof authPagesResetPasswordRoute
   '/admin/import': typeof importPagesIndexRoute
   '/admin/profile': typeof profilePagesIndexRoute
+  '/admin/donors/': typeof donorsPagesListRoute
   '/admin/events/': typeof eventsPagesListRoute
   '/admin/members/': typeof membersPagesListRoute
   '/admin/news/': typeof newsPagesListRoute
@@ -368,6 +400,7 @@ export interface FileRoutesByFullPath {
   '/admin/research/': typeof researchPagesListRoute
   '/admin/stories/': typeof storiesPagesListRoute
   '/admin/users/': typeof usersPagesListRoute
+  '/admin/donors/create': typeof donorsPagesCreateRoute
   '/admin/events/$eventId': typeof eventsPagesEventIdIndexRoute
   '/admin/events/create': typeof eventsPagesCreateRoute
   '/admin/members/create': typeof membersPagesCreateRoute
@@ -379,6 +412,7 @@ export interface FileRoutesByFullPath {
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/admin/import-excel': typeof ApiAdminImportExcelRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/donors/$': typeof ApiDonorsSplatRoute
   '/api/events/$': typeof ApiEventsSplatRoute
   '/api/news/$': typeof ApiNewsSplatRoute
   '/api/opportunities/$': typeof ApiOpportunitiesSplatRoute
@@ -386,6 +420,7 @@ export interface FileRoutesByFullPath {
   '/api/research/$': typeof ApiResearchSplatRoute
   '/api/stats/$': typeof ApiStatsSplatRoute
   '/api/stories/$': typeof ApiStoriesSplatRoute
+  '/admin/donors/$donorId/edit': typeof donorsPagesEditRoute
   '/admin/events/$eventId/edit': typeof eventsPagesEventIdEditRoute
   '/admin/members/$memberId/edit': typeof membersPagesMemberIdEditRoute
   '/admin/news/$newsId/edit': typeof newsPagesEditRoute
@@ -408,6 +443,7 @@ export interface FileRoutesByTo {
   '/auth/reset-password': typeof authPagesResetPasswordRoute
   '/admin/import': typeof importPagesIndexRoute
   '/admin/profile': typeof profilePagesIndexRoute
+  '/admin/donors': typeof donorsPagesListRoute
   '/admin/events': typeof eventsPagesListRoute
   '/admin/members': typeof membersPagesListRoute
   '/admin/news': typeof newsPagesListRoute
@@ -416,6 +452,7 @@ export interface FileRoutesByTo {
   '/admin/research': typeof researchPagesListRoute
   '/admin/stories': typeof storiesPagesListRoute
   '/admin/users': typeof usersPagesListRoute
+  '/admin/donors/create': typeof donorsPagesCreateRoute
   '/admin/events/$eventId': typeof eventsPagesEventIdIndexRoute
   '/admin/events/create': typeof eventsPagesCreateRoute
   '/admin/members/create': typeof membersPagesCreateRoute
@@ -427,6 +464,7 @@ export interface FileRoutesByTo {
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/admin/import-excel': typeof ApiAdminImportExcelRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/donors/$': typeof ApiDonorsSplatRoute
   '/api/events/$': typeof ApiEventsSplatRoute
   '/api/news/$': typeof ApiNewsSplatRoute
   '/api/opportunities/$': typeof ApiOpportunitiesSplatRoute
@@ -434,6 +472,7 @@ export interface FileRoutesByTo {
   '/api/research/$': typeof ApiResearchSplatRoute
   '/api/stats/$': typeof ApiStatsSplatRoute
   '/api/stories/$': typeof ApiStoriesSplatRoute
+  '/admin/donors/$donorId/edit': typeof donorsPagesEditRoute
   '/admin/events/$eventId/edit': typeof eventsPagesEventIdEditRoute
   '/admin/members/$memberId/edit': typeof membersPagesMemberIdEditRoute
   '/admin/news/$newsId/edit': typeof newsPagesEditRoute
@@ -451,6 +490,7 @@ export interface FileRoutesById {
   '/auth': typeof authLayoutRouteWithChildren
   '/maintenance': typeof maintenanceRoute
   '/admin/dashboard': typeof dashboardPagesAdminDashboardRoute
+  '/admin/donors': typeof donorsLayoutRouteWithChildren
   '/admin/events': typeof eventsLayoutRouteWithChildren
   '/admin/members': typeof membersLayoutRouteWithChildren
   '/admin/news': typeof newsLayoutRouteWithChildren
@@ -465,6 +505,7 @@ export interface FileRoutesById {
   '/auth/reset-password': typeof authPagesResetPasswordRoute
   '/admin/import': typeof importPagesIndexRoute
   '/admin/profile': typeof profilePagesIndexRoute
+  '/admin/donors/': typeof donorsPagesListRoute
   '/admin/events/': typeof eventsPagesListRoute
   '/admin/members/': typeof membersPagesListRoute
   '/admin/news/': typeof newsPagesListRoute
@@ -473,6 +514,7 @@ export interface FileRoutesById {
   '/admin/research/': typeof researchPagesListRoute
   '/admin/stories/': typeof storiesPagesListRoute
   '/admin/users/': typeof usersPagesListRoute
+  '/admin/donors/create': typeof donorsPagesCreateRoute
   '/admin/events/$eventId': typeof eventsPagesEventIdIndexRoute
   '/admin/events/create': typeof eventsPagesCreateRoute
   '/admin/members/create': typeof membersPagesCreateRoute
@@ -484,6 +526,7 @@ export interface FileRoutesById {
   '/admin/users/create': typeof usersPagesCreateRoute
   '/api/admin/import-excel': typeof ApiAdminImportExcelRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/donors/$': typeof ApiDonorsSplatRoute
   '/api/events/$': typeof ApiEventsSplatRoute
   '/api/news/$': typeof ApiNewsSplatRoute
   '/api/opportunities/$': typeof ApiOpportunitiesSplatRoute
@@ -491,6 +534,7 @@ export interface FileRoutesById {
   '/api/research/$': typeof ApiResearchSplatRoute
   '/api/stats/$': typeof ApiStatsSplatRoute
   '/api/stories/$': typeof ApiStoriesSplatRoute
+  '/admin/donors/$donorId/edit': typeof donorsPagesEditRoute
   '/admin/events/$eventId/edit': typeof eventsPagesEventIdEditRoute
   '/admin/members/$memberId/edit': typeof membersPagesMemberIdEditRoute
   '/admin/news/$newsId/edit': typeof newsPagesEditRoute
@@ -509,6 +553,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/maintenance'
     | '/admin/dashboard'
+    | '/admin/donors'
     | '/admin/events'
     | '/admin/members'
     | '/admin/news'
@@ -523,6 +568,7 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/admin/import'
     | '/admin/profile'
+    | '/admin/donors/'
     | '/admin/events/'
     | '/admin/members/'
     | '/admin/news/'
@@ -531,6 +577,7 @@ export interface FileRouteTypes {
     | '/admin/research/'
     | '/admin/stories/'
     | '/admin/users/'
+    | '/admin/donors/create'
     | '/admin/events/$eventId'
     | '/admin/events/create'
     | '/admin/members/create'
@@ -542,6 +589,7 @@ export interface FileRouteTypes {
     | '/admin/users/create'
     | '/api/admin/import-excel'
     | '/api/auth/$'
+    | '/api/donors/$'
     | '/api/events/$'
     | '/api/news/$'
     | '/api/opportunities/$'
@@ -549,6 +597,7 @@ export interface FileRouteTypes {
     | '/api/research/$'
     | '/api/stats/$'
     | '/api/stories/$'
+    | '/admin/donors/$donorId/edit'
     | '/admin/events/$eventId/edit'
     | '/admin/members/$memberId/edit'
     | '/admin/news/$newsId/edit'
@@ -571,6 +620,7 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/admin/import'
     | '/admin/profile'
+    | '/admin/donors'
     | '/admin/events'
     | '/admin/members'
     | '/admin/news'
@@ -579,6 +629,7 @@ export interface FileRouteTypes {
     | '/admin/research'
     | '/admin/stories'
     | '/admin/users'
+    | '/admin/donors/create'
     | '/admin/events/$eventId'
     | '/admin/events/create'
     | '/admin/members/create'
@@ -590,6 +641,7 @@ export interface FileRouteTypes {
     | '/admin/users/create'
     | '/api/admin/import-excel'
     | '/api/auth/$'
+    | '/api/donors/$'
     | '/api/events/$'
     | '/api/news/$'
     | '/api/opportunities/$'
@@ -597,6 +649,7 @@ export interface FileRouteTypes {
     | '/api/research/$'
     | '/api/stats/$'
     | '/api/stories/$'
+    | '/admin/donors/$donorId/edit'
     | '/admin/events/$eventId/edit'
     | '/admin/members/$memberId/edit'
     | '/admin/news/$newsId/edit'
@@ -613,6 +666,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/maintenance'
     | '/admin/dashboard'
+    | '/admin/donors'
     | '/admin/events'
     | '/admin/members'
     | '/admin/news'
@@ -627,6 +681,7 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/admin/import'
     | '/admin/profile'
+    | '/admin/donors/'
     | '/admin/events/'
     | '/admin/members/'
     | '/admin/news/'
@@ -635,6 +690,7 @@ export interface FileRouteTypes {
     | '/admin/research/'
     | '/admin/stories/'
     | '/admin/users/'
+    | '/admin/donors/create'
     | '/admin/events/$eventId'
     | '/admin/events/create'
     | '/admin/members/create'
@@ -646,6 +702,7 @@ export interface FileRouteTypes {
     | '/admin/users/create'
     | '/api/admin/import-excel'
     | '/api/auth/$'
+    | '/api/donors/$'
     | '/api/events/$'
     | '/api/news/$'
     | '/api/opportunities/$'
@@ -653,6 +710,7 @@ export interface FileRouteTypes {
     | '/api/research/$'
     | '/api/stats/$'
     | '/api/stories/$'
+    | '/admin/donors/$donorId/edit'
     | '/admin/events/$eventId/edit'
     | '/admin/members/$memberId/edit'
     | '/admin/news/$newsId/edit'
@@ -672,6 +730,7 @@ export interface RootRouteChildren {
   ApiMediaRoute: typeof ApiMediaRoute
   ApiAdminImportExcelRoute: typeof ApiAdminImportExcelRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiDonorsSplatRoute: typeof ApiDonorsSplatRoute
   ApiEventsSplatRoute: typeof ApiEventsSplatRoute
   ApiNewsSplatRoute: typeof ApiNewsSplatRoute
   ApiOpportunitiesSplatRoute: typeof ApiOpportunitiesSplatRoute
@@ -810,6 +869,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof eventsLayoutRouteImport
       parentRoute: typeof adminDotrouteRoute
     }
+    '/admin/donors': {
+      id: '/admin/donors'
+      path: '/donors'
+      fullPath: '/admin/donors'
+      preLoaderRoute: typeof donorsLayoutRouteImport
+      parentRoute: typeof adminDotrouteRoute
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/dashboard'
@@ -864,6 +930,13 @@ declare module '@tanstack/react-router' {
       path: '/api/events/$'
       fullPath: '/api/events/$'
       preLoaderRoute: typeof ApiEventsSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/donors/$': {
+      id: '/api/donors/$'
+      path: '/api/donors/$'
+      fullPath: '/api/donors/$'
+      preLoaderRoute: typeof ApiDonorsSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -943,6 +1016,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof eventsPagesEventIdIndexRouteImport
       parentRoute: typeof eventsLayoutRoute
     }
+    '/admin/donors/create': {
+      id: '/admin/donors/create'
+      path: '/create'
+      fullPath: '/admin/donors/create'
+      preLoaderRoute: typeof donorsPagesCreateRouteImport
+      parentRoute: typeof donorsLayoutRoute
+    }
     '/admin/users/': {
       id: '/admin/users/'
       path: '/'
@@ -998,6 +1078,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/events/'
       preLoaderRoute: typeof eventsPagesListRouteImport
       parentRoute: typeof eventsLayoutRoute
+    }
+    '/admin/donors/': {
+      id: '/admin/donors/'
+      path: '/'
+      fullPath: '/admin/donors/'
+      preLoaderRoute: typeof donorsPagesListRouteImport
+      parentRoute: typeof donorsLayoutRoute
     }
     '/api/auth/admin/$': {
       id: '/api/auth/admin/$'
@@ -1062,8 +1149,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof eventsPagesEventIdEditRouteImport
       parentRoute: typeof eventsLayoutRoute
     }
+    '/admin/donors/$donorId/edit': {
+      id: '/admin/donors/$donorId/edit'
+      path: '/$donorId/edit'
+      fullPath: '/admin/donors/$donorId/edit'
+      preLoaderRoute: typeof donorsPagesEditRouteImport
+      parentRoute: typeof donorsLayoutRoute
+    }
   }
 }
+
+interface donorsLayoutRouteChildren {
+  donorsPagesListRoute: typeof donorsPagesListRoute
+  donorsPagesCreateRoute: typeof donorsPagesCreateRoute
+  donorsPagesEditRoute: typeof donorsPagesEditRoute
+}
+
+const donorsLayoutRouteChildren: donorsLayoutRouteChildren = {
+  donorsPagesListRoute: donorsPagesListRoute,
+  donorsPagesCreateRoute: donorsPagesCreateRoute,
+  donorsPagesEditRoute: donorsPagesEditRoute,
+}
+
+const donorsLayoutRouteWithChildren = donorsLayoutRoute._addFileChildren(
+  donorsLayoutRouteChildren,
+)
 
 interface eventsLayoutRouteChildren {
   eventsPagesListRoute: typeof eventsPagesListRoute
@@ -1196,6 +1306,7 @@ const usersLayoutRouteWithChildren = usersLayoutRoute._addFileChildren(
 
 interface adminDotrouteRouteChildren {
   dashboardPagesAdminDashboardRoute: typeof dashboardPagesAdminDashboardRoute
+  donorsLayoutRoute: typeof donorsLayoutRouteWithChildren
   eventsLayoutRoute: typeof eventsLayoutRouteWithChildren
   membersLayoutRoute: typeof membersLayoutRouteWithChildren
   newsLayoutRoute: typeof newsLayoutRouteWithChildren
@@ -1210,6 +1321,7 @@ interface adminDotrouteRouteChildren {
 
 const adminDotrouteRouteChildren: adminDotrouteRouteChildren = {
   dashboardPagesAdminDashboardRoute: dashboardPagesAdminDashboardRoute,
+  donorsLayoutRoute: donorsLayoutRouteWithChildren,
   eventsLayoutRoute: eventsLayoutRouteWithChildren,
   membersLayoutRoute: membersLayoutRouteWithChildren,
   newsLayoutRoute: newsLayoutRouteWithChildren,
@@ -1250,6 +1362,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiMediaRoute: ApiMediaRoute,
   ApiAdminImportExcelRoute: ApiAdminImportExcelRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiDonorsSplatRoute: ApiDonorsSplatRoute,
   ApiEventsSplatRoute: ApiEventsSplatRoute,
   ApiNewsSplatRoute: ApiNewsSplatRoute,
   ApiOpportunitiesSplatRoute: ApiOpportunitiesSplatRoute,

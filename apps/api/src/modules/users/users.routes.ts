@@ -334,8 +334,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 				data: {
 					id: currentUser.id,
 					name: currentUser.name,
-					email:
-						currentUser.emailVisible === true ? currentUser.email : null,
+					email: currentUser.emailVisible === true ? currentUser.email : null,
 					type: normalizeUserType(currentUser.type),
 					major: currentUser.programName ?? null,
 					graduationYear: currentUser.graduationYear ?? null,
@@ -634,9 +633,7 @@ export const usersModule = new Elysia({ prefix: "/users" })
 						};
 					}
 					if (
-						!eligibleTypes.includes(
-							ct as (typeof CONNECTION_TYPES)[number],
-						)
+						!eligibleTypes.includes(ct as (typeof CONNECTION_TYPES)[number])
 					) {
 						set.status = 400;
 						return {
